@@ -13,7 +13,7 @@ import {
   UserRound,
   UsersRound,
 } from "lucide-react";
-import { HydraMark, HydraWordmark } from "../../components/brand";
+import { HydraMark } from "../../components/brand";
 import { MunicipalityPicker } from "../../components/municipality-picker";
 import { Field } from "../../components/ui";
 import { emptyProperty, type AuthResult, type Property, type SignupPayload } from "../../lib/hydra-types";
@@ -217,9 +217,8 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
           <span /><span /><span /><span /><span /><span />
         </div>
         <div className="auth-landing-shade" aria-hidden="true" />
-        <header className="auth-landing-brand"><HydraWordmark /></header>
         <section className="auth-landing-content">
-          <HydraMark className="auth-landing-mark" />
+          <span className="auth-landing-mark-wrap"><HydraMark className="auth-landing-mark" /></span>
           <p className="auth-landing-kicker">Gestão rural em um só lugar</p>
           <h1>Água, rebanho e rotina.<br /><strong>Juntos.</strong></h1>
           <p className="auth-landing-copy">Use o Hydra Agro no Android, iPhone, iPad ou computador.</p>
@@ -234,13 +233,10 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
   }
 
   return (
-    <main className="auth-shell">
+    <main className={`auth-shell ${mode === "signup" ? "auth-shell-signup" : ""}`}>
+      {mode === "signup" && <div className="signup-motion-bg" aria-hidden="true"><span /><span /><span /><span /><span /><span /></div>}
       <section className={`auth-card ${mode === "signup" ? "auth-card-wide" : ""}`}>
         {(mode === "signup" || loginStep === "email" || loginStep === "staff") && <button className="auth-home-back" type="button" onClick={() => { setView("landing"); setError(""); setNotice(""); }}><ArrowLeft size={17} /> Voltar</button>}
-        <div className="auth-brand-row">
-          <HydraWordmark compact />
-          <span>Acesso ao Hydra Agro</span>
-        </div>
 
         {mode === "login" ? (
           <div className="auth-content auth-enter" key={loginStep}>

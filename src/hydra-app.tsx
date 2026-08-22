@@ -73,14 +73,29 @@ export default function HydraApp() {
   const [publicAnimal] = useState(() => !Capacitor.isNativePlatform() ? readPublicAnimalSnapshot() : null);
   const [quickIntent, setQuickIntent] = useState<{ kind: "water" | "animal" | "activity" | "sector" | "post"; request: number }>();
   const quickTimer = useRef<number | null>(null);
+  const splashTimer = useRef<number | null>(null);
+  const splashInitialized = useRef(false);
   const modalNavigationOpen = useModalNavigation();
 
   useAppOverlay(quickOpen, () => closeQuick());
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => setSplash(false), 3000);
-    return () => window.clearTimeout(timer);
-  }, []);
+  useLayoutEffect(() => {
+    const isInitialSplash = !splashInitialized.current;
+    splashInitialized.current = true;
+    if (!isInitialSplash && !store.account?.id) {
+      setSplash(false);
+      return;
+    }
+    setSplash(true);
+    if (splashTimer.current) window.clearTimeout(splashTimer.current);
+    splashTimer.current = window.setTimeout(() => {
+      setSplash(false);
+      splashTimer.current = null;
+    }, 3000);
+    return () => {
+      if (splashTimer.current) window.clearTimeout(splashTimer.current);
+    };
+  }, [store.account?.id]);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");

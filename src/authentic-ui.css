@@ -248,6 +248,8 @@
 
 /* Autenticação */
 .hydra-root .auth-shell {
+  position: relative;
+  isolation: isolate;
   min-height: 100dvh;
   padding: max(24px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom));
   display: grid;
@@ -313,11 +315,20 @@
   text-align: center;
 }
 
-.hydra-root .auth-landing-mark {
+.hydra-root .auth-landing-mark-wrap {
+  display: block;
   width: 62px;
   height: 62px;
-  margin-bottom: 14px;
+  margin: 0 auto 14px;
   filter: drop-shadow(0 10px 22px rgba(0, 0, 0, .24));
+  will-change: transform;
+  animation: auth-logo-float 4.8s ease-in-out infinite;
+}
+
+.hydra-root .auth-landing-mark {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .hydra-root .auth-landing-kicker {
@@ -377,6 +388,8 @@
 
 .hydra-root .auth-card,
 .hydra-root .auth-card-wide {
+  position: relative;
+  z-index: 2;
   width: min(100%, 560px);
   min-height: 0;
   margin: 0;
@@ -387,6 +400,55 @@
   box-shadow: 0 20px 60px rgba(9, 39, 27, .09);
   animation: none;
 }
+
+.hydra-root .auth-shell-signup {
+  background: var(--forest-950);
+}
+
+.hydra-root .auth-shell-signup::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(8, 39, 27, .22), rgba(8, 39, 27, .56));
+}
+
+.hydra-root .auth-shell-signup .auth-card {
+  border-color: rgba(255, 255, 255, .58);
+  background: rgba(255, 255, 255, .9);
+  box-shadow: 0 28px 80px rgba(3, 26, 17, .3);
+  -webkit-backdrop-filter: blur(22px) saturate(145%);
+  backdrop-filter: blur(22px) saturate(145%);
+}
+
+.hydra-root .signup-motion-bg {
+  position: absolute;
+  z-index: 0;
+  inset: -12vh -12vw;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hydra-root .signup-motion-bg span {
+  position: absolute;
+  width: clamp(170px, 43vw, 420px);
+  height: clamp(180px, 30vh, 360px);
+  border-radius: clamp(24px, 5vw, 46px);
+  background-color: #315240;
+  background-position: center;
+  background-size: cover;
+  box-shadow: 0 24px 65px rgba(0, 0, 0, .3);
+  will-change: transform;
+  animation: signup-photo-drift var(--drift-speed, 14s) ease-in-out infinite alternate;
+}
+
+.hydra-root .signup-motion-bg span:nth-child(1) { --tile-rotate: -8deg; --drift-x: 20px; --drift-y: 24px; --drift-speed: 13s; left: -7vw; top: 2vh; background-image: url("https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(2) { --tile-rotate: 7deg; --drift-x: -18px; --drift-y: 28px; --drift-speed: 16s; right: -8vw; top: -1vh; background-image: url("https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(3) { --tile-rotate: 5deg; --drift-x: 24px; --drift-y: -18px; --drift-speed: 15s; left: -13vw; top: 40vh; background-image: url("https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(4) { --tile-rotate: -6deg; --drift-x: -22px; --drift-y: -25px; --drift-speed: 17s; right: -12vw; top: 42vh; background-image: url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(5) { --tile-rotate: -4deg; --drift-x: 18px; --drift-y: -28px; --drift-speed: 18s; left: 4vw; bottom: -15vh; background-image: url("https://images.unsplash.com/photo-1500076656116-558758c991c1?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(6) { --tile-rotate: 8deg; --drift-x: -20px; --drift-y: 22px; --drift-speed: 14s; right: 1vw; bottom: -16vh; background-image: url("https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=900&q=80"); }
 
 .hydra-root .auth-home-back {
   min-height: 40px;
@@ -961,6 +1023,226 @@
   .hydra-root .shortcut-row button small {
     font-size: 9px !important;
   }
+}
+
+/* Movimento do acesso e cadastro: fotos lentas, etapas e microinterações. */
+.hydra-root .auth-landing-mosaic span {
+  --tile-rotate: 0deg;
+  --drift-x: 12px;
+  --drift-y: 16px;
+  will-change: transform;
+  animation: auth-photo-drift 13s ease-in-out infinite alternate;
+}
+
+.hydra-root .auth-landing-mosaic span:nth-child(1) { --tile-rotate: -7deg; --drift-x: 18px; animation-duration: 14s; }
+.hydra-root .auth-landing-mosaic span:nth-child(2) { --tile-rotate: 4deg; --drift-x: -15px; --drift-y: 20px; animation-duration: 17s; }
+.hydra-root .auth-landing-mosaic span:nth-child(3) { --tile-rotate: 8deg; --drift-x: -20px; animation-duration: 15s; }
+.hydra-root .auth-landing-mosaic span:nth-child(4) { --tile-rotate: 5deg; --drift-y: -18px; animation-duration: 18s; }
+.hydra-root .auth-landing-mosaic span:nth-child(5) { --tile-rotate: -3deg; --drift-x: 16px; --drift-y: -22px; animation-duration: 16s; }
+.hydra-root .auth-landing-mosaic span:nth-child(6) { --tile-rotate: 5deg; --drift-x: -14px; --drift-y: -17px; animation-duration: 19s; }
+
+.hydra-root .auth-shell-signup .signup-panel {
+  animation: signup-step-in 440ms cubic-bezier(.2, .8, .2, 1) both !important;
+}
+
+.hydra-root .auth-shell-signup .signup-panel > * {
+  opacity: 0;
+  animation: signup-item-in 460ms cubic-bezier(.2, .8, .2, 1) forwards !important;
+}
+
+.hydra-root .auth-shell-signup .signup-panel > :nth-child(1) { animation-delay: 40ms !important; }
+.hydra-root .auth-shell-signup .signup-panel > :nth-child(2) { animation-delay: 85ms !important; }
+.hydra-root .auth-shell-signup .signup-panel > :nth-child(3) { animation-delay: 125ms !important; }
+.hydra-root .auth-shell-signup .signup-panel > :nth-child(n+4) { animation-delay: 165ms !important; }
+
+.hydra-root .auth-shell-signup .field {
+  transform-origin: center;
+  transition: transform 200ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.hydra-root .auth-shell-signup .field:focus-within {
+  animation: signup-field-focus 300ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.hydra-root .auth-shell-signup .field:focus-within > span {
+  color: var(--forest-700);
+}
+
+.hydra-root .auth-shell-signup :is(input, select, textarea):focus {
+  background: rgba(255, 255, 255, .98);
+  box-shadow: 0 0 0 4px rgba(31, 101, 71, .12), 0 10px 25px rgba(9, 39, 27, .07);
+}
+
+.hydra-root .auth-shell-signup input:not(:placeholder-shown) {
+  border-color: rgba(31, 101, 71, .38);
+}
+
+.hydra-root .auth-shell-signup button {
+  overflow: hidden;
+  transition: transform 170ms cubic-bezier(.2, .8, .2, 1), background-color 180ms ease, border-color 180ms ease !important;
+}
+
+.hydra-root .auth-shell-signup button:not(:disabled):active {
+  transform: scale(.965) !important;
+}
+
+.hydra-root .auth-shell-signup .choice-chip.active {
+  animation: signup-choice-pop 280ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.hydra-root .auth-shell-signup .step-dots span {
+  transition: width 280ms cubic-bezier(.2, .8, .2, 1), background-color 220ms ease, transform 220ms ease;
+}
+
+.hydra-root .auth-shell-signup .step-dots span.active {
+  animation: signup-dot-pulse 420ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.hydra-root.theme-dark .auth-shell-signup .auth-card {
+  border-color: rgba(255, 255, 255, .1);
+  background: rgba(24, 32, 27, .9);
+}
+
+@keyframes auth-photo-drift {
+  from { transform: rotate(var(--tile-rotate)) translate3d(0, 0, 0) scale(1.02); }
+  to { transform: rotate(calc(var(--tile-rotate) + 1.2deg)) translate3d(var(--drift-x), var(--drift-y), 0) scale(1.07); }
+}
+
+@keyframes signup-photo-drift {
+  from { transform: rotate(var(--tile-rotate)) translate3d(0, 0, 0) scale(1.02); }
+  to { transform: rotate(calc(var(--tile-rotate) + 1.4deg)) translate3d(var(--drift-x), var(--drift-y), 0) scale(1.08); }
+}
+
+@keyframes auth-logo-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-7px) scale(1.035); }
+}
+
+@keyframes signup-step-in {
+  from { opacity: 0; transform: translate3d(24px, 0, 0) scale(.985); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes signup-item-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes signup-field-focus {
+  0% { transform: scale(1); }
+  55% { transform: scale(1.012); }
+  100% { transform: scale(1); }
+}
+
+@keyframes signup-choice-pop {
+  0% { transform: scale(.9); }
+  70% { transform: scale(1.045); }
+  100% { transform: scale(1); }
+}
+
+@keyframes signup-dot-pulse {
+  0% { transform: scaleX(.75); opacity: .55; }
+  70% { transform: scaleX(1.08); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+
+/* Motion geral: respostas curtas durante o uso, sem animações decorativas contínuas. */
+.hydra-root .phone-app :is(
+  .animal-card,
+  .sector-card,
+  .monitoring-card,
+  .activity-card,
+  .post-card,
+  .challenge-card,
+  .first-action-card,
+  .history-home-row,
+  .profile-menu-row,
+  .compact-row,
+  .notification-item,
+  .nfc-banner,
+  .feature-link-grid button,
+  .task-card button,
+  .shortcut-row button
+) {
+  transition: transform 190ms cubic-bezier(.2, .8, .2, 1), border-color 190ms ease, background-color 190ms ease, box-shadow 220ms ease !important;
+}
+
+.hydra-root .phone-app :is(
+  .animal-card,
+  .sector-card,
+  .monitoring-card,
+  .activity-card,
+  .post-card,
+  .challenge-card,
+  .compact-row,
+  .notification-item
+) {
+  animation: hydra-card-settle 260ms cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.hydra-root .phone-app :is(
+  .animal-card,
+  .sector-card,
+  .monitoring-card,
+  .activity-card,
+  .first-action-card,
+  .history-home-row,
+  .profile-menu-row,
+  .compact-row,
+  .notification-item,
+  .nfc-banner,
+  .feature-link-grid button,
+  .task-card button,
+  .shortcut-row button
+):active {
+  transform: scale(.982) !important;
+}
+
+.hydra-root .phone-app :is(.filter-chips button, .community-tabs button, .choice-chip, .segmented-control button, .toggle) {
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 180ms cubic-bezier(.2, .8, .2, 1), box-shadow 180ms ease !important;
+}
+
+.hydra-root .phone-app :is(.filter-chips button, .community-tabs button, .choice-chip, .segmented-control button):active {
+  transform: scale(.96) !important;
+}
+
+.hydra-root .phone-app :is(.modal-layer, .quick-layer) {
+  animation-duration: 210ms !important;
+}
+
+.hydra-root .phone-app :is(.modal-sheet, .quick-sheet) {
+  animation-duration: 280ms !important;
+  animation-timing-function: cubic-bezier(.2, .8, .2, 1) !important;
+}
+
+.hydra-root .phone-app .route-loading span {
+  animation-duration: 760ms !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hydra-root .phone-app :is(
+    .animal-card,
+    .sector-card,
+    .monitoring-card,
+    .activity-card,
+    .first-action-card,
+    .history-home-row,
+    .profile-menu-row,
+    .compact-row,
+    .notification-item,
+    .nfc-banner,
+    .feature-link-grid button,
+    .task-card button
+  ):hover {
+    transform: translateY(-2px) !important;
+    border-color: rgba(31, 101, 71, .2) !important;
+    box-shadow: 0 10px 24px rgba(9, 39, 27, .07) !important;
+  }
+}
+
+@keyframes hydra-card-settle {
+  from { opacity: .78; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Resposta tátil da navegação: compressão, pulso do ícone e onda no toque. */
