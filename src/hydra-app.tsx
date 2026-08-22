@@ -101,6 +101,8 @@ export default function HydraApp() {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const navTapTimers = new Map<HTMLButtonElement, number>();
     const navTapFrames = new Map<HTMLButtonElement, number>();
+    const pressTimers = new Map<HTMLButtonElement, number>();
+    const pressFrames = new Map<HTMLButtonElement, number>();
     function handlePointerDown(event: PointerEvent) {
       if (reducedMotion.matches || event.button !== 0) return;
       const target = event.target instanceof Element ? event.target.closest("button") : null;
@@ -114,6 +116,20 @@ export default function HydraApp() {
       ripple.style.setProperty("--touch-y", `${event.clientY - bounds.top - diameter / 2}px`);
       target.appendChild(ripple);
       window.setTimeout(() => ripple.remove(), 620);
+      const previousPressTimer = pressTimers.get(target);
+      if (previousPressTimer) window.clearTimeout(previousPressTimer);
+      const previousPressFrame = pressFrames.get(target);
+      if (previousPressFrame) window.cancelAnimationFrame(previousPressFrame);
+      target.classList.remove("is-pressed");
+      pressFrames.set(target, window.requestAnimationFrame(() => {
+        pressFrames.delete(target);
+        if (!target.isConnected) return;
+        target.classList.add("is-pressed");
+        pressTimers.set(target, window.setTimeout(() => {
+          target.classList.remove("is-pressed");
+          pressTimers.delete(target);
+        }, 440));
+      }));
       if (target.matches(".bottom-nav button")) {
         const previousTimer = navTapTimers.get(target);
         if (previousTimer) window.clearTimeout(previousTimer);
@@ -137,6 +153,8 @@ export default function HydraApp() {
       document.removeEventListener("pointerdown", handlePointerDown);
       navTapTimers.forEach((timer) => window.clearTimeout(timer));
       navTapFrames.forEach((frame) => window.cancelAnimationFrame(frame));
+      pressTimers.forEach((timer) => window.clearTimeout(timer));
+      pressFrames.forEach((frame) => window.cancelAnimationFrame(frame));
     };
   }, []);
 
