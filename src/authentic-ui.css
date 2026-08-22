@@ -218,40 +218,10 @@
   animation: hydra-mark-transition 2.6s cubic-bezier(.72, 0, .2, 1) both !important;
 }
 
-.hydra-root .splash-name {
-  position: absolute;
-  top: calc(100% + 18px);
-  display: flex;
-  gap: 5px;
-  color: white;
-  font-size: 20px;
-  letter-spacing: -.04em;
-  white-space: nowrap;
-  animation: hydra-name-transition 2.6s ease both;
-}
-
-.hydra-root .splash-name strong { color: #f2a057; }
-
-.hydra-root .splash-screen > p {
-  position: absolute;
-  bottom: max(28px, calc(env(safe-area-inset-bottom) + 18px));
-  margin: 0;
-  color: rgba(255, 255, 255, .5);
-  letter-spacing: .18em;
-  font-size: 9px;
-  animation: hydra-name-transition 2.6s ease both;
-}
-
 @keyframes hydra-mark-transition {
   0% { opacity: 0; transform: scale(.72); }
   16%, 52% { opacity: 1; transform: scale(1); }
   76%, 100% { opacity: 0; transform: scale(5.8); }
-}
-
-@keyframes hydra-name-transition {
-  0%, 12% { opacity: 0; transform: translateY(6px); }
-  25%, 52% { opacity: 1; transform: translateY(0); }
-  68%, 100% { opacity: 0; transform: translateY(-5px); }
 }
 
 @keyframes hydra-splash-expand {
@@ -612,6 +582,7 @@
   box-shadow: 0 -1px 0 rgba(10, 40, 28, .03);
   backdrop-filter: none;
   transform: translateX(-50%);
+  animation: hydra-nav-enter 420ms cubic-bezier(.2, .8, .2, 1) both;
 }
 
 .hydra-root .bottom-nav.is-hidden {
@@ -625,19 +596,21 @@
 .hydra-root .bottom-nav button {
   gap: 3px;
   color: #737d77;
+  transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
 }
 
 .hydra-root .bottom-nav button span {
   width: 38px;
   height: 32px;
   border-radius: 10px;
+  transition: color 180ms ease, background-color 180ms ease, transform 220ms cubic-bezier(.2, .8, .2, 1);
 }
 
 .hydra-root .bottom-nav button.active span {
   color: var(--forest-800);
   background: var(--forest-100);
-  transform: none;
-  animation: none;
+  transform: translateY(-2px);
+  animation: hydra-nav-active 280ms cubic-bezier(.2, .8, .2, 1);
 }
 
 .hydra-root .bottom-nav button small {
@@ -646,6 +619,17 @@
 
 .hydra-root .desktop-nav-brand {
   display: none;
+}
+
+@keyframes hydra-nav-enter {
+  from { opacity: 0; transform: translate(-50%, 18px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes hydra-nav-active {
+  0% { transform: translateY(1px) scale(.9); }
+  65% { transform: translateY(-3px) scale(1.06); }
+  100% { transform: translateY(-2px) scale(1); }
 }
 
 .hydra-root .screen-header {
@@ -875,7 +859,11 @@
     height: 30px !important;
     color: inherit !important;
     background: transparent !important;
-    transform: none !important;
+    transform: none;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button.active > span {
+    animation: hydra-nav-active 280ms cubic-bezier(.2, .8, .2, 1);
   }
 
   .hydra-root .phone-app .bottom-nav > button > small {

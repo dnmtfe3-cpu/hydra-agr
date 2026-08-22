@@ -255,7 +255,7 @@ export default function HydraApp() {
 
   if (!store.configured) return <BackendSetupScreen />;
 
-  const splashLayer = splash ? <main className="splash-screen"><SplashBrand /><p>HYDRA AGRO</p></main> : null;
+  const splashLayer = splash ? <main className="splash-screen"><SplashBrand /></main> : null;
 
   if (!store.ready) return splashLayer;
 
