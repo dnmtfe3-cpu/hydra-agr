@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState, type CSSP
 import { App as CapacitorApp } from "@capacitor/app";
 import { Capacitor } from "@capacitor/core";
 import { ClipboardCheck, Beef as Cow, Droplets, History, Home, MapPin, Nfc, Plus, Send, UserRound, UsersRound, X } from "lucide-react";
-import { HydraWordmark, SplashBrand } from "./components/brand";
+import { SplashBrand } from "./components/brand";
 import { requestCloseTopOverlay, useAppOverlay, useModalNavigation } from "./components/modal-system";
 import { BackendSetupScreen, BannedScreen, PasswordRecoveryScreen, SyncBanner } from "./components/system-state";
 import { AppToastRegion } from "./components/ui";
@@ -78,7 +78,7 @@ export default function HydraApp() {
   useAppOverlay(quickOpen, () => closeQuick());
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setSplash(false), 1650);
+    const timer = window.setTimeout(() => setSplash(false), 2600);
     return () => window.clearTimeout(timer);
   }, []);
 
@@ -255,13 +255,13 @@ export default function HydraApp() {
 
   if (!store.configured) return <BackendSetupScreen />;
 
-  if (!store.ready || splash) {
-    return <main className="splash-screen"><div className="splash-glow" /><SplashBrand /><div className="splash-loader"><span /></div><p>HYDRA AGRO</p></main>;
-  }
+  const splashLayer = splash ? <main className="splash-screen"><SplashBrand /><p>HYDRA AGRO</p></main> : null;
 
-  if (!store.account) return <AuthFlow onLogin={store.login} onStaffLogin={store.loginStaff} onSignup={store.createAccount} onResetPassword={store.resetPassword} />;
-  if (store.account.bannedAt) return <BannedScreen reason={store.account.banReason} logout={store.logout} />;
-  if (passwordRecovery) return <PasswordRecoveryScreen save={async (password) => { const result = await store.changeCredentials({ password }); if (result.ok) window.setTimeout(() => setPasswordRecovery(false), 650); return result; }} logout={async () => { setPasswordRecovery(false); await store.logout(); }} />;
+  if (!store.ready) return splashLayer;
+
+  if (!store.account) return <><AuthFlow onLogin={store.login} onStaffLogin={store.loginStaff} onSignup={store.createAccount} onResetPassword={store.resetPassword} />{splashLayer}</>;
+  if (store.account.bannedAt) return <><BannedScreen reason={store.account.banReason} logout={store.logout} />{splashLayer}</>;
+  if (passwordRecovery) return <><PasswordRecoveryScreen save={async (password) => { const result = await store.changeCredentials({ password }); if (result.ok) window.setTimeout(() => setPasswordRecovery(false), 650); return result; }} logout={async () => { setPasswordRecovery(false); await store.logout(); }} />{splashLayer}</>;
 
   const account = store.account;
   const isStaff = account.access.kind === "staff";
@@ -301,16 +301,13 @@ export default function HydraApp() {
   const navStyle = { "--active-index": activeIndex } as CSSProperties;
 
   return (
+    <>
     <main className="app-shell">
       <div className={`phone-app ${modalNavigationOpen ? "is-overlay-open" : ""}`}>
         <SyncBanner status={store.syncStatus} error={store.lastError} retry={store.retrySync} />
         <div key={route} className={`app-content route-motion-${routeMotion}`}><Suspense fallback={<div className="route-loading"><span /><small>Carregando…</small></div>}>{mainContent()}</Suspense></div>
 
         <nav className={`bottom-nav ${modalNavigationOpen ? "is-hidden" : ""}`} aria-label="Navegação principal" aria-hidden={modalNavigationOpen} style={navStyle}>
-          <div className="desktop-nav-brand">
-            <HydraWordmark />
-            <small>Gestão da propriedade</small>
-          </div>
           <span className="bottom-nav-indicator" aria-hidden="true" />
           {mainTabs.map((tab) => {
             const Icon = tab.icon;
@@ -322,6 +319,8 @@ export default function HydraApp() {
         <AppToastRegion />
       </div>
     </main>
+    {splashLayer}
+    </>
   );
 }
 

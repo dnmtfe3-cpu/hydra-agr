@@ -5,18 +5,15 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
-  ClipboardCheck,
-  Droplets,
   Eye,
   EyeOff,
   KeyRound,
   LockKeyhole,
   MapPin,
-  Nfc,
   UserRound,
   UsersRound,
 } from "lucide-react";
-import { HydraWordmark } from "../../components/brand";
+import { HydraMark, HydraWordmark } from "../../components/brand";
 import { MunicipalityPicker } from "../../components/municipality-picker";
 import { Field } from "../../components/ui";
 import { emptyProperty, type AuthResult, type Property, type SignupPayload } from "../../lib/hydra-types";
@@ -59,6 +56,7 @@ function formatStaffCode(value: string) {
 }
 
 export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: Props) {
+  const [view, setView] = useState<"landing" | "auth">("landing");
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [loginStep, setLoginStep] = useState<"email" | "password" | "recovery" | "staff">("email");
   const [email, setEmail] = useState("");
@@ -206,24 +204,39 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
     setNotice("");
   }
 
+  function openAuth(next: "login" | "signup", step: "email" | "staff" = "email") {
+    switchMode(next);
+    setLoginStep(step);
+    setView("auth");
+  }
+
+  if (view === "landing") {
+    return (
+      <main className="auth-landing">
+        <div className="auth-landing-mosaic" aria-hidden="true">
+          <span /><span /><span /><span /><span /><span />
+        </div>
+        <div className="auth-landing-shade" aria-hidden="true" />
+        <header className="auth-landing-brand"><HydraWordmark /></header>
+        <section className="auth-landing-content">
+          <HydraMark className="auth-landing-mark" />
+          <p className="auth-landing-kicker">Gestão rural em um só lugar</p>
+          <h1>Água, rebanho e rotina.<br /><strong>Juntos.</strong></h1>
+          <p className="auth-landing-copy">Use o Hydra Agro no Android, iPhone, iPad ou computador.</p>
+          <div className="auth-landing-actions">
+            <button className="auth-landing-primary" type="button" onClick={() => openAuth("login")}>Entrar</button>
+            <button className="auth-landing-secondary" type="button" onClick={() => openAuth("signup")}>Criar conta</button>
+          </div>
+          <button className="auth-landing-staff" type="button" onClick={() => openAuth("login", "staff")}><UsersRound size={17} /> Acesso de funcionário</button>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main className="auth-shell">
-      <aside className="auth-story" aria-label="Sobre o Hydra Agro">
-        <HydraWordmark />
-        <div className="auth-story-copy">
-          <span>Gestão rural no dia a dia</span>
-          <h2>A propriedade organizada, do campo à tela.</h2>
-          <p>Registre o que acontece, acompanhe os animais e consulte as informações sem depender de cadernos espalhados.</p>
-        </div>
-        <div className="auth-story-features">
-          <div><Nfc size={20} /><span><strong>Brinco NFC</strong><small>Abra a ficha do animal por aproximação.</small></span></div>
-          <div><Droplets size={20} /><span><strong>Gestão hídrica</strong><small>Acompanhe fontes, leituras e consumo.</small></span></div>
-          <div><ClipboardCheck size={20} /><span><strong>Rotina da propriedade</strong><small>Organize atividades e registros em um lugar.</small></span></div>
-        </div>
-        <small className="auth-story-availability">Disponível para Android e navegadores.</small>
-      </aside>
-
       <section className={`auth-card ${mode === "signup" ? "auth-card-wide" : ""}`}>
+        {(mode === "signup" || loginStep === "email" || loginStep === "staff") && <button className="auth-home-back" type="button" onClick={() => { setView("landing"); setError(""); setNotice(""); }}><ArrowLeft size={17} /> Voltar</button>}
         <div className="auth-brand-row">
           <HydraWordmark compact />
           <span>Acesso ao Hydra Agro</span>

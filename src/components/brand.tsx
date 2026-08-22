@@ -42,7 +42,9 @@ export function HydraWordmark({ compact = false }: { compact?: boolean }) {
 export function SplashBrand() {
   return (
     <div className="splash-brand" aria-label="Carregando Hydra Agro">
+      <span className="splash-expansion" aria-hidden="true" />
       <HydraMark className="splash-mark" />
+      <div className="splash-name"><span>Hydra</span><strong>Agro</strong></div>
     </div>
   );
 }
