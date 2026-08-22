@@ -450,21 +450,66 @@
   background: var(--forest-950);
 }
 
-.hydra-root .auth-shell-signup::after {
+.hydra-root .auth-shell-motion {
+  background: var(--forest-950);
+}
+
+.hydra-root .auth-shell-motion::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(8, 39, 27, .22), rgba(8, 39, 27, .56));
+  background:
+    radial-gradient(circle at 50% 42%, rgba(244, 242, 236, .16), transparent 32%),
+    linear-gradient(180deg, rgba(8, 39, 27, .22), rgba(8, 39, 27, .67));
 }
 
-.hydra-root .auth-shell-signup .auth-card {
-  border-color: rgba(255, 255, 255, .58);
-  background: rgba(255, 255, 255, .9);
+.hydra-root .auth-shell-motion .auth-card {
+  border-color: rgba(255, 255, 255, .5);
+  background: rgba(250, 249, 245, .86);
   box-shadow: 0 28px 80px rgba(3, 26, 17, .3);
-  -webkit-backdrop-filter: blur(22px) saturate(145%);
-  backdrop-filter: blur(22px) saturate(145%);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  animation: auth-glass-card-in 620ms cubic-bezier(.16, .84, .28, 1) both;
+}
+
+.hydra-root .auth-form-mark {
+  width: 58px;
+  height: 58px;
+  margin: -8px auto 17px;
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 9px 18px rgba(8, 39, 27, .18));
+  animation: auth-form-mark-in 620ms cubic-bezier(.16, .84, .28, 1) 90ms both;
+}
+
+.hydra-root .auth-form-mark > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hydra-root .auth-shell-motion .auth-home-back {
+  position: absolute;
+  z-index: 3;
+  top: 18px;
+  left: 20px;
+  margin: 0;
+}
+
+.hydra-root .auth-shell-motion .auth-content h1,
+.hydra-root .auth-shell-motion .signup-panel h1 {
+  text-align: center;
+}
+
+.hydra-root .auth-shell-motion .auth-subtitle {
+  text-align: center;
+}
+
+.hydra-root .auth-shell-staff .auth-form-mark {
+  padding: 9px;
+  border-radius: 18px;
+  background: var(--orange-soft);
 }
 
 .hydra-root .signup-motion-bg {
@@ -817,14 +862,29 @@
 }
 
 .hydra-root .page-enter,
-.hydra-root .route-motion-forward,
+.hydra-root .route-motion-forward {
+  animation: hydra-page-forward 330ms cubic-bezier(.2, .8, .2, 1) both !important;
+  will-change: transform, opacity;
+}
+
 .hydra-root .route-motion-back {
-  animation: hydra-page-in 160ms ease-out both !important;
+  animation: hydra-page-back 330ms cubic-bezier(.2, .8, .2, 1) both !important;
+  will-change: transform, opacity;
 }
 
 @keyframes hydra-page-in {
   from { opacity: .5; }
   to { opacity: 1; }
+}
+
+@keyframes hydra-page-forward {
+  from { opacity: 0; transform: translate3d(26px, 0, 0) scale(.985); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes hydra-page-back {
+  from { opacity: 0; transform: translate3d(-24px, 0, 0) scale(.985); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
 
 /* Tema escuro sem brilhos ou gradientes decorativos. */
@@ -1188,6 +1248,17 @@
 @keyframes signup-tile-reveal {
   from { opacity: 0; transform: rotate(var(--tile-rotate)) translate3d(0, -56px, 0) scale(.86); }
   to { opacity: 1; transform: rotate(var(--tile-rotate)) translate3d(0, 0, 0) scale(1.02); }
+}
+
+@keyframes auth-glass-card-in {
+  from { opacity: 0; transform: translate3d(0, 34px, 0) scale(.95); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes auth-form-mark-in {
+  from { opacity: 0; transform: scale(.72) rotate(-7deg); }
+  70% { opacity: 1; transform: scale(1.06) rotate(1deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
 }
 
 @keyframes auth-logo-float {
