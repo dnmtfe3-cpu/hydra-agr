@@ -233,10 +233,11 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
   }
 
   return (
-    <main className={`auth-shell ${mode === "signup" ? "auth-shell-signup" : ""}`}>
-      {mode === "signup" && <div className="signup-motion-bg" aria-hidden="true"><span /><span /><span /><span /><span /><span /></div>}
+    <main className={`auth-shell auth-shell-motion ${mode === "signup" ? "auth-shell-signup" : ""} ${loginStep === "staff" ? "auth-shell-staff" : ""}`}>
+      <div className="signup-motion-bg" aria-hidden="true"><span /><span /><span /><span /><span /><span /></div>
       <section className={`auth-card ${mode === "signup" ? "auth-card-wide" : ""}`}>
         {(mode === "signup" || loginStep === "email" || loginStep === "staff") && <button className="auth-home-back" type="button" onClick={() => { setView("landing"); setError(""); setNotice(""); }}><ArrowLeft size={17} /> Voltar</button>}
+        <span className="auth-form-mark" aria-hidden="true"><HydraMark /></span>
 
         {mode === "login" ? (
           <div className="auth-content auth-enter" key={loginStep}>
