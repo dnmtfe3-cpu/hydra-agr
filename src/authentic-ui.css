@@ -1426,7 +1426,9 @@
 
 .hydra-root .phone-app .bottom-nav > button.nav-nfc > span:not(.touch-ripple),
 .hydra-root .phone-app .bottom-nav > button.nav-nfc.active > span:not(.touch-ripple) {
-  color: var(--orange) !important;
+  color: #fff !important;
+  background: var(--orange) !important;
+  box-shadow: 0 7px 16px rgba(231, 130, 40, .24) !important;
   opacity: 1 !important;
   filter: none !important;
 }
