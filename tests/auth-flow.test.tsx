@@ -4,6 +4,7 @@ import { AuthFlow } from "../src/features/auth/auth-flow";
 
 const handlers = {
   onLogin: vi.fn(async () => ({ ok: true, message: "ok" })),
+  onGoogleLogin: vi.fn(async () => ({ ok: true, message: "ok" })),
   onStaffLogin: vi.fn(async () => ({ ok: true, message: "ok" })),
   onSignup: vi.fn(async () => ({ ok: true, message: "ok" })),
   onResetPassword: vi.fn(async () => ({ ok: true, message: "ok" })),
