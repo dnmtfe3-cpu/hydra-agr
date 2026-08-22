@@ -964,6 +964,21 @@
 }
 
 /* Resposta tátil da navegação: compressão, pulso do ícone e onda no toque. */
+.hydra-root .phone-app .bottom-nav {
+  border-color: rgba(255, 255, 255, .58) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .76), rgba(248, 249, 246, .68)) !important;
+  box-shadow: 0 -10px 34px rgba(8, 39, 27, .09), inset 0 1px 0 rgba(255, 255, 255, .72) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(165%) !important;
+  backdrop-filter: blur(28px) saturate(165%) !important;
+  background-clip: padding-box !important;
+}
+
+.hydra-root.theme-dark .phone-app .bottom-nav {
+  border-color: rgba(255, 255, 255, .1) !important;
+  background: linear-gradient(180deg, rgba(24, 35, 29, .8), rgba(17, 26, 21, .72)) !important;
+  box-shadow: 0 -10px 34px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .07) !important;
+}
+
 .hydra-root .phone-app .bottom-nav > button {
   overflow: hidden !important;
   transform-origin: center !important;
