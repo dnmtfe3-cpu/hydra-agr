@@ -236,7 +236,7 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
     <main className={`auth-shell auth-shell-motion ${mode === "signup" ? "auth-shell-signup" : ""} ${loginStep === "staff" ? "auth-shell-staff" : ""}`}>
       <div className="signup-motion-bg" aria-hidden="true"><span /><span /><span /><span /><span /><span /></div>
       <section className={`auth-card ${mode === "signup" ? "auth-card-wide" : ""}`}>
-        {(mode === "signup" || loginStep === "email" || loginStep === "staff") && <button className="auth-home-back" type="button" onClick={() => { setView("landing"); setError(""); setNotice(""); }}><ArrowLeft size={17} /> Voltar</button>}
+        {mode === "login" && loginStep === "email" && <button className="auth-home-back" type="button" onClick={() => { setView("landing"); setError(""); setNotice(""); }}><ArrowLeft size={17} /> Voltar</button>}
         <span className="auth-form-mark" aria-hidden="true"><HydraMark /></span>
 
         {mode === "login" ? (
@@ -271,7 +271,7 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
               </form>
             ) : loginStep === "staff" ? (
               <form onSubmit={submitStaffLogin}>
-                <button className="auth-back" type="button" onClick={() => { setLoginStep("email"); setError(""); }}>
+                <button className="auth-back" type="button" onClick={() => { setView("landing"); setLoginStep("email"); setError(""); }}>
                   <ArrowLeft size={17} /> Voltar
                 </button>
                 <div className="auth-icon"><KeyRound size={22} /></div>
@@ -352,7 +352,7 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
         ) : (
           <div className="signup-flow auth-enter">
             <div className="signup-topline">
-              <button className="auth-back" type="button" onClick={() => switchMode("login")}><ArrowLeft size={17} /> Entrar</button>
+              <button className="auth-back" type="button" onClick={() => { setView("landing"); switchMode("login"); }}><ArrowLeft size={17} /> Voltar</button>
               <div className="step-dots" aria-label={`Etapa ${signupStep + 1} de 4`}>
                 {[0, 1, 2, 3].map((step) => <span key={step} className={`${step === signupStep ? "active" : ""} ${step < signupStep ? "done" : ""}`} />)}
               </div>
