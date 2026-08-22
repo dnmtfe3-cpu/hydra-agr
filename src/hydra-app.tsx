@@ -78,7 +78,7 @@ export default function HydraApp() {
   useAppOverlay(quickOpen, () => closeQuick());
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setSplash(false), 2600);
+    const timer = window.setTimeout(() => setSplash(false), 3000);
     return () => window.clearTimeout(timer);
   }, []);
 

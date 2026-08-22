@@ -188,7 +188,7 @@
   place-items: center;
   overflow: hidden;
   background: var(--forest-950);
-  animation: hydra-splash-exit 2.6s ease both;
+  animation: hydra-splash-exit 3s cubic-bezier(.4, 0, .2, 1) both;
 }
 
 .hydra-root .splash-brand {
@@ -206,33 +206,44 @@
   border-radius: 24px;
   background: var(--cream);
   opacity: 0;
-  animation: hydra-splash-expand 2.6s cubic-bezier(.72, 0, .2, 1) both;
+  will-change: transform, opacity;
+  animation: hydra-splash-expand 3s cubic-bezier(.65, 0, .22, 1) both;
 }
 
-.hydra-root .splash-mark {
+.hydra-root .splash-mark-wrap {
   position: relative;
   z-index: 2;
   width: 88px;
   height: 88px;
+  display: block;
+  will-change: transform, opacity;
   filter: drop-shadow(0 12px 28px rgba(0, 0, 0, .2));
-  animation: hydra-mark-transition 2.6s cubic-bezier(.72, 0, .2, 1) both !important;
+  animation: hydra-mark-transition 3s cubic-bezier(.65, 0, .22, 1) both;
+}
+
+.hydra-root .splash-mark {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 @keyframes hydra-mark-transition {
-  0% { opacity: 0; transform: scale(.72); }
-  16%, 52% { opacity: 1; transform: scale(1); }
-  76%, 100% { opacity: 0; transform: scale(5.8); }
+  0% { opacity: 0; transform: scale(.78); }
+  18% { opacity: 1; transform: scale(1.02); }
+  30%, 54% { opacity: 1; transform: scale(1); }
+  72% { opacity: .96; transform: scale(1.18); }
+  100% { opacity: 0; transform: scale(7); }
 }
 
 @keyframes hydra-splash-expand {
-  0%, 54% { opacity: 0; transform: scale(.7); }
-  62% { opacity: 1; }
-  100% { opacity: 1; transform: scale(32); }
+  0%, 50% { opacity: 0; transform: scale(.76); }
+  61% { opacity: 1; transform: scale(1); }
+  100% { opacity: 1; transform: scale(34); }
 }
 
 @keyframes hydra-splash-exit {
-  0%, 88% { visibility: visible; }
-  100% { visibility: hidden; }
+  0%, 84% { visibility: visible; opacity: 1; }
+  100% { visibility: hidden; opacity: 0; }
 }
 
 /* Autenticação */
@@ -459,7 +470,18 @@
 
 .hydra-root .greeting-block h1 {
   margin-bottom: 7px;
-  color: var(--ink);
+  color: var(--forest-800);
+}
+
+.hydra-root .greeting-time {
+  color: var(--forest-800);
+  font-weight: 700;
+}
+
+.hydra-root .greeting-name {
+  color: var(--orange);
+  font: inherit;
+  font-weight: 800;
 }
 
 .hydra-root .greeting-block p {
@@ -721,6 +743,9 @@
   border-color: var(--line);
   background: rgba(24, 32, 27, .98);
 }
+
+.hydra-root.theme-dark .greeting-time { color: #83ba5b; }
+.hydra-root.theme-dark .greeting-name { color: #f2a057; }
 
 /* Formulários reais centralizados; a landing visual é uma tela separada. */
 @media (min-width: 900px) {

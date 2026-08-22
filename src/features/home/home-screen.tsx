@@ -32,18 +32,18 @@ type Props = {
   announcements: Announcement[];
 };
 
-function welcomeMessage(firstName: string) {
+function welcomeMessage() {
   const hour = new Date().getHours();
-  if (hour < 5) return `Boa noite, ${firstName}`;
-  if (hour < 12) return `Bom dia, ${firstName}`;
-  if (hour < 18) return `Boa tarde, ${firstName}`;
-  return `Boa noite, ${firstName}`;
+  if (hour < 5) return "Boa noite";
+  if (hour < 12) return "Bom dia";
+  if (hour < 18) return "Boa tarde";
+  return "Boa noite";
 }
 
 export function HomeScreen({ account, navigate, onQuickAction, announcements }: Props) {
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const firstName = account.profile.name.split(/\s+/)[0] || "Produtor";
-  const welcome = welcomeMessage(firstName);
+  const welcome = welcomeMessage();
   const today = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "2-digit", month: "long" }).format(new Date());
   const waterTotal = account.waterRecords.reduce((total, record) => total + record.amount, 0);
   const pendingActivities = account.activities.filter((activity) => !activity.done);
@@ -91,7 +91,7 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
         <button className="icon-button bare" onClick={() => navigate("notifications")} aria-label="Notificações"><Bell size={23} />{hasUnreadNotifications && <span className="notification-dot" />}</button>
       </div>
 
-      <section className="greeting-block"><div><h1>{welcome}</h1><p className="capitalize">{today}</p></div><WeatherWidget municipality={account.property.municipality} onCompleteProperty={() => navigate("property")} /></section>
+      <section className="greeting-block"><div><h1><span className="greeting-time">{welcome},</span> <strong className="greeting-name">{firstName}</strong></h1><p className="capitalize">{today}</p></div><WeatherWidget municipality={account.property.municipality} onCompleteProperty={() => navigate("property")} /></section>
 
       {announcements.length > 0 && <section className="home-announcements" aria-label="Avisos do Hydra Agro">{announcements.slice(0, 3).map((announcement) => <article key={announcement.id} className={announcement.level}><span>{announcement.level === "critical" ? "IMPORTANTE" : announcement.level === "attention" ? "ATENÇÃO" : "AVISO"}</span><strong>{announcement.title}</strong><p>{announcement.body}</p></article>)}</section>}
 
