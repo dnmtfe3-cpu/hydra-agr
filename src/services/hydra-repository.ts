@@ -337,6 +337,18 @@ export async function signIn(email: string, password: string) {
   return data;
 }
 
+export async function signInWithGoogle() {
+  const redirectTo = Capacitor.isNativePlatform()
+    ? "br.com.hydraagro.app://auth/oauth"
+    : window.location.origin;
+  const { data, error } = await requireSupabase().auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo },
+  });
+  throwIfError(error);
+  return data;
+}
+
 export async function resetPassword(email: string) {
   const redirectTo = Capacitor.isNativePlatform()
     ? "br.com.hydraagro.app://auth/recovery"

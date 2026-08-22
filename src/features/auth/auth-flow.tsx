@@ -42,6 +42,7 @@ const waterKinds = [
 
 type Props = {
   onLogin: (email: string, password: string) => Promise<AuthResult>;
+  onGoogleLogin: () => Promise<AuthResult>;
   onStaffLogin: (code: string) => Promise<AuthResult>;
   onSignup: (payload: SignupPayload) => Promise<AuthResult>;
   onResetPassword: (email: string) => Promise<AuthResult>;
@@ -55,7 +56,7 @@ function formatStaffCode(value: string) {
   return compact ? `HA${groups.length ? `-${groups.join("-")}` : ""}` : "";
 }
 
-export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: Props) {
+export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onResetPassword }: Props) {
   const [view, setView] = useState<"landing" | "auth">("landing");
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [loginStep, setLoginStep] = useState<"email" | "password" | "recovery" | "staff">("email");
@@ -114,6 +115,16 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
     if (!result.ok) setError(result.message);
   }
 
+  async function submitGoogleLogin() {
+    setError("");
+    setSubmitting(true);
+    const result = await onGoogleLogin();
+    if (!result.ok) {
+      setSubmitting(false);
+      setError(result.message);
+    }
+  }
+
   async function submitStaffLogin(event: FormEvent) {
     event.preventDefault();
     const compact = staffCode.toUpperCase().replace(/[^A-Z0-9]/g, "");
@@ -133,10 +144,12 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
       if (signup.name.trim().length < 2) return "Informe seu nome completo.";
       if (!/^\S+@\S+\.\S+$/.test(signup.email)) return "Informe um e-mail válido.";
       if (signup.phone.replace(/\D/g, "").length < 10) return "Informe um telefone válido.";
+    }
+    if (signupStep === 1) {
       if (signup.password.length < 8) return "A senha precisa ter pelo menos 8 caracteres.";
       if (signup.password !== signup.confirmPassword) return "As senhas não coincidem.";
     }
-    if (signupStep === 1) {
+    if (signupStep === 2) {
       if (!property.name.trim()) return "Informe o nome da propriedade.";
       if (!property.municipality.trim()) return "Informe o município.";
       if (!isSupportedMunicipality(property.municipality)) return "Escolha Brejões ou um dos municípios vizinhos atendidos.";
@@ -145,7 +158,7 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
       if (!Number.isFinite(area) || area <= 0) return "Informe uma área válida, maior que zero.";
       if (!property.type) return "Selecione o tipo de propriedade.";
     }
-    if (signupStep === 2) {
+    if (signupStep === 3) {
       if (!property.mainActivity) return "Selecione a principal atividade.";
       if (property.approximateAnimals && (!/^\d+$/.test(property.approximateAnimals) || Number(property.approximateAnimals) < 0)) return "Informe uma quantidade válida de animais.";
     }
@@ -160,7 +173,7 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
       return;
     }
     setError("");
-    setSignupStep((current) => Math.min(current + 1, 3));
+    setSignupStep((current) => Math.min(current + 1, 4));
   }
 
   async function finishSignup() {
@@ -246,6 +259,11 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
                 <div className="auth-icon"><UserRound size={22} /></div>
                 <h1>Bem-vindo de volta</h1>
                 <p className="auth-subtitle">Entre para acessar sua propriedade.</p>
+                <button className="google-auth-button" type="button" onClick={() => void submitGoogleLogin()} disabled={submitting}>
+                  <span className="google-g" aria-hidden="true">G</span>
+                  {submitting ? "Abrindo Google…" : "Continuar com Google"}
+                </button>
+                <div className="auth-divider"><span>ou entre com seu e-mail</span></div>
                 <Field label="E-mail">
                   <input
                     type="email"
@@ -353,20 +371,18 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
           <div className="signup-flow auth-enter">
             <div className="signup-topline">
               <button className="auth-back" type="button" onClick={() => { setView("landing"); switchMode("login"); }}><ArrowLeft size={17} /> Voltar</button>
-              <div className="step-dots" aria-label={`Etapa ${signupStep + 1} de 4`}>
-                {[0, 1, 2, 3].map((step) => <span key={step} className={`${step === signupStep ? "active" : ""} ${step < signupStep ? "done" : ""}`} />)}
+              <div className="step-dots" aria-label={`Etapa ${signupStep + 1} de 5`}>
+                {[0, 1, 2, 3, 4].map((step) => <span key={step} className={`${step === signupStep ? "active" : ""} ${step < signupStep ? "done" : ""}`} />)}
               </div>
             </div>
 
             {signupStep === 0 && (
               <form onSubmit={nextSignup} className="signup-panel">
-                <span className="eyebrow">DADOS PESSOAIS</span><h1>Vamos criar sua conta</h1><p className="auth-subtitle">Seus dados ficam separados dos demais usuários.</p>
+                <span className="eyebrow">DADOS PESSOAIS</span><h1>Vamos criar sua conta</h1><p className="auth-subtitle">Comece com as informações básicas.</p>
                 <div className="form-grid">
                   <Field label="Nome completo"><input value={signup.name} onChange={(e) => changeSignup("name", e.target.value)} placeholder="Seu nome" autoComplete="name" /></Field>
                   <Field label="E-mail"><input type="email" value={signup.email} onChange={(e) => changeSignup("email", e.target.value)} placeholder="voce@email.com" autoComplete="email" /></Field>
                   <Field label="Telefone"><input type="tel" value={signup.phone} onChange={(e) => changeSignup("phone", e.target.value)} placeholder="(75) 99999-9999" autoComplete="tel" /></Field>
-                  <Field label="Senha" hint="Use pelo menos 8 caracteres e evite reutilizar senhas."><input type="password" value={signup.password} onChange={(e) => changeSignup("password", e.target.value)} placeholder="Mínimo 8 caracteres" autoComplete="new-password" /></Field>
-                  <Field label="Confirmar senha"><input type="password" value={signup.confirmPassword} onChange={(e) => changeSignup("confirmPassword", e.target.value)} placeholder="Repita a senha" autoComplete="new-password" /></Field>
                 </div>
                 {error && <p className="form-error" role="alert">{error}</p>}
                 <button className="primary-button full" type="submit">Continuar <ArrowRight size={18} /></button>
@@ -374,6 +390,18 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
             )}
 
             {signupStep === 1 && (
+              <form onSubmit={nextSignup} className="signup-panel">
+                <span className="eyebrow">SEGURANÇA</span><h1>Proteja seu acesso</h1><p className="auth-subtitle">Crie uma senha segura para sua propriedade.</p>
+                <div className="form-grid">
+                  <Field label="Senha" hint="Use pelo menos 8 caracteres e evite reutilizar senhas."><input type="password" value={signup.password} onChange={(e) => changeSignup("password", e.target.value)} placeholder="Mínimo 8 caracteres" autoComplete="new-password" /></Field>
+                  <Field label="Confirmar senha"><input type="password" value={signup.confirmPassword} onChange={(e) => changeSignup("confirmPassword", e.target.value)} placeholder="Repita a senha" autoComplete="new-password" /></Field>
+                </div>
+                {error && <p className="form-error" role="alert">{error}</p>}
+                <div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(0)}>Voltar</button><button className="primary-button" type="submit">Continuar <ArrowRight size={18} /></button></div>
+              </form>
+            )}
+
+            {signupStep === 2 && (
               <form onSubmit={nextSignup} className="signup-panel">
                 <span className="eyebrow">SUA PROPRIEDADE</span><h1>Conte sobre sua terra</h1><p className="auth-subtitle">Esses dados já formarão a ficha da propriedade.</p>
                 <div className="form-grid">
@@ -389,11 +417,11 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
                   <Field label="Tipo da propriedade"><select value={property.type} onChange={(e) => changeProperty("type", e.target.value)}><option value="">Selecione</option><option>Familiar</option><option>Comercial</option><option>Assentamento</option><option>Cooperativa</option><option>Outra</option></select></Field>
                 </div>
                 {error && <p className="form-error" role="alert">{error}</p>}
-                <div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(0)}>Voltar</button><button className="primary-button" type="submit">Continuar <ArrowRight size={18} /></button></div>
+                <div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(1)}>Voltar</button><button className="primary-button" type="submit">Continuar <ArrowRight size={18} /></button></div>
               </form>
             )}
 
-            {signupStep === 2 && (
+            {signupStep === 3 && (
               <form onSubmit={nextSignup} className="signup-panel">
                 <span className="eyebrow">PRODUÇÃO E RECURSOS</span><h1>O que acontece por aí?</h1><p className="auth-subtitle">Escolha a atividade principal e tudo que fizer parte da rotina.</p>
                 <Field label="Principal atividade"><select value={property.mainActivity} onChange={(e) => changeProperty("mainActivity", e.target.value)}><option value="">Selecione</option>{activities.map((activity) => <option key={activity}>{activity}</option>)}</select></Field>
@@ -401,17 +429,17 @@ export function AuthFlow({ onLogin, onStaffLogin, onSignup, onResetPassword }: P
                 <Field label="Quantidade aproximada de animais" hint="Pode deixar em branco se não houver rebanho."><input inputMode="numeric" value={property.approximateAnimals} onChange={(e) => changeProperty("approximateAnimals", e.target.value)} placeholder="0" /></Field>
                 <Field label="Fontes de água disponíveis"><div className="choice-grid">{waterKinds.map((kind) => { const active = property.waterKinds.includes(kind); return <button type="button" key={kind} className={`choice-chip ${active ? "active" : ""}`} onClick={() => changeProperty("waterKinds", active ? property.waterKinds.filter((item) => item !== kind) : [...property.waterKinds, kind])}>{active && <Check size={14} />} {kind}</button>; })}</div></Field>
                 {error && <p className="form-error" role="alert">{error}</p>}
-                <div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(1)}>Voltar</button><button className="primary-button" type="submit">Revisar <ArrowRight size={18} /></button></div>
+                <div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(2)}>Voltar</button><button className="primary-button" type="submit">Revisar <ArrowRight size={18} /></button></div>
               </form>
             )}
 
-            {signupStep === 3 && (
+            {signupStep === 4 && (
               <div className="signup-panel review-panel">
                 <span className="eyebrow">TUDO CERTO</span><h1>Sua base está pronta, {firstName}</h1><p className="auth-subtitle">Você poderá editar tudo depois no perfil.</p>
                 <div className="review-card"><div className="review-icon"><MapPin size={23} /></div><div><strong>{property.name}</strong><span>{property.municipality}, {property.state}</span><small>{property.area} {property.areaUnit} · {property.mainActivity}</small></div></div>
                 <div className="preview-note">Seus dados serão associados à sua conta e isolados dos demais produtores pelo servidor.</div>
                 {error && <p className="form-error" role="alert">{error}</p>}
-                <div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(2)}>Voltar</button><button className="primary-button" type="button" onClick={finishSignup} disabled={submitting}>{submitting ? "Criando conta…" : "Confirmar e criar conta"}</button></div>
+                <div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(3)}>Voltar</button><button className="primary-button" type="button" onClick={finishSignup} disabled={submitting}>{submitting ? "Criando conta…" : "Confirmar e criar conta"}</button></div>
               </div>
             )}
           </div>

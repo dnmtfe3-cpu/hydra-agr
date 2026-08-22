@@ -20,6 +20,7 @@ import {
   recordNfcReading,
   resetPassword as requestPasswordReset,
   signIn,
+  signInWithGoogle,
   signUp,
   syncAccountDelta,
   togglePostLike,
@@ -279,6 +280,15 @@ export function useHydraStore() {
     }
   }, [loadUser]);
 
+  const loginGoogle = useCallback(async (): Promise<AuthResult> => {
+    try {
+      await signInWithGoogle();
+      return { ok: true, message: "Abrindo o acesso seguro do Google…" };
+    } catch (error) {
+      return { ok: false, message: friendlyError(error) };
+    }
+  }, []);
+
   const createAccount = useCallback(async (payload: SignupPayload): Promise<AuthResult> => {
     try {
       setReady(false);
@@ -514,6 +524,7 @@ export function useHydraStore() {
     syncStatus,
     lastError,
     login,
+    loginGoogle,
     loginStaff,
     createAccount,
     resetPassword,

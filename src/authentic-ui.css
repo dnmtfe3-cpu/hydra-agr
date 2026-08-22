@@ -677,6 +677,86 @@
   box-shadow: 0 12px 24px rgba(231, 130, 40, .22);
 }
 
+.hydra-root .auth-shell-motion .auth-icon {
+  display: none;
+}
+
+.hydra-root .google-auth-button {
+  width: 100%;
+  min-height: 54px;
+  margin-bottom: 17px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid rgba(18, 52, 37, .14);
+  border-radius: 16px;
+  color: #26352d;
+  background: rgba(255, 255, 255, .9);
+  box-shadow: 0 8px 24px rgba(8, 39, 27, .07), inset 0 1px 0 #fff;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.hydra-root .google-auth-button:hover {
+  border-color: rgba(18, 52, 37, .22);
+  background: #fff;
+}
+
+.hydra-root .google-g {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  font-family: Arial, sans-serif;
+  font-size: 21px;
+  font-weight: 900;
+  line-height: 1;
+  background: conic-gradient(from -38deg, #4285f4 0 25%, #34a853 25% 43%, #fbbc05 43% 68%, #ea4335 68% 84%, #4285f4 84% 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hydra-root .auth-divider {
+  margin: 0 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #8b958f;
+  font-size: 10px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.hydra-root .auth-divider::before,
+.hydra-root .auth-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: rgba(31, 101, 71, .11);
+}
+
+.hydra-root .auth-shell-motion .auth-content > form,
+.hydra-root .auth-shell-motion .signup-panel {
+  animation: auth-form-content-in 420ms cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.hydra-root .auth-shell-motion .form-actions {
+  position: sticky;
+  bottom: -1px;
+  z-index: 4;
+  margin-top: 20px;
+  padding-top: 12px;
+  background: linear-gradient(180deg, rgba(248, 248, 244, 0), rgba(248, 248, 244, .96) 28%);
+}
+
+@keyframes auth-form-content-in {
+  from { opacity: 0; transform: translate3d(18px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
 @media (max-width: 560px) {
   .hydra-root .auth-shell-motion {
     align-items: end;
@@ -684,11 +764,19 @@
   }
 
   .hydra-root .auth-shell-motion .auth-card {
-    max-height: calc(100dvh - max(24px, env(safe-area-inset-top)));
+    max-height: calc(100dvh - max(18px, env(safe-area-inset-top)));
     padding: 24px 20px 23px;
-    border-radius: 28px;
+    border-radius: 30px 30px 24px 24px;
     overflow-y: auto;
     overscroll-behavior: contain;
+  }
+
+  .hydra-root .auth-shell-motion:not(.auth-shell-signup):not(.auth-shell-staff) .auth-card {
+    max-height: calc(100dvh - 15vh);
+  }
+
+  .hydra-root .auth-shell-staff .auth-card {
+    max-height: calc(100dvh - 10vh);
   }
 
   .hydra-root .auth-shell-motion .auth-form-mark {
@@ -709,6 +797,10 @@
 
   .hydra-root .auth-shell-motion .form-grid {
     gap: 13px;
+  }
+
+  .hydra-root .auth-shell-motion .auth-subtitle {
+    margin-bottom: 20px;
   }
 }
 
