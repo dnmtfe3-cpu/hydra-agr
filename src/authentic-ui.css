@@ -1353,6 +1353,13 @@
   filter: none;
 }
 
+.hydra-root .phone-app .bottom-nav > button.nav-nfc > span:not(.touch-ripple),
+.hydra-root .phone-app .bottom-nav > button.nav-nfc.active > span:not(.touch-ripple) {
+  color: var(--orange) !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
 /* Resposta de clique consistente em todas as funções do aplicativo. */
 .hydra-root :is(button, [role="button"], a, .animal-card, .sector-card, .monitoring-card, .activity-card, .post-card, .challenge-card, .history-home-row, .profile-menu-row, .compact-row, .notification-item) {
   -webkit-tap-highlight-color: transparent;
