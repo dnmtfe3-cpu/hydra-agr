@@ -35,7 +35,7 @@
   overflow: visible !important;
 }
 
-.phone-app .bottom-nav > button > span {
+.phone-app .bottom-nav > button > span:not(.touch-ripple) {
   width: 38px !important;
   height: 34px !important;
   border-radius: 12px !important;
@@ -70,8 +70,8 @@
   color: var(--forest-700) !important;
 }
 
-.phone-app .bottom-nav > button:nth-of-type(3) > span,
-.phone-app .bottom-nav > button:nth-of-type(3).active > span {
+.phone-app .bottom-nav > button:nth-of-type(3) > span:not(.touch-ripple),
+.phone-app .bottom-nav > button:nth-of-type(3).active > span:not(.touch-ripple) {
   width: 52px !important;
   height: 52px !important;
   margin-bottom: 0 !important;
@@ -94,7 +94,7 @@
   font-weight: 800 !important;
 }
 
-.phone-app .bottom-nav > button:nth-of-type(3):active > span {
+.phone-app .bottom-nav > button:nth-of-type(3):active > span:not(.touch-ripple) {
   transform: translateY(-8px) scale(.96) !important;
 }
 

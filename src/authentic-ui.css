@@ -963,6 +963,64 @@
   }
 }
 
+/* Resposta tátil da navegação: compressão, pulso do ícone e onda no toque. */
+.hydra-root .phone-app .bottom-nav > button {
+  overflow: hidden !important;
+  transform-origin: center !important;
+}
+
+.hydra-root .phone-app .bottom-nav > button.is-tapped {
+  animation: hydra-nav-tap 420ms cubic-bezier(.2, .8, .2, 1) !important;
+}
+
+.hydra-root .phone-app .bottom-nav > button.is-tapped > span:not(.touch-ripple) {
+  animation: hydra-nav-icon-tap 420ms cubic-bezier(.2, .8, .2, 1) !important;
+}
+
+.hydra-root .phone-app .bottom-nav button > .touch-ripple,
+.hydra-root .phone-app .bottom-nav button .touch-ripple {
+  display: block !important;
+  visibility: visible !important;
+  position: absolute !important;
+  z-index: 1 !important;
+  left: var(--touch-x) !important;
+  top: var(--touch-y) !important;
+  width: var(--touch-size) !important;
+  height: var(--touch-size) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: rgba(31, 101, 71, .22) !important;
+  box-shadow: none !important;
+  opacity: 0;
+  pointer-events: none !important;
+  transform: scale(0);
+  animation: hydra-nav-ripple 580ms cubic-bezier(.2, .8, .2, 1) forwards !important;
+}
+
+@keyframes hydra-nav-tap {
+  0% { transform: scale(1); }
+  34% { transform: scale(.94); }
+  68% { transform: scale(1.025); }
+  100% { transform: scale(1); }
+}
+
+@keyframes hydra-nav-icon-tap {
+  0% { transform: translateY(0) scale(1); }
+  38% { transform: translateY(2px) scale(.9); }
+  72% { transform: translateY(-3px) scale(1.08); }
+  100% { transform: translateY(-2px) scale(1); }
+}
+
+@keyframes hydra-nav-ripple {
+  0% { opacity: .34; transform: scale(0); }
+  68% { opacity: .13; }
+  100% { opacity: 0; transform: scale(1); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hydra-root *,
   .hydra-root *::before,

@@ -84,6 +84,8 @@ export default function HydraApp() {
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const navTapTimers = new Map<HTMLButtonElement, number>();
+    const navTapFrames = new Map<HTMLButtonElement, number>();
     function handlePointerDown(event: PointerEvent) {
       if (reducedMotion.matches || event.button !== 0) return;
       const target = event.target instanceof Element ? event.target.closest("button") : null;
@@ -92,16 +94,35 @@ export default function HydraApp() {
       const diameter = Math.max(bounds.width, bounds.height) * 1.5;
       const ripple = document.createElement("span");
       ripple.className = "touch-ripple";
-      ripple.style.width = `${diameter}px`;
-      ripple.style.height = `${diameter}px`;
-      ripple.style.left = `${event.clientX - bounds.left - diameter / 2}px`;
-      ripple.style.top = `${event.clientY - bounds.top - diameter / 2}px`;
+      ripple.style.setProperty("--touch-size", `${diameter}px`);
+      ripple.style.setProperty("--touch-x", `${event.clientX - bounds.left - diameter / 2}px`);
+      ripple.style.setProperty("--touch-y", `${event.clientY - bounds.top - diameter / 2}px`);
       target.appendChild(ripple);
       window.setTimeout(() => ripple.remove(), 620);
+      if (target.matches(".bottom-nav button")) {
+        const previousTimer = navTapTimers.get(target);
+        if (previousTimer) window.clearTimeout(previousTimer);
+        const previousFrame = navTapFrames.get(target);
+        if (previousFrame) window.cancelAnimationFrame(previousFrame);
+        target.classList.remove("is-tapped");
+        navTapFrames.set(target, window.requestAnimationFrame(() => {
+          navTapFrames.delete(target);
+          if (!target.isConnected) return;
+          target.classList.add("is-tapped");
+          navTapTimers.set(target, window.setTimeout(() => {
+            target.classList.remove("is-tapped");
+            navTapTimers.delete(target);
+          }, 420));
+        }));
+      }
       if (target.matches(".primary-button, .icon-button.accent, .bottom-nav button, .toggle, .home-fab-label")) window.navigator.vibrate?.(7);
     }
     document.addEventListener("pointerdown", handlePointerDown, { passive: true });
-    return () => document.removeEventListener("pointerdown", handlePointerDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      navTapTimers.forEach((timer) => window.clearTimeout(timer));
+      navTapFrames.forEach((frame) => window.cancelAnimationFrame(frame));
+    };
   }, []);
 
   useEffect(() => () => { if (quickTimer.current) window.clearTimeout(quickTimer.current); }, []);
