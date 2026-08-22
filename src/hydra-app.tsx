@@ -347,7 +347,7 @@ export default function HydraApp() {
           <span className="bottom-nav-indicator" aria-hidden="true" />
           {mainTabs.map((tab) => {
             const Icon = tab.icon;
-            return <button key={tab.id} className={activeTab === tab.id ? "active" : ""} onClick={() => openMainTab(tab.id)} aria-current={activeTab === tab.id ? "page" : undefined}><span><Icon size={21} strokeWidth={activeTab === tab.id ? 2.5 : 2} /></span><small>{tab.label}</small></button>;
+            return <button key={tab.id} className={`${activeTab === tab.id ? "active" : ""} ${tab.id === "nfc" ? "nav-nfc" : ""}`.trim()} onClick={() => openMainTab(tab.id)} aria-current={activeTab === tab.id ? "page" : undefined}><span><Icon size={21} strokeWidth={activeTab === tab.id ? 2.5 : 2} /></span><small>{tab.label}</small></button>;
           })}
         </nav>
 
