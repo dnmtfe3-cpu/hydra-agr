@@ -375,15 +375,60 @@
 .hydra-root .auth-landing-secondary { color: white; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.08); backdrop-filter: blur(14px); }
 
 .hydra-root .auth-landing-staff {
-  min-height: 42px;
-  margin: 10px auto 0;
-  padding: 0 12px;
+  width: 100%;
+  min-height: 52px;
+  margin: 11px auto 0;
+  padding: 0 17px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  color: #b9c9c0;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 999px;
+  color: #f4f8f5;
+  background: rgba(255, 255, 255, .08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   font-size: 12px;
+  font-weight: 750;
+}
+
+.hydra-root .auth-landing-staff > svg {
+  width: 30px;
+  height: 30px;
+  padding: 6px;
+  border-radius: 10px;
+  color: #ffad62;
+  background: rgba(255, 255, 255, .1);
+}
+
+.hydra-root .staff-entry-button {
+  min-height: 70px;
+  margin-top: 14px;
+  padding: 10px 13px;
+  border: 1px solid rgba(31, 101, 71, .14);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(231, 238, 233, .9), rgba(249, 234, 219, .62));
+  box-shadow: none;
+}
+
+.hydra-root .staff-entry-button > svg:first-child {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 13px;
+  color: white;
+  background: var(--forest-800);
+}
+
+.hydra-root .staff-entry-button span strong { color: var(--forest-950); font-size: 13px; }
+.hydra-root .staff-entry-button span small { margin-top: 3px; color: var(--muted); font-size: 10px; }
+.hydra-root .staff-entry-button > svg:last-child { color: var(--forest-700); }
+
+.hydra-root.theme-dark .staff-entry-button {
+  border-color: rgba(255, 255, 255, .1);
+  background: linear-gradient(135deg, rgba(42, 58, 49, .9), rgba(66, 48, 33, .58));
 }
 
 .hydra-root .auth-card,
@@ -431,6 +476,7 @@
 }
 
 .hydra-root .signup-motion-bg span {
+  --intro-delay: 0ms;
   position: absolute;
   width: clamp(170px, 43vw, 420px);
   height: clamp(180px, 30vh, 360px);
@@ -440,15 +486,17 @@
   background-size: cover;
   box-shadow: 0 24px 65px rgba(0, 0, 0, .3);
   will-change: transform;
-  animation: signup-photo-drift var(--drift-speed, 14s) ease-in-out infinite alternate;
+  animation:
+    signup-tile-reveal 760ms cubic-bezier(.16, .84, .28, 1) var(--intro-delay) both,
+    signup-photo-drift var(--drift-speed, 8s) ease-in-out calc(var(--intro-delay) + 760ms) infinite alternate;
 }
 
-.hydra-root .signup-motion-bg span:nth-child(1) { --tile-rotate: -8deg; --drift-x: 20px; --drift-y: 24px; --drift-speed: 13s; left: -7vw; top: 2vh; background-image: url("https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=900&q=80"); }
-.hydra-root .signup-motion-bg span:nth-child(2) { --tile-rotate: 7deg; --drift-x: -18px; --drift-y: 28px; --drift-speed: 16s; right: -8vw; top: -1vh; background-image: url("https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=900&q=80"); }
-.hydra-root .signup-motion-bg span:nth-child(3) { --tile-rotate: 5deg; --drift-x: 24px; --drift-y: -18px; --drift-speed: 15s; left: -13vw; top: 40vh; background-image: url("https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?auto=format&fit=crop&w=900&q=80"); }
-.hydra-root .signup-motion-bg span:nth-child(4) { --tile-rotate: -6deg; --drift-x: -22px; --drift-y: -25px; --drift-speed: 17s; right: -12vw; top: 42vh; background-image: url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=80"); }
-.hydra-root .signup-motion-bg span:nth-child(5) { --tile-rotate: -4deg; --drift-x: 18px; --drift-y: -28px; --drift-speed: 18s; left: 4vw; bottom: -15vh; background-image: url("https://images.unsplash.com/photo-1500076656116-558758c991c1?auto=format&fit=crop&w=900&q=80"); }
-.hydra-root .signup-motion-bg span:nth-child(6) { --tile-rotate: 8deg; --drift-x: -20px; --drift-y: 22px; --drift-speed: 14s; right: 1vw; bottom: -16vh; background-image: url("https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(1) { --tile-rotate: -8deg; --drift-x: 40px; --drift-y: 42px; --drift-speed: 7.3s; --intro-delay: 40ms; left: -7vw; top: 2vh; background-image: url("https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(2) { --tile-rotate: 7deg; --drift-x: -38px; --drift-y: 46px; --drift-speed: 8.6s; --intro-delay: 100ms; right: -8vw; top: -1vh; background-image: url("https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(3) { --tile-rotate: 5deg; --drift-x: 44px; --drift-y: -38px; --drift-speed: 7.8s; --intro-delay: 160ms; left: -13vw; top: 40vh; background-image: url("https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(4) { --tile-rotate: -6deg; --drift-x: -42px; --drift-y: -45px; --drift-speed: 9s; --intro-delay: 220ms; right: -12vw; top: 42vh; background-image: url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(5) { --tile-rotate: -4deg; --drift-x: 38px; --drift-y: -48px; --drift-speed: 8.2s; --intro-delay: 280ms; left: 4vw; bottom: -15vh; background-image: url("https://images.unsplash.com/photo-1500076656116-558758c991c1?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(6) { --tile-rotate: 8deg; --drift-x: -40px; --drift-y: 42px; --drift-speed: 9.4s; --intro-delay: 340ms; right: 1vw; bottom: -16vh; background-image: url("https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=900&q=80"); }
 
 .hydra-root .auth-home-back {
   min-height: 40px;
@@ -1028,18 +1076,32 @@
 /* Movimento do acesso e cadastro: fotos lentas, etapas e microinterações. */
 .hydra-root .auth-landing-mosaic span {
   --tile-rotate: 0deg;
-  --drift-x: 12px;
-  --drift-y: 16px;
+  --drift-x: 32px;
+  --drift-y: 38px;
+  --drift-speed: 8s;
+  --intro-delay: 0ms;
   will-change: transform;
-  animation: auth-photo-drift 13s ease-in-out infinite alternate;
+  animation:
+    auth-tile-reveal 880ms cubic-bezier(.16, .84, .28, 1) var(--intro-delay) both,
+    auth-photo-drift var(--drift-speed) ease-in-out calc(var(--intro-delay) + 880ms) infinite alternate;
 }
 
-.hydra-root .auth-landing-mosaic span:nth-child(1) { --tile-rotate: -7deg; --drift-x: 18px; animation-duration: 14s; }
-.hydra-root .auth-landing-mosaic span:nth-child(2) { --tile-rotate: 4deg; --drift-x: -15px; --drift-y: 20px; animation-duration: 17s; }
-.hydra-root .auth-landing-mosaic span:nth-child(3) { --tile-rotate: 8deg; --drift-x: -20px; animation-duration: 15s; }
-.hydra-root .auth-landing-mosaic span:nth-child(4) { --tile-rotate: 5deg; --drift-y: -18px; animation-duration: 18s; }
-.hydra-root .auth-landing-mosaic span:nth-child(5) { --tile-rotate: -3deg; --drift-x: 16px; --drift-y: -22px; animation-duration: 16s; }
-.hydra-root .auth-landing-mosaic span:nth-child(6) { --tile-rotate: 5deg; --drift-x: -14px; --drift-y: -17px; animation-duration: 19s; }
+.hydra-root .auth-landing-mosaic span:nth-child(1) { --tile-rotate: -7deg; --drift-x: 38px; --drift-speed: 7.2s; --intro-delay: 40ms; }
+.hydra-root .auth-landing-mosaic span:nth-child(2) { --tile-rotate: 4deg; --drift-x: -34px; --drift-y: 44px; --drift-speed: 8.6s; --intro-delay: 105ms; }
+.hydra-root .auth-landing-mosaic span:nth-child(3) { --tile-rotate: 8deg; --drift-x: -42px; --drift-speed: 7.8s; --intro-delay: 165ms; }
+.hydra-root .auth-landing-mosaic span:nth-child(4) { --tile-rotate: 5deg; --drift-y: -40px; --drift-speed: 9.1s; --intro-delay: 220ms; }
+.hydra-root .auth-landing-mosaic span:nth-child(5) { --tile-rotate: -3deg; --drift-x: 36px; --drift-y: -45px; --drift-speed: 8.2s; --intro-delay: 275ms; }
+.hydra-root .auth-landing-mosaic span:nth-child(6) { --tile-rotate: 5deg; --drift-x: -32px; --drift-y: -38px; --drift-speed: 9.5s; --intro-delay: 325ms; }
+
+.hydra-root .auth-landing-content {
+  animation: auth-content-reveal 720ms cubic-bezier(.2, .8, .2, 1) 180ms both;
+}
+
+.hydra-root:has(.splash-screen) .auth-landing-mosaic span,
+.hydra-root:has(.splash-screen) .auth-landing-content,
+.hydra-root:has(.splash-screen) .auth-landing-mark-wrap {
+  animation-play-state: paused !important;
+}
 
 .hydra-root .auth-shell-signup .signup-panel {
   animation: signup-step-in 440ms cubic-bezier(.2, .8, .2, 1) both !important;
@@ -1105,12 +1167,27 @@
 
 @keyframes auth-photo-drift {
   from { transform: rotate(var(--tile-rotate)) translate3d(0, 0, 0) scale(1.02); }
-  to { transform: rotate(calc(var(--tile-rotate) + 1.2deg)) translate3d(var(--drift-x), var(--drift-y), 0) scale(1.07); }
+  to { transform: rotate(calc(var(--tile-rotate) + 2.2deg)) translate3d(var(--drift-x), var(--drift-y), 0) scale(1.1); }
+}
+
+@keyframes auth-tile-reveal {
+  from { opacity: 0; transform: rotate(var(--tile-rotate)) translate3d(0, -64px, 0) scale(.84); }
+  to { opacity: 1; transform: rotate(var(--tile-rotate)) translate3d(0, 0, 0) scale(1.02); }
+}
+
+@keyframes auth-content-reveal {
+  from { opacity: 0; transform: translate3d(0, 24px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 @keyframes signup-photo-drift {
   from { transform: rotate(var(--tile-rotate)) translate3d(0, 0, 0) scale(1.02); }
-  to { transform: rotate(calc(var(--tile-rotate) + 1.4deg)) translate3d(var(--drift-x), var(--drift-y), 0) scale(1.08); }
+  to { transform: rotate(calc(var(--tile-rotate) + 2.4deg)) translate3d(var(--drift-x), var(--drift-y), 0) scale(1.1); }
+}
+
+@keyframes signup-tile-reveal {
+  from { opacity: 0; transform: rotate(var(--tile-rotate)) translate3d(0, -56px, 0) scale(.86); }
+  to { opacity: 1; transform: rotate(var(--tile-rotate)) translate3d(0, 0, 0) scale(1.02); }
 }
 
 @keyframes auth-logo-float {
@@ -1247,23 +1324,58 @@
 
 /* Resposta tátil da navegação: compressão, pulso do ícone e onda no toque. */
 .hydra-root .phone-app .bottom-nav {
-  border-color: rgba(255, 255, 255, .58) !important;
-  background: linear-gradient(180deg, rgba(255, 255, 255, .76), rgba(248, 249, 246, .68)) !important;
-  box-shadow: 0 -10px 34px rgba(8, 39, 27, .09), inset 0 1px 0 rgba(255, 255, 255, .72) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(165%) !important;
-  backdrop-filter: blur(28px) saturate(165%) !important;
+  border-color: rgba(255, 255, 255, .42) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .5), rgba(244, 248, 245, .36)) !important;
+  box-shadow: 0 -10px 34px rgba(8, 39, 27, .07), inset 0 1px 0 rgba(255, 255, 255, .58) !important;
+  -webkit-backdrop-filter: blur(38px) saturate(185%) !important;
+  backdrop-filter: blur(38px) saturate(185%) !important;
   background-clip: padding-box !important;
 }
 
 .hydra-root.theme-dark .phone-app .bottom-nav {
   border-color: rgba(255, 255, 255, .1) !important;
-  background: linear-gradient(180deg, rgba(24, 35, 29, .8), rgba(17, 26, 21, .72)) !important;
+  background: linear-gradient(180deg, rgba(24, 35, 29, .6), rgba(17, 26, 21, .46)) !important;
   box-shadow: 0 -10px 34px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .07) !important;
 }
 
 .hydra-root .phone-app .bottom-nav > button {
   overflow: hidden !important;
   transform-origin: center !important;
+}
+
+.hydra-root .phone-app .bottom-nav > button:not(.active) > span:not(.touch-ripple) {
+  opacity: .62;
+  filter: saturate(.55);
+}
+
+.hydra-root .phone-app .bottom-nav > button.active > span:not(.touch-ripple) {
+  opacity: 1;
+  filter: none;
+}
+
+/* Resposta de clique consistente em todas as funções do aplicativo. */
+.hydra-root :is(button, [role="button"], a, .animal-card, .sector-card, .monitoring-card, .activity-card, .post-card, .challenge-card, .history-home-row, .profile-menu-row, .compact-row, .notification-item) {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transform-origin: center;
+}
+
+.hydra-root :is(button, [role="button"], a):not(:disabled) {
+  transition: transform 170ms cubic-bezier(.2, .8, .2, 1), filter 170ms ease, box-shadow 190ms ease, background-color 190ms ease !important;
+}
+
+.hydra-root :is(button, [role="button"], a):not(:disabled):active {
+  transform: scale(.965) !important;
+  filter: brightness(.97) saturate(1.04);
+}
+
+.hydra-root .phone-app :is(.animal-card, .sector-card, .monitoring-card, .activity-card, .post-card, .challenge-card, .history-home-row, .profile-menu-row, .compact-row, .notification-item):active {
+  transform: scale(.98) translateY(1px) !important;
+  filter: brightness(.985);
+}
+
+.hydra-root :is(.auth-landing-staff, .staff-entry-button):not(:disabled):active {
+  transform: scale(.975) !important;
 }
 
 .hydra-root .phone-app .bottom-nav > button.is-tapped {
