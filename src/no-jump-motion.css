@@ -1,0 +1,106 @@
+/* Hydra Agro — remove saltos/rebotes dos componentes sem matar a fluidez da troca de tela. */
+
+@keyframes hydra-route-smooth-forward {
+  from { opacity: .58; transform: translate3d(14px, 0, 0) scale(.995); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes hydra-route-smooth-back {
+  from { opacity: .58; transform: translate3d(-14px, 0, 0) scale(.995); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes hydra-route-smooth-neutral {
+  from { opacity: .62; transform: scale(.996); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* A tela inteira continua animando, mas sem overshoot ou rebote. */
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content.route-motion-forward > .screen.screen.page-enter {
+  animation: hydra-route-smooth-forward 360ms cubic-bezier(.22,.82,.28,1) both !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content.route-motion-back > .screen.screen.page-enter {
+  animation: hydra-route-smooth-back 360ms cubic-bezier(.22,.82,.28,1) both !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content:not(.route-motion-forward):not(.route-motion-back) > .screen.screen.page-enter {
+  animation: hydra-route-smooth-neutral 320ms cubic-bezier(.22,.82,.28,1) both !important;
+}
+
+/* Nada dentro da tela deve subir, crescer ou quicar separadamente. */
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content > .screen.screen.page-enter > *,
+html body #root .hydra-root.hydra-root.hydra-root :is(
+  .animal-list,.activity-list,.notification-list,.community-feed,.post-list,.today-priority-list,.today-activity-list,
+  .compact-list,.timeline-list,.herd-production-grid,.herd-reproduction-grid,.herd-health-grid,.property-info-grid,
+  .tech-list,.profile-menu-card,.feature-link-grid,.task-card,.support-channel-grid,.operations-grid,.staff-list,
+  .monitoring-list,.sector-list
+) > *,
+html body #root .hydra-root.hydra-root.hydra-root .home-shortcuts-five > button,
+html body #root .hydra-root.hydra-root.hydra-root .herd-screen-enhanced.herd-screen-enhanced > *:not([hidden]),
+html body #root .hydra-root.hydra-root.hydra-root .herd-screen-enhanced.herd-screen-enhanced .animal-list > .animal-card,
+html body #root .hydra-root.hydra-root.hydra-root .herd-screen-enhanced.herd-screen-enhanced .herd-view-tabs > button,
+html body #root .hydra-root.hydra-root.hydra-root .herd-screen-enhanced.herd-screen-enhanced .filter-chips > button {
+  animation: none !important;
+  animation-delay: 0ms !important;
+  transform: none !important;
+}
+
+/* Toques sem zoom/compressão. Só muda opacidade/cor. */
+html body #root .hydra-root.hydra-root.hydra-root button:not(:disabled),
+html body #root .hydra-root.hydra-root.hydra-root [role="button"]:not([aria-disabled="true"]),
+html body #root .hydra-root.hydra-root.hydra-root a {
+  transform: none !important;
+  transition: opacity 150ms ease, background-color 190ms ease, border-color 190ms ease, color 190ms ease, box-shadow 210ms ease !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root button:not(:disabled):active,
+html body #root .hydra-root.hydra-root.hydra-root [role="button"]:not([aria-disabled="true"]):active,
+html body #root .hydra-root.hydra-root.hydra-root button.is-pressed,
+html body #root .hydra-root.hydra-root.hydra-root button.is-tapped {
+  transform: none !important;
+  scale: 1 !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root button:not(:disabled):active {
+  opacity: .78;
+}
+
+/* Bottom bar totalmente estável. */
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button > span,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button > small,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button svg {
+  animation: none !important;
+  transform: none !important;
+  transition: color 190ms ease, opacity 190ms ease, background-color 190ms ease !important;
+}
+
+/* O NFC central mantém somente a elevação fixa, sem pop. */
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.nav-nfc > span:first-of-type,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.nav-nfc.active > span:first-of-type,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.nav-nfc.is-tapped > span:first-of-type {
+  animation: none !important;
+  transform: translateY(-9px) !important;
+  scale: 1 !important;
+}
+
+/* FAB não fica respirando/subindo. */
+html body #root .hydra-root.hydra-root.hydra-root .home-fab-label {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Mantém as ondas da tela NFC, porque elas não deslocam as funções. */
+html body #root .hydra-root.hydra-root.hydra-root .nfc-screen .nfc-waves,
+html body #root .hydra-root.hydra-root.hydra-root .nfc-screen .nfc-waves > span {
+  transform-origin: center !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body #root .hydra-root .phone-app .app-content > .screen.page-enter {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
