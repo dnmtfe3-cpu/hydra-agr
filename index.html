@@ -31,7 +31,6 @@
       }
     </script>
 
-    <!-- Base crítica: evita flash de HTML cru enquanto o CSS principal termina de carregar. -->
     <style>
       *, *::before, *::after { box-sizing: border-box; }
       html, body, #root { margin: 0; min-height: 100%; }
@@ -51,35 +50,61 @@
       .wordmark-copy strong { color: #f49a31; }
     </style>
 
-    <!-- Entrada única. O Vite agrupa os imports no build e evita CSS chegando fora de ordem. -->
-    <link rel="stylesheet" href="/src/app-entry.css?v=app-entry-6" />
+    <link rel="stylesheet" href="/src/app-entry.css?v=app-entry-7" />
 
     <title>Hydra Agro</title>
   </head>
   <body>
     <div id="root"></div>
-    <!-- Registra o retorno OAuth do Android antes do React montar. -->
     <script type="module" src="/src/runtime-bootstrap.ts"></script>
-    <!-- Valida existência do e-mail antes do React avançar no login/cadastro. -->
     <script type="module" src="/src/auth-validation.ts"></script>
     <script type="module" src="/src/main.tsx"></script>
     <script type="module" src="/src/herd-tabs.ts"></script>
     <script type="module" src="/src/pull-to-refresh.ts?v=pull-refresh-1"></script>
 
-    <!-- Overrides finais ficam no fim do documento para vencer CSS carregado pelo main.tsx. -->
     <style id="hydra-final-mobile-overrides">
       @media (max-width: 899px) {
-        /* Remove a linha preta que aparecia no fim do conteúdo, antes da bottom bar. */
+        html,
+        body,
+        #root {
+          min-height: 100dvh !important;
+          background: #f8f6ef !important;
+          background-image: none !important;
+        }
+
+        html body #root .hydra-root.theme-light,
+        html body #root .hydra-root.theme-light .app-shell,
+        html body #root .hydra-root.theme-light .phone-app,
+        html body #root .hydra-root.theme-light .phone-app .app-content,
+        html body #root .hydra-root.theme-light .phone-app .app-content > .screen,
+        html body #root .hydra-root.theme-light .phone-app .app-content > .profile-screen {
+          min-height: 100dvh !important;
+          background: #f8f6ef !important;
+          background-color: #f8f6ef !important;
+          background-image: none !important;
+        }
+
+        html body #root .hydra-root.theme-dark,
+        html body #root .hydra-root.theme-dark .app-shell,
+        html body #root .hydra-root.theme-dark .phone-app,
+        html body #root .hydra-root.theme-dark .phone-app .app-content,
+        html body #root .hydra-root.theme-dark .phone-app .app-content > .screen {
+          background-color: #09160f !important;
+          background-image: none !important;
+        }
+
         html body #root .hydra-root .app-shell,
         html body #root .hydra-root .phone-app,
         html body #root .hydra-root .phone-app .app-content,
         html body #root .hydra-root .phone-app .app-content > .screen,
         html body #root .hydra-root .phone-app .app-content > .profile-screen,
         html body #root .hydra-root .phone-app .bottom-nav.bottom-nav {
+          border: 0 !important;
           border-top: 0 !important;
           border-bottom: 0 !important;
           outline: 0 !important;
           box-shadow: none !important;
+          filter: none !important;
         }
 
         html body #root .hydra-root .app-shell::before,
@@ -92,12 +117,14 @@
         html body #root .hydra-root .phone-app .app-content > .screen::after,
         html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::before,
         html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::after {
+          content: none !important;
+          display: none !important;
           border: 0 !important;
           outline: 0 !important;
           box-shadow: none !important;
+          background: transparent !important;
         }
 
-        /* Sem slide/fade de troca de tela fora do Perfil. */
         html body #root .hydra-root .phone-app .app-content.route-motion-forward > .screen.page-enter:not(.profile-screen),
         html body #root .hydra-root .phone-app .app-content.route-motion-back > .screen.page-enter:not(.profile-screen),
         html body #root .hydra-root .phone-app .app-content > .screen.page-enter:not(.profile-screen) {
@@ -109,7 +136,6 @@
           will-change: auto !important;
         }
 
-        /* Bottom bar totalmente estável: sem pop, jump, ripple ou compressão. */
         html body #root .hydra-root .phone-app .bottom-nav.bottom-nav,
         html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button,
         html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > span,
@@ -144,7 +170,6 @@
           animation: none !important;
         }
 
-        /* Rebanho sem animações, como solicitado. Mantém apenas spinners de carregamento. */
         html body #root .hydra-root .herd-screen-enhanced,
         html body #root .hydra-root .herd-screen-enhanced *:not(.spin),
         html body #root .hydra-root .herd-screen-enhanced *:not(.spin)::before,
