@@ -57,7 +57,11 @@ function authCallbackParts(url: string) {
     (hash.get("access_token") && hash.get("refresh_token")),
   );
   const recovery = type === "recovery" || parsed.pathname.includes("/auth/recovery");
-  const callbackError = parsed.searchParams.get("error_description") || hash.get("error_description");
+  const callbackError =
+    parsed.searchParams.get("error_description") ||
+    hash.get("error_description") ||
+    parsed.searchParams.get("error") ||
+    hash.get("error");
   return { parsed, hash, type, hasCredentials, recovery, callbackError };
 }
 
@@ -76,12 +80,17 @@ async function processAuthCallbackUrl(url: string) {
   const code = parsed.searchParams.get("code");
 
   if (accessToken && refreshToken) {
-    // Compatibilidade com links antigos que ainda retornem pelo fluxo implícito.
+    // Compatibilidade com APKs/links antigos que ainda retornem pelo fluxo implícito.
     const { error } = await client.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
     if (error) throw error;
   } else if (code) {
     const { error } = await client.auth.exchangeCodeForSession(code);
-    if (error) throw error;
+    if (error) {
+      // O Android pode entregar o mesmo deep link a mais de um listener. Se o
+      // primeiro já concluiu a sessão, o segundo não deve derrubar o login.
+      const { data } = await client.auth.getSession();
+      if (!data.session?.user) throw error;
+    }
   } else {
     throw new Error("Link de autenticação inválido ou expirado.");
   }
@@ -97,10 +106,22 @@ async function processAuthCallbackUrl(url: string) {
 export function handleAuthCallbackUrl(url: string) {
   const pending = callbackTasks.get(url);
   if (pending) return pending;
-  const task = processAuthCallbackUrl(url).finally(() => {
-    callbackTasks.delete(url);
-  });
+
+  const task = processAuthCallbackUrl(url);
   callbackTasks.set(url, task);
+
+  // Mantém callbacks concluídos em memória para que appUrlOpen + getLaunchUrl
+  // não tentem reutilizar o mesmo código PKCE. Falhas são removidas e podem ser
+  // tentadas novamente se o Android reenviar o deep link.
+  void task.catch(() => {
+    if (callbackTasks.get(url) === task) callbackTasks.delete(url);
+  });
+
+  if (callbackTasks.size > 12) {
+    const oldest = callbackTasks.keys().next().value as string | undefined;
+    if (oldest && oldest !== url) callbackTasks.delete(oldest);
+  }
+
   return task;
 }
 
