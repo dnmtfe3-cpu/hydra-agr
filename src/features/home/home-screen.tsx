@@ -9,7 +9,6 @@ import {
   ChevronRight,
   ClipboardCheck,
   Beef as Cow,
-  Droplets,
   History,
   Leaf,
   Map,
@@ -45,7 +44,6 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
   const firstName = account.profile.name.split(/\s+/)[0] || "Produtor";
   const welcome = welcomeMessage();
   const today = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "2-digit", month: "long" }).format(new Date());
-  const waterTotal = account.waterRecords.reduce((total, record) => total + record.amount, 0);
   const pendingActivities = account.activities.filter((activity) => !activity.done);
   const propertyReady = Boolean(account.property.municipality && account.property.mainActivity);
 
@@ -79,7 +77,6 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
   }, [account.id]);
 
   const pendingSetup = [
-    account.waterRecords.length === 0 && { label: "Registrar a primeira leitura de água", icon: <Droplets size={21} />, route: "water" as AppRoute },
     account.animals.length === 0 && { label: "Cadastrar o primeiro animal", icon: <Cow size={21} />, route: "herd" as AppRoute },
     account.sectors.length === 0 && { label: "Criar o primeiro setor", icon: <Map size={21} />, route: "monitor" as AppRoute },
   ].filter(Boolean) as { label: string; icon: ReactNode; route: AppRoute }[];
@@ -98,7 +95,7 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
       <div className="shortcut-row home-shortcuts-five" aria-label="Atalhos">
         <button onClick={() => navigate("community")} aria-label="Comunidade" title="Comunidade"><span><UsersRound size={23} /></span></button>
         <button onClick={() => navigate("monitor")} aria-label="Monitorar" title="Monitorar"><span><RadioTower size={23} /></span></button>
-        <button onClick={() => navigate("operations")} aria-label="Produção e custos" title="Produção e custos"><span><ChartNoAxesCombined size={23} /></span></button>
+        <button onClick={() => navigate("operations")} aria-label="Equipe e operações" title="Equipe e operações"><span><ChartNoAxesCombined size={23} /></span></button>
         <button onClick={() => navigate("assistant")} aria-label="Assistente" title="Assistente"><span><MessageSquareText size={23} /></span></button>
         <button onClick={() => navigate("property")} aria-label="Propriedade" title="Propriedade"><span><Sprout size={23} /></span></button>
       </div>
@@ -107,12 +104,12 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
 
       <section className="property-hero">
         <div className="property-hero-top"><div><span className="property-kicker">Propriedade</span><h2>{account.property.name || "Propriedade não cadastrada"}</h2><p>{propertyReady ? `${account.property.mainActivity} · ${account.property.municipality}, ${account.property.state}` : "Complete a ficha da propriedade"}</p></div><button onClick={() => navigate("property")} aria-label="Editar propriedade"><Sprout size={20} /></button></div>
-        <div className="property-metrics"><div><Droplets size={20} /><span><strong>{waterTotal.toLocaleString("pt-BR")} L</strong><small>água registrada</small></span></div><div><Cow size={20} /><span><strong>{account.animals.length}</strong><small>animais</small></span></div><div><RadioTower size={20} /><span><strong>{account.monitoring.length}</strong><small>monitoramentos</small></span></div></div>
+        <div className="property-metrics"><div><UsersRound size={20} /><span><strong>Equipe</strong><small>gestão e operações</small></span></div><div><Cow size={20} /><span><strong>{account.animals.length}</strong><small>animais</small></span></div><div><ClipboardCheck size={20} /><span><strong>{pendingActivities.length}</strong><small>tarefas pendentes</small></span></div></div>
         <button className="property-link" onClick={() => navigate("property")}>Ver ficha <ChevronRight size={18} /></button>
       </section>
 
       <section className="home-section home-summary-section">
-        <button className="history-home-row" onClick={() => navigate("history")}><span><History size={19} /></span><div><strong>Histórico da propriedade</strong><small>Água, atividades, rebanho e monitoramentos</small></div><ChevronRight size={18} /></button>
+        <button className="history-home-row" onClick={() => navigate("history")}><span><History size={19} /></span><div><strong>Histórico da propriedade</strong><small>Atividades, rebanho, produção e monitoramentos</small></div><ChevronRight size={18} /></button>
 
         {!propertyReady && <button className="first-action-card" onClick={() => navigate("property")}><span><Plus size={24} /></span><div><strong>Complete a ficha da propriedade</strong><p>Localização, área e atividade principal.</p></div><ChevronRight size={21} /></button>}
 
