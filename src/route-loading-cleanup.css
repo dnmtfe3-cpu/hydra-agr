@@ -1,0 +1,5 @@
+/* Troca de função sem tela intermediária de carregamento. */
+.hydra-root .route-loading {
+  display: none !important;
+  visibility: hidden !important;
+}
