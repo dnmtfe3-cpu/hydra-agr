@@ -1,5 +1,5 @@
-/* Hydra Agro — bottom bar restaurada para o visual da referência (foto 2).
-   Prioridade: barra inteira visível, Safe Area respeitada e NFC central sem cortes. */
+/* Hydra Agro — bottom bar compacta e integrada.
+   Ícones estáveis, NFC sem salto e Safe Area respeitada. */
 @media (max-width: 899px) {
   .hydra-root .phone-app .bottom-nav.bottom-nav {
     box-sizing: border-box !important;
@@ -7,15 +7,16 @@
     display: grid !important;
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
     align-items: end !important;
-    min-height: calc(78px + env(safe-area-inset-bottom)) !important;
+    min-height: calc(72px + env(safe-area-inset-bottom)) !important;
     height: auto !important;
     max-height: none !important;
-    padding: 7px 7px max(9px, env(safe-area-inset-bottom)) !important;
-    border-top: 1px solid var(--line) !important;
-    background: color-mix(in srgb, var(--paper) 97%, transparent) !important;
-    box-shadow: 0 -8px 24px -24px rgba(11, 54, 35, .46) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    backdrop-filter: blur(16px) !important;
+    padding: 7px 8px max(8px, env(safe-area-inset-bottom)) !important;
+    border: 0 !important;
+    border-top: 1px solid color-mix(in srgb, var(--line) 42%, transparent) !important;
+    background: color-mix(in srgb, var(--paper) 96%, transparent) !important;
+    box-shadow: 0 -10px 28px -28px rgba(11, 54, 35, .42) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(1.05) !important;
+    backdrop-filter: blur(18px) saturate(1.05) !important;
   }
 
   .hydra-root .phone-app .bottom-nav.bottom-nav .bottom-nav-indicator {
@@ -25,9 +26,9 @@
   .hydra-root .phone-app .bottom-nav.bottom-nav > button {
     box-sizing: border-box !important;
     min-width: 0 !important;
-    min-height: 58px !important;
+    min-height: 55px !important;
     height: auto !important;
-    padding: 4px 2px 2px !important;
+    padding: 4px 2px 1px !important;
     border: 0 !important;
     border-radius: 0 !important;
     display: flex !important;
@@ -35,11 +36,12 @@
     align-items: center !important;
     justify-content: flex-end !important;
     align-self: end !important;
-    gap: 3px !important;
+    gap: 4px !important;
     overflow: visible !important;
     background: transparent !important;
     box-shadow: none !important;
     color: var(--muted) !important;
+    transform: none !important;
   }
 
   .hydra-root .phone-app .bottom-nav.bottom-nav > button:hover,
@@ -53,9 +55,9 @@
 
   .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple) {
     width: 38px !important;
-    height: 34px !important;
+    height: 33px !important;
     min-width: 38px !important;
-    min-height: 34px !important;
+    min-height: 33px !important;
     margin: 0 !important;
     padding: 0 !important;
     border: 0 !important;
@@ -68,13 +70,14 @@
     transform: none !important;
   }
 
-  .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(.nav-nfc) > span:first-of-type:not(.touch-ripple) {
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.active > span:first-of-type:not(.touch-ripple) {
     background: var(--sage-soft) !important;
   }
 
   .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple) svg {
-    width: 22px !important;
-    height: 22px !important;
+    width: 21px !important;
+    height: 21px !important;
+    transform: none !important;
   }
 
   .hydra-root .phone-app .bottom-nav.bottom-nav > button > small {
@@ -88,58 +91,95 @@
     white-space: nowrap !important;
   }
 
-  /* NFC central igual à segunda foto: verde, branco e elevado, sem ser recortado. */
+  /* NFC central: destaque integrado, sem ficar saltando acima da barra. */
   .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc,
   .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active {
     position: relative !important;
-    z-index: 8 !important;
+    z-index: 2 !important;
     background: transparent !important;
     color: var(--forest-700) !important;
     box-shadow: none !important;
+    transform: none !important;
   }
 
   .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple),
   .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) {
-    width: 52px !important;
-    height: 52px !important;
-    min-width: 52px !important;
-    min-height: 52px !important;
+    width: 42px !important;
+    height: 38px !important;
+    min-width: 42px !important;
+    min-height: 38px !important;
     margin: 0 !important;
     padding: 0 !important;
-    border: 3px solid var(--paper) !important;
-    border-radius: 17px !important;
+    border: 0 !important;
+    border-radius: 14px !important;
     display: grid !important;
     place-items: center !important;
-    background: var(--forest-700) !important;
-    color: #fff !important;
-    transform: translateY(-9px) !important;
-    box-shadow: 0 9px 22px -15px rgba(10, 67, 42, .75), 0 0 0 1px rgba(16, 75, 49, .08) !important;
+    background: var(--sage-soft) !important;
+    color: var(--forest-700) !important;
+    transform: none !important;
+    box-shadow: none !important;
     opacity: 1 !important;
     filter: none !important;
   }
 
-  .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple) svg {
-    width: 25px !important;
-    height: 25px !important;
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) {
+    background: var(--forest-700) !important;
     color: #fff !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple) svg {
+    width: 22px !important;
+    height: 22px !important;
+    color: inherit !important;
+    transform: none !important;
   }
 
   .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > small,
   .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > small {
-    margin-top: -6px !important;
-    color: var(--forest-700) !important;
+    margin: 0 !important;
+    color: inherit !important;
     font-size: var(--type-nav, 8.5px) !important;
     font-weight: 800 !important;
     transform: none !important;
   }
 
   .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc:active > span:first-of-type:not(.touch-ripple) {
-    transform: translateY(-8px) scale(.96) !important;
+    transform: none !important;
+  }
+
+  /* Modo Verde: barra e estados usando a mesma paleta da tela de boas-vindas. */
+  .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav {
+    background: rgba(18, 49, 38, .985) !important;
+    border-top-color: rgba(170, 184, 175, .13) !important;
+    box-shadow: 0 -12px 30px rgba(4, 28, 19, .12) !important;
+  }
+
+  .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button {
+    color: #83978c !important;
+  }
+
+  .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.active {
+    color: #f7f6f0 !important;
+  }
+
+  .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.active > span:first-of-type:not(.touch-ripple),
+  .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) {
+    background: #287a55 !important;
+    color: #f7f6f0 !important;
+  }
+
+  .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc:not(.active) > span:first-of-type:not(.touch-ripple) {
+    background: #204536 !important;
+    color: #a8c8b5 !important;
+  }
+
+  .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) svg {
+    color: #f2a45c !important;
   }
 
   /* Reserva espaço real para a barra + Safe Area em todas as telas. */
   .hydra-root .phone-app .app-content {
-    padding-bottom: calc(92px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(86px + env(safe-area-inset-bottom)) !important;
   }
 }
 
