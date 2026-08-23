@@ -1,59 +1,144 @@
-/* Hydra Agro — bottom bar compacta, alinhada e sem aspecto espremido no Android. */
+/* Hydra Agro — bottom bar restaurada para o visual da referência (foto 2).
+   Prioridade: barra inteira visível, Safe Area respeitada e NFC central sem cortes. */
 @media (max-width: 899px) {
-  .hydra-root .phone-app .bottom-nav {
-    min-height: calc(64px + env(safe-area-inset-bottom)) !important;
-    height: calc(64px + env(safe-area-inset-bottom)) !important;
-    padding: 4px 8px max(5px, env(safe-area-inset-bottom)) !important;
+  .hydra-root .phone-app .bottom-nav.bottom-nav {
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: end !important;
+    min-height: calc(78px + env(safe-area-inset-bottom)) !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 7px 7px max(9px, env(safe-area-inset-bottom)) !important;
+    border-top: 1px solid var(--line) !important;
+    background: color-mix(in srgb, var(--paper) 97%, transparent) !important;
+    box-shadow: 0 -8px 24px -24px rgba(11, 54, 35, .46) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    backdrop-filter: blur(16px) !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav.bottom-nav .bottom-nav-indicator {
+    display: none !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button {
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+    min-height: 58px !important;
+    height: auto !important;
+    padding: 4px 2px 2px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
     align-items: center !important;
-    background: rgba(250, 248, 241, 0.98) !important;
+    justify-content: flex-end !important;
+    align-self: end !important;
+    gap: 3px !important;
+    overflow: visible !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: var(--muted) !important;
   }
 
-  .hydra-root .phone-app .bottom-nav > button {
-    min-height: 50px !important;
-    height: 50px !important;
-    padding: 1px 2px 0 !important;
-    gap: 2px !important;
-    align-self: center !important;
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button:hover,
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.active {
+    background: transparent !important;
   }
 
-  .hydra-root .phone-app .bottom-nav > button > span:first-of-type {
-    width: 30px !important;
-    height: 30px !important;
-    min-width: 30px !important;
-    min-height: 30px !important;
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.active {
+    color: var(--forest-700) !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple) {
+    width: 38px !important;
+    height: 34px !important;
+    min-width: 38px !important;
+    min-height: 34px !important;
+    margin: 0 !important;
     padding: 0 !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    display: grid !important;
+    place-items: center !important;
+    background: transparent !important;
+    color: inherit !important;
+    box-shadow: none !important;
+    transform: none !important;
   }
 
-  .hydra-root .phone-app .bottom-nav > button > span:first-of-type svg {
-    width: 20px !important;
-    height: 20px !important;
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(.nav-nfc) > span:first-of-type:not(.touch-ripple) {
+    background: var(--sage-soft) !important;
   }
 
-  .hydra-root .phone-app .bottom-nav > button > small {
-    font-size: 10px !important;
-    line-height: 1.05 !important;
-    margin-top: 0 !important;
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple) svg {
+    width: 22px !important;
+    height: 22px !important;
   }
 
-  /* NFC continua sendo o destaque central, sem aumentar a barra toda. */
-  .hydra-root .phone-app .bottom-nav > button.nav-nfc > span:first-of-type {
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
-    transform: translateY(-4px) !important;
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button > small {
+    margin: 0 !important;
+    font-size: var(--type-nav, 8.5px) !important;
+    line-height: 1 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+    color: inherit !important;
+    transform: none !important;
+    white-space: nowrap !important;
   }
 
-  .hydra-root .phone-app .bottom-nav > button.nav-nfc > span:first-of-type svg {
-    width: 29px !important;
-    height: 29px !important;
+  /* NFC central igual à segunda foto: verde, branco e elevado, sem ser recortado. */
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc,
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active {
+    position: relative !important;
+    z-index: 8 !important;
+    background: transparent !important;
+    color: var(--forest-700) !important;
+    box-shadow: none !important;
   }
 
-  .hydra-root .phone-app .bottom-nav > button.nav-nfc > small {
-    transform: translateY(-3px) !important;
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple),
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) {
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
+    min-height: 52px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 3px solid var(--paper) !important;
+    border-radius: 17px !important;
+    display: grid !important;
+    place-items: center !important;
+    background: var(--forest-700) !important;
+    color: #fff !important;
+    transform: translateY(-9px) !important;
+    box-shadow: 0 9px 22px -15px rgba(10, 67, 42, .75), 0 0 0 1px rgba(16, 75, 49, .08) !important;
+    opacity: 1 !important;
+    filter: none !important;
   }
 
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple) svg {
+    width: 25px !important;
+    height: 25px !important;
+    color: #fff !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > small,
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > small {
+    margin-top: -6px !important;
+    color: var(--forest-700) !important;
+    font-size: var(--type-nav, 8.5px) !important;
+    font-weight: 800 !important;
+    transform: none !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc:active > span:first-of-type:not(.touch-ripple) {
+    transform: translateY(-8px) scale(.96) !important;
+  }
+
+  /* Reserva espaço real para a barra + Safe Area em todas as telas. */
   .hydra-root .phone-app .app-content {
-    padding-bottom: calc(70px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(92px + env(safe-area-inset-bottom)) !important;
   }
 }
