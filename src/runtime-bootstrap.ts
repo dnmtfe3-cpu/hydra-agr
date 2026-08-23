@@ -132,6 +132,32 @@ function installCompactTypography() {
   document.head.appendChild(style);
 }
 
+function preloadRouteChunks() {
+  const loaders = [
+    () => import("./features/herd/herd-screen"),
+    () => import("./features/monitor/monitor-screen"),
+    () => import("./features/profile/profile-screen"),
+    () => import("./features/community/community-screen"),
+    () => import("./features/challenges/challenges-screen"),
+    () => import("./features/property/property-screen"),
+    () => import("./features/activities/activities-screen"),
+    () => import("./features/operations/operations-screen"),
+    () => import("./features/assistant"),
+    () => import("./features/today"),
+    () => import("./features/history"),
+    () => import("./features/nfc/nfc-screen"),
+    () => import("./features/notifications/notifications-screen"),
+    () => import("./features/premium/plus-screen"),
+    () => import("./features/admin/admin-screen"),
+  ];
+
+  void Promise.allSettled(loaders.map((load) => load()));
+}
+
 // O main.tsx é o próximo módulo do HTML. O frame seguinte garante que este
 // ajuste fique por último na cascata sem causar flash perceptível.
 window.requestAnimationFrame(installCompactTypography);
+
+// As rotas são carregadas durante a splash. Assim a primeira troca de tela
+// não passa pelo fallback "Carregando…" do React.lazy.
+window.setTimeout(preloadRouteChunks, 60);
