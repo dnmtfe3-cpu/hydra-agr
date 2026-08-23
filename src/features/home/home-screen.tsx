@@ -5,7 +5,6 @@ import "../../product-polish.css";
 import "./home-production-shortcut.css";
 import {
   Bell,
-  ChartNoAxesCombined,
   ChevronRight,
   ClipboardCheck,
   Beef as Cow,
@@ -95,7 +94,7 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
       <div className="shortcut-row home-shortcuts-five" aria-label="Atalhos">
         <button onClick={() => navigate("community")} aria-label="Comunidade" title="Comunidade"><span><UsersRound size={23} /></span></button>
         <button onClick={() => navigate("monitor")} aria-label="Monitorar" title="Monitorar"><span><RadioTower size={23} /></span></button>
-        <button onClick={() => navigate("operations")} aria-label="Equipe e operações" title="Equipe e operações"><span><ChartNoAxesCombined size={23} /></span></button>
+        <button onClick={() => navigate("activities")} aria-label="Tarefas" title="Tarefas"><span><ClipboardCheck size={23} /></span></button>
         <button onClick={() => navigate("assistant")} aria-label="Assistente" title="Assistente"><span><MessageSquareText size={23} /></span></button>
         <button onClick={() => navigate("property")} aria-label="Propriedade" title="Propriedade"><span><Sprout size={23} /></span></button>
       </div>
