@@ -1,0 +1,83 @@
+/* Ajustes finais de navegação/perfil solicitados: sem linha preta, sem animações de troca fora do Perfil e modal de saída compacto. */
+
+@media (max-width: 899px) {
+  .hydra-root .phone-app .bottom-nav.bottom-nav {
+    border-top: 0 !important;
+    outline: 0 !important;
+    box-shadow: 0 -8px 24px -24px rgba(11,54,35,.32) !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav.bottom-nav::before,
+  .hydra-root .phone-app .bottom-nav.bottom-nav::after {
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* A troca de abas fica instantânea e estável. O Perfil mantém suas animações próprias. */
+.hydra-root .app-content.route-motion-forward > .screen.page-enter:not(.profile-screen),
+.hydra-root .app-content.route-motion-back > .screen.page-enter:not(.profile-screen),
+.hydra-root .app-content:not(.route-motion-forward):not(.route-motion-back) > .screen.page-enter:not(.profile-screen) {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.hydra-root .app-content > .screen.page-enter:not(.profile-screen) > *,
+.hydra-root .app-content > .screen.page-enter:not(.profile-screen) > :is(
+  .screen-header,.home-brandbar,.greeting-block,.segmented-control,.search-row,.filter-chips,
+  .nfc-inline-card,.herd-care-launch,.herd-view-tabs,.herd-production-context,.herd-reproduction-tools,
+  .herd-health-tools,.property-hero,.assistant-v2-hero,.assistant-v2-conversation,.home-summary-section
+) {
+  animation-name: none !important;
+}
+
+/* Remove os dois efeitos vistos na troca pela bottom bar: pop/jump do ativo e confirmação de toque. */
+.hydra-root .bottom-nav > button.active > span:first-of-type,
+.hydra-root .bottom-nav > button.is-tapped > span:first-of-type,
+.hydra-root .bottom-nav > button.is-pressed > span:first-of-type,
+.hydra-root .bottom-nav > button:nth-of-type(3).active > span:first-of-type {
+  animation: none !important;
+}
+
+.hydra-root .bottom-nav > button:not(.nav-nfc) > span:first-of-type {
+  transform: none !important;
+}
+
+/* Finalizar sessão: elimina o vazio grande abaixo dos botões. */
+.modal-layer .modal-sheet.modal-centered {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: min(540px, calc(100dvh - max(48px, env(safe-area-inset-top)) - max(48px, env(safe-area-inset-bottom)))) !important;
+  align-self: center !important;
+}
+
+.modal-layer .modal-sheet.modal-centered .modal-body {
+  min-height: 0 !important;
+  height: auto !important;
+  overflow: visible !important;
+  padding-bottom: max(22px, env(safe-area-inset-bottom)) !important;
+}
+
+.modal-layer .modal-sheet.modal-centered .confirm-action {
+  min-height: 0 !important;
+  padding-top: 18px !important;
+  padding-bottom: 2px !important;
+  gap: 16px !important;
+}
+
+.modal-layer .modal-sheet.modal-centered .confirm-action > p {
+  margin: 0 0 6px !important;
+}
+
+.modal-layer .modal-sheet.modal-centered .modal-action-row {
+  margin-top: 4px !important;
+  gap: 10px !important;
+}
+
+@media (max-width: 520px) {
+  .modal-layer .modal-sheet.modal-centered {
+    width: calc(100% - 28px) !important;
+    max-width: 430px !important;
+  }
+}
