@@ -113,3 +113,6 @@ if (document.readyState === "loading") {
 /* MutationObserver roda antes do próximo paint e impede os saltos dos CSS antigos. */
 const observer = new MutationObserver(() => applyMotionController());
 observer.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ["class"] });
+
+/* Mantém este arquivo em escopo de módulo para não colidir com herd-tabs.ts no build. */
+export {};
