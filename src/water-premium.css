@@ -1,0 +1,386 @@
+/* Hydra Agro — Água: visual mais limpo, técnico e com identidade própria. */
+
+.hydra-root .screen:has(> .water-overview) {
+  --water-deep: #0d4f4d;
+  --water-mid: #16756e;
+  --water-soft: #eaf7f4;
+  --water-soft-2: #f4fbf9;
+  --water-line: #d6e9e4;
+  --water-ink: #123c3a;
+  width: min(100%, 1080px) !important;
+  margin-inline: auto !important;
+}
+
+.hydra-root .screen:has(> .water-overview) > .screen-header {
+  margin-bottom: 14px !important;
+}
+
+.hydra-root .screen:has(> .water-overview) > .screen-header .eyebrow {
+  color: var(--water-mid) !important;
+}
+
+.hydra-root .screen:has(> .water-overview) > .screen-header h1 {
+  letter-spacing: -.04em !important;
+}
+
+/* Resumo principal */
+.hydra-root .screen:has(> .water-overview) > .water-overview {
+  position: relative;
+  overflow: hidden;
+  min-height: 205px;
+  padding: 20px !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 28px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.35fr) minmax(190px, .65fr) !important;
+  gap: 15px !important;
+  align-items: stretch !important;
+  color: #fff !important;
+  background:
+    radial-gradient(circle at 90% 8%, rgba(112,207,193,.25), transparent 35%),
+    linear-gradient(135deg, #0d4a49 0%, #126a64 58%, #0b3f40 100%) !important;
+  box-shadow: 0 26px 58px -40px rgba(8,62,59,.78) !important;
+}
+
+.hydra-root .screen:has(> .water-overview) > .water-overview::before {
+  content: "";
+  position: absolute;
+  width: 215px;
+  height: 215px;
+  right: -86px;
+  bottom: -118px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 50%;
+  box-shadow: 0 0 0 32px rgba(255,255,255,.026), 0 0 0 64px rgba(255,255,255,.014);
+  pointer-events: none;
+}
+
+.hydra-root .screen:has(> .water-overview) .water-total {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  padding: 2px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .water-total-icon {
+  width: 50px !important;
+  height: 50px !important;
+  margin: 0 0 14px !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 16px !important;
+  display: grid !important;
+  place-items: center !important;
+  color: #dffefa !important;
+  background: rgba(255,255,255,.09) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(10px);
+}
+
+.hydra-root .screen:has(> .water-overview) .water-total > span {
+  margin-bottom: 4px !important;
+  color: rgba(240,255,252,.72) !important;
+  font-size: 9px !important;
+  font-weight: 850 !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .water-total > strong {
+  color: #fff !important;
+  font-size: clamp(30px, 5vw, 46px) !important;
+  line-height: 1 !important;
+  letter-spacing: -.055em !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .water-total > small {
+  margin-top: 8px !important;
+  color: rgba(237,255,251,.72) !important;
+  font-size: 10px !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .water-mini-metrics {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 9px !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .water-mini-metrics > div {
+  min-height: 76px !important;
+  padding: 13px 14px !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  border-radius: 18px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  background: rgba(255,255,255,.075) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(10px);
+}
+
+.hydra-root .screen:has(> .water-overview) .water-mini-metrics span {
+  color: rgba(239,255,252,.66) !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase;
+}
+
+.hydra-root .screen:has(> .water-overview) .water-mini-metrics strong {
+  margin-top: 4px !important;
+  color: #fff !important;
+  font-size: 19px !important;
+  letter-spacing: -.03em !important;
+}
+
+/* Ações principais */
+.hydra-root .screen:has(> .water-overview) > .action-pair {
+  margin: 12px 0 22px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr) !important;
+  gap: 9px !important;
+}
+
+.hydra-root .screen:has(> .water-overview) > .action-pair > button {
+  min-height: 52px !important;
+  border-radius: 16px !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .screen:has(> .water-overview) > .action-pair > .primary-button {
+  background: var(--water-deep) !important;
+}
+
+.hydra-root .screen:has(> .water-overview) > .action-pair > .secondary-button {
+  border: 1px solid var(--water-line) !important;
+  color: var(--water-deep) !important;
+  background: var(--water-soft) !important;
+}
+
+/* Seções */
+.hydra-root .screen:has(> .water-overview) > .content-section {
+  margin: 0 0 13px !important;
+  padding: 17px !important;
+  border: 1px solid #e1e7e3 !important;
+  border-radius: 22px !important;
+  background: var(--paper) !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .screen:has(> .water-overview) > .content-section .section-heading {
+  margin-bottom: 13px !important;
+}
+
+.hydra-root .screen:has(> .water-overview) > .content-section .section-heading h2 {
+  font-size: 14px !important;
+  letter-spacing: -.025em !important;
+}
+
+/* Gráfico */
+.hydra-root .screen:has(> .water-overview) .water-chart {
+  min-height: 205px !important;
+  padding: 16px 12px 11px !important;
+  border: 1px solid var(--water-line) !important;
+  border-radius: 19px !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: 8px !important;
+  background: linear-gradient(180deg, #fbfffe 0%, var(--water-soft-2) 100%) !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .chart-column {
+  min-width: 0 !important;
+  flex: 1 !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .chart-value {
+  margin-bottom: 6px !important;
+  color: #4d6c68 !important;
+  font-size: 8px !important;
+  font-weight: 800 !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .chart-track {
+  height: 132px !important;
+  overflow: hidden !important;
+  border-radius: 999px !important;
+  background: #e4f1ee !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .chart-track > i {
+  width: 100% !important;
+  border-radius: 999px !important;
+  display: block !important;
+  background: linear-gradient(180deg, #58b9ae 0%, #17766e 100%) !important;
+  transform-origin: bottom;
+}
+
+.hydra-root .screen:has(> .water-overview) .chart-column > small {
+  margin-top: 7px !important;
+  color: #7a8883 !important;
+  font-size: 8px !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .water-trend {
+  margin-top: 11px !important;
+  padding: 12px 13px !important;
+  border: 1px solid var(--water-line) !important;
+  border-radius: 17px !important;
+  background: var(--water-soft-2) !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .water-trend > span {
+  color: var(--water-mid) !important;
+  background: var(--water-soft) !important;
+}
+
+/* Fontes */
+.hydra-root .screen:has(> .water-overview) .compact-list {
+  display: grid !important;
+  gap: 8px !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .compact-row {
+  min-height: 68px !important;
+  padding: 10px 11px !important;
+  border: 1px solid #e1e8e4 !important;
+  border-radius: 17px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .compact-row .row-icon.soft-blue {
+  width: 43px !important;
+  height: 43px !important;
+  border-radius: 14px !important;
+  color: var(--water-deep) !important;
+  background: var(--water-soft) !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .status-pill {
+  border-radius: 999px !important;
+  font-size: 8px !important;
+  font-weight: 850 !important;
+  text-transform: uppercase;
+}
+
+/* Alertas */
+.hydra-root .screen:has(> .water-overview) .setting-card {
+  min-height: 72px !important;
+  padding: 11px 12px !important;
+  border: 1px solid #e3e7e3 !important;
+  border-radius: 18px !important;
+  background: #fffdf9 !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .info-strip {
+  margin-top: 9px !important;
+  border-radius: 14px !important;
+}
+
+/* Histórico */
+.hydra-root .screen:has(> .water-overview) .timeline-list {
+  position: relative;
+  display: grid !important;
+  gap: 7px !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .timeline-list > button {
+  min-height: 62px !important;
+  padding: 9px 10px !important;
+  border: 1px solid #e4e9e5 !important;
+  border-radius: 16px !important;
+  background: #fff !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .timeline-dot {
+  width: 9px !important;
+  height: 9px !important;
+  border: 2px solid #fff !important;
+  background: var(--water-mid) !important;
+  box-shadow: 0 0 0 2px #cfe7e1 !important;
+}
+
+.hydra-root .screen:has(> .water-overview) .water-detail > span {
+  color: var(--water-deep) !important;
+  background: var(--water-soft) !important;
+}
+
+/* Mobile */
+@media (max-width: 620px) {
+  .hydra-root .screen:has(> .water-overview) > .water-overview {
+    min-height: 0;
+    padding: 17px !important;
+    grid-template-columns: 1fr !important;
+    gap: 13px !important;
+    border-radius: 24px !important;
+  }
+
+  .hydra-root .screen:has(> .water-overview) .water-mini-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .hydra-root .screen:has(> .water-overview) .water-mini-metrics > div {
+    min-height: 66px !important;
+  }
+
+  .hydra-root .screen:has(> .water-overview) > .action-pair {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .hydra-root .screen:has(> .water-overview) > .action-pair > button {
+    padding-inline: 10px !important;
+    font-size: 10px !important;
+  }
+
+  .hydra-root .screen:has(> .water-overview) > .content-section {
+    padding: 14px !important;
+    border-radius: 20px !important;
+  }
+
+  .hydra-root .screen:has(> .water-overview) .water-chart {
+    min-height: 184px !important;
+    padding-inline: 8px !important;
+    gap: 5px !important;
+  }
+
+  .hydra-root .screen:has(> .water-overview) .chart-track {
+    height: 112px !important;
+  }
+}
+
+/* Dark mode */
+.hydra-root.theme-dark .screen:has(> .water-overview) > .content-section,
+.hydra-root.theme-dark .screen:has(> .water-overview) .compact-row,
+.hydra-root.theme-dark .screen:has(> .water-overview) .timeline-list > button,
+.hydra-root.theme-dark .screen:has(> .water-overview) .setting-card {
+  border-color: #294239 !important;
+  background: #0e1d17 !important;
+}
+
+.hydra-root.theme-dark .screen:has(> .water-overview) .water-chart,
+.hydra-root.theme-dark .screen:has(> .water-overview) .water-trend {
+  border-color: #29483f !important;
+  background: #10231d !important;
+}
+
+.hydra-root.theme-dark .screen:has(> .water-overview) .chart-track {
+  background: #1b3730 !important;
+}
+
+.hydra-root.theme-dark .screen:has(> .water-overview) .compact-row .row-icon.soft-blue,
+.hydra-root.theme-dark .screen:has(> .water-overview) .water-trend > span {
+  color: #9fd8cf !important;
+  background: #17362f !important;
+}
