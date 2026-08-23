@@ -58,7 +58,6 @@ function animateScreen(screen: HTMLElement) {
 function animateOperations(screen: HTMLElement) {
   if (!screen.classList.contains("operations-screen") || reducedMotion.matches) return;
 
-  /* Só anima camadas grandes. Nada de card, botão ou ícone individual. */
   screen.querySelectorAll<HTMLElement>(
     ":scope > .operations-header, :scope > .operations-tabs, :scope > .operations-summary, :scope > .operations-actions, :scope > .operations-panel, :scope > .staff-session-banner",
   ).forEach((layer) => fadeLayer(layer, 280));
@@ -71,7 +70,6 @@ function isHerdScreen(screen: HTMLElement) {
 function animateHerd(screen: HTMLElement) {
   if (!isHerdScreen(screen) || reducedMotion.matches) return;
 
-  /* Rebanho também usa apenas crossfade das áreas grandes. */
   screen.querySelectorAll<HTMLElement>(
     ":scope > .screen-header, :scope > .herd-view-tabs, :scope > .herd-overview-view-item:not([hidden]), :scope > .herd-animal-view-item:not([hidden])",
   ).forEach((layer) => fadeLayer(layer, 280));
@@ -104,10 +102,6 @@ function lockBottomNav(root: ParentNode = document) {
   root.querySelectorAll<HTMLElement>(
     ".bottom-nav, .bottom-nav > button, .bottom-nav > button > span, .bottom-nav > button > small, .bottom-nav > button svg",
   ).forEach((el) => lockElement(el, true));
-
-  root.querySelectorAll<HTMLElement>(".bottom-nav > button.nav-nfc > span:first-of-type").forEach((el) => {
-    important(el, "transform", "translateY(-9px)");
-  });
 }
 
 function applyMotionController() {
