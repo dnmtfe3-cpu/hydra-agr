@@ -1,0 +1,482 @@
+/* Hydra Agro — Modo Verde
+ * Paleta inspirada na tela de boas-vindas enviada como referência.
+ * Mantém o modo claro intacto e substitui apenas o antigo theme-dark.
+ */
+
+.hydra-root.theme-dark {
+  --green-mode-bg: #08261c;
+  --green-mode-bg-deep: #062117;
+  --green-mode-surface: #1a382c;
+  --green-mode-surface-2: #153126;
+  --green-mode-surface-3: #204536;
+  --green-mode-primary: #155034;
+  --green-mode-active: #287a55;
+  --green-mode-soft: #2c5945;
+  --green-mode-line: #3a594a;
+  --green-mode-line-soft: rgba(154, 184, 165, .16);
+  --green-mode-text: #f7f6f0;
+  --green-mode-muted: #aab8af;
+  --green-mode-muted-2: #7f9589;
+  --green-mode-orange: #f2a45c;
+  --green-mode-orange-soft: #503824;
+  --green-mode-danger: #ef8b7d;
+  min-height: 100dvh;
+  background: var(--green-mode-bg) !important;
+  color-scheme: dark;
+}
+
+.hydra-root.theme-dark .phone-app {
+  --forest-950: #062117;
+  --forest-900: #08261c;
+  --forest-800: #103a2a;
+  --forest-700: #155034;
+  --forest-100: #1a382c;
+  --sage: #93b39f;
+  --sage-soft: #244737;
+  --orange: #f2a45c;
+  --orange-soft: #503824;
+  --cream: #08261c;
+  --paper: #1a382c;
+  --ink: #f7f6f0;
+  --muted: #aab8af;
+  --line: #3a594a;
+  --blue-soft: #1b4032;
+  --blue: #79a78c;
+  --danger: #ef8b7d;
+  --shadow: 0 18px 44px rgba(0, 20, 13, .28);
+  background: var(--green-mode-bg) !important;
+  color: var(--green-mode-text) !important;
+}
+
+/* Fundo único: elimina faixas pretas/cinza do antigo modo escuro. */
+html body #root .hydra-root.theme-dark,
+html body #root .hydra-root.theme-dark .app-shell,
+html body #root .hydra-root.theme-dark .phone-app,
+html body #root .hydra-root.theme-dark .phone-app .app-content,
+html body #root .hydra-root.theme-dark .phone-app .app-content > .screen,
+html body #root .hydra-root.theme-dark .phone-app .extra-screen {
+  background: var(--green-mode-bg) !important;
+  background-color: var(--green-mode-bg) !important;
+  background-image: none !important;
+  color: var(--green-mode-text) !important;
+}
+
+/* Tipografia */
+.hydra-root.theme-dark .phone-app h1,
+.hydra-root.theme-dark .phone-app h2,
+.hydra-root.theme-dark .phone-app h3,
+.hydra-root.theme-dark .phone-app h4,
+.hydra-root.theme-dark .phone-app strong,
+.hydra-root.theme-dark .phone-app .screen-heading h1,
+.hydra-root.theme-dark .phone-app .section-heading h2,
+.hydra-root.theme-dark .phone-app .profile-menu-row strong,
+.hydra-root.theme-dark .phone-app .operations-list strong,
+.hydra-root.theme-dark .phone-app .animal-card strong {
+  color: var(--green-mode-text) !important;
+}
+
+.hydra-root.theme-dark .phone-app p,
+.hydra-root.theme-dark .phone-app small,
+.hydra-root.theme-dark .phone-app .subtle-label,
+.hydra-root.theme-dark .phone-app .profile-menu-row small,
+.hydra-root.theme-dark .phone-app .operations-list small,
+.hydra-root.theme-dark .phone-app .animal-card small,
+.hydra-root.theme-dark .phone-app .screen-heading p {
+  color: var(--green-mode-muted) !important;
+}
+
+.hydra-root.theme-dark .phone-app .eyebrow,
+.hydra-root.theme-dark .phone-app .group-label,
+.hydra-root.theme-dark .phone-app .property-kicker,
+.hydra-root.theme-dark .phone-app .animal-code {
+  color: var(--green-mode-orange) !important;
+}
+
+/* Superfícies gerais */
+.hydra-root.theme-dark .phone-app .home-card,
+.hydra-root.theme-dark .phone-app .summary-card,
+.hydra-root.theme-dark .phone-app .metric-card,
+.hydra-root.theme-dark .phone-app .animal-card,
+.hydra-root.theme-dark .phone-app .profile-menu-card,
+.hydra-root.theme-dark .phone-app .plan-card,
+.hydra-root.theme-dark .phone-app .empty-state,
+.hydra-root.theme-dark .phone-app .task-card,
+.hydra-root.theme-dark .phone-app .first-action-card,
+.hydra-root.theme-dark .phone-app .feature-link-grid > button,
+.hydra-root.theme-dark .phone-app .calm-state,
+.hydra-root.theme-dark .phone-app .detail-grid > div,
+.hydra-root.theme-dark .phone-app .detail-line,
+.hydra-root.theme-dark .phone-app .detail-note,
+.hydra-root.theme-dark .phone-app .community-card,
+.hydra-root.theme-dark .phone-app .activity-card,
+.hydra-root.theme-dark .phone-app .monitor-card,
+.hydra-root.theme-dark .phone-app .property-card,
+.hydra-root.theme-dark .phone-app .notification-card,
+.hydra-root.theme-dark .phone-app .operations-panel,
+.hydra-root.theme-dark .phone-app .operations-summary > div,
+.hydra-root.theme-dark .phone-app .operations-actions button,
+.hydra-root.theme-dark .phone-app .operations-list article,
+.hydra-root.theme-dark .phone-app .guide-card,
+.hydra-root.theme-dark .phone-app .modal-card,
+.hydra-root.theme-dark .phone-app .sheet,
+.hydra-root.theme-dark .phone-app .dialog-card,
+.hydra-root.theme-dark .phone-app .setting-card,
+.hydra-root.theme-dark .phone-app .compact-list,
+.hydra-root.theme-dark .phone-app .inline-empty {
+  background: var(--green-mode-surface) !important;
+  border-color: var(--green-mode-line-soft) !important;
+  color: var(--green-mode-text) !important;
+  box-shadow: none !important;
+}
+
+/* HOME */
+.hydra-root.theme-dark .phone-app .greeting-block h1 {
+  color: var(--green-mode-text) !important;
+}
+.hydra-root.theme-dark .phone-app .greeting-block h1 span,
+.hydra-root.theme-dark .phone-app .greeting-block h1 strong {
+  color: var(--green-mode-orange) !important;
+}
+.hydra-root.theme-dark .phone-app .shortcut-row button > span,
+.hydra-root.theme-dark .phone-app .home-shortcuts button > span,
+.hydra-root.theme-dark .phone-app .home-shortcuts-five button > span {
+  background: var(--green-mode-surface-3) !important;
+  border-color: transparent !important;
+  color: #a8c8b5 !important;
+}
+.hydra-root.theme-dark .phone-app .nfc-banner {
+  background: var(--green-mode-surface) !important;
+  border-color: var(--green-mode-line-soft) !important;
+}
+.hydra-root.theme-dark .phone-app .nfc-banner-icon {
+  background: var(--green-mode-primary) !important;
+  color: var(--green-mode-text) !important;
+}
+.hydra-root.theme-dark .phone-app .nfc-banner > svg {
+  color: var(--green-mode-orange) !important;
+}
+.hydra-root.theme-dark .phone-app .property-hero {
+  background: linear-gradient(145deg, #155034 0%, #103e2c 58%, #0b3124 100%) !important;
+  color: var(--green-mode-text) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+.hydra-root.theme-dark .phone-app .property-hero p,
+.hydra-root.theme-dark .phone-app .property-hero small,
+.hydra-root.theme-dark .phone-app .property-metrics small {
+  color: #bdcbc2 !important;
+}
+.hydra-root.theme-dark .phone-app .property-metrics > div,
+.hydra-root.theme-dark .phone-app .property-metrics svg {
+  color: #a8c8b5 !important;
+}
+.hydra-root.theme-dark .phone-app .home-announcements article {
+  background: var(--green-mode-surface) !important;
+  color: var(--green-mode-text) !important;
+}
+.hydra-root.theme-dark .phone-app .home-fab-label {
+  background: var(--green-mode-active) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+/* Clima: remove o azul frio do antigo dark. */
+.hydra-root.theme-dark .phone-app .climate-chip,
+.hydra-root.theme-dark .phone-app .weather-metric,
+.hydra-root.theme-dark .phone-app .weather-dayline {
+  background: var(--green-mode-surface) !important;
+  border-color: var(--green-mode-line-soft) !important;
+  color: var(--green-mode-text) !important;
+}
+.hydra-root.theme-dark .phone-app .climate-chip svg,
+.hydra-root.theme-dark .phone-app .weather-source svg,
+.hydra-root.theme-dark .phone-app .weather-metric > span {
+  color: var(--green-mode-orange) !important;
+}
+.hydra-root.theme-dark .phone-app .weather-metric > span {
+  background: var(--green-mode-surface-3) !important;
+}
+.hydra-root.theme-dark .phone-app .weather-current {
+  background: linear-gradient(145deg, #1a5a40 0%, #12402f 100%) !important;
+}
+.hydra-root.theme-dark .phone-app .weather-current-icon {
+  background: rgba(255,255,255,.09) !important;
+  color: var(--green-mode-orange) !important;
+}
+
+/* EQUIPE / OPERAÇÕES */
+.hydra-root.theme-dark .operations-screen {
+  --ops-v3-green: #155034;
+  --ops-v3-green-2: #287a55;
+  --ops-v3-green-3: #244737;
+  --ops-v3-card: #1a382c;
+  --ops-v3-line: rgba(154,184,165,.16);
+  --ops-soft: #244737;
+  --ops-soft-2: #153126;
+}
+.hydra-root.theme-dark .operations-screen > .operations-header {
+  background:
+    radial-gradient(circle at 88% 10%, rgba(255,255,255,.08) 0 12%, transparent 12.5%),
+    radial-gradient(circle at 98% 54%, rgba(242,164,92,.13) 0 18%, transparent 18.5%),
+    linear-gradient(145deg, #155034 0%, #103e2c 58%, #0b3124 100%) !important;
+  color: var(--green-mode-text) !important;
+  box-shadow: none !important;
+}
+.hydra-root.theme-dark .operations-screen > .operations-header .eyebrow {
+  color: #ffd1a1 !important;
+  background: rgba(255,255,255,.08) !important;
+}
+.hydra-root.theme-dark .operations-screen > .operations-header p {
+  color: #bdcbc2 !important;
+}
+.hydra-root.theme-dark .operations-screen > .operations-tabs button {
+  background: var(--green-mode-surface) !important;
+  border-color: var(--green-mode-line-soft) !important;
+  color: var(--green-mode-muted) !important;
+}
+.hydra-root.theme-dark .operations-screen > .operations-tabs button.active {
+  background: var(--green-mode-active) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}
+.hydra-root.theme-dark .operations-screen .operations-summary > div,
+.hydra-root.theme-dark .operations-screen .operations-actions > button,
+.hydra-root.theme-dark .operations-screen .operations-panel,
+.hydra-root.theme-dark .operations-screen .operations-list article,
+.hydra-root.theme-dark .operations-screen .operations-title {
+  background: var(--green-mode-surface) !important;
+  border-color: var(--green-mode-line-soft) !important;
+  color: var(--green-mode-text) !important;
+}
+.hydra-root.theme-dark .operations-screen .operations-summary svg,
+.hydra-root.theme-dark .operations-screen .operations-actions svg,
+.hydra-root.theme-dark .operations-screen .operations-list article > svg,
+.hydra-root.theme-dark .operations-screen .staff-avatar {
+  background: var(--green-mode-surface-3) !important;
+  color: #a8c8b5 !important;
+}
+.hydra-root.theme-dark .operations-screen .operations-summary > div:nth-child(2) svg,
+.hydra-root.theme-dark .operations-screen .operations-summary > div:nth-child(3) svg,
+.hydra-root.theme-dark .operations-screen .operations-summary > div:nth-child(4) svg {
+  background: var(--green-mode-surface-3) !important;
+  color: var(--green-mode-orange) !important;
+}
+.hydra-root.theme-dark .operations-screen .staff-access-explainer,
+.hydra-root.theme-dark .operations-screen .staff-session-banner {
+  background: var(--green-mode-surface-2) !important;
+  border-color: var(--green-mode-line-soft) !important;
+}
+.hydra-root.theme-dark .operations-screen .staff-access-explainer > svg {
+  background: var(--green-mode-active) !important;
+  color: #fff !important;
+}
+
+/* REBANHO */
+.hydra-root.theme-dark .phone-app .herd-screen-enhanced > .screen-header,
+.hydra-root.theme-dark .phone-app .screen:has(> .nfc-inline-card) > .screen-header {
+  background: linear-gradient(145deg, #155034 0%, #103e2c 58%, #0b3124 100%) !important;
+  border-color: transparent !important;
+  color: var(--green-mode-text) !important;
+  box-shadow: none !important;
+}
+.hydra-root.theme-dark .phone-app .screen:has(> .nfc-inline-card) .screen-heading p {
+  color: #bdcbc2 !important;
+}
+.hydra-root.theme-dark .phone-app .herd-view-tabs {
+  background: var(--green-mode-surface) !important;
+  border-color: var(--green-mode-line-soft) !important;
+}
+.hydra-root.theme-dark .phone-app .herd-view-tabs button {
+  color: var(--green-mode-muted) !important;
+}
+.hydra-root.theme-dark .phone-app .herd-view-tabs button.active {
+  background: var(--green-mode-active) !important;
+  color: #fff !important;
+}
+.hydra-root.theme-dark .phone-app .search-box,
+.hydra-root.theme-dark .phone-app .filter-button,
+.hydra-root.theme-dark .phone-app .filter-chips button,
+.hydra-root.theme-dark .phone-app .nfc-inline-card,
+.hydra-root.theme-dark .phone-app .herd-care-launch,
+.hydra-root.theme-dark .phone-app .herd-production-context,
+.hydra-root.theme-dark .phone-app .herd-reproduction-tools,
+.hydra-root.theme-dark .phone-app .herd-health-tools,
+.hydra-root.theme-dark .phone-app .herd-production-card,
+.hydra-root.theme-dark .phone-app .animal-card {
+  background: var(--green-mode-surface) !important;
+  border-color: var(--green-mode-line-soft) !important;
+  color: var(--green-mode-text) !important;
+  box-shadow: none !important;
+}
+.hydra-root.theme-dark .phone-app .filter-chips button.active {
+  background: var(--green-mode-active) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+.hydra-root.theme-dark .phone-app .nfc-inline-card > span,
+.hydra-root.theme-dark .phone-app .herd-care-launch > span,
+.hydra-root.theme-dark .phone-app .herd-production-card > span,
+.hydra-root.theme-dark .phone-app .animal-avatar:not(.image) {
+  background: var(--green-mode-surface-3) !important;
+  color: #a8c8b5 !important;
+}
+.hydra-root.theme-dark .phone-app .nfc-inline-card > span,
+.hydra-root.theme-dark .phone-app .nfc-inline-card > svg {
+  color: var(--green-mode-orange) !important;
+}
+
+/* NFC */
+.hydra-root.theme-dark .phone-app .nfc-screen .nfc-hero,
+.hydra-root.theme-dark .phone-app .nfc-reader-card,
+.hydra-root.theme-dark .phone-app .nfc-manual-card,
+.hydra-root.theme-dark .phone-app .nfc-result-card {
+  background: var(--green-mode-surface) !important;
+  border-color: var(--green-mode-line-soft) !important;
+  color: var(--green-mode-text) !important;
+}
+.hydra-root.theme-dark .phone-app .nfc-screen .nfc-hero,
+.hydra-root.theme-dark .phone-app .nfc-reader-hero {
+  background: linear-gradient(145deg, #18583e 0%, #12452f 100%) !important;
+}
+.hydra-root.theme-dark .phone-app .nfc-screen .primary-button {
+  background: var(--green-mode-orange) !important;
+  color: #173526 !important;
+}
+
+/* PERFIL */
+.hydra-root.theme-dark .phone-app .profile-hero {
+  background-color: var(--green-mode-primary) !important;
+  background-image: linear-gradient(145deg, #155034 0%, #103e2c 72%, #0b3124 100%) !important;
+  color: var(--green-mode-text) !important;
+}
+.hydra-root.theme-dark .phone-app .profile-menu-row {
+  border-color: var(--green-mode-line-soft) !important;
+}
+.hydra-root.theme-dark .phone-app .profile-menu-icon {
+  background: var(--green-mode-surface-3) !important;
+  color: #a8c8b5 !important;
+}
+.hydra-root.theme-dark .phone-app .plan-card {
+  background: var(--green-mode-surface) !important;
+  border-color: var(--green-mode-line-soft) !important;
+}
+.hydra-root.theme-dark .phone-app .plan-card > button {
+  background: var(--green-mode-active) !important;
+  color: #fff !important;
+}
+
+/* Formulários e controles */
+.hydra-root.theme-dark .phone-app .icon-button,
+.hydra-root.theme-dark .phone-app .secondary-button,
+.hydra-root.theme-dark .phone-app .wide-outline-button,
+.hydra-root.theme-dark .phone-app .segmented-control,
+.hydra-root.theme-dark .phone-app .field input,
+.hydra-root.theme-dark .phone-app .field select,
+.hydra-root.theme-dark .phone-app .field textarea,
+.hydra-root.theme-dark .phone-app .operations-form input,
+.hydra-root.theme-dark .phone-app .operations-form select,
+.hydra-root.theme-dark .phone-app .operations-form textarea,
+.hydra-root.theme-dark .phone-app input,
+.hydra-root.theme-dark .phone-app select,
+.hydra-root.theme-dark .phone-app textarea {
+  background: var(--green-mode-surface-2) !important;
+  border-color: var(--green-mode-line-soft) !important;
+  color: var(--green-mode-text) !important;
+}
+.hydra-root.theme-dark .phone-app input::placeholder,
+.hydra-root.theme-dark .phone-app textarea::placeholder {
+  color: var(--green-mode-muted-2) !important;
+}
+.hydra-root.theme-dark .phone-app .primary-button,
+.hydra-root.theme-dark .phone-app .small-button {
+  background: var(--green-mode-active) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+.hydra-root.theme-dark .phone-app .icon-button.accent {
+  background: var(--green-mode-orange) !important;
+  color: #173526 !important;
+}
+
+/* Modais e quick actions */
+.hydra-root.theme-dark .modal-sheet,
+.hydra-root.theme-dark .quick-sheet,
+.hydra-root.theme-dark .modal-head,
+.hydra-root.theme-dark .quick-sheet header {
+  background: var(--green-mode-surface) !important;
+  border-color: var(--green-mode-line-soft) !important;
+  color: var(--green-mode-text) !important;
+}
+.hydra-root.theme-dark .modal-form > .modal-action-row,
+.hydra-root.theme-dark .confirm-action > .modal-action-row {
+  background: linear-gradient(to bottom, rgba(26,56,44,0), var(--green-mode-surface) 15px) !important;
+}
+.hydra-root.theme-dark .quick-grid > button {
+  background: var(--green-mode-surface-2) !important;
+  border-color: var(--green-mode-line-soft) !important;
+  color: var(--green-mode-text) !important;
+}
+.hydra-root.theme-dark .quick-grid > button > span {
+  background: var(--green-mode-surface-3) !important;
+  color: var(--green-mode-orange) !important;
+}
+
+/* Bottom bar igual à referência: verde contínuo, sem faixa quase preta. */
+.hydra-root.theme-dark .phone-app .bottom-nav {
+  background: rgba(19, 49, 38, .98) !important;
+  border-color: transparent !important;
+  box-shadow: 0 -14px 34px rgba(4, 28, 19, .16) !important;
+}
+.hydra-root.theme-dark .phone-app .bottom-nav button {
+  color: #82978b !important;
+}
+.hydra-root.theme-dark .phone-app .bottom-nav button.active {
+  color: #b7d1c0 !important;
+}
+.hydra-root.theme-dark .phone-app .bottom-nav-indicator,
+.hydra-root.theme-dark .phone-app .bottom-nav .nav-nfc > span:first-of-type {
+  background: var(--green-mode-active) !important;
+  color: #fff !important;
+}
+
+/* Status */
+.hydra-root.theme-dark .phone-app .tag-badge,
+.hydra-root.theme-dark .phone-app .form-notice,
+.hydra-root.theme-dark .phone-app .status-pill {
+  background: var(--green-mode-surface-3) !important;
+  color: #b8d0c1 !important;
+}
+.hydra-root.theme-dark .phone-app .logout-button {
+  background: #3d2925 !important;
+  border-color: #69463f !important;
+  color: #f1a095 !important;
+}
+
+/* Janela Aparência também já mostra a identidade do Modo Verde. */
+.hydra-root.theme-dark .theme-dialog {
+  background: var(--green-mode-surface) !important;
+  border-color: var(--green-mode-line-soft) !important;
+  color: var(--green-mode-text) !important;
+}
+.hydra-root.theme-dark .theme-dialog h2 { color: var(--green-mode-text) !important; }
+.hydra-root.theme-dark .theme-dialog > p,
+.hydra-root.theme-dark .theme-dialog-close,
+.hydra-root.theme-dark .theme-option small { color: var(--green-mode-muted) !important; }
+.hydra-root.theme-dark .theme-dialog-kicker { color: var(--green-mode-orange) !important; }
+.hydra-root.theme-dark .theme-option {
+  background: var(--green-mode-surface-2) !important;
+  border-color: var(--green-mode-line-soft) !important;
+  color: var(--green-mode-text) !important;
+}
+.hydra-root.theme-dark .theme-option > span {
+  background: var(--green-mode-surface-3) !important;
+  color: #a8c8b5 !important;
+}
+.hydra-root.theme-dark .theme-option.active {
+  background: #244737 !important;
+  border-color: #527462 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hydra-root.theme-dark * { scroll-behavior: auto; }
+}
