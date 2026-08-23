@@ -48,6 +48,8 @@ html body #root .hydra-root.theme-dark .phone-app .herd-screen-enhanced > .scree
 html body #root .hydra-root.theme-dark .phone-app .screen:has(> .nfc-inline-card) > .screen-header {
   background: linear-gradient(145deg, #155034 0%, #103e2c 62%, #0b3124 100%) !important;
   color: #f7f6f0 !important;
+  border-radius: 28px !important;
+  overflow: hidden !important;
 }
 html body #root .hydra-root.theme-dark .phone-app .herd-screen-enhanced > .screen-header .eyebrow,
 html body #root .hydra-root.theme-dark .phone-app .screen:has(> .nfc-inline-card) > .screen-header .eyebrow {
@@ -137,6 +139,10 @@ html body #root .hydra-root.theme-dark .phone-app .property-screen .tech-list sm
 
 /* Bottom bar do Modo Verde: NFC como o destaque central do claro, agora laranja. */
 @media (max-width: 899px) {
+  html body #root .hydra-root.theme-dark .phone-app .property-screen {
+    padding-top: max(18px, env(safe-area-inset-top)) !important;
+  }
+
   html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav {
     overflow: visible !important;
     background: rgba(17, 47, 36, .992) !important;
