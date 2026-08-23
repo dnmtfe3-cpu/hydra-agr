@@ -50,7 +50,7 @@
       .wordmark-copy strong { color: #f49a31; }
     </style>
 
-    <link rel="stylesheet" href="/src/app-entry.css?v=app-entry-7" />
+    <link rel="stylesheet" href="/src/app-entry.css?v=app-entry-8" />
 
     <title>Hydra Agro</title>
   </head>
@@ -75,10 +75,28 @@
         html body #root .hydra-root.theme-light,
         html body #root .hydra-root.theme-light .app-shell,
         html body #root .hydra-root.theme-light .phone-app,
-        html body #root .hydra-root.theme-light .phone-app .app-content,
-        html body #root .hydra-root.theme-light .phone-app .app-content > .screen,
-        html body #root .hydra-root.theme-light .phone-app .app-content > .profile-screen {
+        html body #root .hydra-root.theme-light .phone-app .app-content {
           min-height: 100dvh !important;
+          background: #f8f6ef !important;
+          background-color: #f8f6ef !important;
+          background-image: none !important;
+        }
+
+        /* Telas normais crescem só até o conteúdo. Evita o vazio enorme no fim da Home. */
+        html body #root .hydra-root .phone-app .app-content > .screen:not(.profile-screen) {
+          min-height: 0 !important;
+          height: auto !important;
+        }
+
+        html body #root .hydra-root .phone-app .app-content > .home-screen {
+          min-height: 0 !important;
+          height: auto !important;
+          padding-bottom: calc(92px + env(safe-area-inset-bottom)) !important;
+        }
+
+        /* Perfil mantém fundo contínuo para não reaparecer a emenda preta no Safari/PWA. */
+        html body #root .hydra-root.theme-light .phone-app .app-content:has(> .profile-screen),
+        html body #root .hydra-root.theme-light .phone-app .app-content > .profile-screen {
           background: #f8f6ef !important;
           background-color: #f8f6ef !important;
           background-image: none !important;
