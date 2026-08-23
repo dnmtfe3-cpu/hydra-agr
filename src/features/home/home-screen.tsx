@@ -8,6 +8,7 @@ import {
   ChevronRight,
   ClipboardCheck,
   Beef as Cow,
+  HeartHandshake,
   History,
   Leaf,
   Map,
@@ -92,7 +93,7 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
       {announcements.length > 0 && <section className="home-announcements" aria-label="Avisos do Hydra Agro">{announcements.slice(0, 3).map((announcement) => <article key={announcement.id} className={announcement.level}><span>{announcement.level === "critical" ? "IMPORTANTE" : announcement.level === "attention" ? "ATENÇÃO" : "AVISO"}</span><strong>{announcement.title}</strong><p>{announcement.body}</p></article>)}</section>}
 
       <div className="shortcut-row home-shortcuts-five" aria-label="Atalhos">
-        <button onClick={() => navigate("community")} aria-label="Comunidade" title="Comunidade"><span><UsersRound size={23} /></span></button>
+        <button onClick={() => navigate("community")} aria-label="Comunidade" title="Comunidade"><span><HeartHandshake size={23} /></span></button>
         <button onClick={() => navigate("monitor")} aria-label="Monitorar" title="Monitorar"><span><RadioTower size={23} /></span></button>
         <button onClick={() => navigate("activities")} aria-label="Tarefas" title="Tarefas"><span><ClipboardCheck size={23} /></span></button>
         <button onClick={() => navigate("assistant")} aria-label="Assistente" title="Assistente"><span><MessageSquareText size={23} /></span></button>
