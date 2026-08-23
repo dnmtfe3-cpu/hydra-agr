@@ -119,8 +119,8 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
     setError("");
     setSubmitting(true);
     const result = await onGoogleLogin();
+    setSubmitting(false);
     if (!result.ok) {
-      setSubmitting(false);
       setError(result.message);
     }
   }
