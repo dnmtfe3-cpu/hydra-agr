@@ -1,0 +1,82 @@
+/* Ícones estáveis: a tela pode animar, mas os ícones não pulam dentro dos componentes. */
+
+html body #root .hydra-root.hydra-root :is(
+  .home-shortcuts-five,
+  .home-shortcuts-five > button,
+  .home-shortcuts-five > button > span,
+  .profile-social-tabs > button,
+  .segmented-control > button,
+  .herd-view-tabs > button,
+  .filter-chips > button
+) {
+  transform: none !important;
+  scale: 1 !important;
+}
+
+html body #root .hydra-root.hydra-root :is(
+  .home-shortcuts-five > button,
+  .home-shortcuts-five > button > span,
+  .home-shortcuts-five svg,
+  .bottom-nav > button,
+  .bottom-nav > button > span,
+  .bottom-nav > button svg,
+  .profile-social-tabs svg,
+  .segmented-control svg,
+  .herd-view-tabs svg,
+  .filter-chips svg
+):not(.spin) {
+  animation: none !important;
+}
+
+html body #root .hydra-root.hydra-root :is(
+  .home-shortcuts-five svg,
+  .bottom-nav > button svg,
+  .profile-social-tabs svg,
+  .segmented-control svg,
+  .herd-view-tabs svg,
+  .filter-chips svg
+):not(.spin) {
+  transform: none !important;
+}
+
+/* Bottom bar muda apenas cor/opacidade, sem pop, salto ou zoom. */
+html body #root .hydra-root.hydra-root .phone-app .bottom-nav.bottom-nav > button:not(.nav-nfc),
+html body #root .hydra-root.hydra-root .phone-app .bottom-nav.bottom-nav > button:not(.nav-nfc) > span:first-of-type {
+  transform: none !important;
+  scale: 1 !important;
+  animation: none !important;
+}
+
+html body #root .hydra-root.hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc,
+html body #root .hydra-root.hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc > span:first-of-type,
+html body #root .hydra-root.hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.active > span:first-of-type,
+html body #root .hydra-root.hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.is-tapped > span:first-of-type {
+  animation: none !important;
+  scale: 1 !important;
+}
+
+html body #root .hydra-root.hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc > span:first-of-type {
+  transform: translateY(-9px) !important;
+}
+
+/* Os atalhos da Home aparecem como um grupo; nenhum ícone entra separado. */
+html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five,
+html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button,
+html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button > span,
+html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five svg {
+  animation: none !important;
+  transform: none !important;
+  scale: 1 !important;
+}
+
+html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button:active,
+html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button:active > span {
+  transform: none !important;
+  scale: 1 !important;
+}
+
+/* Mantém feedback de toque sem deslocar o desenho. */
+html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button:active,
+html body #root .hydra-root.hydra-root .phone-app .bottom-nav.bottom-nav > button:active {
+  opacity: .68 !important;
+}
