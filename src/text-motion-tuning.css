@@ -44,6 +44,46 @@
   overflow: hidden;
 }
 
+/* NFC mobile: mantém os títulos principais e a caixa verde com a escala atual.
+   Só reduz os textos que funcionam como legenda, ajuda e navegação. */
+@media (max-width: 767px) {
+  .hydra-root .phone-app .nfc-screen .screen-heading > .eyebrow {
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    letter-spacing: .11em !important;
+  }
+
+  .hydra-root .phone-app .nfc-screen .screen-heading > p {
+    max-width: 32ch !important;
+    font-size: 13px !important;
+    line-height: 1.45 !important;
+    -webkit-line-clamp: 3 !important;
+  }
+
+  .hydra-root .phone-app .nfc-screen .nfc-segment > button {
+    min-height: 44px !important;
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+    line-height: 1.2 !important;
+    font-weight: 750 !important;
+  }
+
+  .hydra-root .phone-app .nfc-screen .manual-heading strong {
+    font-size: 14px !important;
+    line-height: 1.25 !important;
+  }
+
+  .hydra-root .phone-app .nfc-screen .manual-heading small,
+  .hydra-root .phone-app .nfc-screen .field > span,
+  .hydra-root .phone-app .nfc-screen .field > small,
+  .hydra-root .phone-app .nfc-screen .nfc-message,
+  .hydra-root .phone-app .nfc-screen .nfc-result-card small,
+  .hydra-root .phone-app .nfc-screen .nfc-result-card p {
+    font-size: 11.5px !important;
+    line-height: 1.4 !important;
+  }
+}
+
 /* Entrada dos blocos depois da troca de funcao. A tela ja faz o fade principal;
    aqui entra apenas um pequeno deslocamento em sequencia. */
 @keyframes hydra-block-enter {
