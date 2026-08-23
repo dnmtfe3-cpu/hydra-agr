@@ -1,0 +1,61 @@
+/* Hydra Agro — mantém Login e Criar conta realmente centralizados e estáveis.
+   O cartão não fica preso no rodapé e não muda de posição ao trocar de etapa. */
+
+.hydra-root .auth-shell-motion:not(.auth-shell-staff) {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  height: 100svh !important;
+  padding: max(16px, env(safe-area-inset-top)) 14px max(16px, env(safe-area-inset-bottom)) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.hydra-root .auth-shell-motion:not(.auth-shell-staff) .auth-card,
+.hydra-root .auth-shell-motion:not(.auth-shell-staff) .auth-card-wide {
+  position: relative !important;
+  inset: auto !important;
+  width: min(100%, 560px) !important;
+  height: min(620px, calc(100svh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom))) !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: auto !important;
+  transform: none !important;
+  align-self: center !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.hydra-root .auth-shell-motion:not(.auth-shell-staff) .auth-card::-webkit-scrollbar,
+.hydra-root .auth-shell-motion:not(.auth-shell-staff) .auth-card-wide::-webkit-scrollbar {
+  display: none;
+}
+
+/* A troca entre entrar, senha e cadastro não empurra o painel pela tela. */
+.hydra-root .auth-shell-motion:not(.auth-shell-staff) .auth-content > form,
+.hydra-root .auth-shell-motion:not(.auth-shell-staff) .signup-panel {
+  animation: none !important;
+  transform: none !important;
+}
+
+@media (max-width: 560px) {
+  .hydra-root .auth-shell-motion:not(.auth-shell-staff) {
+    align-items: center !important;
+    justify-content: center !important;
+    padding: max(12px, env(safe-area-inset-top)) 10px max(12px, env(safe-area-inset-bottom)) !important;
+  }
+
+  .hydra-root .auth-shell-motion:not(.auth-shell-staff) .auth-card,
+  .hydra-root .auth-shell-motion:not(.auth-shell-staff) .auth-card-wide {
+    width: min(calc(100vw - 20px), 560px) !important;
+    height: min(620px, calc(100svh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom))) !important;
+    max-height: none !important;
+    border-radius: 30px !important;
+  }
+}
