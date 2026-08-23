@@ -65,14 +65,31 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
     }
     const duplicate = account.animals.find((animal) => animal.electronicId?.toLowerCase() === normalized.toLowerCase() && animal.id !== animalId);
     if (duplicate) {
-      setMessage(`Este código já pertence a ${duplicate.name || duplicate.identification}.`);
+      setMessage(`Este código já está vinculado a ${duplicate.name || duplicate.identification}.`);
       return;
     }
     const linked = account.animals.find((animal) => animal.id === animalId) || null;
     setLinking(true);
     setMessage("");
     try {
-      await updateAccount((current) => ({ ...current, animals: current.animals.map((animal) => animal.id === animalId ? { ...animal, electronicId: normalized, history: [...(animal.history ?? []), { id: `history-${Date.now()}`, date: new Date().toISOString(), type: "Identificação eletrônica", description: `Tag ${normalized} vinculada` }] } : animal) }), { requireRemote: true });
+      await updateAccount((current) => ({
+        ...current,
+        animals: current.animals.map((animal) => animal.id === animalId
+          ? {
+              ...animal,
+              electronicId: normalized,
+              history: [
+                ...(animal.history ?? []),
+                {
+                  id: `history-${Date.now()}`,
+                  date: new Date().toISOString(),
+                  type: "Identificação eletrônica",
+                  description: `Tag ${normalized} vinculada`,
+                },
+              ],
+            }
+          : animal),
+      }), { requireRemote: true });
       setResult(linked ? { ...linked, electronicId: normalized } : null);
       setMessage("Identificação vinculada com sucesso.");
       showAppToast("Identificação NFC/RFID vinculada");
@@ -91,7 +108,7 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
       return;
     }
     setScanning(true);
-    setMessage("Aproxime o brinco eletrônico ou tag do celular.");
+    setMessage("Aproxime a tag ou o brinco eletrônico do celular.");
     try {
       const readCode = await readNfcTag();
       await onRealRead(readCode).catch(() => false);
@@ -99,13 +116,13 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
       if (mode === "locate") {
         const found = findByCode(readCode);
         setResult(found);
-        setMessage(found ? (canLink ? "Tag lida. Abrindo a ficha do animal…" : "Tag lida. Animal localizado.") : `Tag ${readCode} lida, mas ainda não está vinculada.`);
+        setMessage(found ? (canLink ? "Tag lida. Abrindo a ficha do animal…" : "Tag lida. Animal localizado.") : `Tag ${readCode} lida, mas ainda não vinculada.`);
         if (found && canLink) window.setTimeout(() => onFound(found), 350);
       } else {
         setMessage(`Tag ${readCode} lida. Confirme o vínculo abaixo.`);
       }
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "A leitura não pôde ser concluída.");
+      setMessage(error instanceof Error ? error.message : "Não foi possível concluir a leitura.");
     } finally {
       setScanning(false);
     }
@@ -120,31 +137,36 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
   }
 
   const availabilityText = availability === "ready"
-    ? "NFC pronto no celular"
+    ? "NFC pronto para leitura"
     : availability === "disabled"
-      ? "NFC do celular desativado"
+      ? "NFC desativado no celular"
       : availability === "unsupported"
-        ? "Dispositivo sem NFC compatível"
-        : "Leitura por aproximação somente no app Android";
+        ? "Este aparelho não oferece NFC compatível"
+        : "Aproximação disponível no app Android";
 
   return (
     <div className="screen page-enter extra-screen nfc-screen">
-      <ScreenHeader eyebrow="IDENTIFICAÇÃO ANIMAL" title="Central NFC / RFID" subtitle={canLink ? "Leitura por aproximação no celular Android compatível; código manual disponível em qualquer dispositivo." : "Seu acesso de funcionário permite localizar animais por NFC/RFID. O vínculo de etiquetas fica com o responsável."} onBack={onBack} />
+      <ScreenHeader
+        eyebrow="IDENTIFICAÇÃO ANIMAL"
+        title="NFC e RFID"
+        subtitle={canLink ? "Leia uma tag por aproximação ou informe o código manualmente." : "Localize animais pela identificação eletrônica."}
+        onBack={onBack}
+      />
 
-      <section className="nfc-desktop-notice" aria-label="NFC disponível somente no celular">
+      <section className="nfc-desktop-notice" aria-label="Leitura NFC no celular">
         <span><Smartphone size={26} /></span>
         <div>
-          <small>RECURSO MÓVEL</small>
-          <strong>A leitura NFC por aproximação é feita no celular</strong>
-          <p>Notebooks e computadores normalmente não possuem leitor NFC compatível com o Hydra Agro. Para encostar a tag ou brinco eletrônico, abra o aplicativo em um celular Android com NFC. No computador, use o código da identificação para localizar o animal.</p>
+          <small>LEITURA POR APROXIMAÇÃO</small>
+          <strong>Use um celular Android com NFC</strong>
+          <p>No computador, localize o animal pelo código da identificação.</p>
         </div>
       </section>
 
       <section className={`nfc-hero ${scanning ? "is-scanning" : ""}`}>
         <div className="nfc-waves"><span /><span /><span />{scanning ? <LoaderCircle size={38} className="spin" /> : <Nfc size={38} />}</div>
-        <h2>{scanning ? "Lendo identificação…" : "Aproxime a identificação do celular"}</h2>
-        <p>O código vem diretamente de uma tag real. A leitura por aproximação exige o aplicativo Android instalado em um celular com NFC.</p>
-        <button className="nfc-native-read-button" onClick={() => void startNativeRead()} disabled={scanning}><Radio size={18} /> {scanning ? "Aguardando tag" : "Iniciar leitura no celular"}</button>
+        <h2>{scanning ? "Lendo identificação…" : "Aproxime a tag do celular"}</h2>
+        <p>Encoste o brinco eletrônico ou a tag na área NFC do aparelho.</p>
+        <button className="nfc-native-read-button" onClick={() => void startNativeRead()} disabled={scanning}><Radio size={18} /> {scanning ? "Aguardando aproximação" : "Iniciar leitura"}</button>
         <small><Smartphone size={15} /> {availabilityText}</small>
       </section>
 
@@ -154,24 +176,39 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
       </div>
 
       {account.animals.length === 0 ? (
-        <EmptyState icon={<Cow size={26} />} title="Nenhum animal disponível" text={canLink ? "Cadastre um animal antes de usar a identificação eletrônica." : "O responsável ainda não cadastrou animais nesta propriedade."} />
+        <EmptyState icon={<Cow size={26} />} title="Nenhum animal cadastrado" text={canLink ? "Cadastre um animal antes de vincular uma identificação eletrônica." : "Ainda não há animais cadastrados nesta propriedade."} />
       ) : (
         <form className="nfc-manual-card" onSubmit={mode === "locate" ? locate : link}>
-          <div className="manual-heading"><Keyboard size={21} /><div><strong>Código manual</strong><small>Disponível no celular, notebook e computador</small></div></div>
-          {mode === "link" && canLink && <Field label="Animal"><select value={animalId} onChange={(event) => { setAnimalId(event.target.value); setMessage(""); }}><option value="">Selecione</option>{account.animals.map((animal) => <option key={animal.id} value={animal.id}>{animal.name || animal.identification} · {animal.identification}</option>)}</select></Field>}
+          <div className="manual-heading"><Keyboard size={21} /><div><strong>Código manual</strong><small>Use quando preferir digitar o código.</small></div></div>
+          {mode === "link" && canLink && (
+            <Field label="Animal">
+              <select value={animalId} onChange={(event) => { setAnimalId(event.target.value); setMessage(""); }}>
+                <option value="">Selecione</option>
+                {account.animals.map((animal) => <option key={animal.id} value={animal.id}>{animal.name || animal.identification} · {animal.identification}</option>)}
+              </select>
+            </Field>
+          )}
           <Field label="Código da identificação"><input value={code} onChange={(event) => { setCode(event.target.value); setMessage(""); setResult(null); }} placeholder="Digite o código NFC/RFID" /></Field>
           {message && <p className={`nfc-message ${result ? "success" : ""}`}>{result ? <CheckCircle2 size={17} /> : <AlertCircle size={17} />}{message}</p>}
-          <LoadingButton className="primary-button full" type="submit" loading={linking} loadingLabel="Vinculando...">{mode === "locate" ? <><ScanLine size={18} /> Localizar animal</> : <><Nfc size={18} /> Confirmar vínculo</>}</LoadingButton>
+          <LoadingButton className="primary-button full" type="submit" loading={linking} loadingLabel="Vinculando…">{mode === "locate" ? <><ScanLine size={18} /> Localizar animal</> : <><Nfc size={18} /> Confirmar vínculo</>}</LoadingButton>
         </form>
       )}
 
-      {result && (canLink ? <button className="nfc-result-card" onClick={() => onFound(result)}><span><Cow size={27} /></span><div><small>{result.identification}</small><strong>{result.name || "Animal sem nome"}</strong><p>{result.species}{result.breed ? ` · ${result.breed}` : ""}</p></div><ChevronRight size={20} /></button> : <div className="nfc-result-card"><span><Cow size={27} /></span><div><small>{result.identification}</small><strong>{result.name || "Animal sem nome"}</strong><p>{result.species}{result.breed ? ` · ${result.breed}` : ""}</p></div><CheckCircle2 size={20} /></div>)}
+      {result && (
+        canLink
+          ? <button className="nfc-result-card" onClick={() => onFound(result)}><span><Cow size={27} /></span><div><small>{result.identification}</small><strong>{result.name || "Animal sem nome"}</strong><p>{result.species}{result.breed ? ` · ${result.breed}` : ""}</p></div><ChevronRight size={20} /></button>
+          : <div className="nfc-result-card"><span><Cow size={27} /></span><div><small>{result.identification}</small><strong>{result.name || "Animal sem nome"}</strong><p>{result.species}{result.breed ? ` · ${result.breed}` : ""}</p></div><CheckCircle2 size={20} /></div>
+      )}
 
-      <Modal open={nativeInfo} onClose={() => setNativeInfo(false)} eyebrow="LEITURA NFC" title={availability === "disabled" ? "Ative o NFC do celular" : "Use um celular Android com NFC"}>
+      <Modal open={nativeInfo} onClose={() => setNativeInfo(false)} eyebrow="LEITURA NFC" title={availability === "disabled" ? "Ative o NFC do celular" : "Leitura por aproximação indisponível"}>
         <div className="hardware-message">
           <span><Smartphone size={31} /></span>
-          <p>{availability === "disabled" ? "O celular possui NFC, mas o recurso está desativado. Ative-o nas configurações do Android e tente novamente." : availability === "web" ? "A leitura por aproximação não é feita pelo navegador do notebook ou computador. Abra o aplicativo Hydra Agro em um celular Android compatível com NFC. Aqui, você pode continuar usando o código manual da identificação." : "Este dispositivo não possui hardware NFC compatível para a leitura do Hydra Agro. Use um celular Android com NFC ou informe o código da identificação manualmente."}</p>
-          <div className="future-data-list"><div><Nfc size={17} /> Aproximação somente em celular compatível</div><div><span className="tiny-shield" /> Código manual disponível em qualquer dispositivo</div></div>
+          <p>{availability === "disabled"
+            ? "O NFC está desativado. Ative-o nas configurações do Android e tente novamente."
+            : availability === "web"
+              ? "A leitura por aproximação funciona no app Android. Neste dispositivo, use o código manual."
+              : "Este aparelho não oferece leitura NFC compatível. Use o código manual ou outro celular Android com NFC."}</p>
+          <div className="future-data-list"><div><Nfc size={17} /> Leitura por aproximação no Android</div><div><span className="tiny-shield" /> Código manual em qualquer dispositivo</div></div>
           {availability === "disabled" && <button className="secondary-button full" onClick={() => void openNfcSettings()}><Settings size={17} /> Abrir configurações</button>}
           <button className="primary-button full" onClick={() => setNativeInfo(false)}>Usar código manual</button>
         </div>
