@@ -28,8 +28,11 @@ export const supabase: SupabaseClient | null = backendConfigured
         storage: authStorage,
         persistSession: true,
         autoRefreshToken: true,
-        // O navegador conclui OAuth/confirmacao diretamente pela URL.
-        // No APK o retorno chega por deep link e continua sendo tratado abaixo.
+        // PKCE evita depender de tokens no fragmento (#) do deep link no Android.
+        // O APK recebe um `code` e conclui a sessão com exchangeCodeForSession.
+        flowType: "pkce",
+        // No navegador o Supabase pode concluir o callback pela URL.
+        // No APK o retorno chega pelo listener de deep link do Capacitor.
         detectSessionInUrl: !Capacitor.isNativePlatform(),
       },
       global: {
@@ -73,6 +76,7 @@ async function processAuthCallbackUrl(url: string) {
   const code = parsed.searchParams.get("code");
 
   if (accessToken && refreshToken) {
+    // Compatibilidade com links antigos que ainda retornem pelo fluxo implícito.
     const { error } = await client.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
     if (error) throw error;
   } else if (code) {
@@ -82,13 +86,20 @@ async function processAuthCallbackUrl(url: string) {
     throw new Error("Link de autenticação inválido ou expirado.");
   }
 
+  // Só considera o retorno concluído quando a sessão realmente foi persistida.
+  const { data, error: sessionError } = await client.auth.getSession();
+  if (sessionError) throw sessionError;
+  if (!data.session?.user) throw new Error("O Google autenticou a conta, mas a sessão não foi concluída no aplicativo.");
+
   return recovery;
 }
 
 export function handleAuthCallbackUrl(url: string) {
   const pending = callbackTasks.get(url);
   if (pending) return pending;
-  const task = processAuthCallbackUrl(url);
+  const task = processAuthCallbackUrl(url).finally(() => {
+    callbackTasks.delete(url);
+  });
   callbackTasks.set(url, task);
   return task;
 }
