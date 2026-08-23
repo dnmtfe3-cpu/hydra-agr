@@ -1,0 +1,96 @@
+/* Hydra Agro — modo de movimento restrito à NFC.
+   Todas as telas normais ficam estáticas. A NFC mantém ondas, leitura e feedback visual. */
+
+/* Remove a animação da própria troca de tela fora da NFC. */
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content.route-motion-forward > .screen.screen.page-enter:not(.nfc-screen),
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content.route-motion-back > .screen.screen.page-enter:not(.nfc-screen),
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content > .screen.screen.page-enter:not(.nfc-screen) {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  will-change: auto !important;
+}
+
+/* Início, Equipe, Rebanho, Perfil, Comunidade, Propriedade etc. sem animação interna. */
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content > .screen:not(.nfc-screen),
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content > .screen:not(.nfc-screen) *:not(.spin),
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content > .screen:not(.nfc-screen) *:not(.spin)::before,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content > .screen:not(.nfc-screen) *:not(.spin)::after {
+  animation: none !important;
+  animation-delay: 0ms !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+/* Botões fora da NFC não dão zoom, pop ou salto ao tocar. */
+html body #root .hydra-root.hydra-root.hydra-root .phone-app .app-content > .screen:not(.nfc-screen) button,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app .app-content > .screen:not(.nfc-screen) [role="button"],
+html body #root .hydra-root.hydra-root.hydra-root .phone-app .app-content > .screen:not(.nfc-screen) button:active,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app .app-content > .screen:not(.nfc-screen) [role="button"]:active,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app .app-content > .screen:not(.nfc-screen) button.is-pressed,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app .app-content > .screen:not(.nfc-screen) button.is-tapped {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  scale: 1 !important;
+}
+
+/* Bottom bar inteira estática, inclusive o botão central. */
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button > span,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button > small,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button svg {
+  animation: none !important;
+  transition: none !important;
+  scale: 1 !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button:not(.nav-nfc),
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button:not(.nav-nfc) > span:first-of-type {
+  transform: none !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.nav-nfc,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.nav-nfc > span:first-of-type,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.nav-nfc.active > span:first-of-type,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.nav-nfc.is-tapped > span:first-of-type {
+  animation: none !important;
+  transition: none !important;
+  scale: 1 !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.nav-nfc > span:first-of-type,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.nav-nfc.active > span:first-of-type,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.nav-nfc.is-tapped > span:first-of-type {
+  transform: translateY(-9px) !important;
+}
+
+/* Modais e sheets abrem sem transição. */
+html body .modal-layer,
+html body .modal-layer .modal-sheet,
+html body .modal-layer.is-closing,
+html body .modal-layer.is-closing .modal-sheet {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* A tela NFC fica explicitamente livre para usar seu motion system. */
+html body #root .hydra-root .phone-app .app-content > .nfc-screen,
+html body #root .hydra-root .phone-app .app-content > .nfc-screen * {
+  scroll-behavior: smooth;
+}
+
+/* Evita movimento para usuários que pedem redução de animações. */
+@media (prefers-reduced-motion: reduce) {
+  html body #root .hydra-root .phone-app .app-content > .nfc-screen,
+  html body #root .hydra-root .phone-app .app-content > .nfc-screen *,
+  html body #root .hydra-root .phone-app .app-content > .nfc-screen *::before,
+  html body #root .hydra-root .phone-app .app-content > .nfc-screen *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
