@@ -142,3 +142,9 @@
     padding-bottom: calc(92px + env(safe-area-inset-bottom)) !important;
   }
 }
+
+/* Google removido do fluxo de login e criação de conta. */
+.hydra-root .auth-card .google-auth-button,
+.hydra-root .auth-card .google-auth-button + .auth-divider {
+  display: none !important;
+}
