@@ -1,0 +1,79 @@
+/* Ajustes finais: botão Voltar arredondado e Home do notebook com a mesma composição do mobile. */
+
+.hydra-root .auth-shell-motion :is(.auth-back, .auth-home-back) {
+  min-height: 40px !important;
+  padding: 8px 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(31, 101, 71, .12) !important;
+  background: rgba(255, 255, 255, .78) !important;
+  box-shadow: none !important;
+  line-height: 1 !important;
+}
+
+.hydra-root .auth-shell-motion :is(.auth-back, .auth-home-back) svg {
+  flex: 0 0 auto !important;
+}
+
+@media (min-width: 1024px) {
+  /* A Home no notebook mantém a ordem e a leitura vertical do mobile.
+     Só ganha largura e respiro para a tela maior, sem virar um dashboard diferente. */
+  .hydra-root .app-content > .home-screen,
+  .hydra-root .app-content .home-screen {
+    width: min(calc(100% - 72px), 920px) !important;
+    max-width: 920px !important;
+    min-height: calc(100dvh - 138px) !important;
+    margin: 0 auto !important;
+    padding: 34px 0 48px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 18px !important;
+  }
+
+  .hydra-root .home-screen > .home-brandbar,
+  .hydra-root .home-screen > .greeting-block,
+  .hydra-root .home-screen > .home-announcements,
+  .hydra-root .home-screen > .shortcut-row,
+  .hydra-root .home-screen > .nfc-banner,
+  .hydra-root .home-screen > .property-hero,
+  .hydra-root .home-screen > .home-summary-section,
+  .hydra-root .home-screen > .home-section:not(.home-summary-section) {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    grid-column: auto !important;
+    grid-row: auto !important;
+    align-self: stretch !important;
+  }
+
+  .hydra-root .home-screen > .home-fab-label {
+    width: auto !important;
+    margin: 0 !important;
+    align-self: flex-start !important;
+    justify-self: auto !important;
+    grid-column: auto !important;
+  }
+
+  /* Mantém os cinco atalhos como no mobile, só com mais espaço horizontal. */
+  .hydra-root .home-screen > .shortcut-row {
+    gap: 10px !important;
+  }
+
+  .hydra-root .home-screen > .shortcut-row > button {
+    min-width: 0 !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  .hydra-root .app-content > .home-screen,
+  .hydra-root .app-content .home-screen {
+    width: min(calc(100% - 96px), 980px) !important;
+    max-width: 980px !important;
+  }
+}
