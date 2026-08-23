@@ -4,53 +4,53 @@ export type ProfileInformationKind = "terms" | "privacy" | "credits" | "about";
 
 const information = {
   terms: {
-    eyebrow: "DOCUMENTO OFICIAL",
+    eyebrow: "TERMOS DE USO",
     title: "Termos de uso",
     icon: <FileCheck2 size={28} />,
-    introduction: "Estes termos explicam como utilizar o Hydra Agro com responsabilidade e quais recursos dependem de serviços ou equipamentos externos.",
+    introduction: "Ao usar o Hydra Agro, você concorda com estas regras básicas de uso.",
     sections: [
-      ["1. Finalidade da plataforma", "O Hydra Agro auxilia na organização de dados da propriedade, água, rebanho, atividades, setores, comunidade, NFC/RFID e monitoramento. Ele não substitui orientação veterinária, agronômica, ambiental, jurídica ou de segurança."],
-      ["2. Responsabilidade pelos registros", "O usuário deve informar dados verdadeiros, manter suas credenciais protegidas e revisar as informações antes de salvar. Decisões sobre manejo, consumo e operação da propriedade continuam sendo responsabilidade do produtor."],
-      ["3. Recursos conectados", "Leitura NFC/RFID, clima, notificações externas e pagamentos dependem de aparelho, internet, permissões ou integração compatível. O aplicativo não confirma uma operação que não aconteceu."],
-      ["4. Comunidade", "É proibido publicar conteúdo ilegal, ofensivo, enganoso ou que viole direitos de terceiros. Conteúdos podem ser moderados e contas podem ser restringidas quando houver abuso comprovado."],
-      ["5. Disponibilidade e evolução", "O projeto pode receber melhorias, correções e períodos de manutenção. Sempre que possível, dados já sincronizados permanecem vinculados à conta do usuário."],
+      ["1. Para que serve", "O Hydra Agro ajuda a organizar dados da propriedade, rebanho, tarefas, setores, comunidade, NFC/RFID e monitoramentos. O aplicativo não substitui orientação veterinária, agronômica, jurídica ou de segurança."],
+      ["2. Seus registros", "Mantenha os dados da conta corretos, proteja suas credenciais e confira as informações antes de salvar. As decisões de manejo e operação continuam sob responsabilidade do produtor."],
+      ["3. Recursos externos", "Leitura NFC/RFID, clima, notificações e pagamentos podem depender do aparelho, da internet, de permissões ou de serviços externos."],
+      ["4. Comunidade", "Não é permitido publicar conteúdo ilegal, ofensivo, enganoso ou que viole direitos de outras pessoas. Publicações podem ser moderadas quando necessário."],
+      ["5. Atualizações", "O aplicativo pode receber melhorias, correções e períodos de manutenção. Sempre que possível, os dados já sincronizados permanecem vinculados à conta."],
     ],
   },
   privacy: {
-    eyebrow: "SEUS DADOS",
+    eyebrow: "PRIVACIDADE",
     title: "Política de privacidade",
     icon: <ShieldCheck size={28} />,
-    introduction: "A privacidade foi organizada para que cada conta veja apenas os próprios dados rurais, salvo conteúdos públicos da comunidade e acessos administrativos autorizados pelo servidor.",
+    introduction: "Os dados da conta são usados para manter as funções do Hydra Agro e o acesso à propriedade.",
     sections: [
-      ["Dados tratados", "Podem ser armazenados nome, e-mail, telefone, foto, dados da propriedade, animais, registros de água, atividades, setores, monitoramentos, publicações e preferências."],
-      ["Finalidade", "Os dados são usados para autenticar a conta, manter a ficha da propriedade, calcular indicadores reais, sincronizar registros, exibir alertas e permitir as funções escolhidas pelo usuário."],
-      ["Isolamento e segurança", "Registros privados são vinculados ao identificador da conta e protegidos pelas regras de acesso do Supabase. Cargos administrativos são validados no servidor, nunca apenas na interface."],
-      ["Clima e serviços externos", "Para consultar o clima, o aplicativo envia somente o nome da cidade e suas coordenadas aproximadas ao serviço meteorológico. E-mail, senha, animais e demais registros rurais não fazem parte dessa consulta."],
-      ["Direitos do usuário", "O titular pode solicitar acesso, correção ou exclusão de dados pelos canais oficiais. Algumas informações poderão ser preservadas quando houver obrigação legal ou necessidade de segurança."],
+      ["Dados armazenados", "Podem ser armazenados nome, e-mail, telefone, foto, dados da propriedade, animais, tarefas, setores, monitoramentos, publicações e preferências."],
+      ["Como os dados são usados", "Essas informações servem para autenticar a conta, manter a ficha da propriedade, sincronizar registros, mostrar avisos e liberar as funções escolhidas pelo usuário."],
+      ["Acesso e segurança", "Registros privados ficam vinculados à conta e seguem as regras de acesso configuradas no servidor. Recursos administrativos exigem permissão válida."],
+      ["Clima e serviços externos", "Na consulta do clima, o aplicativo usa apenas a cidade cadastrada e dados necessários para localizar a previsão. Informações da conta e do rebanho não fazem parte dessa consulta."],
+      ["Seus direitos", "Você pode solicitar acesso, correção ou exclusão dos seus dados pelos canais oficiais do Hydra Agro, respeitando eventuais obrigações legais."],
     ],
   },
   credits: {
-    eyebrow: "CRÉDITOS DO PROJETO",
+    eyebrow: "CRÉDITOS",
     title: "Créditos",
     icon: <Code2 size={28} />,
-    introduction: "O Hydra Agro é um projeto independente de tecnologia rural, desenvolvido para reunir gestão da propriedade, sustentabilidade e identificação de animais em uma experiência simples.",
+    introduction: "O Hydra Agro é um projeto independente voltado à rotina da propriedade rural.",
     sections: [
-      ["Produto e desenvolvimento", "Concepção, interface e desenvolvimento do Hydra Agro são mantidos de forma independente, com evolução contínua a partir dos testes reais do aplicativo."],
-      ["Tecnologias", "A aplicação utiliza React e TypeScript na interface, Supabase para autenticação e dados e Capacitor para integração com recursos do aplicativo móvel."],
-      ["Identificação animal", "A área de identificação foi construída para trabalhar com NFC/RFID e links públicos de animais quando o aparelho e o ambiente oferecem suporte compatível."],
-      ["Princípio do projeto", "Indicadores, leituras, consumo e resultados só devem aparecer quando existirem registros reais. O aplicativo evita preencher métricas com dados inventados."],
+      ["Produto e desenvolvimento", "A concepção, a interface e o desenvolvimento do Hydra Agro são mantidos de forma independente."],
+      ["Tecnologias", "A interface utiliza React e TypeScript, com Supabase para autenticação e dados e Capacitor para recursos do aplicativo móvel."],
+      ["Identificação animal", "A identificação eletrônica utiliza NFC/RFID em aparelhos compatíveis e pode ser associada à ficha de cada animal."],
+      ["Dados da conta", "Indicadores e resultados exibidos pelo aplicativo usam as informações disponíveis nos registros da própria conta."],
     ],
   },
   about: {
-    eyebrow: "TECNOLOGIA RURAL",
+    eyebrow: "HYDRA AGRO",
     title: "Sobre o Hydra Agro",
     icon: <Sprout size={28} />,
-    introduction: "O Hydra Agro é uma plataforma regional de tecnologia para o agronegócio, criada para aproximar gestão, sustentabilidade e inovação da rotina do produtor.",
+    introduction: "O Hydra Agro reúne ferramentas de gestão rural em um aplicativo simples para o dia a dia da propriedade.",
     sections: [
-      ["O que o aplicativo reúne", "Gestão hídrica, rebanho, identificação NFC/RFID, atividades, setores da propriedade, comunidade e monitoramento."],
-      ["Atuação inicial", "O lançamento regional atende Brejões e municípios vizinhos na Bahia. A cidade cadastrada personaliza a propriedade e a consulta meteorológica."],
-      ["Compromisso com dados reais", "O aplicativo mostra estados vazios quando não existem registros. Leituras NFC, economia de água e cobranças nunca são inventadas."],
-      ["Desenvolvimento", "Produto independente em evolução contínua. Recursos que dependem de hardware, API ou pagamento somente são liberados quando a integração correspondente está disponível."],
+      ["O que você encontra", "Rebanho, identificação NFC/RFID, tarefas, setores, equipe, comunidade e monitoramentos."],
+      ["Região atendida", "O projeto começou em Brejões e municípios vizinhos da Bahia. A cidade cadastrada também é usada para mostrar a previsão do tempo."],
+      ["Informações da conta", "Telas, históricos e indicadores usam os registros disponíveis na sua conta."],
+      ["Recursos externos", "Algumas funções dependem de hardware, internet ou serviços externos, como NFC, clima e notificações."],
     ],
   },
 } as const;
@@ -66,12 +66,12 @@ export function ProfileInformation({ kind, onClose, onEmail, onInstagram }: { ki
       <div className="legal-sections">
         {content.sections.map(([title, text]) => <section key={title}><h3>{title}</h3><p>{text}</p></section>)}
       </div>
-      <div className="legal-meta"><strong>Hydra Agro · versão 1.2.2</strong><span>Última atualização: 21 de agosto de 2026</span></div>
+      <div className="legal-meta"><strong>Hydra Agro · versão 1.2.2</strong><span>Última atualização: 23 de agosto de 2026</span></div>
       <div className="legal-contact-actions">
         <button className="secondary-button" onClick={onEmail}><Mail size={18} /> Suporte</button>
         <button className="secondary-button" onClick={onInstagram}><Instagram size={18} /> Instagram <ExternalLink size={14} /></button>
       </div>
-      <button className="primary-button full" onClick={onClose}>Entendi e fechar</button>
+      <button className="primary-button full" onClick={onClose}>Fechar</button>
     </div>
   );
 }
