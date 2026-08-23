@@ -22,11 +22,15 @@ function showInlineError(form: HTMLFormElement, message: string) {
 
 async function emailExists(email: string) {
   if (!supabase) return null;
-  const { data, error } = await supabase.rpc("auth_email_exists", {
-    p_email: email.trim().toLowerCase(),
+
+  const { data, error } = await supabase.functions.invoke("auth-email-status", {
+    body: { email: email.trim().toLowerCase() },
   });
   if (error) throw error;
-  return Boolean(data);
+
+  const response = data as { ok?: boolean; exists?: boolean; message?: string } | null;
+  if (!response?.ok) throw new Error(response?.message || "Não foi possível verificar este e-mail agora.");
+  return Boolean(response.exists);
 }
 
 function isOwnerLoginEmailStep(form: HTMLFormElement) {
@@ -63,7 +67,6 @@ async function validateEmailBeforeSubmit(event: SubmitEvent) {
   const email = emailInput?.value.trim().toLowerCase() ?? "";
   if (!emailPattern.test(email) || !supabase) return;
 
-  // Interrompe o submit do React apenas enquanto o e-mail é verificado.
   event.preventDefault();
   event.stopImmediatePropagation();
   removeInlineError(form);
