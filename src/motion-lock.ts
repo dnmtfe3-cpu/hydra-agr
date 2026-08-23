@@ -25,6 +25,16 @@ function lockElement(el: HTMLElement, resetTransform = false) {
   }
 }
 
+function lockNavSpan(el: HTMLElement) {
+  important(el, "animation", "none");
+  important(el, "animation-delay", "0ms");
+  important(el, "animation-duration", "0ms");
+  important(el, "transition", "none");
+  /* O transform do destaque NFC é controlado pelo CSS final. */
+  el.style.removeProperty("transform");
+  el.style.removeProperty("scale");
+}
+
 function fadeLayer(element: HTMLElement, duration = 260) {
   if (seenFeatureLayers.has(element) || reducedMotion.matches) return;
   seenFeatureLayers.add(element);
@@ -99,15 +109,12 @@ function lockScreen(screen: HTMLElement) {
 }
 
 function lockBottomNav(root: ParentNode = document) {
-  /*
-   * A barra pode usar transform para se centralizar. Não zere o transform do
-   * contêiner: isso deslocava a barra metade da largura para a direita no iPhone.
-   */
+  /* A barra inteira pode depender de posicionamento/transform; não altere seu transform. */
   root.querySelectorAll<HTMLElement>(".bottom-nav").forEach((nav) => lockElement(nav, false));
 
-  root.querySelectorAll<HTMLElement>(
-    ".bottom-nav > button, .bottom-nav > button > span, .bottom-nav > button > small, .bottom-nav > button svg",
-  ).forEach((el) => lockElement(el, true));
+  root.querySelectorAll<HTMLElement>(".bottom-nav > button").forEach((button) => lockElement(button, true));
+  root.querySelectorAll<HTMLElement>(".bottom-nav > button > span").forEach(lockNavSpan);
+  root.querySelectorAll<HTMLElement>(".bottom-nav > button > small, .bottom-nav > button svg").forEach((el) => lockElement(el, true));
 }
 
 function applyMotionController() {
