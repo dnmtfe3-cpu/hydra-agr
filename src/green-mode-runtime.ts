@@ -1,4 +1,5 @@
 import "./green-mode-theme.css";
+import "./bottom-nav-runtime-fix.css";
 
 const GREEN_THEME_COLOR = "#08261c";
 const LIGHT_THEME_COLOR = "#0f3727";
