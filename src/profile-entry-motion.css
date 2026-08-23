@@ -1,0 +1,91 @@
+/* Entrada do Perfil — curta, fluida e sem exagero. */
+.profile-screen.page-enter {
+  animation: profile-screen-enter 420ms cubic-bezier(.22,.8,.28,1) both;
+}
+
+.profile-screen .profile-hero {
+  animation: profile-hero-enter 520ms cubic-bezier(.2,.82,.24,1) both;
+  transform-origin: 50% 20%;
+}
+
+.profile-screen .profile-avatar-wrap {
+  animation: profile-avatar-enter 560ms 90ms cubic-bezier(.18,.9,.25,1.15) both;
+}
+
+.profile-screen .profile-social-tabs {
+  animation: profile-item-enter 420ms 120ms cubic-bezier(.22,.8,.28,1) both;
+}
+
+.profile-screen .plan-card {
+  animation: profile-item-enter 440ms 170ms cubic-bezier(.22,.8,.28,1) both;
+}
+
+.profile-screen > .profile-group {
+  animation: profile-item-enter 440ms cubic-bezier(.22,.8,.28,1) both;
+}
+
+.profile-screen > .profile-group:nth-of-type(4) { animation-delay: 210ms; }
+.profile-screen > .profile-group:nth-of-type(5) { animation-delay: 250ms; }
+.profile-screen > .profile-group:nth-of-type(6) { animation-delay: 290ms; }
+
+.profile-screen > .logout-button,
+.profile-screen > .profile-version {
+  animation: profile-item-enter 420ms 300ms cubic-bezier(.22,.8,.28,1) both;
+}
+
+@keyframes profile-screen-enter {
+  from { opacity: .01; }
+  to { opacity: 1; }
+}
+
+@keyframes profile-hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(.985);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes profile-avatar-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(.78);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.035);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes profile-item-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-screen.page-enter,
+  .profile-screen .profile-hero,
+  .profile-screen .profile-avatar-wrap,
+  .profile-screen .profile-social-tabs,
+  .profile-screen .plan-card,
+  .profile-screen > .profile-group,
+  .profile-screen > .logout-button,
+  .profile-screen > .profile-version {
+    animation: none !important;
+  }
+}
