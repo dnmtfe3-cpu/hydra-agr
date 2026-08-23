@@ -379,6 +379,11 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
             {signupStep === 0 && (
               <form onSubmit={nextSignup} className="signup-panel">
                 <span className="eyebrow">DADOS PESSOAIS</span><h1>Vamos criar sua conta</h1><p className="auth-subtitle">Comece com as informações básicas.</p>
+                <button className="google-auth-button" type="button" onClick={() => void submitGoogleLogin()} disabled={submitting}>
+                  <span className="google-g" aria-hidden="true">G</span>
+                  {submitting ? "Abrindo Google…" : "Criar conta com Google"}
+                </button>
+                <div className="auth-divider"><span>ou preencha seus dados</span></div>
                 <div className="form-grid">
                   <Field label="Nome completo"><input value={signup.name} onChange={(e) => changeSignup("name", e.target.value)} placeholder="Seu nome" autoComplete="name" /></Field>
                   <Field label="E-mail"><input type="email" value={signup.email} onChange={(e) => changeSignup("email", e.target.value)} placeholder="voce@email.com" autoComplete="email" /></Field>
