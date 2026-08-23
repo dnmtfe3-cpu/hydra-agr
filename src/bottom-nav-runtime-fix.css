@@ -115,6 +115,29 @@
     padding-bottom: calc(70px + env(safe-area-inset-bottom)) !important;
   }
 
+  /* Modo claro: NFC com fundo verde e símbolo branco. */
+  html body #root .hydra-root.theme-light .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple),
+  html body #root .hydra-root.theme-light .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) {
+    width: 40px !important;
+    height: 34px !important;
+    min-width: 40px !important;
+    min-height: 34px !important;
+    border-radius: 12px !important;
+    background: #155034 !important;
+    color: #ffffff !important;
+  }
+
+  html body #root .hydra-root.theme-light .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple) svg,
+  html body #root .hydra-root.theme-light .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) svg {
+    color: #ffffff !important;
+  }
+
+  html body #root .hydra-root.theme-light .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > small,
+  html body #root .hydra-root.theme-light .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > small {
+    color: #155034 !important;
+    font-weight: 800 !important;
+  }
+
   /* Modo verde */
   html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav {
     background: rgba(17, 47, 36, .985) !important;
