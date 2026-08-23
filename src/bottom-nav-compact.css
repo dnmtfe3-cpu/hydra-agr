@@ -1,0 +1,52 @@
+/* Ajuste final da barra inferior no mobile: mais baixa e com NFC levemente maior. */
+@media (max-width: 899px) {
+  .hydra-root .phone-app .bottom-nav {
+    min-height: calc(68px + env(safe-area-inset-bottom)) !important;
+    height: calc(68px + env(safe-area-inset-bottom)) !important;
+    padding: 5px 8px max(6px, env(safe-area-inset-bottom)) !important;
+    align-items: start !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button {
+    min-height: 54px !important;
+    height: 54px !important;
+    padding: 2px 2px 0 !important;
+    gap: 2px !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button > span:first-of-type {
+    width: 31px !important;
+    height: 31px !important;
+    min-width: 31px !important;
+    min-height: 31px !important;
+    padding: 0 !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button > span:first-of-type svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button > small {
+    font-size: 8px !important;
+    line-height: 1 !important;
+    margin-top: 1px !important;
+  }
+
+  /* NFC continua sendo o destaque central, só que sem aumentar a barra inteira. */
+  .hydra-root .phone-app .bottom-nav > button.nav-nfc > span:first-of-type {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button.nav-nfc > span:first-of-type svg {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .hydra-root .phone-app .app-content {
+    padding-bottom: calc(74px + env(safe-area-inset-bottom)) !important;
+  }
+}
