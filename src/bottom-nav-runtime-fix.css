@@ -1,0 +1,143 @@
+/* Hydra Agro — correção final da bottom bar mobile.
+   Mantém os cinco itens sempre dentro da largura útil e elimina deslocamentos laterais. */
+
+@media (max-width: 899px) {
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: end !important;
+    gap: 0 !important;
+    overflow: visible !important;
+    min-height: calc(76px + env(safe-area-inset-bottom)) !important;
+    height: auto !important;
+    padding: 7px 8px max(8px, env(safe-area-inset-bottom)) !important;
+    z-index: 140 !important;
+  }
+
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 56px !important;
+    margin: 0 !important;
+    padding: 4px 1px 2px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 3px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+    overflow: visible !important;
+  }
+
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple) {
+    width: 40px !important;
+    height: 36px !important;
+    min-width: 40px !important;
+    min-height: 36px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+    border: 0 !important;
+    border-radius: 13px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple) svg {
+    width: 22px !important;
+    height: 22px !important;
+    transform: none !important;
+  }
+
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > small {
+    max-width: 100% !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    font-size: 8.5px !important;
+    line-height: 1 !important;
+    font-weight: 730 !important;
+    transform: none !important;
+  }
+
+  /* NFC participa da mesma grade; nada de botão elevado ou largo. */
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc,
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active {
+    position: relative !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple),
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) {
+    width: 40px !important;
+    height: 36px !important;
+    min-width: 40px !important;
+    min-height: 36px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 13px !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > small,
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > small {
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  html body #root .hydra-root .phone-app .app-content {
+    padding-bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+  }
+
+  /* Modo verde */
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav {
+    background: rgba(19, 49, 38, .985) !important;
+    border-top: 1px solid rgba(170, 184, 175, .10) !important;
+    box-shadow: 0 -12px 30px rgba(4, 28, 19, .14) !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button {
+    color: #81968a !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.active {
+    color: #d8e5dc !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.active > span:first-of-type:not(.touch-ripple) {
+    background: #285a45 !important;
+    color: #f7f6f0 !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.active > span:first-of-type:not(.touch-ripple) {
+    background: #287a55 !important;
+    color: #f2a45c !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav .bottom-nav-indicator {
+    display: none !important;
+  }
+}
