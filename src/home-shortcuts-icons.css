@@ -1,0 +1,89 @@
+/* Atalhos da Home no estilo da bottom bar: cinco ícones lado a lado. */
+.hydra-root .home-screen .shortcut-row.home-shortcuts-five {
+  width: 100% !important;
+  max-width: 430px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 6px !important;
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 4px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 22px !important;
+  background: color-mix(in srgb, var(--paper) 92%, transparent) !important;
+  box-shadow: 0 12px 30px -26px rgba(12, 54, 37, .42) !important;
+}
+
+.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 52px !important;
+  padding: 5px !important;
+  display: grid !important;
+  place-items: center !important;
+  grid-template-columns: 1fr !important;
+  border: 0 !important;
+  border-radius: 16px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button::after {
+  content: none !important;
+  display: none !important;
+}
+
+.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button > span {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 14px !important;
+  background: var(--sage-soft) !important;
+  color: var(--forest-700) !important;
+  transition: transform 180ms cubic-bezier(.2,.86,.24,1), background-color 180ms ease, color 180ms ease, box-shadow 180ms ease !important;
+}
+
+.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button:active > span {
+  transform: translateY(-2px) scale(.92) !important;
+}
+
+@media (hover:hover) and (pointer:fine) {
+  .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button:hover {
+    transform: none !important;
+    background: var(--sage-soft) !important;
+  }
+  .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button:hover > span {
+    transform: translateY(-2px) !important;
+    background: var(--forest-700) !important;
+    color: #fff !important;
+  }
+}
+
+.hydra-root.theme-dark .home-screen .shortcut-row.home-shortcuts-five {
+  border-color: #294235 !important;
+  background: #0e1d15 !important;
+}
+.hydra-root.theme-dark .home-screen .shortcut-row.home-shortcuts-five > button {
+  background: transparent !important;
+  border: 0 !important;
+}
+.hydra-root.theme-dark .home-screen .shortcut-row.home-shortcuts-five > button > span {
+  background: #173326 !important;
+  color: #a9cfb3 !important;
+}
+
+@media (max-width: 390px) {
+  .hydra-root .home-screen .shortcut-row.home-shortcuts-five { padding: 5px !important; gap: 2px !important; }
+  .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button { min-height: 48px !important; padding: 3px !important; }
+  .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button > span {
+    width: 39px !important;
+    height: 39px !important;
+    min-width: 39px !important;
+    min-height: 39px !important;
+    border-radius: 13px !important;
+  }
+}
