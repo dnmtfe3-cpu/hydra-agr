@@ -13,7 +13,7 @@ import { StaffHomeScreen } from "./features/staff/staff-home-screen";
 import { StaffProfileScreen } from "./features/staff/staff-profile-screen";
 import { useHydraStore } from "./hooks/use-hydra-store";
 import type { AppRoute, StaffRole } from "./lib/hydra-types";
-import { handleAuthCallbackUrl, isAuthCallbackUrl } from "./services/supabase";
+import { handleAuthCallbackUrl, supabase } from "./services/supabase";
 
 const WaterScreen = lazy(() => import("./features/water/water-screen").then((module) => ({ default: module.WaterScreen })));
 const HerdScreen = lazy(() => import("./features/herd/herd-screen").then((module) => ({ default: module.HerdScreen })));
@@ -220,16 +220,21 @@ export default function HydraApp() {
   }, [store.configured]);
 
   useEffect(() => {
-    if (Capacitor.isNativePlatform() || !store.configured || !isAuthCallbackUrl(window.location.href)) return;
-    let active = true;
-    void handleAuthCallbackUrl(window.location.href)
-      .then((recovery) => {
-        if (!active || !recovery) return;
+    if (Capacitor.isNativePlatform() || !store.configured || !supabase) return;
+
+    if (window.location.pathname.includes("/auth/recovery")) {
+      setPasswordRecovery(true);
+      window.history.replaceState({}, document.title, "/");
+    }
+
+    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
         setPasswordRecovery(true);
         window.history.replaceState({}, document.title, "/");
-      })
-      .catch(() => undefined);
-    return () => { active = false; };
+      }
+    });
+
+    return () => listener.subscription.unsubscribe();
   }, [store.configured]);
 
   useEffect(() => {
