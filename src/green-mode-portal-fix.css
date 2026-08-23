@@ -1,0 +1,142 @@
+/* Hydra Agro — correções de portal do Modo Verde e bottom bar. */
+
+/* Os modais são renderizados em document.body, fora de .hydra-root. */
+body.hydra-green-mode .modal-layer {
+  background: rgba(3, 22, 15, .66) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+body.hydra-green-mode .modal-sheet,
+body.hydra-green-mode .modal-head,
+body.hydra-green-mode .modal-body {
+  background: #1a382c !important;
+  background-color: #1a382c !important;
+  color: #f7f6f0 !important;
+  border-color: rgba(168, 200, 181, .16) !important;
+}
+
+body.hydra-green-mode .modal-sheet {
+  box-shadow: 0 -20px 60px rgba(1, 18, 12, .38) !important;
+}
+
+body.hydra-green-mode .sheet-handle {
+  background: #668175 !important;
+  opacity: .58 !important;
+}
+
+body.hydra-green-mode .modal-head h2,
+body.hydra-green-mode .modal-body h1,
+body.hydra-green-mode .modal-body h2,
+body.hydra-green-mode .modal-body h3,
+body.hydra-green-mode .modal-body strong {
+  color: #f7f6f0 !important;
+}
+
+body.hydra-green-mode .modal-head .eyebrow,
+body.hydra-green-mode .modal-head .eyebrow.orange,
+body.hydra-green-mode .modal-body .group-label {
+  color: #f2a45c !important;
+}
+
+body.hydra-green-mode .modal-head .icon-button {
+  background: #244737 !important;
+  border-color: rgba(168, 200, 181, .15) !important;
+  color: #f7f6f0 !important;
+}
+
+body.hydra-green-mode .modal-body p,
+body.hydra-green-mode .modal-body small {
+  color: #aab8af !important;
+}
+
+/* Menu e configurações */
+body.hydra-green-mode .profile-settings-sheet {
+  background: #1a382c !important;
+  color: #f7f6f0 !important;
+}
+
+body.hydra-green-mode .profile-settings-sheet .profile-menu-card {
+  background: #153126 !important;
+  border: 1px solid rgba(168, 200, 181, .16) !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+body.hydra-green-mode .profile-settings-sheet .profile-menu-row,
+body.hydra-green-mode .profile-settings-sheet button.profile-menu-row {
+  background: transparent !important;
+  color: #f7f6f0 !important;
+  border-color: rgba(168, 200, 181, .12) !important;
+}
+
+body.hydra-green-mode .profile-settings-sheet .profile-menu-row strong {
+  color: #f7f6f0 !important;
+}
+
+body.hydra-green-mode .profile-settings-sheet .profile-menu-row small {
+  color: #9fb0a6 !important;
+}
+
+body.hydra-green-mode .profile-settings-sheet .profile-menu-icon {
+  background: #244737 !important;
+  color: #a8c8b5 !important;
+}
+
+body.hydra-green-mode .profile-settings-sheet .profile-menu-row > svg {
+  color: #8ca196 !important;
+}
+
+body.hydra-green-mode .profile-settings-sheet .group-label,
+body.hydra-green-mode .profile-settings-sheet > span,
+body.hydra-green-mode .profile-settings-sheet section > span {
+  color: #91a79b !important;
+}
+
+/* Inputs e controles de modais no Modo Verde. */
+body.hydra-green-mode .modal-body input,
+body.hydra-green-mode .modal-body select,
+body.hydra-green-mode .modal-body textarea,
+body.hydra-green-mode .modal-body .secondary-button,
+body.hydra-green-mode .modal-body .wide-outline-button {
+  background: #153126 !important;
+  border-color: rgba(168, 200, 181, .16) !important;
+  color: #f7f6f0 !important;
+}
+
+body.hydra-green-mode .modal-body input::placeholder,
+body.hydra-green-mode .modal-body textarea::placeholder {
+  color: #7f9589 !important;
+}
+
+/* NFC da bottom bar: mantém o destaque laranja, mas reserva espaço real pro texto. */
+@media (max-width: 899px) {
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc,
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active {
+    min-height: 50px !important;
+    height: 50px !important;
+    overflow: visible !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple),
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    transform: translateY(-4px) !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > small,
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > small {
+    display: block !important;
+    height: auto !important;
+    min-height: 9px !important;
+    margin-top: -1px !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    color: #f2a45c !important;
+  }
+}
