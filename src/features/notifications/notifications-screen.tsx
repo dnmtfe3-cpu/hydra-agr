@@ -6,7 +6,6 @@ import {
   BellRing,
   CheckCheck,
   ClipboardCheck,
-  Droplets,
   LoaderCircle,
   RadioTower,
   RefreshCw,
@@ -35,7 +34,6 @@ type NotificationRow = {
 
 function notificationIcon(kind: string) {
   const normalized = kind.toLowerCase();
-  if (normalized.includes("water") || normalized.includes("agua") || normalized.includes("água")) return <Droplets size={19} />;
   if (normalized.includes("activity") || normalized.includes("task") || normalized.includes("atividade") || normalized.includes("tarefa")) return <ClipboardCheck size={19} />;
   if (normalized.includes("monitor") || normalized.includes("occurrence") || normalized.includes("ocorr")) return <RadioTower size={19} />;
   if (normalized.includes("community") || normalized.includes("comunidade")) return <UsersRound size={19} />;
@@ -45,8 +43,7 @@ function notificationIcon(kind: string) {
 
 function notificationKindLabel(kind: string) {
   const normalized = kind.toLowerCase();
-  if (normalized.includes("water") || normalized.includes("agua") || normalized.includes("água")) return "Água";
-  if (normalized.includes("activity") || normalized.includes("task") || normalized.includes("atividade") || normalized.includes("tarefa")) return "Atividade";
+  if (normalized.includes("activity") || normalized.includes("task") || normalized.includes("atividade") || normalized.includes("tarefa")) return "Tarefa";
   if (normalized.includes("monitor") || normalized.includes("occurrence") || normalized.includes("ocorr")) return "Monitoramento";
   if (normalized.includes("community") || normalized.includes("comunidade")) return "Comunidade";
   if (normalized.includes("admin")) return "Hydra Agro";
@@ -68,7 +65,7 @@ export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
   const [refreshing, setRefreshing] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [markingAll, setMarkingAll] = useState(false);
-  const [settingsBusy, setSettingsBusy] = useState<"push" | "water" | null>(null);
+  const [settingsBusy, setSettingsBusy] = useState(false);
   const [error, setError] = useState("");
 
   const unreadCount = useMemo(() => items.filter((item) => !item.read_at).length, [items]);
@@ -150,26 +147,14 @@ export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
   }
 
   async function changePushNotifications(pushNotifications: boolean) {
-    setSettingsBusy("push");
+    setSettingsBusy(true);
     try {
       await updateAccount((current) => ({ ...current, settings: { ...current.settings, pushNotifications } }), { requireRemote: true });
       showAppToast(pushNotifications ? "Avisos do aplicativo ativados" : "Avisos do aplicativo pausados");
     } catch (caught) {
       showAppToast(caught instanceof Error ? caught.message : "Não foi possível salvar a preferência.", "error");
     } finally {
-      setSettingsBusy(null);
-    }
-  }
-
-  async function changeWaterAlerts(waterAlerts: boolean) {
-    setSettingsBusy("water");
-    try {
-      await updateAccount((current) => ({ ...current, settings: { ...current.settings, waterAlerts } }), { requireRemote: true });
-      showAppToast(waterAlerts ? "Alertas de água ativados" : "Alertas de água pausados");
-    } catch (caught) {
-      showAppToast(caught instanceof Error ? caught.message : "Não foi possível salvar a preferência.", "error");
-    } finally {
-      setSettingsBusy(null);
+      setSettingsBusy(false);
     }
   }
 
@@ -177,7 +162,7 @@ export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
     <div className="screen page-enter extra-screen notifications-screen">
       <ScreenHeader
         title="Notificações"
-        subtitle={unreadCount > 0 ? `${unreadCount} não lida${unreadCount === 1 ? "" : "s"}` : "Você está em dia com os avisos."}
+        subtitle={unreadCount > 0 ? `${unreadCount} ${unreadCount === 1 ? "aviso não lido" : "avisos não lidos"}` : "Nenhum aviso novo."}
         onBack={onBack}
         action={<button className="icon-button notification-refresh" onClick={() => void loadNotifications(true)} disabled={refreshing} aria-label="Atualizar notificações">{refreshing ? <LoaderCircle size={19} className="spin" /> : <RefreshCw size={19} />}</button>}
       />
@@ -185,20 +170,14 @@ export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
       <section className="notification-preferences" aria-label="Preferências de notificação">
         <div className="notification-preference-row">
           <span className="notification-preference-icon"><Bell size={20} /></span>
-          <div><strong>Avisos do aplicativo</strong><small>Atividades, monitoramentos e mensagens do Hydra Agro.</small></div>
+          <div><strong>Avisos do aplicativo</strong><small>Tarefas, monitoramentos, comunidade e avisos da conta.</small></div>
           <Toggle checked={account.settings.pushNotifications} label="Avisos do aplicativo" onChange={(value) => void changePushNotifications(value)} />
-          {settingsBusy === "push" && <LoaderCircle size={15} className="spin notification-setting-loader" />}
-        </div>
-        <div className="notification-preference-row water">
-          <span className="notification-preference-icon"><Droplets size={20} /></span>
-          <div><strong>Alertas de água</strong><small>Exibidos quando seus registros permitem uma análise real.</small></div>
-          <Toggle checked={account.settings.waterAlerts} label="Alertas de água" onChange={(value) => void changeWaterAlerts(value)} />
-          {settingsBusy === "water" && <LoaderCircle size={15} className="spin notification-setting-loader" />}
+          {settingsBusy && <LoaderCircle size={15} className="spin notification-setting-loader" />}
         </div>
       </section>
 
       <div className="notification-list-head">
-        <div><span>CENTRAL</span><strong>Avisos recentes</strong></div>
+        <div><span>RECENTES</span><strong>Seus avisos</strong></div>
         {unreadCount > 0 && <button onClick={() => void markAllRead()} disabled={markingAll}>{markingAll ? <LoaderCircle size={15} className="spin" /> : <CheckCheck size={16} />} Marcar todas</button>}
       </div>
 
@@ -207,7 +186,7 @@ export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
       {loading ? (
         <div className="notification-loading" role="status"><LoaderCircle size={25} className="spin" /><span>Carregando avisos…</span></div>
       ) : items.length === 0 ? (
-        <EmptyState icon={<Bell size={26} />} title="Nenhuma notificação" text="Quando houver algo importante e baseado em dados reais, aparecerá aqui." />
+        <EmptyState icon={<Bell size={26} />} title="Nenhuma notificação" text="Quando houver algo importante, o aviso aparece aqui." />
       ) : (
         <div className="notification-list notification-list-v2">
           {items.map((item) => {
