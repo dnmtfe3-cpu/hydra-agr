@@ -13,6 +13,8 @@ function syncGreenModeUi() {
   const root = document.querySelector<HTMLElement>(".hydra-root");
   const isGreen = root?.classList.contains("theme-dark") ?? false;
 
+  document.documentElement.classList.toggle("hydra-green-mode", isGreen);
+  document.body.classList.toggle("hydra-green-mode", isGreen);
   document.documentElement.style.backgroundColor = isGreen ? GREEN_THEME_COLOR : "#f8f6ef";
   document.body.style.backgroundColor = isGreen ? GREEN_THEME_COLOR : "#f8f6ef";
 
@@ -21,6 +23,10 @@ function syncGreenModeUi() {
 
   document.querySelectorAll<HTMLElement>(".theme-menu-row small").forEach((node) => {
     setTextIf(node, "Modo escuro", "Modo verde");
+  });
+
+  document.querySelectorAll<HTMLElement>(".profile-settings-sheet small").forEach((node) => {
+    setTextIf(node, "Modo claro ou escuro", "Modo claro ou verde");
   });
 
   document.querySelectorAll<HTMLButtonElement>(".theme-option").forEach((button) => {
