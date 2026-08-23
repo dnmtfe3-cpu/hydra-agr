@@ -1,0 +1,27 @@
+/* Remove qualquer divisor/faixa escura entre o conteúdo e a navegação inferior. */
+@media (max-width: 899px) {
+  .hydra-root .phone-app,
+  .hydra-root .phone-app .app-content,
+  .hydra-root .phone-app .bottom-nav.bottom-nav {
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .hydra-root .phone-app::before,
+  .hydra-root .phone-app::after,
+  .hydra-root .phone-app .app-content::before,
+  .hydra-root .phone-app .app-content::after,
+  .hydra-root .phone-app .bottom-nav.bottom-nav::before,
+  .hydra-root .phone-app .bottom-nav.bottom-nav::after {
+    content: none !important;
+    display: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav.bottom-nav {
+    background-clip: padding-box !important;
+  }
+}
