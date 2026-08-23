@@ -1,0 +1,253 @@
+/* Hydra Agro — motion system fluido aplicado ao app inteiro.
+   Usa somente opacity/transform para manter boa resposta em telas de alta taxa de atualização. */
+
+:root {
+  --hydra-fluid-fast: 170ms;
+  --hydra-fluid-base: 300ms;
+  --hydra-fluid-slow: 420ms;
+  --hydra-fluid-ease: cubic-bezier(.16, 1, .3, 1);
+  --hydra-fluid-soft: cubic-bezier(.22, .78, .24, 1);
+}
+
+@keyframes hydra-fluid-screen {
+  0% { opacity: .72; transform: translate3d(0, 3px, 0) scale(.997); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes hydra-fluid-rise {
+  0% { opacity: 0; transform: translate3d(0, 9px, 0) scale(.992); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes hydra-fluid-card {
+  0% { opacity: 0; transform: translate3d(0, 7px, 0) scale(.988); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes hydra-fluid-nav {
+  0% { opacity: .66; transform: scale(.90); }
+  58% { opacity: 1; transform: scale(1.035); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes hydra-fluid-nav-nfc {
+  0% { opacity: .72; transform: translateY(-9px) scale(.90); }
+  58% { opacity: 1; transform: translateY(-9px) scale(1.035); }
+  100% { opacity: 1; transform: translateY(-9px) scale(1); }
+}
+
+@keyframes hydra-fluid-sheet {
+  0% { opacity: 0; transform: translate3d(0, 24px, 0) scale(.982); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes hydra-fluid-sheet-close {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  100% { opacity: 0; transform: translate3d(0, 16px, 0) scale(.989); }
+}
+
+@keyframes hydra-fluid-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes hydra-fluid-nfc-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.045); }
+}
+
+@keyframes hydra-fluid-nfc-ring {
+  0% { opacity: .38; transform: scale(.58); }
+  65% { opacity: .12; }
+  100% { opacity: 0; transform: scale(1.52); }
+}
+
+/* A tela troca sem corte seco. A especificidade alta substitui os bloqueios móveis antigos. */
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content.route-motion-forward > .screen.screen.page-enter,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content.route-motion-back > .screen.screen.page-enter,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content > .screen.screen.page-enter {
+  animation: hydra-fluid-screen 300ms var(--hydra-fluid-ease) both !important;
+  transition: none !important;
+  transform-origin: center top !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  will-change: transform, opacity !important;
+}
+
+/* Conteúdo de TODAS as telas entra em uma sequência curta e contínua. */
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content > .screen.screen.page-enter > * {
+  animation: hydra-fluid-rise var(--hydra-fluid-slow) var(--hydra-fluid-ease) both !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+}
+html body #root .hydra-root.hydra-root.hydra-root .app-content > .screen.page-enter > :nth-child(1) { animation-delay: 10ms !important; }
+html body #root .hydra-root.hydra-root.hydra-root .app-content > .screen.page-enter > :nth-child(2) { animation-delay: 28ms !important; }
+html body #root .hydra-root.hydra-root.hydra-root .app-content > .screen.page-enter > :nth-child(3) { animation-delay: 46ms !important; }
+html body #root .hydra-root.hydra-root.hydra-root .app-content > .screen.page-enter > :nth-child(4) { animation-delay: 64ms !important; }
+html body #root .hydra-root.hydra-root.hydra-root .app-content > .screen.page-enter > :nth-child(5) { animation-delay: 82ms !important; }
+html body #root .hydra-root.hydra-root.hydra-root .app-content > .screen.page-enter > :nth-child(6) { animation-delay: 100ms !important; }
+html body #root .hydra-root.hydra-root.hydra-root .app-content > .screen.page-enter > :nth-child(n+7) { animation-delay: 116ms !important; }
+
+/* Listas e grades: cada item aparece suavemente, sem parecer um slideshow. */
+html body #root .hydra-root.hydra-root.hydra-root :is(
+  .animal-list,
+  .activity-list,
+  .notification-list,
+  .community-feed,
+  .post-list,
+  .today-priority-list,
+  .today-activity-list,
+  .compact-list,
+  .timeline-list,
+  .herd-production-grid,
+  .herd-reproduction-grid,
+  .herd-health-grid,
+  .property-info-grid,
+  .tech-list,
+  .profile-menu-card,
+  .feature-link-grid,
+  .task-card,
+  .support-channel-grid
+) > * {
+  animation: hydra-fluid-card 360ms var(--hydra-fluid-ease) both !important;
+  backface-visibility: hidden !important;
+}
+html body #root .hydra-root.hydra-root.hydra-root :is(.animal-list,.activity-list,.notification-list,.community-feed,.post-list,.today-priority-list,.today-activity-list,.compact-list,.timeline-list,.herd-production-grid,.herd-reproduction-grid,.herd-health-grid,.property-info-grid,.tech-list,.profile-menu-card,.feature-link-grid,.task-card,.support-channel-grid) > :nth-child(2) { animation-delay: 18ms !important; }
+html body #root .hydra-root.hydra-root.hydra-root :is(.animal-list,.activity-list,.notification-list,.community-feed,.post-list,.today-priority-list,.today-activity-list,.compact-list,.timeline-list,.herd-production-grid,.herd-reproduction-grid,.herd-health-grid,.property-info-grid,.tech-list,.profile-menu-card,.feature-link-grid,.task-card,.support-channel-grid) > :nth-child(3) { animation-delay: 36ms !important; }
+html body #root .hydra-root.hydra-root.hydra-root :is(.animal-list,.activity-list,.notification-list,.community-feed,.post-list,.today-priority-list,.today-activity-list,.compact-list,.timeline-list,.herd-production-grid,.herd-reproduction-grid,.herd-health-grid,.property-info-grid,.tech-list,.profile-menu-card,.feature-link-grid,.task-card,.support-channel-grid) > :nth-child(4) { animation-delay: 54ms !important; }
+html body #root .hydra-root.hydra-root.hydra-root :is(.animal-list,.activity-list,.notification-list,.community-feed,.post-list,.today-priority-list,.today-activity-list,.compact-list,.timeline-list,.herd-production-grid,.herd-reproduction-grid,.herd-health-grid,.property-info-grid,.tech-list,.profile-menu-card,.feature-link-grid,.task-card,.support-channel-grid) > :nth-child(n+5) { animation-delay: 68ms !important; }
+
+/* Rebanho volta a participar do motion system, inclusive abas, cards e ferramentas. */
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content .herd-screen-enhanced.herd-screen-enhanced,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content .herd-screen-enhanced.herd-screen-enhanced *:not(.spin) {
+  scroll-behavior: smooth !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content .herd-screen-enhanced.herd-screen-enhanced > *:not([hidden]) {
+  animation: hydra-fluid-rise 390ms var(--hydra-fluid-ease) both !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content .herd-screen-enhanced.herd-screen-enhanced .animal-list > .animal-card,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content .herd-screen-enhanced.herd-screen-enhanced .herd-view-tabs > button,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content.app-content .herd-screen-enhanced.herd-screen-enhanced .filter-chips > button {
+  animation: hydra-fluid-card 360ms var(--hydra-fluid-ease) both !important;
+  transition: transform var(--hydra-fluid-fast) var(--hydra-fluid-ease), opacity var(--hydra-fluid-fast) ease, background-color 210ms ease, border-color 210ms ease, color 210ms ease !important;
+}
+
+/* Botões e cards respondem ao toque de forma contínua. */
+html body #root .hydra-root.hydra-root.hydra-root button:not(:disabled),
+html body #root .hydra-root.hydra-root.hydra-root [role="button"]:not([aria-disabled="true"]),
+html body #root .hydra-root.hydra-root.hydra-root a {
+  -webkit-tap-highlight-color: transparent !important;
+  transform-origin: center !important;
+  transition:
+    transform var(--hydra-fluid-fast) var(--hydra-fluid-ease),
+    opacity var(--hydra-fluid-fast) ease,
+    background-color 210ms ease,
+    border-color 210ms ease,
+    color 210ms ease,
+    box-shadow 230ms ease !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root button:not(:disabled):active,
+html body #root .hydra-root.hydra-root.hydra-root [role="button"]:not([aria-disabled="true"]):active {
+  transform: scale(.978) !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root button:not(:disabled):active svg,
+html body #root .hydra-root.hydra-root.hydra-root [role="button"]:active svg {
+  transform: none !important;
+}
+
+/* Bottom bar: mantém a posição fixa, mas confirma a seleção com movimento suave. */
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button > span,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button > small,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button svg {
+  transition: transform 260ms var(--hydra-fluid-ease), opacity 220ms ease, color 220ms ease, background-color 240ms ease !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.active:not(.nav-nfc) > span:first-of-type,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.is-tapped:not(.nav-nfc) > span:first-of-type {
+  animation: hydra-fluid-nav 285ms var(--hydra-fluid-ease) both !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.nav-nfc.active > span:first-of-type,
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav > button.nav-nfc.is-tapped > span:first-of-type {
+  animation: hydra-fluid-nav-nfc 300ms var(--hydra-fluid-ease) both !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .bottom-nav.bottom-nav .touch-ripple {
+  display: none !important;
+}
+
+/* Inputs, chips, tabs e toggles também ficam sem mudança seca de estado. */
+html body #root .hydra-root.hydra-root.hydra-root :is(input,select,textarea) {
+  transition: border-color 220ms ease, box-shadow 240ms ease, background-color 220ms ease, opacity 180ms ease !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root :is(.segmented-control,.filter-chips,.herd-view-tabs,.profile-social-tabs) > button {
+  transition: transform 190ms var(--hydra-fluid-ease), background-color 230ms ease, color 230ms ease, border-color 230ms ease, opacity 190ms ease !important;
+}
+
+html body #root .hydra-root.hydra-root.hydra-root .toggle,
+html body #root .hydra-root.hydra-root.hydra-root .toggle > span {
+  transition: transform 260ms var(--hydra-fluid-ease), background-color 240ms ease, border-color 240ms ease !important;
+}
+
+/* Modal/sheet mais fluido, sem abrir ou fechar em dois cortes. */
+html body .modal-layer:not(.is-closing) {
+  animation: hydra-fluid-fade 220ms ease both !important;
+}
+html body .modal-layer:not(.is-closing) .modal-sheet {
+  animation: hydra-fluid-sheet 380ms var(--hydra-fluid-ease) both !important;
+  transform-origin: center bottom !important;
+  will-change: transform, opacity !important;
+}
+html body .modal-layer.is-closing .modal-sheet {
+  animation: hydra-fluid-sheet-close 240ms cubic-bezier(.4,0,.6,1) both !important;
+}
+html body .modal-layer.is-closing {
+  animation: hydra-fluid-fade 240ms ease reverse both !important;
+}
+
+/* NFC continua viva mesmo parada e acelera durante a leitura real. */
+html body #root .hydra-root.hydra-root.hydra-root .nfc-screen.nfc-screen .nfc-waves {
+  animation: hydra-fluid-nfc-breathe 2.4s ease-in-out infinite !important;
+  transform-origin: center !important;
+}
+html body #root .hydra-root.hydra-root.hydra-root .nfc-screen.nfc-screen .nfc-waves > span {
+  animation: hydra-fluid-nfc-ring 2.25s var(--hydra-fluid-ease) infinite !important;
+}
+html body #root .hydra-root.hydra-root.hydra-root .nfc-screen.nfc-screen .nfc-waves > span:nth-child(2) { animation-delay: .44s !important; }
+html body #root .hydra-root.hydra-root.hydra-root .nfc-screen.nfc-screen .nfc-waves > span:nth-child(3) { animation-delay: .88s !important; }
+html body #root .hydra-root.hydra-root.hydra-root .nfc-screen.nfc-screen .nfc-hero.is-scanning .nfc-waves { animation-duration: 1.25s !important; }
+
+/* Autenticação e onboarding também recebem entrada suave. */
+html body #root .hydra-root.hydra-root.hydra-root :is(.auth-shell,.auth-landing,.onboarding-screen) > * {
+  animation: hydra-fluid-rise 440ms var(--hydra-fluid-ease) both !important;
+}
+
+@media (hover:hover) and (pointer:fine) {
+  html body #root .hydra-root.hydra-root.hydra-root :is(
+    .animal-card,.activity-card,.history-home-row,.profile-menu-row,.property-section-card,
+    .nfc-result-card,.post-card,.challenge-card,.sector-card,.monitoring-card
+  ):hover {
+    transform: translateY(-2px) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body #root .hydra-root *,
+  html body #root .hydra-root *::before,
+  html body #root .hydra-root *::after,
+  html body .modal-layer,
+  html body .modal-sheet {
+    animation-duration: .001ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
