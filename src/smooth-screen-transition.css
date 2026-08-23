@@ -1,0 +1,123 @@
+/* Hydra Agro — transição de rota contínua.
+   A tela nunca deve parecer que some antes da próxima entrar. */
+
+:root {
+  --hydra-route-duration: 440ms;
+  --hydra-route-ease: cubic-bezier(.16, 1, .3, 1);
+}
+
+@keyframes hydra-route-smooth-forward {
+  0% {
+    opacity: .86;
+    transform: translate3d(14px, 2px, 0) scale(.988);
+  }
+  52% {
+    opacity: .985;
+    transform: translate3d(3px, 0, 0) scale(.997);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes hydra-route-smooth-back {
+  0% {
+    opacity: .86;
+    transform: translate3d(-14px, 2px, 0) scale(.988);
+  }
+  52% {
+    opacity: .985;
+    transform: translate3d(-3px, 0, 0) scale(.997);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes hydra-route-child-settle {
+  from {
+    opacity: .72;
+    transform: translate3d(0, 7px, 0) scale(.994);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* A própria página faz o movimento principal. */
+html body #root .hydra-root.hydra-root .phone-app.phone-app .app-content.route-motion-forward > .screen.page-enter {
+  animation: hydra-route-smooth-forward var(--hydra-route-duration) var(--hydra-route-ease) both !important;
+  transform-origin: center top !important;
+  will-change: transform, opacity !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+}
+
+html body #root .hydra-root.hydra-root .phone-app.phone-app .app-content.route-motion-back > .screen.page-enter {
+  animation: hydra-route-smooth-back var(--hydra-route-duration) var(--hydra-route-ease) both !important;
+  transform-origin: center top !important;
+  will-change: transform, opacity !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+}
+
+/* Os blocos acompanham a tela com um atraso mínimo; nada entra aos trancos. */
+html body #root .hydra-root.hydra-root .phone-app.phone-app .app-content > .screen.page-enter > * {
+  animation: hydra-route-child-settle 360ms var(--hydra-route-ease) both !important;
+}
+
+html body #root .hydra-root.hydra-root .phone-app.phone-app .app-content > .screen.page-enter > :nth-child(1) { animation-delay: 28ms !important; }
+html body #root .hydra-root.hydra-root .phone-app.phone-app .app-content > .screen.page-enter > :nth-child(2) { animation-delay: 46ms !important; }
+html body #root .hydra-root.hydra-root .phone-app.phone-app .app-content > .screen.page-enter > :nth-child(3) { animation-delay: 64ms !important; }
+html body #root .hydra-root.hydra-root .phone-app.phone-app .app-content > .screen.page-enter > :nth-child(4) { animation-delay: 82ms !important; }
+html body #root .hydra-root.hydra-root .phone-app.phone-app .app-content > .screen.page-enter > :nth-child(5) { animation-delay: 100ms !important; }
+html body #root .hydra-root.hydra-root .phone-app.phone-app .app-content > .screen.page-enter > :nth-child(n+6) { animation-delay: 116ms !important; }
+
+/* Nunca mostrar uma tela intermediária de “Carregando…” durante navegação. */
+html body #root .hydra-root .route-loading {
+  position: absolute !important;
+  inset: 0 !important;
+  min-height: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  background: transparent !important;
+}
+
+html body #root .hydra-root .route-loading > * {
+  display: none !important;
+}
+
+/* A bottom bar acompanha a troca sem pular de posição. */
+html body #root .hydra-root .bottom-nav > button:not(.nav-nfc) > span:first-of-type {
+  transition: transform 300ms var(--hydra-route-ease), background-color 260ms ease, color 240ms ease, opacity 220ms ease !important;
+}
+
+html body #root .hydra-root .bottom-nav > button.active:not(.nav-nfc) > span:first-of-type {
+  animation: none !important;
+  transform: scale(1.045) !important;
+}
+
+html body #root .hydra-root .bottom-nav > button.nav-nfc > span:first-of-type {
+  transition: transform 300ms var(--hydra-route-ease), background-color 260ms ease, color 240ms ease, opacity 220ms ease !important;
+}
+
+html body #root .hydra-root .bottom-nav > button.nav-nfc.active > span:first-of-type {
+  animation: none !important;
+  transform: translateY(-9px) scale(1.035) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body #root .hydra-root .phone-app .app-content > .screen.page-enter,
+  html body #root .hydra-root .phone-app .app-content > .screen.page-enter > * {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
