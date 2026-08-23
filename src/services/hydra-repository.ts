@@ -338,14 +338,25 @@ export async function signIn(email: string, password: string) {
 }
 
 export async function signInWithGoogle() {
-  const redirectTo = Capacitor.isNativePlatform()
-    ? "br.com.hydraagro.app://auth/oauth"
+  const native = Capacitor.isNativePlatform();
+  const redirectTo = native
+    ? "br.com.hydraagro.app://auth/confirm"
     : window.location.origin;
   const { data, error } = await requireSupabase().auth.signInWithOAuth({
     provider: "google",
-    options: { redirectTo },
+    options: {
+      redirectTo,
+      skipBrowserRedirect: native,
+    },
   });
   throwIfError(error);
+
+  if (native) {
+    if (!data.url) throw new Error("O Google não retornou um endereço de acesso válido.");
+    const { Browser } = await import("@capacitor/browser");
+    await Browser.open({ url: data.url, toolbarColor: "#0B5136" });
+  }
+
   return data;
 }
 

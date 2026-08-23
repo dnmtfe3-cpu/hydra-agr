@@ -209,6 +209,8 @@ export default function HydraApp() {
       if (!url?.startsWith("br.com.hydraagro.app://auth/")) return;
       try {
         const recovery = await handleAuthCallbackUrl(url);
+        const { Browser } = await import("@capacitor/browser");
+        await Browser.close().catch(() => undefined);
         if (active && recovery) setPasswordRecovery(true);
       } catch {
         // O fluxo de login permanece disponível quando o link expirou.
