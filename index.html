@@ -52,7 +52,7 @@
     </style>
 
     <!-- Entrada única. O Vite agrupa os imports no build e evita CSS chegando fora de ordem. -->
-    <link rel="stylesheet" href="/src/app-entry.css?v=app-entry-5" />
+    <link rel="stylesheet" href="/src/app-entry.css?v=app-entry-6" />
 
     <title>Hydra Agro</title>
   </head>
@@ -65,5 +65,95 @@
     <script type="module" src="/src/main.tsx"></script>
     <script type="module" src="/src/herd-tabs.ts"></script>
     <script type="module" src="/src/pull-to-refresh.ts?v=pull-refresh-1"></script>
+
+    <!-- Overrides finais ficam no fim do documento para vencer CSS carregado pelo main.tsx. -->
+    <style id="hydra-final-mobile-overrides">
+      @media (max-width: 899px) {
+        /* Remove a linha preta que aparecia no fim do conteúdo, antes da bottom bar. */
+        html body #root .hydra-root .app-shell,
+        html body #root .hydra-root .phone-app,
+        html body #root .hydra-root .phone-app .app-content,
+        html body #root .hydra-root .phone-app .app-content > .screen,
+        html body #root .hydra-root .phone-app .app-content > .profile-screen,
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav {
+          border-top: 0 !important;
+          border-bottom: 0 !important;
+          outline: 0 !important;
+          box-shadow: none !important;
+        }
+
+        html body #root .hydra-root .app-shell::before,
+        html body #root .hydra-root .app-shell::after,
+        html body #root .hydra-root .phone-app::before,
+        html body #root .hydra-root .phone-app::after,
+        html body #root .hydra-root .phone-app .app-content::before,
+        html body #root .hydra-root .phone-app .app-content::after,
+        html body #root .hydra-root .phone-app .app-content > .screen::before,
+        html body #root .hydra-root .phone-app .app-content > .screen::after,
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::before,
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::after {
+          border: 0 !important;
+          outline: 0 !important;
+          box-shadow: none !important;
+        }
+
+        /* Sem slide/fade de troca de tela fora do Perfil. */
+        html body #root .hydra-root .phone-app .app-content.route-motion-forward > .screen.page-enter:not(.profile-screen),
+        html body #root .hydra-root .phone-app .app-content.route-motion-back > .screen.page-enter:not(.profile-screen),
+        html body #root .hydra-root .phone-app .app-content > .screen.page-enter:not(.profile-screen) {
+          animation: none !important;
+          transition: none !important;
+          transform: none !important;
+          opacity: 1 !important;
+          filter: none !important;
+          will-change: auto !important;
+        }
+
+        /* Bottom bar totalmente estável: sem pop, jump, ripple ou compressão. */
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav,
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button,
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > span,
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > small,
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button svg {
+          animation: none !important;
+          transition: none !important;
+        }
+
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button,
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:active,
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.is-pressed,
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.is-tapped {
+          transform: none !important;
+        }
+
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:not(.nav-nfc) > span:first-of-type {
+          transform: none !important;
+        }
+
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc > span:first-of-type,
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc:active > span:first-of-type,
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.is-pressed > span:first-of-type,
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc.is-tapped > span:first-of-type {
+          animation: none !important;
+          transition: none !important;
+          transform: translateY(-9px) !important;
+        }
+
+        html body #root .hydra-root .phone-app .bottom-nav.bottom-nav .touch-ripple {
+          display: none !important;
+          animation: none !important;
+        }
+
+        /* Rebanho sem animações, como solicitado. Mantém apenas spinners de carregamento. */
+        html body #root .hydra-root .herd-screen-enhanced,
+        html body #root .hydra-root .herd-screen-enhanced *:not(.spin),
+        html body #root .hydra-root .herd-screen-enhanced *:not(.spin)::before,
+        html body #root .hydra-root .herd-screen-enhanced *:not(.spin)::after {
+          animation: none !important;
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
   </body>
 </html>
