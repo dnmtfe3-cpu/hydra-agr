@@ -1,52 +1,52 @@
-/* Ajuste final da barra inferior no mobile: mais baixa e com NFC levemente maior. */
+/* Barra inferior mobile final: compacta, alinhada e com NFC como destaque. */
 @media (max-width: 899px) {
   .hydra-root .phone-app .bottom-nav {
-    min-height: calc(68px + env(safe-area-inset-bottom)) !important;
-    height: calc(68px + env(safe-area-inset-bottom)) !important;
-    padding: 5px 8px max(6px, env(safe-area-inset-bottom)) !important;
+    min-height: calc(60px + env(safe-area-inset-bottom)) !important;
+    height: calc(60px + env(safe-area-inset-bottom)) !important;
+    padding: 4px 8px max(4px, env(safe-area-inset-bottom)) !important;
     align-items: start !important;
   }
 
   .hydra-root .phone-app .bottom-nav > button {
-    min-height: 54px !important;
-    height: 54px !important;
-    padding: 2px 2px 0 !important;
-    gap: 2px !important;
+    min-height: 50px !important;
+    height: 50px !important;
+    padding: 1px 2px 0 !important;
+    gap: 1px !important;
   }
 
   .hydra-root .phone-app .bottom-nav > button > span:first-of-type {
-    width: 31px !important;
-    height: 31px !important;
-    min-width: 31px !important;
-    min-height: 31px !important;
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
     padding: 0 !important;
   }
 
   .hydra-root .phone-app .bottom-nav > button > span:first-of-type svg {
-    width: 20px !important;
-    height: 20px !important;
+    width: 19px !important;
+    height: 19px !important;
   }
 
   .hydra-root .phone-app .bottom-nav > button > small {
-    font-size: 8px !important;
+    font-size: 7.6px !important;
     line-height: 1 !important;
     margin-top: 1px !important;
   }
 
-  /* NFC continua sendo o destaque central, só que sem aumentar a barra inteira. */
+  /* NFC maior sem aumentar a barra inteira. */
   .hydra-root .phone-app .bottom-nav > button.nav-nfc > span:first-of-type {
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    min-height: 40px !important;
+    width: 43px !important;
+    height: 43px !important;
+    min-width: 43px !important;
+    min-height: 43px !important;
   }
 
   .hydra-root .phone-app .bottom-nav > button.nav-nfc > span:first-of-type svg {
-    width: 26px !important;
-    height: 26px !important;
+    width: 29px !important;
+    height: 29px !important;
   }
 
   .hydra-root .phone-app .app-content {
-    padding-bottom: calc(74px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(66px + env(safe-area-inset-bottom)) !important;
   }
 }
