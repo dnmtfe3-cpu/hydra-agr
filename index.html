@@ -58,6 +58,8 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Registra o retorno OAuth do Android antes do React montar. -->
+    <script type="module" src="/src/runtime-bootstrap.ts"></script>
     <script type="module" src="/src/main.tsx"></script>
     <script type="module" src="/src/pull-to-refresh.ts?v=pull-refresh-1"></script>
   </body>
