@@ -99,8 +99,14 @@ function lockScreen(screen: HTMLElement) {
 }
 
 function lockBottomNav(root: ParentNode = document) {
+  /*
+   * A barra pode usar transform para se centralizar. Não zere o transform do
+   * contêiner: isso deslocava a barra metade da largura para a direita no iPhone.
+   */
+  root.querySelectorAll<HTMLElement>(".bottom-nav").forEach((nav) => lockElement(nav, false));
+
   root.querySelectorAll<HTMLElement>(
-    ".bottom-nav, .bottom-nav > button, .bottom-nav > button > span, .bottom-nav > button > small, .bottom-nav > button svg",
+    ".bottom-nav > button, .bottom-nav > button > span, .bottom-nav > button > small, .bottom-nav > button svg",
   ).forEach((el) => lockElement(el, true));
 }
 
