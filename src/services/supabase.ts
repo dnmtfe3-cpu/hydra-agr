@@ -28,7 +28,9 @@ export const supabase: SupabaseClient | null = backendConfigured
         storage: authStorage,
         persistSession: true,
         autoRefreshToken: true,
-        detectSessionInUrl: false,
+        // O navegador conclui OAuth/confirmacao diretamente pela URL.
+        // No APK o retorno chega por deep link e continua sendo tratado abaixo.
+        detectSessionInUrl: !Capacitor.isNativePlatform(),
       },
       global: {
         headers: { "x-hydra-client": "hydra-agro-mobile/1.2.2" },
@@ -56,7 +58,9 @@ function authCallbackParts(url: string) {
   return { parsed, hash, type, hasCredentials, recovery, callbackError };
 }
 
-export async function handleAuthCallbackUrl(url: string) {
+const callbackTasks = new Map<string, Promise<boolean>>();
+
+async function processAuthCallbackUrl(url: string) {
   const client = requireSupabase();
   const { parsed, hash, recovery, callbackError } = authCallbackParts(url);
 
@@ -81,6 +85,14 @@ export async function handleAuthCallbackUrl(url: string) {
   return recovery;
 }
 
+export function handleAuthCallbackUrl(url: string) {
+  const pending = callbackTasks.get(url);
+  if (pending) return pending;
+  const task = processAuthCallbackUrl(url);
+  callbackTasks.set(url, task);
+  return task;
+}
+
 /* Mantém esta função específica para o fluxo de recuperação usado pelo HydraApp. */
 export function isAuthCallbackUrl(url: string) {
   try {
@@ -89,37 +101,6 @@ export function isAuthCallbackUrl(url: string) {
   } catch {
     return false;
   }
-}
-
-function isSignupConfirmationUrl(url: string) {
-  try {
-    const { hasCredentials, recovery, type } = authCallbackParts(url);
-    if (!hasCredentials || recovery) return false;
-    return type === "signup" || type === "email" || type === "magiclink" || type === "";
-  } catch {
-    return false;
-  }
-}
-
-/*
- * O app desativa detectSessionInUrl porque o fluxo nativo usa deep link manual.
- * No navegador isso fazia o retorno da confirmação de cadastro ser ignorado.
- * Processamos somente confirmações de conta aqui; recovery continua no HydraApp.
- */
-if (
-  supabase &&
-  typeof window !== "undefined" &&
-  !Capacitor.isNativePlatform() &&
-  isSignupConfirmationUrl(window.location.href)
-) {
-  void handleAuthCallbackUrl(window.location.href)
-    .then(() => {
-      const cleanUrl = `${window.location.pathname}${window.location.search ? "" : ""}`;
-      window.history.replaceState({}, document.title, cleanUrl || "/");
-    })
-    .catch((error) => {
-      console.error("Hydra Agro: falha ao confirmar e-mail", error);
-    });
 }
 
 export function publicMediaUrl(bucket: "avatars" | "community-media", path?: string | null) {
