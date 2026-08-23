@@ -1,5 +1,4 @@
-/* Hydra Agro — entrada única dos estilos carregados pelo index.
-   O Vite resolve e agrupa estes imports no build, reduzindo flashes sem CSS no Safari/PWA. */
+/* Hydra Agro — estilos do app. Movimento restrito à experiência NFC. */
 
 @import "./professional-polish.css";
 @import "./visual-fixes.css";
@@ -14,24 +13,16 @@
 @import "./desktop-format-only.css";
 @import "./pull-to-refresh.css";
 @import "./mobile-flow-fix.css";
-@import "./route-transition.css";
 @import "./bottom-nav-compact.css";
 @import "./auth-center-fix.css";
 @import "./desktop-mobile-home-fix.css";
-@import "./community-entry-motion.css";
-@import "./profile-entry-motion.css";
 @import "./final-ui-polish.css";
-@import "./app-motion-plus.css";
 @import "./home-shortcuts-icons.css";
-@import "./high-refresh-motion.css";
 @import "./navigation-profile-cleanup.css";
 @import "./mobile-final-cleanup.css";
 @import "./herd-static.css";
 @import "./no-bottom-divider.css";
-@import "./nfc-motion-polish.css";
-@import "./fitfolio-motion.css";
-@import "./fluid-motion-everywhere.css?v=fluid-motion-2";
-@import "./smooth-screen-transition.css?v=smooth-route-1";
-@import "./no-jump-motion.css?v=no-jump-1";
-@import "./stable-icons-motion.css?v=stable-icons-1";
-@import "./nfc-only-motion.css?v=nfc-only-motion-1";
+
+/* ÚNICO pacote de movimento visual mantido no app. */
+@import "./nfc-motion-polish.css?v=nfc-motion-2";
+@import "./nfc-only-motion.css?v=nfc-only-motion-2";
