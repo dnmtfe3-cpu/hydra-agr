@@ -1,4 +1,4 @@
-/* Atalhos da Home: somente cinco ícones, sem barra/card ao redor. */
+/* Atalhos da Home: cinco ícones independentes, sem barra/card ao redor. */
 .hydra-root .home-screen .shortcut-row.home-shortcuts-five {
   width: 100% !important;
   max-width: 430px !important;
@@ -8,7 +8,7 @@
   display: grid !important;
   grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
   align-items: center !important;
-  gap: 8px !important;
+  gap: 10px !important;
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
@@ -19,7 +19,7 @@
 .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button {
   width: 100% !important;
   min-width: 0 !important;
-  min-height: 50px !important;
+  min-height: 52px !important;
   padding: 4px !important;
   display: grid !important;
   place-items: center !important;
@@ -31,7 +31,7 @@
   outline: 0 !important;
   animation: none !important;
   transform: none !important;
-  transition: opacity 150ms ease, color 180ms ease !important;
+  transition: none !important;
 }
 
 .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button::before,
@@ -41,21 +41,21 @@
 }
 
 .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button > span {
-  width: 44px !important;
-  height: 44px !important;
-  min-width: 44px !important;
-  min-height: 44px !important;
+  width: 46px !important;
+  height: 46px !important;
+  min-width: 46px !important;
+  min-height: 46px !important;
   margin: 0 !important;
   display: grid !important;
   place-items: center !important;
   border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
+  border-radius: 15px !important;
+  background: var(--sage-soft) !important;
   color: var(--forest-700) !important;
   box-shadow: none !important;
   animation: none !important;
   transform: none !important;
-  transition: opacity 150ms ease, color 180ms ease !important;
+  transition: none !important;
 }
 
 .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button > span > svg {
@@ -70,17 +70,17 @@
 }
 
 .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button:active {
-  opacity: .62 !important;
+  opacity: .68 !important;
 }
 
 @media (hover:hover) and (pointer:fine) {
   .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button:hover,
   .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button:hover > span {
     transform: none !important;
-    background: transparent !important;
     box-shadow: none !important;
   }
   .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button:hover > span {
+    background: var(--sage-soft) !important;
     color: var(--forest-800) !important;
   }
 }
@@ -90,22 +90,25 @@
   background: transparent !important;
   box-shadow: none !important;
 }
-.hydra-root.theme-dark .home-screen .shortcut-row.home-shortcuts-five > button,
-.hydra-root.theme-dark .home-screen .shortcut-row.home-shortcuts-five > button > span {
+
+.hydra-root.theme-dark .home-screen .shortcut-row.home-shortcuts-five > button {
   background: transparent !important;
   border: 0 !important;
 }
+
 .hydra-root.theme-dark .home-screen .shortcut-row.home-shortcuts-five > button > span {
+  background: #173326 !important;
   color: #a9cfb3 !important;
 }
 
 @media (max-width: 390px) {
-  .hydra-root .home-screen .shortcut-row.home-shortcuts-five { gap: 4px !important; }
-  .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button { min-height: 46px !important; padding: 2px !important; }
+  .hydra-root .home-screen .shortcut-row.home-shortcuts-five { gap: 6px !important; }
+  .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button { min-height: 48px !important; padding: 2px !important; }
   .hydra-root .home-screen .shortcut-row.home-shortcuts-five > button > span {
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    min-height: 40px !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+    border-radius: 14px !important;
   }
 }
