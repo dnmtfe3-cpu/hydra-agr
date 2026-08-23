@@ -1,0 +1,183 @@
+/* Hydra Agro — acabamentos finais do Modo Verde.
+   Mantém a paleta da tela de referência e corrige contrastes que escaparam dos estilos antigos. */
+
+/* HOME — saudação: período branco, nome do proprietário laranja. */
+html body #root .hydra-root.theme-dark .phone-app .greeting-block h1 .greeting-time {
+  color: #f7f6f0 !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .greeting-block h1 .greeting-name {
+  color: #f2a45c !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .greeting-block > div > p {
+  color: #aab8af !important;
+}
+
+/* Wordmark legível no fundo verde. */
+html body #root .hydra-root.theme-dark .phone-app .home-brandbar .wordmark-copy span {
+  color: #f7f6f0 !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .home-brandbar .wordmark-copy strong {
+  color: #f2a45c !important;
+}
+
+/* NFC da Home — verde, sem marrom, com o laranja só como acento. */
+html body #root .hydra-root.theme-dark .phone-app .nfc-banner {
+  background: #1a382c !important;
+  border: 1px solid rgba(168, 200, 181, .19) !important;
+  color: #f7f6f0 !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .nfc-banner .nfc-banner-icon {
+  background: #287a55 !important;
+  color: #ffffff !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .nfc-banner .nfc-banner-copy small {
+  color: #f2a45c !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .nfc-banner .nfc-banner-copy strong {
+  color: #f7f6f0 !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .nfc-banner .nfc-banner-copy em {
+  color: #aab8af !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .nfc-banner > svg {
+  color: #f2a45c !important;
+}
+
+/* REBANHO — elimina o cartão NFC marrom e reforça a hierarquia do cabeçalho. */
+html body #root .hydra-root.theme-dark .phone-app .herd-screen-enhanced > .screen-header,
+html body #root .hydra-root.theme-dark .phone-app .screen:has(> .nfc-inline-card) > .screen-header {
+  background: linear-gradient(145deg, #155034 0%, #103e2c 62%, #0b3124 100%) !important;
+  color: #f7f6f0 !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .herd-screen-enhanced > .screen-header .eyebrow,
+html body #root .hydra-root.theme-dark .phone-app .screen:has(> .nfc-inline-card) > .screen-header .eyebrow {
+  color: #f2a45c !important;
+  opacity: 1 !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .herd-screen-enhanced > .screen-header h1,
+html body #root .hydra-root.theme-dark .phone-app .screen:has(> .nfc-inline-card) > .screen-header h1 {
+  color: #f7f6f0 !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .herd-screen-enhanced > .screen-header p,
+html body #root .hydra-root.theme-dark .phone-app .screen:has(> .nfc-inline-card) > .screen-header p {
+  color: #b8c7be !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .nfc-inline-card {
+  background: #1a382c !important;
+  border: 1px solid rgba(242, 164, 92, .24) !important;
+  color: #f7f6f0 !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .nfc-inline-card > span {
+  background: #244737 !important;
+  color: #f2a45c !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .nfc-inline-card strong {
+  color: #f7f6f0 !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .nfc-inline-card small {
+  color: #aab8af !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .nfc-inline-card > svg {
+  color: #f2a45c !important;
+}
+
+/* Cards do Rebanho permanecem todos na mesma família de verdes. */
+html body #root .hydra-root.theme-dark .phone-app .herd-care-launch,
+html body #root .hydra-root.theme-dark .phone-app .herd-production-context,
+html body #root .hydra-root.theme-dark .phone-app .herd-production-card,
+html body #root .hydra-root.theme-dark .phone-app .herd-reproduction-tools,
+html body #root .hydra-root.theme-dark .phone-app .herd-health-tools {
+  background: #1a382c !important;
+  border-color: rgba(168, 200, 181, .18) !important;
+  color: #f7f6f0 !important;
+}
+
+/* PROPRIEDADE — remove cartões brancos que escapavam do tema. */
+html body #root .hydra-root.theme-dark .phone-app .property-screen .property-section-card {
+  background: #1a382c !important;
+  border: 1px solid rgba(168, 200, 181, .18) !important;
+  color: #f7f6f0 !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .property-screen .property-info-item {
+  background: #153126 !important;
+  border: 1px solid rgba(168, 200, 181, .13) !important;
+  color: #f7f6f0 !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .property-screen .property-info-item > span {
+  color: #9fc7ad !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .property-screen .property-info-item small,
+html body #root .hydra-root.theme-dark .phone-app .property-screen .production-main small,
+html body #root .hydra-root.theme-dark .phone-app .property-screen .production-summary small {
+  color: #93a79c !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .property-screen .property-info-item strong,
+html body #root .hydra-root.theme-dark .phone-app .property-screen .production-main strong,
+html body #root .hydra-root.theme-dark .phone-app .property-screen .production-summary strong {
+  color: #f7f6f0 !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .property-screen .production-main,
+html body #root .hydra-root.theme-dark .phone-app .property-screen .production-summary,
+html body #root .hydra-root.theme-dark .phone-app .property-screen .tech-list > div {
+  border-color: rgba(168, 200, 181, .14) !important;
+  color: #f7f6f0 !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .property-screen .production-main > svg,
+html body #root .hydra-root.theme-dark .phone-app .property-screen .production-summary > svg,
+html body #root .hydra-root.theme-dark .phone-app .property-screen .tech-list > div > span {
+  color: #287a55 !important;
+}
+html body #root .hydra-root.theme-dark .phone-app .property-screen .property-tags em,
+html body #root .hydra-root.theme-dark .phone-app .property-screen .production-summary p,
+html body #root .hydra-root.theme-dark .phone-app .property-screen .tech-list small {
+  color: #aab8af !important;
+}
+
+/* Bottom bar do Modo Verde: NFC como o destaque central do claro, agora laranja. */
+@media (max-width: 899px) {
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav {
+    overflow: visible !important;
+    background: rgba(17, 47, 36, .992) !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button {
+    overflow: visible !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc,
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active {
+    color: #f2a45c !important;
+    overflow: visible !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple),
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    border: 3px solid #112f24 !important;
+    border-radius: 15px !important;
+    background: #f2a45c !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 20px -14px rgba(242, 164, 92, .72) !important;
+    transform: translateY(-6px) !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple) svg,
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) svg {
+    width: 22px !important;
+    height: 22px !important;
+    color: #ffffff !important;
+    transform: none !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > small,
+  html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > small {
+    margin-top: -5px !important;
+    color: #f2a45c !important;
+    font-weight: 800 !important;
+  }
+}
