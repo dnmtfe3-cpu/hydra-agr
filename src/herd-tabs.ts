@@ -3,6 +3,9 @@ const TAB_CLASS = "herd-view-tabs";
 
 type HerdView = "overview" | "animals";
 
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const smoothEase = "cubic-bezier(.16, 1, .3, 1)";
+
 function animalCount(screen: HTMLElement) {
   const subtitle = screen.querySelector<HTMLElement>(".screen-heading p")?.textContent || "";
   const match = subtitle.match(/(\d+)\s+animais?/i);
@@ -44,7 +47,47 @@ function applyVisibility(screen: HTMLElement, view: HerdView) {
   });
 }
 
-function setView(screen: HTMLElement, view: HerdView) {
+function animateViewChange(screen: HTMLElement, view: HerdView) {
+  if (reducedMotion.matches) return;
+
+  const activeButton = screen.querySelector<HTMLElement>(`:scope > .${TAB_CLASS} button[data-view="${view}"]`);
+  activeButton?.animate(
+    [{ opacity: .72 }, { opacity: 1 }],
+    { duration: 220, easing: smoothEase, fill: "none" },
+  );
+
+  const selector = view === "animals"
+    ? ":scope > .herd-animal-view-item:not([hidden])"
+    : ":scope > .herd-overview-view-item:not([hidden])";
+
+  const blocks = Array.from(screen.querySelectorAll<HTMLElement>(selector));
+  blocks.forEach((block, index) => {
+    const keyframes = block.matches("button")
+      ? [{ opacity: 0 }, { opacity: 1 }]
+      : [
+          { opacity: 0, transform: "translate3d(0, 10px, 0) scale(.994)" },
+          { opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" },
+        ];
+    block.animate(keyframes, {
+      duration: 330,
+      delay: index * 34,
+      easing: smoothEase,
+      fill: "none",
+    });
+  });
+
+  if (view === "animals") {
+    screen.querySelectorAll<HTMLElement>(":scope > .animal-list:not([hidden]) > .animal-card").forEach((card, index) => {
+      card.animate(
+        [{ opacity: 0 }, { opacity: 1 }],
+        { duration: 280, delay: 70 + Math.min(index, 10) * 24, easing: smoothEase, fill: "none" },
+      );
+    });
+  }
+}
+
+function setView(screen: HTMLElement, view: HerdView, animate = false) {
+  const previous = screen.dataset.herdView as HerdView | undefined;
   screen.dataset.herdView = view;
   const tabs = screen.querySelector<HTMLElement>(`:scope > .${TAB_CLASS}`);
   tabs?.querySelectorAll<HTMLButtonElement>("button").forEach((button) => {
@@ -55,6 +98,7 @@ function setView(screen: HTMLElement, view: HerdView) {
   });
 
   applyVisibility(screen, view);
+  if (animate && previous !== view) animateViewChange(screen, view);
   try { window.sessionStorage.setItem("hydra.herd.view", view); } catch { /* armazenamento indisponível */ }
 }
 
@@ -81,7 +125,7 @@ function createTabs(screen: HTMLElement) {
   nav.addEventListener("click", (event) => {
     const button = event.target instanceof Element ? event.target.closest<HTMLButtonElement>("button[data-view]") : null;
     if (!button) return;
-    setView(screen, button.dataset.view === "animals" ? "animals" : "overview");
+    setView(screen, button.dataset.view === "animals" ? "animals" : "overview", true);
   });
 
   const header = screen.querySelector(":scope > .screen-header");
@@ -120,3 +164,5 @@ const observer = new MutationObserver(scheduleEnhance);
 observer.observe(document.documentElement, { childList: true, subtree: true });
 window.addEventListener("DOMContentLoaded", scheduleEnhance, { once: true });
 scheduleEnhance();
+
+export {};
