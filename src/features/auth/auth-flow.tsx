@@ -72,7 +72,6 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
   const [signup, setSignup] = useState({
     name: "",
     email: "",
-    phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -143,7 +142,6 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
     if (signupStep === 0) {
       if (signup.name.trim().length < 2) return "Informe seu nome completo.";
       if (!/^\S+@\S+\.\S+$/.test(signup.email)) return "Informe um e-mail válido.";
-      if (signup.phone.replace(/\D/g, "").length < 10) return "Informe um telefone válido.";
     }
     if (signupStep === 1) {
       if (signup.password.length < 8) return "A senha precisa ter pelo menos 8 caracteres.";
@@ -181,7 +179,7 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
     const result = await onSignup({
       name: signup.name,
       email: signup.email,
-      phone: signup.phone,
+      phone: "",
       password: signup.password,
       property,
     });
@@ -387,7 +385,6 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
                 <div className="form-grid">
                   <Field label="Nome completo"><input value={signup.name} onChange={(e) => changeSignup("name", e.target.value)} placeholder="Seu nome" autoComplete="name" /></Field>
                   <Field label="E-mail"><input type="email" value={signup.email} onChange={(e) => changeSignup("email", e.target.value)} placeholder="voce@email.com" autoComplete="email" /></Field>
-                  <Field label="Telefone"><input type="tel" value={signup.phone} onChange={(e) => changeSignup("phone", e.target.value)} placeholder="(75) 99999-9999" autoComplete="tel" /></Field>
                 </div>
                 {error && <p className="form-error" role="alert">{error}</p>}
                 <button className="primary-button full" type="submit">Continuar <ArrowRight size={18} /></button>
