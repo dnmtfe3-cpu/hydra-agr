@@ -1,0 +1,108 @@
+/* Ajustes finais mobile: barra inferior limpa, transições discretas e logout compacto. */
+
+@media (max-width: 899px) {
+  /* Remove a linha/barra escura acima da bottom bar. */
+  .hydra-root .phone-app .bottom-nav.bottom-nav {
+    border-top: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav.bottom-nav::before,
+  .hydra-root .phone-app .bottom-nav.bottom-nav::after,
+  .hydra-root .phone-app .app-content::before,
+  .hydra-root .phone-app .app-content::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .hydra-root .phone-app .app-content {
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Remove as duas animações vistas na gravação: slide da tela e pop da bottom bar.
+     O Perfil mantém as animações próprias definidas em profile-entry-motion/final-ui-polish. */
+  .hydra-root .phone-app .app-content.route-motion-forward > .screen.page-enter:not(.profile-screen),
+  .hydra-root .phone-app .app-content.route-motion-back > .screen.page-enter:not(.profile-screen) {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button.active > span:first-of-type,
+  .hydra-root .phone-app .bottom-nav > button.is-tapped > span:first-of-type,
+  .hydra-root .phone-app .bottom-nav > button.active.nav-nfc > span:first-of-type,
+  .hydra-root .phone-app .bottom-nav > button.is-tapped.nav-nfc > span:first-of-type {
+    animation: none !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button:not(.nav-nfc) > span:first-of-type {
+    transform: none !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button.nav-nfc > span:first-of-type {
+    transform: translateY(-9px) !important;
+  }
+
+  /* Confirmação de logout mais curta, sem o bloco vazio embaixo. */
+  .hydra-root .modal-layer:has(.modal-sheet.modal-centered .confirm-action) {
+    align-items: center !important;
+    justify-content: center !important;
+    padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom)) !important;
+  }
+
+  .hydra-root .modal-sheet.modal-centered:has(.confirm-action) {
+    width: min(calc(100vw - 36px), 390px) !important;
+    height: fit-content !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - 56px) !important;
+    margin: 0 !important;
+    border-radius: 24px !important;
+    overflow: hidden !important;
+  }
+
+  .hydra-root .modal-sheet.modal-centered:has(.confirm-action) .modal-head {
+    min-height: 0 !important;
+    padding: 18px 18px 15px !important;
+  }
+
+  .hydra-root .modal-sheet.modal-centered:has(.confirm-action) .modal-body {
+    flex: 0 0 auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 18px !important;
+    overflow: visible !important;
+  }
+
+  .hydra-root .modal-sheet.modal-centered:has(.confirm-action) .confirm-action {
+    min-height: 0 !important;
+    gap: 13px !important;
+    padding: 0 !important;
+  }
+
+  .hydra-root .modal-sheet.modal-centered:has(.confirm-action) .confirm-action > span {
+    width: 56px !important;
+    height: 56px !important;
+    border-radius: 18px !important;
+  }
+
+  .hydra-root .modal-sheet.modal-centered:has(.confirm-action) .confirm-action > p {
+    margin: 0 !important;
+    line-height: 1.4 !important;
+  }
+
+  .hydra-root .modal-sheet.modal-centered:has(.confirm-action) .modal-action-row {
+    width: 100% !important;
+    margin: 2px 0 0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  .hydra-root .modal-sheet.modal-centered:has(.confirm-action) .modal-action-row > button {
+    min-height: 46px !important;
+    margin: 0 !important;
+  }
+}
