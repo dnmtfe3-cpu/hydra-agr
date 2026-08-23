@@ -8,7 +8,6 @@ import {
   ChevronRight,
   CircleHelp,
   Crown,
-  Droplets,
   ExternalLink,
   FileText,
   HeartHandshake,
@@ -82,7 +81,7 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
   const [logoutConfirm, setLogoutConfirm] = useState(false);
   const [info, setInfo] = useState<ProfileInformationKind | null>(null);
   const [profile, setProfile] = useState<ProfileDraft>(() => draftFromAccount(account));
-  const [notificationDraft, setNotificationDraft] = useState({ pushNotifications: account.settings.pushNotifications, waterAlerts: account.settings.waterAlerts });
+  const [notificationDraft, setNotificationDraft] = useState({ pushNotifications: account.settings.pushNotifications });
   const [security, setSecurity] = useState({ email: account.email, password: "", confirmPassword: "" });
   const [securityFeedback, setSecurityFeedback] = useState<{ tone: "error" | "notice"; message: string } | null>(null);
   const [preferenceError, setPreferenceError] = useState("");
@@ -193,7 +192,7 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
   }
 
   function openNotificationPreferences() {
-    setNotificationDraft({ pushNotifications: account.settings.pushNotifications, waterAlerts: account.settings.waterAlerts });
+    setNotificationDraft({ pushNotifications: account.settings.pushNotifications });
     setPreferenceError("");
     setNotificationsOpen(true);
   }
@@ -207,7 +206,6 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
         settings: {
           ...current.settings,
           pushNotifications: notificationDraft.pushNotifications,
-          waterAlerts: notificationDraft.waterAlerts,
         },
       }), { requireRemote: true });
       setNotificationsOpen(false);
@@ -273,17 +271,17 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
 
       <section className={`plan-card ${isPlus ? "is-plus" : "is-free"}`}>
         <div className="plan-mark">{isPlus ? <Crown size={24} /> : <Sprout size={24} />}</div>
-        <div><span>PLANO ATUAL</span><strong>{account.profile.plan}</strong><small>{isPlus ? "Membro Hydra Agro+ · painel premium ativo" : "Conheça o Hydra Agro+ · R$ 6 por mês"}</small></div>
+        <div><span>PLANO ATUAL</span><strong>{account.profile.plan}</strong><small>{isPlus ? "Hydra Agro+ ativo" : "Conheça o Hydra Agro+ · R$ 6 por mês"}</small></div>
         <button onClick={() => navigate("plus")}>{isPlus ? "Abrir painel" : "Conhecer"}</button>
       </section>
 
-      {isAdmin && <section className="profile-group"><span className="group-label">ADMINISTRAÇÃO</span><div className="profile-menu-card admin-access-card"><MenuRow icon={<ShieldCheck size={21} />} title="Painel administrativo" subtitle={`Acesso ${account.role} validado pelo servidor`} onClick={() => navigate("admin")} /></div></section>}
+      {isAdmin && <section className="profile-group"><span className="group-label">ADMINISTRAÇÃO</span><div className="profile-menu-card admin-access-card"><MenuRow icon={<ShieldCheck size={21} />} title="Painel administrativo" subtitle="Acesso autorizado" onClick={() => navigate("admin")} /></div></section>}
 
       <section className="profile-group">
         <span className="group-label">MINHA CONTA</span>
         <div className="profile-menu-card">
           <MenuRow icon={<UserRound size={21} />} title="Dados pessoais" subtitle={account.email} onClick={openEditor} />
-          <MenuRow icon={<Sprout size={21} />} title="Minha propriedade" subtitle="Dados, produção, água e tecnologia" onClick={() => navigate("property")} />
+          <MenuRow icon={<Sprout size={21} />} title="Minha propriedade" subtitle="Dados, produção e tecnologia" onClick={() => navigate("property")} />
           <MenuRow icon={<UsersRound size={21} />} title="Equipe e operações" subtitle="Funcionários, relatórios e ocorrências" onClick={() => navigate("operations" as AppRoute)} />
         </div>
       </section>
@@ -295,7 +293,7 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
         <div className="profile-settings-sheet">
           <div className="profile-menu-card">
             <MenuRow icon={<Palette size={21} />} title="Aparência" subtitle="Modo claro ou escuro" onClick={() => openInjectedMenu(".theme-menu-row")} />
-            <MenuRow icon={<Bell size={21} />} title="Notificações" subtitle="Avisos e alertas de água" onClick={() => { setSettingsOpen(false); openNotificationPreferences(); }} />
+            <MenuRow icon={<Bell size={21} />} title="Notificações" subtitle="Avisos da conta e da propriedade" onClick={() => { setSettingsOpen(false); openNotificationPreferences(); }} />
             <MenuRow icon={<LockKeyhole size={21} />} title="Segurança" subtitle="Alterar e-mail ou senha" onClick={() => { setSettingsOpen(false); setSecurity({ email: account.email, password: "", confirmPassword: "" }); setSecurityFeedback(null); setSecurityOpen(true); }} />
             {isDemoAccount && <MenuRow icon={<Presentation size={21} />} title="Modo demonstração" subtitle="Roteiro da apresentação" onClick={() => openInjectedMenu(".demo-menu-row")} />}
           </div>
@@ -322,7 +320,7 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
         <form className="modal-form" onSubmit={saveProfile}>
           <div className="profile-media-editor">
             <button type="button" onClick={() => Capacitor.isNativePlatform() ? void chooseAvatar() : avatarFileRef.current?.click()} disabled={Boolean(uploading)}><span>{account.profile.avatarUrl ? <img src={account.profile.avatarUrl} alt="Foto atual" /> : initials}</span><div><strong>Foto de perfil</strong><small>JPG, PNG ou WebP</small></div><Camera size={18} /></button>
-            <button type="button" onClick={() => Capacitor.isNativePlatform() ? void chooseCover() : coverFileRef.current?.click()} disabled={Boolean(uploading)}><span className="cover-thumb">{account.property.coverUrl ? <img src={account.property.coverUrl} alt="Capa atual" /> : <Sprout size={21} />}</span><div><strong>Capa da propriedade</strong><small>Imagem privada da sua conta</small></div>{uploading === "cover" ? <LoaderCircle size={18} className="spin" /> : <Camera size={18} />}</button>
+            <button type="button" onClick={() => Capacitor.isNativePlatform() ? void chooseCover() : coverFileRef.current?.click()} disabled={Boolean(uploading)}><span className="cover-thumb">{account.property.coverUrl ? <img src={account.property.coverUrl} alt="Capa atual" /> : <Sprout size={21} />}</span><div><strong>Capa da propriedade</strong><small>Imagem da sua conta</small></div>{uploading === "cover" ? <LoaderCircle size={18} className="spin" /> : <Camera size={18} />}</button>
             <input ref={coverFileRef} className="hidden-file" type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void chooseCover(event.target.files?.[0])} />
           </div>
           <Field label="Nome"><input value={profile.name} onChange={(event) => setProfile({ ...profile, name: event.target.value })} /></Field>
@@ -333,51 +331,45 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
           <div className="municipality-field-grid"><Field label="Cidade"><MunicipalityPicker value={profile.municipality} onChange={(municipality) => { setProfile({ ...profile, municipality }); setError(""); }} /></Field><Field label="Estado"><div className="state-readonly"><span>BA</span><strong>Bahia</strong></div></Field></div>
           <Field label="E-mail" hint="Altere o e-mail em Segurança."><input value={account.email} disabled /></Field>
           {error && <p className="form-error" role="alert">{error}</p>}
-          <div className="modal-action-row"><button className="secondary-button" type="button" onClick={() => setEditOpen(false)} disabled={saving === "profile" || Boolean(uploading)}>Cancelar</button><LoadingButton className="primary-button" type="submit" loading={saving === "profile"} loadingLabel="Salvando perfil..." disabled={Boolean(uploading)}>Confirmar alterações</LoadingButton></div>
+          <div className="modal-action-row"><button className="secondary-button" type="button" onClick={() => setEditOpen(false)} disabled={saving === "profile" || Boolean(uploading)}>Cancelar</button><LoadingButton className="primary-button" type="submit" loading={saving === "profile"} loadingLabel="Salvando perfil…" disabled={Boolean(uploading)}>Salvar alterações</LoadingButton></div>
         </form>
       </Modal>
 
       <Modal open={notificationsOpen} onClose={() => setNotificationsOpen(false)} eyebrow="PREFERÊNCIAS" title="Notificações do aplicativo" dismissible={saving !== "notifications"}>
         <div className="preference-modal">
-          <p className="preference-intro">Escolha quais avisos deseja acompanhar. A configuração fica vinculada à sua conta e é salva no servidor.</p>
-          <div className="preference-status"><CheckCircle2 size={19} /><span><strong>Central do Hydra Agro</strong><small>Os avisos reais continuam disponíveis na tela de notificações.</small></span></div>
+          <p className="preference-intro">Escolha se deseja receber avisos do Hydra Agro.</p>
+          <div className="preference-status"><CheckCircle2 size={19} /><span><strong>Notificações</strong><small>Os avisos também ficam disponíveis na central de notificações.</small></span></div>
           <div className="preference-options">
             <div>
               <span className="preference-option-icon"><BellRing size={21} /></span>
-              <span><strong>Avisos do aplicativo</strong><small>Propriedade, administração, atividades e monitoramentos.</small></span>
+              <span><strong>Avisos do aplicativo</strong><small>Propriedade, administração, tarefas e monitoramentos.</small></span>
               <Toggle checked={notificationDraft.pushNotifications} label="Avisos do aplicativo" onChange={(pushNotifications) => setNotificationDraft({ ...notificationDraft, pushNotifications })} />
             </div>
-            <div>
-              <span className="preference-option-icon"><Droplets size={21} /></span>
-              <span><strong>Alertas de consumo de água</strong><small>Disponíveis quando seus registros permitirem uma análise real.</small></span>
-              <Toggle checked={notificationDraft.waterAlerts} label="Alertas de consumo de água" onChange={(waterAlerts) => setNotificationDraft({ ...notificationDraft, waterAlerts })} />
-            </div>
           </div>
-          <p className="preference-note">O Hydra Agro não inventa alertas. Sem dados suficientes, a central permanece em estado vazio.</p>
           {preferenceError && <p className="form-error" role="alert">{preferenceError}</p>}
-          <button className="wide-outline-button" onClick={() => { setNotificationsOpen(false); window.setTimeout(() => navigate("notifications"), 240); }} disabled={saving === "notifications"}>Ver central de notificações</button>
-          <div className="modal-action-row"><button className="secondary-button" onClick={() => setNotificationsOpen(false)} disabled={saving === "notifications"}>Cancelar</button><LoadingButton className="primary-button" onClick={() => void saveNotificationPreferences()} loading={saving === "notifications"} loadingLabel="Salvando preferências...">Salvar preferências</LoadingButton></div>
+          <button className="wide-outline-button" onClick={() => { setNotificationsOpen(false); window.setTimeout(() => navigate("notifications"), 240); }} disabled={saving === "notifications"}>Ver notificações</button>
+          <div className="modal-action-row"><button className="secondary-button" onClick={() => setNotificationsOpen(false)} disabled={saving === "notifications"}>Cancelar</button><LoadingButton className="primary-button" onClick={() => void saveNotificationPreferences()} loading={saving === "notifications"} loadingLabel="Salvando preferências…">Salvar</LoadingButton></div>
         </div>
       </Modal>
 
       <Modal open={securityOpen} onClose={() => setSecurityOpen(false)} eyebrow="SEGURANÇA" title="E-mail e senha" dismissible={saving !== "security"}>
         <form className="modal-form" onSubmit={saveSecurity}>
           <div className="security-session"><ShieldCheck size={22} /><span><strong>Conta autenticada</strong><small>{account.email}</small></span></div>
-          <p className="security-intro">Você pode alterar somente o e-mail, somente a senha ou os dois. O Supabase poderá solicitar confirmação no novo endereço.</p>
+          <p className="security-intro">Você pode alterar o e-mail, a senha ou os dois. Uma confirmação pode ser enviada ao novo endereço.</p>
           <Field label="Novo e-mail"><input type="email" value={security.email} onChange={(event) => { setSecurity({ ...security, email: event.target.value }); setSecurityFeedback(null); }} autoComplete="email" /></Field>
           <Field label="Nova senha" hint="Deixe em branco para manter a atual. Use no mínimo 8 caracteres."><input type="password" value={security.password} onChange={(event) => { setSecurity({ ...security, password: event.target.value }); setSecurityFeedback(null); }} autoComplete="new-password" /></Field>
           <Field label="Confirmar nova senha"><input type="password" value={security.confirmPassword} onChange={(event) => { setSecurity({ ...security, confirmPassword: event.target.value }); setSecurityFeedback(null); }} autoComplete="new-password" /></Field>
           {securityFeedback && <p className={securityFeedback.tone === "error" ? "form-error" : "form-notice"} role={securityFeedback.tone === "error" ? "alert" : "status"}>{securityFeedback.message}</p>}
-          <div className="modal-action-row"><button className="secondary-button" type="button" onClick={() => setSecurityOpen(false)} disabled={saving === "security"}>Cancelar</button><LoadingButton className="primary-button" type="submit" loading={saving === "security"} loadingLabel="Atualizando segurança...">Confirmar com segurança</LoadingButton></div>
+          <div className="modal-action-row"><button className="secondary-button" type="button" onClick={() => setSecurityOpen(false)} disabled={saving === "security"}>Cancelar</button><LoadingButton className="primary-button" type="submit" loading={saving === "security"} loadingLabel="Atualizando…">Salvar alterações</LoadingButton></div>
         </form>
       </Modal>
 
       <Modal open={supportOpen} onClose={() => setSupportOpen(false)} eyebrow="APOIO VOLUNTÁRIO" title="Apoie o Hydra Agro">
         <div className="support-modal">
           <span><HeartHandshake size={31} /></span>
-          <h3>Tecnologia feita para a nossa região</h3>
-          <p>O Hydra Agro aproxima gestão, sustentabilidade e inovação da rotina do produtor. O apoio voluntário ajuda na manutenção, nos testes de campo e na criação de novas ferramentas.</p>
-          <div className="support-separation-note"><Crown size={18} /><span><strong>Apoio não é assinatura</strong><small>A contribuição é opcional, não libera o Hydra Agro+ e não bloqueia nenhuma função gratuita.</small></span></div>
+          <h3>Ajude o projeto a continuar</h3>
+          <p>O apoio voluntário contribui com manutenção, testes e novas ferramentas para o Hydra Agro.</p>
+          <div className="support-separation-note"><Crown size={18} /><span><strong>Apoio não é assinatura</strong><small>A contribuição é opcional, não libera o Hydra Agro+ e não bloqueia funções gratuitas.</small></span></div>
           <div className="support-channel-grid">
             <button onClick={() => openInstagram("support")}><Instagram size={21} /><span><strong>Quero apoiar o projeto</strong><small>Conversar no Instagram · {hydraSupport.instagramHandle}</small></span><ExternalLink size={16} /></button>
             <button onClick={() => openSupportEmail("Quero apoiar o Hydra Agro")}><Mail size={21} /><span><strong>Falar por e-mail</strong><small>{hydraSupport.email}</small></span><ExternalLink size={16} /></button>
@@ -392,7 +384,7 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
       </Modal>
 
       <Modal open={logoutConfirm} onClose={() => setLogoutConfirm(false)} eyebrow="CONFIRMAÇÃO" title="Finalizar sessão" centered dismissible={saving !== "logout"}>
-        <div className="confirm-action"><span><LogOut size={27} /></span><p>Deseja realmente finalizar sua sessão?</p>{error && <p className="form-error" role="alert">{error}</p>}<div className="modal-action-row"><button className="secondary-button" onClick={() => setLogoutConfirm(false)} disabled={saving === "logout"}>Cancelar</button><LoadingButton className="danger-button" onClick={() => void confirmLogout()} loading={saving === "logout"} loadingLabel="Saindo...">Sair</LoadingButton></div></div>
+        <div className="confirm-action"><span><LogOut size={27} /></span><p>Deseja sair desta conta?</p>{error && <p className="form-error" role="alert">{error}</p>}<div className="modal-action-row"><button className="secondary-button" onClick={() => setLogoutConfirm(false)} disabled={saving === "logout"}>Cancelar</button><LoadingButton className="danger-button" onClick={() => void confirmLogout()} loading={saving === "logout"} loadingLabel="Saindo…">Sair</LoadingButton></div></div>
       </Modal>
     </div>
   );
