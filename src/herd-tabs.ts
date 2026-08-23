@@ -33,6 +33,17 @@ function markViewItems(screen: HTMLElement) {
   });
 }
 
+function applyVisibility(screen: HTMLElement, view: HerdView) {
+  screen.querySelectorAll<HTMLElement>(":scope > .herd-overview-view-item").forEach((node) => {
+    node.hidden = view !== "overview";
+    node.setAttribute("aria-hidden", view === "overview" ? "false" : "true");
+  });
+  screen.querySelectorAll<HTMLElement>(":scope > .herd-animal-view-item").forEach((node) => {
+    node.hidden = view !== "animals";
+    node.setAttribute("aria-hidden", view === "animals" ? "false" : "true");
+  });
+}
+
 function setView(screen: HTMLElement, view: HerdView) {
   screen.dataset.herdView = view;
   const tabs = screen.querySelector<HTMLElement>(`:scope > .${TAB_CLASS}`);
@@ -43,6 +54,7 @@ function setView(screen: HTMLElement, view: HerdView) {
     button.tabIndex = active ? 0 : -1;
   });
 
+  applyVisibility(screen, view);
   try { window.sessionStorage.setItem("hydra.herd.view", view); } catch { /* armazenamento indisponível */ }
 }
 
