@@ -27,6 +27,7 @@
 /* NFC mantém seu motion próprio; o restante usa transições curtas e estáveis. */
 @import "./nfc-motion-polish.css?v=nfc-motion-2";
 @import "./nfc-only-motion.css?v=nfc-only-motion-3";
+@import "./home-nfc-scanner.css?v=home-nfc-scanner-1";
 
 /* Redesign visual final de Equipe/Funcionários e Rebanho. */
 @import "./management-redesign-v3.css?v=management-redesign-v3";
