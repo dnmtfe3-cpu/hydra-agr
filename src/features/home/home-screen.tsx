@@ -2,8 +2,10 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import "../../product-polish.css";
+import "./home-production-shortcut.css";
 import {
   Bell,
+  ChartNoAxesCombined,
   ChevronRight,
   ClipboardCheck,
   Beef as Cow,
@@ -95,11 +97,12 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
 
       {announcements.length > 0 && <section className="home-announcements" aria-label="Avisos do Hydra Agro">{announcements.slice(0, 3).map((announcement) => <article key={announcement.id} className={announcement.level}><span>{announcement.level === "critical" ? "IMPORTANTE" : announcement.level === "attention" ? "ATENÇÃO" : "AVISO"}</span><strong>{announcement.title}</strong><p>{announcement.body}</p></article>)}</section>}
 
-      <div className="shortcut-row" aria-label="Atalhos" style={{ gridTemplateColumns: "repeat(5, minmax(0, 1fr))" }}>
+      <div className="shortcut-row home-shortcuts-six" aria-label="Atalhos">
         <button onClick={() => navigate("history")}><span><History size={23} /></span><small>Histórico</small></button>
         <button onClick={() => navigate("community")}><span><UsersRound size={23} /></span><small>Comunidade</small></button>
         <button onClick={() => navigate("monitor")}><span><RadioTower size={23} /></span><small>Monitorar</small></button>
         <button onClick={() => navigate("activities")}><span><ClipboardCheck size={23} /></span><small>Atividades</small></button>
+        <button onClick={() => navigate("operations")}><span><ChartNoAxesCombined size={23} /></span><small>Produção e custos</small></button>
         <button onClick={() => navigate("assistant")}><span><MessageSquareText size={23} /></span><small>Assistente</small></button>
       </div>
 
