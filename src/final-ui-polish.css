@@ -1,0 +1,310 @@
+/* Ajustes finais do Hydra Agro: perfil, assistente e rebanho. */
+
+/* PERFIL — entrada mais viva, fundo contínuo e sem faixa escura no final. */
+.hydra-root .app-content:has(.profile-screen),
+.hydra-root .phone-app:has(.profile-screen) {
+  background: var(--cream) !important;
+}
+
+.hydra-root .profile-screen {
+  min-height: 100dvh !important;
+  padding-bottom: calc(118px + env(safe-area-inset-bottom)) !important;
+  border-bottom: 0 !important;
+  background: var(--cream) !important;
+  box-shadow: none !important;
+  overflow-x: clip;
+}
+
+.hydra-root .profile-screen::before,
+.hydra-root .profile-screen::after {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .profile-screen .profile-hero {
+  animation: hydraProfileHeroIn 560ms cubic-bezier(.2,.82,.24,1) both !important;
+}
+
+.hydra-root .profile-screen .profile-avatar-wrap {
+  animation: hydraProfileAvatarIn 620ms 70ms cubic-bezier(.18,.9,.25,1.15) both !important;
+}
+
+.hydra-root .profile-screen .profile-social-tabs {
+  animation: hydraProfileItemIn 450ms 120ms cubic-bezier(.22,.8,.28,1) both !important;
+}
+
+.hydra-root .profile-screen .plan-card {
+  animation: hydraProfileItemIn 470ms 165ms cubic-bezier(.22,.8,.28,1) both !important;
+}
+
+.hydra-root .profile-screen > .profile-group:nth-of-type(1) { animation: hydraProfileItemIn 470ms 205ms cubic-bezier(.22,.8,.28,1) both !important; }
+.hydra-root .profile-screen > .profile-group:nth-of-type(2) { animation: hydraProfileItemIn 470ms 245ms cubic-bezier(.22,.8,.28,1) both !important; }
+.hydra-root .profile-screen > .profile-group:nth-of-type(3) { animation: hydraProfileItemIn 470ms 285ms cubic-bezier(.22,.8,.28,1) both !important; }
+.hydra-root .profile-screen > .logout-button,
+.hydra-root .profile-screen > .profile-version { animation: hydraProfileItemIn 440ms 320ms cubic-bezier(.22,.8,.28,1) both !important; }
+
+.hydra-root .profile-screen .profile-menu-row,
+.hydra-root .profile-screen .profile-social-tabs button,
+.hydra-root .profile-screen .plan-card button {
+  transition: transform 180ms cubic-bezier(.22,.8,.28,1), background-color 180ms ease, box-shadow 180ms ease !important;
+}
+
+.hydra-root .profile-screen .profile-menu-row:active,
+.hydra-root .profile-screen .profile-social-tabs button:active,
+.hydra-root .profile-screen .plan-card button:active { transform: scale(.985); }
+
+@keyframes hydraProfileHeroIn {
+  from { opacity: 0; transform: translateY(18px) scale(.985); filter: blur(2px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes hydraProfileAvatarIn {
+  0% { opacity: 0; transform: translateY(12px) scale(.78); }
+  68% { opacity: 1; transform: translateY(-3px) scale(1.045); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes hydraProfileItemIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ASSISTENTE — uma coluna de verdade e sem análises/perguntas rápidas. */
+.hydra-root .assistant-screen.assistant-v2 {
+  width: min(100%, 760px) !important;
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block !important;
+}
+
+.hydra-root .assistant-v2 .assistant-insight-grid,
+.hydra-root .assistant-v2 .assistant-section-block {
+  display: none !important;
+}
+
+.hydra-root .assistant-v2 .assistant-v2-hero,
+.hydra-root .assistant-v2 .assistant-v2-conversation,
+.hydra-root .assistant-v2 .assistant-boundaries {
+  width: 100% !important;
+  max-width: none !important;
+  grid-column: auto !important;
+}
+
+/* Atalhos da Home: sem Histórico e Atividades na barra superior. */
+.hydra-root .home-screen .shortcut-row.home-shortcuts-six > button:nth-child(1),
+.hydra-root .home-screen .shortcut-row.home-shortcuts-six > button:nth-child(4) {
+  display: none !important;
+}
+.hydra-root .home-screen .shortcut-row.home-shortcuts-six {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+@media (min-width: 760px) {
+  .hydra-root .home-screen .shortcut-row.home-shortcuts-six {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+/* REBANHO — navegação por abas e visual mais limpo. */
+.hydra-root .herd-screen-enhanced {
+  --herd-green: #174c36;
+  --herd-soft: #eef5ee;
+  --herd-warm: #fff7ec;
+}
+
+.hydra-root .herd-screen-enhanced > .screen-header {
+  margin-bottom: 12px !important;
+}
+
+.herd-view-tabs {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin: 0 0 16px;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: rgba(255,255,255,.72);
+  box-shadow: 0 10px 28px -28px rgba(14,58,39,.5);
+}
+
+.herd-view-tabs button {
+  min-height: 44px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.herd-view-tabs button.active {
+  background: var(--forest-800);
+  color: #fff;
+  box-shadow: 0 8px 20px -15px rgba(15,55,39,.75);
+}
+
+.herd-view-tabs button:active { transform: scale(.98); }
+.herd-view-tabs small {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  background: rgba(255,255,255,.16);
+  color: inherit;
+  font-size: 8px;
+  font-weight: 850;
+}
+.herd-view-tabs button:not(.active) small { background: var(--sage-soft); color: var(--forest-700); }
+
+.herd-screen-enhanced[data-herd-view="overview"] > .herd-animal-view-item,
+.herd-screen-enhanced[data-herd-view="animals"] > .herd-overview-view-item {
+  display: none !important;
+}
+
+.herd-screen-enhanced[data-herd-view="animals"] > .herd-animal-view-item,
+.herd-screen-enhanced[data-herd-view="overview"] > .herd-overview-view-item {
+  animation: herdViewIn 320ms cubic-bezier(.22,.8,.28,1) both;
+}
+
+@keyframes herdViewIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hydra-root .herd-screen-enhanced > .nfc-inline-card,
+.hydra-root .herd-screen-enhanced > .herd-care-launch {
+  min-height: 78px;
+  padding: 14px 15px !important;
+  border: 1px solid #dfe5dd !important;
+  border-radius: 20px !important;
+  background: var(--paper) !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .herd-screen-enhanced > .nfc-inline-card > span,
+.hydra-root .herd-screen-enhanced > .herd-care-launch > span {
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 15px !important;
+}
+
+.hydra-root .herd-screen-enhanced > .nfc-inline-card > span {
+  background: #eaf3ee !important;
+  color: var(--forest-700) !important;
+}
+
+.hydra-root .herd-screen-enhanced > .herd-care-launch > span {
+  background: #fff1df !important;
+  color: #c6752d !important;
+}
+
+.hydra-root .herd-screen-enhanced > .herd-production-context,
+.hydra-root .herd-screen-enhanced > .herd-reproduction-tools,
+.hydra-root .herd-screen-enhanced > .herd-health-tools {
+  border: 1px solid #dfe5dd !important;
+  border-radius: 22px !important;
+  background: var(--paper) !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .herd-screen-enhanced > .search-row {
+  margin-top: 2px;
+}
+
+.hydra-root .herd-screen-enhanced > .filter-chips {
+  padding: 2px 0 8px;
+}
+
+.hydra-root .herd-screen-enhanced > .animal-list {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+}
+
+.hydra-root .herd-screen-enhanced .animal-card {
+  min-height: 82px !important;
+  padding: 11px 12px !important;
+  border: 1px solid #dfe4dd !important;
+  border-radius: 19px !important;
+  background: var(--paper) !important;
+  box-shadow: none !important;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease !important;
+}
+.hydra-root .herd-screen-enhanced .animal-card:active { transform: scale(.988); }
+.hydra-root .herd-screen-enhanced .animal-avatar {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 16px !important;
+}
+.hydra-root .herd-screen-enhanced .animal-code {
+  font-size: 8px !important;
+  letter-spacing: .08em !important;
+}
+.hydra-root .herd-screen-enhanced .animal-copy > strong { font-size: 13px !important; }
+.hydra-root .herd-screen-enhanced .animal-copy > small { font-size: 9px !important; }
+
+@media (min-width: 760px) {
+  .hydra-root .herd-screen-enhanced > .animal-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .hydra-root .herd-screen-enhanced[data-herd-view="overview"] > .nfc-inline-card,
+  .hydra-root .herd-screen-enhanced[data-herd-view="overview"] > .herd-care-launch {
+    width: calc(50% - 6px) !important;
+    display: inline-flex !important;
+    vertical-align: top;
+  }
+  .hydra-root .herd-screen-enhanced[data-herd-view="overview"] > .nfc-inline-card { margin-right: 8px !important; }
+}
+
+@media (min-width: 1024px) {
+  .hydra-root .herd-screen-enhanced {
+    width: min(calc(100% - 72px), 1080px) !important;
+    max-width: 1080px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .herd-view-tabs { max-width: 560px; margin-left: auto; margin-right: auto; }
+}
+
+.hydra-root.theme-dark .app-content:has(.profile-screen),
+.hydra-root.theme-dark .phone-app:has(.profile-screen),
+.hydra-root.theme-dark .profile-screen { background: #09160f !important; }
+.hydra-root.theme-dark .herd-view-tabs {
+  border-color: #294235;
+  background: #0e1d15;
+}
+.hydra-root.theme-dark .herd-view-tabs button:not(.active) { color: #9caaa1; }
+.hydra-root.theme-dark .herd-view-tabs button:not(.active) small { background: #173326; color: #a9cfb3; }
+.hydra-root.theme-dark .herd-screen-enhanced > .nfc-inline-card,
+.hydra-root.theme-dark .herd-screen-enhanced > .herd-care-launch,
+.hydra-root.theme-dark .herd-screen-enhanced > .herd-production-context,
+.hydra-root.theme-dark .herd-screen-enhanced > .herd-reproduction-tools,
+.hydra-root.theme-dark .herd-screen-enhanced > .herd-health-tools,
+.hydra-root.theme-dark .herd-screen-enhanced .animal-card {
+  border-color: #294235 !important;
+  background: #0e1d15 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hydra-root .profile-screen .profile-hero,
+  .hydra-root .profile-screen .profile-avatar-wrap,
+  .hydra-root .profile-screen .profile-social-tabs,
+  .hydra-root .profile-screen .plan-card,
+  .hydra-root .profile-screen > .profile-group,
+  .hydra-root .profile-screen > .logout-button,
+  .hydra-root .profile-screen > .profile-version,
+  .herd-screen-enhanced > .herd-animal-view-item,
+  .herd-screen-enhanced > .herd-overview-view-item {
+    animation: none !important;
+  }
+}
