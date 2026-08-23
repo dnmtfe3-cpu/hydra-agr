@@ -1,0 +1,57 @@
+/* Rebanho: navegação estática e animais somente em "Animais cadastrados". */
+
+/* Nenhuma animação/transição dentro do Rebanho. */
+.hydra-root .herd-screen-enhanced,
+.hydra-root .herd-screen-enhanced *,
+.hydra-root .herd-screen-enhanced *::before,
+.hydra-root .herd-screen-enhanced *::after {
+  animation: none !important;
+  animation-delay: 0ms !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+/* A troca entre Visão geral e Animais cadastrados é instantânea. */
+.hydra-root .herd-screen-enhanced .herd-view-tabs button,
+.hydra-root .herd-screen-enhanced .animal-card,
+.hydra-root .herd-screen-enhanced button:active,
+.hydra-root .herd-screen-enhanced [role="button"]:active {
+  transform: none !important;
+}
+
+/* Garante que a Visão geral nunca mostre busca, filtros ou fichas de animais. */
+.hydra-root .herd-screen-enhanced[data-herd-view="overview"] > .search-row,
+.hydra-root .herd-screen-enhanced[data-herd-view="overview"] > .filter-chips,
+.hydra-root .herd-screen-enhanced[data-herd-view="overview"] > .animal-list,
+.hydra-root .herd-screen-enhanced[data-herd-view="overview"] > .empty-state,
+.hydra-root .herd-screen-enhanced[data-herd-view="overview"] > .herd-animal-view-item {
+  display: none !important;
+}
+
+/* As ferramentas da visão geral não entram na aba de animais. */
+.hydra-root .herd-screen-enhanced[data-herd-view="animals"] > .nfc-inline-card,
+.hydra-root .herd-screen-enhanced[data-herd-view="animals"] > .herd-care-launch,
+.hydra-root .herd-screen-enhanced[data-herd-view="animals"] > .herd-production-context,
+.hydra-root .herd-screen-enhanced[data-herd-view="animals"] > .herd-reproduction-tools,
+.hydra-root .herd-screen-enhanced[data-herd-view="animals"] > .herd-health-tools,
+.hydra-root .herd-screen-enhanced[data-herd-view="animals"] > .herd-overview-view-item {
+  display: none !important;
+}
+
+/* Respeita o atributo hidden mesmo que algum estilo antigo tente forçar display. */
+.hydra-root .herd-screen-enhanced > [hidden] {
+  display: none !important;
+}
+
+/* Na aba Animais cadastrados, tudo fica em uma coluna no celular. */
+.hydra-root .herd-screen-enhanced[data-herd-view="animals"] > .animal-list {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 10px !important;
+}
+
+@media (min-width: 760px) {
+  .hydra-root .herd-screen-enhanced[data-herd-view="animals"] > .animal-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
