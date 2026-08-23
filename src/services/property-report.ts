@@ -38,62 +38,61 @@ function dateLabel(value?: string) {
   return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString("pt-BR");
 }
 
+function countLabel(count: number, singular: string, plural: string) {
+  return `${count} ${count === 1 ? singular : plural}`;
+}
+
 function buildLines(account: HydraAccount): PdfLine[] {
   const now = new Date();
   const pending = account.activities.filter((activity) => !activity.done);
   const overdue = pending.filter((activity) => new Date(activity.date).getTime() < new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime());
   const identified = account.animals.filter((animal) => Boolean(animal.electronicId)).length;
   const weighted = account.animals.filter((animal) => Number(animal.weight ?? 0) > 0).length;
-  const waterTotal = account.waterRecords.reduce((sum, record) => sum + Number(record.amount || 0), 0);
   const occurrences = account.monitoring.filter((record) => Boolean(record.occurrence?.trim()));
 
   const lines: PdfLine[] = [
     { text: "HYDRA AGRO", size: 18, bold: true, gapAfter: 5 },
-    { text: "Relatorio da propriedade", size: 13, bold: true, gapAfter: 2 },
+    { text: "Relatório da propriedade", size: 13, bold: true, gapAfter: 2 },
     { text: `Gerado em ${now.toLocaleString("pt-BR")}`, size: 9, gapAfter: 12 },
     { text: "PROPRIEDADE", size: 11, bold: true, gapAfter: 4 },
-    { text: `Nome: ${account.property.name || "Nao informado"}` },
-    { text: `Localizacao: ${account.property.municipality || "Nao informada"}${account.property.state ? ` - ${account.property.state}` : ""}` },
-    { text: `Atividade principal: ${account.property.mainActivity || "Nao informada"}` },
-    { text: `Area: ${account.property.area ? `${account.property.area} ${account.property.areaUnit}` : "Nao informada"}`, gapAfter: 10 },
+    { text: `Nome: ${account.property.name || "Não informado"}` },
+    { text: `Localização: ${account.property.municipality || "Não informada"}${account.property.state ? ` - ${account.property.state}` : ""}` },
+    { text: `Atividade principal: ${account.property.mainActivity || "Não informada"}` },
+    { text: `Área: ${account.property.area ? `${account.property.area} ${account.property.areaUnit}` : "Não informada"}`, gapAfter: 10 },
     { text: "REBANHO", size: 11, bold: true, gapAfter: 4 },
-    { text: `Animais cadastrados: ${account.animals.length}` },
-    { text: `Identificados por NFC/RFID: ${identified}` },
-    { text: `Com peso registrado: ${weighted}` },
-    { text: `Leituras NFC registradas: ${account.nfcReadCount}`, gapAfter: 8 },
+    { text: countLabel(account.animals.length, "animal cadastrado", "animais cadastrados") },
+    { text: countLabel(identified, "animal identificado por NFC/RFID", "animais identificados por NFC/RFID") },
+    { text: countLabel(weighted, "animal com peso registrado", "animais com peso registrado") },
+    { text: countLabel(account.nfcReadCount, "leitura NFC registrada", "leituras NFC registradas"), gapAfter: 8 },
   ];
 
   account.animals.slice(0, 18).forEach((animal) => {
     lines.push({ text: `- ${animal.identification}${animal.name ? ` | ${animal.name}` : ""} | ${animal.species}${animal.weight ? ` | ${animal.weight} kg` : ""} | ${animal.electronicId ? "NFC vinculado" : "sem NFC"}` });
   });
-  if (account.animals.length > 18) lines.push({ text: `... e mais ${account.animals.length - 18} animal(is).` });
+  if (account.animals.length > 18) lines.push({ text: `... e mais ${countLabel(account.animals.length - 18, "animal", "animais")}.` });
 
   lines.push(
     { text: "", gapAfter: 3 },
-    { text: "AGUA", size: 11, bold: true, gapAfter: 4 },
-    { text: `Fontes cadastradas: ${account.waterSources.length}` },
-    { text: `Registros de agua: ${account.waterRecords.length}` },
-    { text: `Volume total registrado: ${waterTotal.toLocaleString("pt-BR")} L`, gapAfter: 10 },
-    { text: "ATIVIDADES", size: 11, bold: true, gapAfter: 4 },
-    { text: `Atividades cadastradas: ${account.activities.length}` },
-    { text: `Pendentes: ${pending.length}` },
-    { text: `Atrasadas: ${overdue.length}`, gapAfter: 6 },
+    { text: "TAREFAS", size: 11, bold: true, gapAfter: 4 },
+    { text: countLabel(account.activities.length, "tarefa cadastrada", "tarefas cadastradas") },
+    { text: countLabel(pending.length, "tarefa pendente", "tarefas pendentes") },
+    { text: countLabel(overdue.length, "tarefa atrasada", "tarefas atrasadas"), gapAfter: 6 },
   );
 
   pending.slice(0, 12).forEach((activity) => lines.push({ text: `- ${activity.title} | ${activity.category} | ${dateLabel(activity.date)}` }));
 
   lines.push(
     { text: "", gapAfter: 3 },
-    { text: "MONITORAMENTO E OCORRENCIAS", size: 11, bold: true, gapAfter: 4 },
-    { text: `Monitoramentos: ${account.monitoring.length}` },
-    { text: `Registros com ocorrencia: ${occurrences.length}`, gapAfter: 6 },
+    { text: "MONITORAMENTO E OCORRÊNCIAS", size: 11, bold: true, gapAfter: 4 },
+    { text: countLabel(account.monitoring.length, "monitoramento registrado", "monitoramentos registrados") },
+    { text: countLabel(occurrences.length, "registro com ocorrência", "registros com ocorrência"), gapAfter: 6 },
   );
   occurrences.slice(0, 10).forEach((record) => lines.push({ text: `- ${dateLabel(record.date)} | ${record.type}: ${record.occurrence}` }));
 
   lines.push(
     { text: "", gapAfter: 4 },
-    { text: "Observacao", size: 10, bold: true, gapAfter: 3 },
-    { text: "Este relatorio foi gerado com os dados cadastrados no Hydra Agro no momento da exportacao. Ele e um registro de gestao e nao substitui avaliacao tecnica ou veterinaria." },
+    { text: "Observação", size: 10, bold: true, gapAfter: 3 },
+    { text: "Este relatório foi gerado com os registros disponíveis no Hydra Agro no momento da exportação. Ele serve para organização da propriedade e não substitui avaliação técnica ou veterinária." },
     { text: "", gapAfter: 5 },
     { text: "Tecnologia que nasce do campo", size: 9, bold: true },
   );
