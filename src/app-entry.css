@@ -1,4 +1,4 @@
-/* Hydra Agro — estilos do app. Movimento restrito à experiência NFC. */
+/* Hydra Agro — estilos do app. Movimento restrito à experiência NFC e às trocas suaves de função. */
 
 @import "./professional-polish.css";
 @import "./visual-fixes.css";
@@ -22,7 +22,8 @@
 @import "./mobile-final-cleanup.css";
 @import "./herd-static.css";
 @import "./no-bottom-divider.css";
+@import "./route-loading-cleanup.css?v=route-loading-cleanup-1";
 
-/* ÚNICO pacote de movimento visual mantido no app. */
+/* NFC mantém seu motion próprio. As demais trocas são controladas pelo motion-lock.ts. */
 @import "./nfc-motion-polish.css?v=nfc-motion-2";
 @import "./nfc-only-motion.css?v=nfc-only-motion-2";
