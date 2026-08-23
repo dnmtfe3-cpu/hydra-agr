@@ -1,0 +1,51 @@
+/* Entrada da Comunidade: movimento curto e natural, sem mexer no layout. */
+
+@keyframes hydra-community-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hydra-community-item-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hydra-root .community-screen.page-enter {
+  animation: hydra-community-enter 360ms cubic-bezier(.2, .8, .2, 1) both !important;
+}
+
+.hydra-root .community-screen.page-enter > .screen-header,
+.hydra-root .community-screen.page-enter > .community-tabs,
+.hydra-root .community-screen.page-enter > .community-composer,
+.hydra-root .community-screen.page-enter > .community-message,
+.hydra-root .community-screen.page-enter > .empty-state,
+.hydra-root .community-screen.page-enter > .post-list {
+  animation: hydra-community-item-enter 420ms cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.hydra-root .community-screen.page-enter > .screen-header { animation-delay: 35ms; }
+.hydra-root .community-screen.page-enter > .community-tabs { animation-delay: 70ms; }
+.hydra-root .community-screen.page-enter > .community-composer { animation-delay: 105ms; }
+.hydra-root .community-screen.page-enter > .community-message,
+.hydra-root .community-screen.page-enter > .empty-state,
+.hydra-root .community-screen.page-enter > .post-list { animation-delay: 140ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hydra-root .community-screen.page-enter,
+  .hydra-root .community-screen.page-enter > * {
+    animation: none !important;
+    transform: none !important;
+  }
+}
