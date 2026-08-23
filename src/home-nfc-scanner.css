@@ -1,0 +1,51 @@
+/* Scanner visual do atalho NFC/RFID da Home. */
+
+@keyframes hydra-home-nfc-scan {
+  0% { opacity: 0; transform: translateY(-11px) scaleX(.72); }
+  14% { opacity: .95; }
+  50% { opacity: 1; transform: translateY(0) scaleX(1); }
+  86% { opacity: .95; }
+  100% { opacity: 0; transform: translateY(11px) scaleX(.72); }
+}
+
+@keyframes hydra-home-nfc-scan-soft {
+  0%, 100% { opacity: .16; }
+  50% { opacity: .34; }
+}
+
+html body #root .hydra-root .phone-app .home-screen .nfc-banner .nfc-banner-icon {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+html body #root .hydra-root .phone-app .home-screen .nfc-banner .nfc-banner-icon::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 15% !important;
+  right: 15% !important;
+  top: 50% !important;
+  height: 2px !important;
+  z-index: 4 !important;
+  border-radius: 999px !important;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.82) 24%, #ff8712 50%, rgba(255,255,255,.82) 76%, transparent 100%) !important;
+  box-shadow: 0 0 8px rgba(255,135,18,.55) !important;
+  pointer-events: none !important;
+  animation: hydra-home-nfc-scan 1.7s cubic-bezier(.45,0,.25,1) infinite !important;
+}
+
+html body #root .hydra-root .phone-app .home-screen .nfc-banner::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 1px !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  box-shadow: inset 0 0 22px rgba(255,135,18,.05) !important;
+  animation: hydra-home-nfc-scan-soft 1.7s ease-in-out infinite !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body #root .hydra-root .phone-app .home-screen .nfc-banner .nfc-banner-icon::before,
+  html body #root .hydra-root .phone-app .home-screen .nfc-banner::after {
+    animation: none !important;
+  }
+}
