@@ -29,6 +29,7 @@ const PropertyHistoryScreen = lazy(() => import("./features/history").then((modu
 const NfcScreen = lazy(() => import("./features/nfc/nfc-screen").then((module) => ({ default: module.NfcScreen })));
 const NotificationsScreen = lazy(() => import("./features/notifications/notifications-screen").then((module) => ({ default: module.NotificationsScreen })));
 const PlusScreen = lazy(() => import("./features/premium/plus-screen").then((module) => ({ default: module.PlusScreen })));
+const FamilyFarmingScreen = lazy(() => import("./features/family-farming/family-farming-screen").then((module) => ({ default: module.FamilyFarmingScreen })));
 const AdminScreen = lazy(() => import("./features/admin/admin-screen").then((module) => ({ default: module.AdminScreen })));
 
 type NavTab = { id: AppRoute; label: string; icon: typeof Home };
@@ -49,7 +50,7 @@ const staffMainTabs: NavTab[] = [
   { id: "profile", label: "Perfil", icon: UserRound },
 ];
 
-const employeeRoutes = new Set<AppRoute>(["home", "history", "nfc", "operations", "profile", "notifications"]);
+const employeeRoutes = new Set<AppRoute>(["home", "history", "nfc", "operations", "profile", "notifications", "production"]);
 const managerRoutes = new Set<AppRoute>([...employeeRoutes, "herd", "monitor", "activities", "assistant", "today"]);
 
 function staffRouteAllowed(route: AppRoute, role?: StaffRole) {
@@ -349,6 +350,7 @@ export default function HydraApp() {
       case "today": return <TodayScreen account={account} syncStatus={store.syncStatus} lastError={store.lastError} onBack={goBack} navigate={navigate} retrySync={store.retrySync} />;
       case "history": return <PropertyHistoryScreen account={account} onBack={goBack} navigate={navigate} />;
       case "nfc": return <NfcScreen account={account} updateAccount={store.updateAccount} onBack={goBack} initialAnimalId={nfcAnimalId} onRealRead={store.registerNfcRead} onFound={(animal) => { if (!canOpenAnimalManagement) return; setAnimalToOpen(animal.id); navigate("herd"); }} />;
+      case "production": return <FamilyFarmingScreen account={account} onBack={goBack} />;
       case "notifications": return <NotificationsScreen account={account} updateAccount={store.updateAccount} onBack={goBack} />;
       case "plus": return <PlusScreen account={account} updateAccount={store.updateAccount} onBack={goBack} />;
       case "admin": return ["moderator", "admin", "owner"].includes(account.role) ? <AdminScreen account={account} onBack={goBack} /> : isStaff ? <StaffHomeScreen account={account} announcements={store.announcements} navigate={navigate} /> : <HomeScreen account={account} announcements={store.announcements} navigate={navigate} onQuickAction={openQuick} />;
