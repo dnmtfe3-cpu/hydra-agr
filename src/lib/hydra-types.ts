@@ -13,6 +13,7 @@ export type AppRoute =
   | "nfc"
   | "notifications"
   | "plus"
+  | "production"
   | "admin";
 
 export type UserRole = "user" | "moderator" | "admin" | "owner";
@@ -97,6 +98,57 @@ export type MonitoringRecord = {
   occurrence?: string;
   photoPaths?: string[];
   photoUrls?: string[];
+};
+
+export type ProductionRecord = {
+  id: string;
+  product: string;
+  quantity: number;
+  unit: string;
+  date: string;
+  sectorId?: string;
+  animalId?: string;
+  activityId?: string;
+  note?: string;
+};
+
+export type SaleRecord = {
+  id: string;
+  product: string;
+  quantity: number;
+  unit: string;
+  unitPrice: number;
+  buyer?: string;
+  saleType: string;
+  date: string;
+  productionId?: string;
+};
+
+export type ProductionExpense = {
+  id: string;
+  description: string;
+  category: string;
+  amount: number;
+  date: string;
+  productionId?: string;
+};
+
+export type FamilyWorkRecord = {
+  id: string;
+  activityName: string;
+  activityId?: string;
+  productionId?: string;
+  participants: string[];
+  durationHours?: number;
+  date: string;
+  note?: string;
+};
+
+export type ProductionNotebook = {
+  production: ProductionRecord[];
+  sales: SaleRecord[];
+  expenses: ProductionExpense[];
+  familyWork: FamilyWorkRecord[];
 };
 
 export type CommunityComment = {
