@@ -170,6 +170,17 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
         <small><Smartphone size={15} /> {availabilityText}</small>
       </section>
 
+      {scanning && (
+        <div className="nfc-reading-overlay" role="status" aria-live="polite" aria-label="Lendo etiqueta NFC">
+          <div className="nfc-reading-loader">
+            <span className="nfc-reading-ring" />
+            <Nfc size={30} />
+          </div>
+          <strong>Lendo etiqueta NFC…</strong>
+          <small>Mantenha a etiqueta próxima ao celular.</small>
+        </div>
+      )}
+
       <div className="segmented-control nfc-segment">
         <button className={mode === "locate" ? "active" : ""} onClick={() => switchMode("locate")}>Localizar animal</button>
         {canLink && <button className={mode === "link" ? "active" : ""} onClick={() => switchMode("link")}>Vincular identificação</button>}
