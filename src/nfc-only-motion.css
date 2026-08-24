@@ -162,6 +162,58 @@ html body.theme-dark #root .hydra-root .phone-app .nfc-screen .nfc-reading-overl
   color: #aab8af !important;
 }
 
+/* No site/desktop, o aviso da leitura mantém um indicador girando continuamente.
+   É apenas feedback visual: a leitura por aproximação continua sendo do app Android. */
+@media (min-width: 900px) {
+  html body #root .hydra-root .phone-app .nfc-screen .nfc-desktop-notice {
+    position: relative !important;
+    padding-right: 78px !important;
+  }
+
+  html body #root .hydra-root .phone-app .nfc-screen .nfc-desktop-notice::before,
+  html body #root .hydra-root .phone-app .nfc-screen .nfc-desktop-notice::after {
+    content: "" !important;
+    position: absolute !important;
+    right: 22px !important;
+    top: 50% !important;
+    border-radius: 999px !important;
+    pointer-events: none !important;
+  }
+
+  html body #root .hydra-root .phone-app .nfc-screen .nfc-desktop-notice::before {
+    width: 42px !important;
+    height: 42px !important;
+    margin-top: -21px !important;
+    border: 3px solid rgba(13, 75, 53, .13) !important;
+    border-top-color: #f49436 !important;
+    border-right-color: #0d4b35 !important;
+    animation: hydra-nfc-reading-spin .9s linear infinite !important;
+  }
+
+  html body #root .hydra-root .phone-app .nfc-screen .nfc-desktop-notice::after {
+    width: 14px !important;
+    height: 14px !important;
+    right: 36px !important;
+    margin-top: -7px !important;
+    background: #0d4b35 !important;
+    box-shadow: 0 0 0 6px rgba(13, 75, 53, .08) !important;
+    animation: hydra-nfc-reading-breathe 1.8s ease-in-out infinite !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .nfc-screen .nfc-desktop-notice::before,
+  html body.theme-dark #root .hydra-root .phone-app .nfc-screen .nfc-desktop-notice::before {
+    border-color: rgba(247, 246, 240, .14) !important;
+    border-top-color: #f49436 !important;
+    border-right-color: #f7f6f0 !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .nfc-screen .nfc-desktop-notice::after,
+  html body.theme-dark #root .hydra-root .phone-app .nfc-screen .nfc-desktop-notice::after {
+    background: #f7f6f0 !important;
+    box-shadow: 0 0 0 6px rgba(247, 246, 240, .08) !important;
+  }
+}
+
 /* NFC principal continua livre para usar ondas, leitura e feedback. */
 html body #root .hydra-root .phone-app .app-content > .nfc-screen,
 html body #root .hydra-root .phone-app .app-content > .nfc-screen * {
