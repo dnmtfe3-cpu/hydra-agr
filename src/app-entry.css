@@ -34,3 +34,6 @@
 
 /* Correção do Rebanho apenas no desktop/web. */
 @import "./herd-desktop-fix.css?v=herd-desktop-fix-1";
+
+/* Correção final do Rebanho no celular. */
+@import "./herd-mobile-fix.css?v=herd-mobile-fix-1";
