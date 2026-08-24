@@ -31,3 +31,6 @@
 
 /* Redesign visual final de Equipe/Funcionários e Rebanho. */
 @import "./management-redesign-v3.css?v=management-redesign-v3";
+
+/* Correção do Rebanho apenas no desktop/web. */
+@import "./herd-desktop-fix.css?v=herd-desktop-fix-1";
