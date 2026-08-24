@@ -124,7 +124,7 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
         setScanning(false);
         showAppToast("Tag NFC detectada — demonstração");
         if (canLink) window.setTimeout(() => onFound(demoAnimal), 850);
-      }, 2400);
+      }, 15000);
       return;
     }
 
@@ -204,7 +204,7 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
             <Nfc size={30} />
           </div>
           <strong>Lendo etiqueta NFC…</strong>
-          <small>{webDemo ? "Simulação para demonstração do fluxo." : "Mantenha a etiqueta próxima ao celular."}</small>
+          <small>{webDemo ? "Simulação para demonstração do fluxo. Aguarde a identificação." : "Mantenha a etiqueta próxima ao celular."}</small>
         </div>
       )}
 
