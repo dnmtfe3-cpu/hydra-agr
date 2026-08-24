@@ -92,7 +92,10 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
   useEffect(() => {
     let active = true;
     void loadProductionNotebook(account)
-      .then((notebook) => { if (active) setProductionResult(currentMonthTotals(notebook).result); })
+      .then((notebook) => {
+        const hasRecords = notebook.production.length + notebook.sales.length + notebook.expenses.length + notebook.familyWork.length > 0;
+        if (active) setProductionResult(hasRecords ? currentMonthTotals(notebook).result : null);
+      })
       .catch(() => { if (active) setProductionResult(null); });
     return () => { active = false; };
   }, [account.id, account.access.ownerUserId, account.property.id]);
