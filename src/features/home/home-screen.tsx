@@ -3,6 +3,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import "../../product-polish.css";
 import "./home-production-shortcut.css";
+import "./home-production-notebook-card.css";
 import {
   Bell,
   ChevronRight,
@@ -13,6 +14,7 @@ import {
   Leaf,
   Map,
   MessageSquareText,
+  NotebookTabs,
   Plus,
   RadioTower,
   ScanLine,
@@ -21,6 +23,7 @@ import {
 } from "lucide-react";
 import { HydraWordmark } from "../../components/brand";
 import type { Announcement, AppRoute, HydraAccount } from "../../lib/hydra-types";
+import { currentMonthTotals, loadProductionNotebook } from "../../services/family-farming-repository";
 import { requireSupabase } from "../../services/supabase";
 import { WeatherWidget } from "./weather-widget";
 
@@ -43,8 +46,13 @@ function countLabel(count: number, singular: string, plural: string) {
   return `${count} ${count === 1 ? singular : plural}`;
 }
 
+function money(value: number) {
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(Math.abs(value));
+}
+
 export function HomeScreen({ account, navigate, onQuickAction, announcements }: Props) {
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
+  const [productionResult, setProductionResult] = useState<number | null>(null);
   const firstName = account.profile.name.split(/\s+/)[0] || "Produtor";
   const welcome = welcomeMessage();
   const today = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "2-digit", month: "long" }).format(new Date());
@@ -81,6 +89,14 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
     };
   }, [account.id]);
 
+  useEffect(() => {
+    let active = true;
+    void loadProductionNotebook(account)
+      .then((notebook) => { if (active) setProductionResult(currentMonthTotals(notebook).result); })
+      .catch(() => { if (active) setProductionResult(null); });
+    return () => { active = false; };
+  }, [account.id, account.access.ownerUserId, account.property.id]);
+
   const pendingSetup = [
     account.animals.length === 0 && { label: "Cadastrar o primeiro animal", icon: <Cow size={21} />, route: "herd" as AppRoute },
     account.sectors.length === 0 && { label: "Criar o primeiro setor", icon: <Map size={21} />, route: "monitor" as AppRoute },
@@ -106,6 +122,12 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
       </div>
 
       <button className="nfc-banner" onClick={() => navigate("nfc")}><span className="nfc-banner-icon"><ScanLine size={27} /></span><span className="nfc-banner-copy"><small>NFC / RFID</small><strong>Ler identificação do animal</strong><em>{countLabel(identifiedAnimals, "identificado", "identificados")} · {countLabel(account.nfcReadCount, "leitura", "leituras")}</em></span><ChevronRight size={22} /></button>
+
+      <button className="home-production-notebook-card" onClick={() => navigate("production")}>
+        <span className="home-production-icon"><NotebookTabs size={22} /></span>
+        <span className="home-production-copy"><small>PRODUÇÃO</small><strong>{productionResult === null ? "Comece seu caderno da propriedade" : `${productionResult >= 0 ? "+ " : "− "}${money(productionResult)} resultado este mês`}</strong></span>
+        <ChevronRight size={19} />
+      </button>
 
       <section className="property-hero">
         <div className="property-hero-top"><div><span className="property-kicker">Propriedade</span><h2>{account.property.name || "Propriedade não cadastrada"}</h2><p>{propertyReady ? `${account.property.mainActivity} · ${account.property.municipality}, ${account.property.state}` : "Complete a ficha da propriedade"}</p></div><button onClick={() => navigate("property")} aria-label="Editar propriedade"><Sprout size={20} /></button></div>
