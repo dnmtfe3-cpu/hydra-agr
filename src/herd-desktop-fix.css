@@ -1,0 +1,133 @@
+/* Hydra Agro — correção exclusiva do Rebanho no desktop/web. */
+@media (min-width: 900px) {
+  .hydra-root .phone-app .screen:has(.animal-list) {
+    width: min(1180px, calc(100vw - 72px)) !important;
+    max-width: 1180px !important;
+    margin-inline: auto !important;
+    padding-inline: 28px !important;
+    padding-bottom: 120px !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) > .screen-header,
+  .hydra-root .phone-app .screen:has(.animal-list) > .search-row,
+  .hydra-root .phone-app .screen:has(.animal-list) > .filter-chips {
+    max-width: none !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) > .search-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 48px !important;
+    gap: 12px !important;
+    align-items: center !important;
+    margin-top: 18px !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) .search-box {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) > .filter-chips {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin: 12px 0 18px !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) > .nfc-inline-card,
+  .hydra-root .phone-app .screen:has(.animal-list) > .herd-care-launch {
+    width: calc(50% - 6px) !important;
+    min-height: 94px !important;
+    margin: 0 !important;
+    padding: 18px 20px !important;
+    vertical-align: top !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) > .nfc-inline-card {
+    display: inline-grid !important;
+    grid-template-columns: 48px minmax(0, 1fr) auto !important;
+    margin-right: 8px !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) > .herd-care-launch {
+    display: inline-grid !important;
+    grid-template-columns: 48px minmax(0, 1fr) auto !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) > .nfc-inline-card > span,
+  .hydra-root .phone-app .screen:has(.animal-list) > .herd-care-launch > span {
+    width: 46px !important;
+    height: 46px !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) > .nfc-inline-card strong,
+  .hydra-root .phone-app .screen:has(.animal-list) > .herd-care-launch strong {
+    font-size: 14px !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) > .nfc-inline-card small,
+  .hydra-root .phone-app .screen:has(.animal-list) > .herd-care-launch small {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) > .herd-production-tools,
+  .hydra-root .phone-app .screen:has(.animal-list) > .herd-reproduction-tools,
+  .hydra-root .phone-app .screen:has(.animal-list) > .herd-health-tools {
+    margin-top: 18px !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) .animal-list {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    margin-top: 20px !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) .animal-card {
+    min-width: 0 !important;
+    min-height: 92px !important;
+    padding: 14px 16px !important;
+    display: grid !important;
+    grid-template-columns: 54px minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 13px !important;
+    border-radius: 20px !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) .animal-avatar {
+    width: 52px !important;
+    height: 52px !important;
+    flex: 0 0 52px !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) .animal-copy {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) .animal-copy strong,
+  .hydra-root .phone-app .screen:has(.animal-list) .animal-copy small,
+  .hydra-root .phone-app .screen:has(.animal-list) .animal-code {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) .animal-side {
+    min-width: max-content !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .hydra-root .phone-app .screen:has(.animal-list) .tag-badge {
+    white-space: nowrap !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hydra-root .phone-app .screen:has(.animal-list) .animal-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
