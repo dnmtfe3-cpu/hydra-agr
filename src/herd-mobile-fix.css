@@ -1,17 +1,15 @@
-/* Hydra Agro — correção final do Rebanho apenas no mobile. */
+/* Hydra Agro — layout final do Rebanho apenas no mobile. */
 @media (max-width: 899px) {
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) {
     width: 100% !important;
     max-width: 100% !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)) !important;
+    padding: 0 0 calc(110px + env(safe-area-inset-bottom, 0px)) !important;
     overflow-x: hidden !important;
   }
 
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > .screen-header {
     margin: 0 !important;
-    padding: 12px 16px 10px !important;
+    padding: 14px 16px 12px !important;
   }
 
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .screen-header-row {
@@ -20,18 +18,19 @@
   }
 
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .screen-heading {
-    min-width: 0 !important;
     flex: 1 1 auto !important;
+    min-width: 0 !important;
   }
 
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .screen-heading h1 {
-    font-size: 28px !important;
-    line-height: 1.05 !important;
-    letter-spacing: -.04em !important;
+    margin: 1px 0 0 !important;
+    font-size: 29px !important;
+    line-height: 1.02 !important;
+    letter-spacing: -.045em !important;
   }
 
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .screen-heading p {
-    margin-top: 4px !important;
+    margin-top: 5px !important;
     font-size: 11px !important;
     line-height: 1.35 !important;
   }
@@ -41,7 +40,7 @@
   }
 
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > .search-row {
-    margin: 2px 16px 8px !important;
+    margin: 2px 16px 9px !important;
     width: auto !important;
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) 44px !important;
@@ -58,8 +57,8 @@
   }
 
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .search-box input {
-    min-width: 0 !important;
     width: 100% !important;
+    min-width: 0 !important;
     font-size: 13px !important;
   }
 
@@ -72,21 +71,19 @@
   }
 
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > .filter-chips {
-    margin: 0 0 10px !important;
-    padding: 0 16px 3px !important;
     width: 100% !important;
+    margin: 0 0 11px !important;
+    padding: 0 16px 3px !important;
     display: flex !important;
+    flex-wrap: nowrap !important;
     gap: 7px !important;
     overflow-x: auto !important;
     overflow-y: hidden !important;
-    flex-wrap: nowrap !important;
     scrollbar-width: none !important;
     -webkit-overflow-scrolling: touch !important;
   }
 
-  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > .filter-chips::-webkit-scrollbar {
-    display: none !important;
-  }
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > .filter-chips::-webkit-scrollbar { display: none !important; }
 
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .filter-chips button {
     flex: 0 0 auto !important;
@@ -97,18 +94,20 @@
     font-size: 10.5px !important;
   }
 
+  /* Acessos principais do Rebanho */
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > .nfc-inline-card,
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > .herd-care-launch {
-    margin: 0 16px 9px !important;
     width: calc(100% - 32px) !important;
-    min-height: 76px !important;
-    padding: 12px 13px !important;
+    min-height: 78px !important;
+    margin: 0 16px 9px !important;
+    padding: 13px !important;
     display: grid !important;
     grid-template-columns: 44px minmax(0, 1fr) 18px !important;
     gap: 11px !important;
     align-items: center !important;
     border-radius: 19px !important;
     overflow: hidden !important;
+    box-sizing: border-box !important;
   }
 
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > .nfc-inline-card > span,
@@ -145,23 +144,138 @@
     line-height: 1.3 !important;
   }
 
-  /* Ferramentas do rebanho: nunca deixar grids desktop apertarem no celular. */
-  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > section,
-  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > article {
-    max-width: calc(100% - 32px) !important;
+  /* Blocos internos: uma seção por linha e sem largura herdada do desktop. */
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > .herd-production-context,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > .herd-reproduction-tools,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > .herd-health-tools {
+    width: calc(100% - 32px) !important;
+    max-width: none !important;
+    margin: 12px 16px 0 !important;
+    padding: 14px !important;
     box-sizing: border-box !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
   }
 
-  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) [class*="herd-"][class*="grid"],
-  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) [class*="production-"][class*="grid"],
-  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) [class*="reproduction-"][class*="grid"],
-  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) [class*="health-"][class*="grid"] {
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-production-context > header,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-reproduction-tools > header,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-health-tools > header {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    margin: 0 0 11px !important;
+    padding: 0 !important;
+  }
+
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-production-context > header > div,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-reproduction-tools > header > div,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-health-tools > header > div {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+  }
+
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-production-context header h2,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-reproduction-tools header h2,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-health-tools header h2 {
+    margin: 2px 0 3px !important;
+    font-size: 17px !important;
+    line-height: 1.15 !important;
+    letter-spacing: -.025em !important;
+  }
+
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-production-context header p,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-reproduction-tools header p,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-health-tools header p {
+    margin: 0 !important;
+    font-size: 9.5px !important;
+    line-height: 1.35 !important;
+  }
+
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-production-context header > b {
+    flex: 0 0 auto !important;
+    max-width: 92px !important;
+    padding: 5px 8px !important;
+    font-size: 8.5px !important;
+    white-space: nowrap !important;
+  }
+
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-production-grid,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-reproduction-grid,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-health-grid {
+    width: 100% !important;
+    display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;
+    gap: 8px !important;
   }
 
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-production-card,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-reproduction-card,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-health-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 68px !important;
+    padding: 10px 11px !important;
+    display: grid !important;
+    grid-template-columns: 39px minmax(0, 1fr) auto 16px !important;
+    gap: 9px !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-production-card > span,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-reproduction-card > span,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-health-card > span {
+    width: 39px !important;
+    height: 39px !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 12px !important;
+  }
+
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-production-card > div,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-reproduction-card > div,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-health-card > div {
+    min-width: 0 !important;
+    text-align: left !important;
+  }
+
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-production-card strong,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-reproduction-card strong,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-health-card strong {
+    display: block !important;
+    font-size: 12px !important;
+    line-height: 1.18 !important;
+  }
+
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-production-card small,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-reproduction-card small,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-health-card small {
+    display: block !important;
+    margin-top: 3px !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    font-size: 9px !important;
+  }
+
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-production-card > b,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-reproduction-card > b,
+  .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .herd-health-card > b {
+    max-width: 90px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    font-size: 8.5px !important;
+  }
+
+  /* Lista de animais */
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) > .animal-list {
     width: 100% !important;
-    margin: 12px 0 0 !important;
+    margin: 14px 0 0 !important;
     padding: 0 16px !important;
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;
@@ -203,7 +317,6 @@
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .animal-copy strong {
     display: block !important;
     margin-top: 2px !important;
-    max-width: 100% !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
@@ -214,7 +327,6 @@
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .animal-copy small {
     display: block !important;
     margin-top: 3px !important;
-    max-width: 100% !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
@@ -223,7 +335,7 @@
 
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .animal-side {
     min-width: 18px !important;
-    max-width: 74px !important;
+    max-width: 72px !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-end !important;
@@ -232,16 +344,16 @@
   }
 
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .tag-badge {
-    max-width: 70px !important;
+    max-width: 68px !important;
     padding: 4px 6px !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    font-size: 7.8px !important;
+    font-size: 7.7px !important;
   }
 
   .hydra-root .phone-app .app-content > .screen:has(.nfc-inline-card) .empty-state {
-    margin: 12px 16px 0 !important;
     width: auto !important;
+    margin: 14px 16px 0 !important;
   }
 }
