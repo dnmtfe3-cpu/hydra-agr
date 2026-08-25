@@ -1,6 +1,11 @@
-import { BadgeCheck, Beef as Cow, CalendarDays, ExternalLink, Fingerprint, HeartPulse, Nfc, ShieldCheck, Weight } from "lucide-react";
+import { BadgeCheck, Beef as Cow, CalendarDays, ExternalLink, Fingerprint, HeartPulse, MapPin, Nfc, ShieldCheck, Weight } from "lucide-react";
 import type { Animal } from "../../lib/hydra-types";
 import { publicMediaUrl } from "../../services/supabase";
+
+export type PublicAnimalOrigin = {
+  propertyName?: string;
+  municipality?: string;
+};
 
 export type PublicAnimalSnapshot = {
   identification: string;
@@ -12,11 +17,13 @@ export type PublicAnimalSnapshot = {
   weight?: number;
   status?: string;
   photoPath?: string;
+  propertyName?: string;
+  municipality?: string;
 };
 
-const PUBLIC_KEYS = ["pa", "i", "n", "s", "b", "sx", "bd", "w", "st", "ph"] as const;
+const PUBLIC_KEYS = ["pa", "i", "n", "s", "b", "sx", "bd", "w", "st", "ph", "pn", "pm"] as const;
 
-export function buildPublicAnimalUrl(animal: Animal, photoPath?: string) {
+export function buildPublicAnimalUrl(animal: Animal, photoPath?: string, origin?: PublicAnimalOrigin) {
   const url = new URL(window.location.origin);
   url.searchParams.set("pa", "1");
   url.searchParams.set("i", animal.identification.slice(0, 40));
@@ -28,6 +35,8 @@ export function buildPublicAnimalUrl(animal: Animal, photoPath?: string) {
   if (animal.weight && Number.isFinite(animal.weight)) url.searchParams.set("w", String(animal.weight));
   if (animal.status) url.searchParams.set("st", animal.status.slice(0, 20));
   if (photoPath) url.searchParams.set("ph", photoPath.slice(0, 180));
+  if (origin?.propertyName) url.searchParams.set("pn", origin.propertyName.slice(0, 40));
+  if (origin?.municipality) url.searchParams.set("pm", origin.municipality.slice(0, 28));
   return url.toString();
 }
 
@@ -53,6 +62,8 @@ export function readPublicAnimalSnapshot(href = window.location.href): PublicAni
       weight: Number.isFinite(parsedWeight) && parsedWeight > 0 ? parsedWeight : undefined,
       status: url.searchParams.get("st")?.trim().slice(0, 20) || undefined,
       photoPath,
+      propertyName: url.searchParams.get("pn")?.trim().slice(0, 40) || undefined,
+      municipality: url.searchParams.get("pm")?.trim().slice(0, 28) || undefined,
     };
   } catch {
     return null;
@@ -87,7 +98,8 @@ function animalAge(value?: string) {
 }
 
 export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimalSnapshot; onOpenApp: () => void }) {
-  const photoUrl = animal.photoPath ? publicMediaUrl("community-media", animal.photoPath) : undefined;
+  const rawPhotoUrl = animal.photoPath ? publicMediaUrl("community-media", animal.photoPath) : undefined;
+  const photoUrl = rawPhotoUrl ? `${rawPhotoUrl}${rawPhotoUrl.includes("?") ? "&" : "?"}hydra=${Date.now()}` : undefined;
   const age = animalAge(animal.birthDate);
 
   return (
@@ -115,6 +127,17 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
           <div><Nfc size={16} /><span><strong>Acesso rápido</strong><small>NFC e QR apontam para esta ficha</small></span></div>
         </div>
 
+        {(animal.propertyName || animal.municipality) && (
+          <div className="public-animal-highlight">
+            <MapPin size={20} />
+            <div>
+              <span>Propriedade de origem</span>
+              <strong>{animal.propertyName || "Propriedade cadastrada"}</strong>
+              <small>{animal.municipality ? `${animal.municipality} · origem informada no cadastro do Hydra Agro` : "Origem informada no cadastro do Hydra Agro."}</small>
+            </div>
+          </div>
+        )}
+
         <section className="public-animal-section">
           <div className="public-animal-section-title"><Fingerprint size={17} /><div><strong>Identificação</strong><small>Dados básicos do animal</small></div></div>
           <div className="public-animal-data public-animal-data-detailed">
@@ -140,7 +163,7 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
           <div>
             <small>VALIDAÇÃO HYDRA ID</small>
             <strong>Identificação digital compartilhada</strong>
-            <p>Esta ficha foi preparada para acesso rápido por NFC ou QR e reúne apenas informações públicas de identificação do animal.</p>
+            <p>Esta ficha foi preparada para acesso rápido por NFC ou QR e reúne informações públicas que ajudam a identificar o animal e sua propriedade de origem.</p>
           </div>
           <BadgeCheck size={22} className="public-animal-validation-check" />
         </div>
@@ -151,7 +174,7 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
 
         <div className="public-animal-privacy">
           <ShieldCheck size={20} />
-          <p><strong>Privacidade protegida</strong><small>Conta, dados da propriedade, equipe, telefone, observações e histórico interno não aparecem nesta ficha pública.</small></p>
+          <p><strong>Privacidade protegida</strong><small>Para ajudar na identificação de animais perdidos, somente o nome da propriedade e o município podem aparecer. Telefone, e-mail, endereço detalhado, equipe, observações e histórico interno continuam privados.</small></p>
         </div>
 
         <button className="public-animal-open" onClick={onOpenApp}><ExternalLink size={18} /> Abrir Hydra Agro</button>
