@@ -66,10 +66,10 @@ export function HerdCareGuide({ account }: { account: HydraAccount }) {
   const guide = guides[species] || guides.Outra;
 
   return <div className="herd-care-guide">
-    <div className="herd-care-intro"><span><Sprout size={21} /></span><div><strong>Alimentação, habitat e manejo</strong><small>Guia por espécie usando os animais cadastrados no rebanho.</small></div></div>
+    <div className="herd-care-intro"><span><Sprout size={21} /></span><div><strong>Nutrição, alimentação e manejo</strong><small>Orientações por espécie com foco em alimentação adequada, bem-estar e uso responsável dos recursos.</small></div></div>
     <div className="herd-care-species">{availableSpecies.map((name) => <button key={name} className={species === name ? "active" : ""} onClick={() => setSpecies(name)}>{name}</button>)}</div>
     <div className="herd-care-grid">
-      <CareCard icon={<Beef size={20} />} title="O que comem" items={guide.food} />
+      <CareCard icon={<Beef size={20} />} title="Nutrição e alimentação" items={guide.food} />
       <CareCard icon={<Sprout size={20} />} title="Habitat adequado" items={guide.environment} />
       <CareCard icon={<HeartPulse size={20} />} title="Bem-estar e observação" items={guide.welfare} />
       <CareCard icon={<Pill size={20} />} title="Saúde e medicamentos" items={guide.health} />
