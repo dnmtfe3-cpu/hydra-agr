@@ -1,4 +1,4 @@
-import { BadgeCheck, Beef as Cow, ExternalLink, ShieldCheck, Weight } from "lucide-react";
+import { BadgeCheck, Beef as Cow, ExternalLink, Nfc, ShieldCheck, Weight } from "lucide-react";
 import type { Animal } from "../../lib/hydra-types";
 import { publicMediaUrl } from "../../services/supabase";
 
@@ -65,8 +65,8 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
       <section className="public-animal-shell">
         <header className="public-animal-brand">
           <span className="public-animal-logo"><Cow size={27} /></span>
-          <div><strong>Hydra Agro</strong><small>Identificação animal</small></div>
-          <span className="public-animal-safe"><ShieldCheck size={16} /> público</span>
+          <div><strong>Hydra Agro</strong><small>Hydra ID · identificação animal</small></div>
+          <span className="public-animal-safe"><Nfc size={16} /> NFC / QR</span>
         </header>
 
         <div className={`public-animal-hero ${photoUrl ? "has-photo" : ""}`}>
@@ -74,7 +74,7 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
           {photoUrl && <div className="public-animal-hero-shade" style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(180deg, rgba(5,24,16,.08) 15%, rgba(5,24,16,.28) 46%, rgba(5,24,16,.88) 100%)" }} />}
           {!photoUrl && <span className="public-animal-icon"><Cow size={42} /></span>}
           <div className="public-animal-hero-copy" style={{ position: "relative", zIndex: 2 }}>
-            <span className="public-animal-kicker"><BadgeCheck size={15} /> FICHA COMPARTILHADA</span>
+            <span className="public-animal-kicker"><BadgeCheck size={15} /> HYDRA ID</span>
             <h1>{animal.name || "Animal identificado"}</h1>
             <p>{animal.identification}</p>
           </div>
@@ -91,11 +91,11 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
 
         <div className="public-animal-privacy">
           <ShieldCheck size={20} />
-          <p><strong>Ficha pública limitada</strong><small>Este link mostra somente dados básicos escolhidos para identificação e, quando disponível, uma cópia pública da foto do animal. Dados da conta, propriedade, equipe e observações privadas não são compartilhados.</small></p>
+          <p><strong>Identidade pública protegida</strong><small>O Hydra ID mostra apenas os dados básicos usados para identificar este animal e, quando disponível, uma cópia pública da foto. Conta, propriedade, equipe e observações privadas não são compartilhadas.</small></p>
         </div>
 
         <button className="public-animal-open" onClick={onOpenApp}><ExternalLink size={18} /> Abrir Hydra Agro</button>
-        <p className="public-animal-footer">Tecnologia que nasce do campo</p>
+        <p className="public-animal-footer">Hydra ID · tecnologia que nasce do campo</p>
       </section>
     </main>
   );
