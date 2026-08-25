@@ -4,7 +4,7 @@ import { Modal } from "../../components/ui";
 import { showAppToast } from "../../components/modal-system";
 import type { Animal } from "../../lib/hydra-types";
 import { uploadPublicImage } from "../../services/media-service";
-import { isWebNfcSupported, writeWebNfcUrl } from "../../services/nfc-service";
+import { canWriteNfcUrl, writeNfcUrl } from "../../services/nfc-service";
 import { requireSupabase } from "../../services/supabase";
 import { buildPublicAnimalUrl } from "./public-animal-card";
 
@@ -23,7 +23,7 @@ export function AnimalPublicShare({ animal }: { animal: Animal }) {
   const [publicPhotoPath, setPublicPhotoPath] = useState<string>();
   const publicUrl = useMemo(() => buildPublicAnimalUrl(animal, publicPhotoPath), [animal, publicPhotoPath]);
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=10&data=${encodeURIComponent(publicUrl)}`;
-  const canWriteWebNfc = isWebNfcSupported();
+  const canWriteNfc = canWriteNfcUrl();
   const hasPhoto = Boolean(animal.photoPath || animal.photoUrl);
 
   async function preparePublicPhoto() {
@@ -111,8 +111,8 @@ export function AnimalPublicShare({ animal }: { animal: Animal }) {
     setWriting(true);
     try {
       const url = await currentPublicUrl();
-      await writeWebNfcUrl(url);
-      showAppToast("Link público gravado na etiqueta NFC");
+      await writeNfcUrl(url);
+      showAppToast("Hydra ID gravado na etiqueta NFC");
     } catch (caught) {
       showAppToast(caught instanceof Error ? caught.message : "Não foi possível gravar a etiqueta.", "error");
     } finally {
@@ -124,13 +124,13 @@ export function AnimalPublicShare({ animal }: { animal: Animal }) {
     <>
       <button className="animal-public-share-button" onClick={() => setOpen(true)}>
         <span><QrCode size={20} /></span>
-        <div><strong>NFC / QR público</strong><small>Abrir uma ficha básica sem entrar na conta</small></div>
+        <div><strong>Hydra ID · NFC / QR</strong><small>Abra a ficha pública do animal sem entrar na conta</small></div>
         <ChevronRight size={18} />
       </button>
 
-      <Modal open={open} onClose={() => setOpen(false)} eyebrow="DEMONSTRAÇÃO" title="NFC e QR público" wide dismissible={!writing && !photoBusy}>
+      <Modal open={open} onClose={() => setOpen(false)} eyebrow="HYDRA ID" title="Identidade digital do animal" wide dismissible={!writing && !photoBusy}>
         <div className="public-share-modal">
-          <p className="public-share-intro">Este link contém somente uma cópia dos dados básicos mostrados abaixo. Se houver foto, uma cópia dela também é publicada para aparecer na ficha. Informações privadas da conta e da propriedade não entram no link.</p>
+          <p className="public-share-intro">O mesmo link pode ser usado no QR Code e gravado dentro da etiqueta NFC. Ao aproximar um celular da tag, a ficha pública deste animal abre no navegador sem precisar entrar no Hydra Agro.</p>
 
           {hasPhoto && <div className={`public-share-photo-status ${publicPhotoPath ? "ready" : photoError ? "error" : ""}`}>{photoBusy ? <LoaderCircle size={18} className="spin" /> : <ImageIcon size={18} />}<span><strong>{publicPhotoPath ? "Foto incluída" : photoError ? "Foto não incluída" : "Preparando foto"}</strong><small>{publicPhotoPath ? "Ela aparecerá ao abrir o NFC ou QR." : photoError ? "O link continuará funcionando sem a imagem." : "Criando uma cópia pública somente desta imagem."}</small></span></div>}
 
@@ -138,12 +138,12 @@ export function AnimalPublicShare({ animal }: { animal: Animal }) {
           <div className="public-share-link">{publicUrl}</div>
 
           <div className="public-share-actions">
-            <button className="secondary-button" onClick={() => void copyLink()} disabled={photoBusy}><Copy size={17} /> Copiar link</button>
-            <button className="secondary-button" onClick={() => void shareLink()} disabled={photoBusy}><Share2 size={17} /> Compartilhar</button>
-            {canWriteWebNfc && <button className="primary-button full" onClick={() => void writeTag()} disabled={writing || photoBusy}><Radio size={17} /> {writing ? "Aproxime a etiqueta…" : "Gravar link na etiqueta NFC"}</button>}
+            <button className="secondary-button" onClick={() => void copyLink()} disabled={photoBusy || writing}><Copy size={17} /> Copiar link</button>
+            <button className="secondary-button" onClick={() => void shareLink()} disabled={photoBusy || writing}><Share2 size={17} /> Compartilhar</button>
+            {canWriteNfc && <button className="primary-button full" onClick={() => void writeTag()} disabled={writing || photoBusy}><Radio size={17} /> {writing ? "Aproxime a etiqueta…" : "Gravar Hydra ID na etiqueta"}</button>}
           </div>
 
-          <p className="public-share-note"><Nfc size={15} /> No iPhone, a etiqueta deve estar gravada como URL. Ao aproximar o aparelho, o sistema mostra a notificação e abre esta ficha no navegador. Para gravar pelo próprio site, use Android com Chrome e Web NFC compatível.</p>
+          <p className="public-share-note"><Nfc size={15} /> Depois de gravada, a etiqueta funciona sozinha: encoste um celular compatível e toque na notificação para abrir a ficha pública. A conta, a propriedade, a equipe e as observações privadas continuam escondidas.</p>
         </div>
       </Modal>
     </>
