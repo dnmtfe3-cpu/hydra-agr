@@ -37,3 +37,6 @@
 
 /* Correção final do Rebanho no celular. */
 @import "./herd-mobile-fix.css?v=herd-mobile-fix-1";
+
+/* Destaques do tema da feira: nutrição, alimentação e agricultura familiar. */
+@import "./fair-theme-highlight.css?v=fair-theme-highlight-1";
