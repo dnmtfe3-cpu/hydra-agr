@@ -1,6 +1,6 @@
 import { Capacitor } from "@capacitor/core";
 import { Haptics, NotificationType } from "@capacitor/haptics";
-import { CapacitorNfc, type NfcEvent } from "@capgo/capacitor-nfc";
+import { CapacitorNfc, type NfcEvent, type NdefRecord } from "@capgo/capacitor-nfc";
 
 export type NfcAvailability = "ready" | "disabled" | "unsupported" | "web";
 
@@ -30,6 +30,11 @@ let webAbortController: AbortController | null = null;
 export function isWebNfcSupported() {
   if (typeof window === "undefined") return false;
   return Boolean((window as WebNfcWindow).NDEFReader && window.isSecureContext);
+}
+
+export function canWriteNfcUrl() {
+  if (typeof window === "undefined") return false;
+  return Capacitor.isNativePlatform() || isWebNfcSupported();
 }
 
 export async function getNfcAvailability(): Promise<NfcAvailability> {
@@ -153,11 +158,99 @@ export async function readNfcTag(timeoutMs = 30_000): Promise<string> {
   });
 }
 
+function urlNdefRecord(url: string): NdefRecord {
+  const bytes = Array.from(new TextEncoder().encode(url));
+  return {
+    tnf: 0x01,
+    type: [0x55],
+    id: [],
+    // 0x00 = URI sem abreviação. Assim qualquer URL HTTPS válida é preservada.
+    payload: [0x00, ...bytes],
+  };
+}
+
+async function writeNativeNfcUrl(url: string, timeoutMs: number) {
+  const availability = await getNfcAvailability();
+  if (availability !== "ready") {
+    if (availability === "disabled") throw new Error("Ative o NFC do celular para gravar a etiqueta.");
+    throw new Error("Este aparelho não oferece gravação NFC compatível.");
+  }
+
+  const record = urlNdefRecord(url);
+
+  return new Promise<string>(async (resolve, reject) => {
+    let finished = false;
+    let writing = false;
+    let timer: number | undefined;
+    let listener: { remove: () => Promise<void> } | undefined;
+
+    const cleanup = async () => {
+      if (timer) window.clearTimeout(timer);
+      await listener?.remove().catch(() => undefined);
+      await CapacitorNfc.stopScanning().catch(() => undefined);
+    };
+
+    const fail = async (error: unknown) => {
+      if (finished) return;
+      finished = true;
+      await cleanup();
+      reject(error instanceof Error ? error : new Error("Não foi possível gravar a etiqueta NFC."));
+    };
+
+    try {
+      listener = await CapacitorNfc.addListener("nfcEvent", async (event) => {
+        if (finished || writing) return;
+        const code = tagCode(event);
+        if (!code) return;
+        writing = true;
+
+        try {
+          if (event.tag.isWritable === false) throw new Error("Esta etiqueta NFC está protegida contra gravação.");
+
+          const estimatedBytes = record.payload.length + record.type.length + 8;
+          if (event.tag.maxSize && estimatedBytes > event.tag.maxSize) {
+            throw new Error("O link é maior que a memória disponível nesta etiqueta NFC.");
+          }
+
+          await CapacitorNfc.write({ records: [record], allowFormat: true });
+          finished = true;
+          await cleanup();
+          await Haptics.notification({ type: NotificationType.Success }).catch(() => undefined);
+          resolve(code);
+        } catch (error) {
+          writing = false;
+          await fail(error);
+        }
+      });
+
+      timer = window.setTimeout(() => {
+        void fail(new Error("Tempo de gravação esgotado. Aproxime a etiqueta novamente."));
+      }, timeoutMs);
+
+      await CapacitorNfc.startScanning({
+        invalidateAfterFirstRead: false,
+        alertMessage: "Aproxime a etiqueta para gravar o Hydra ID.",
+        iosSessionType: "tag",
+      });
+    } catch (error) {
+      await fail(error);
+    }
+  });
+}
+
 export async function writeWebNfcUrl(url: string) {
   const Reader = typeof window !== "undefined" ? (window as WebNfcWindow).NDEFReader : undefined;
   if (!Reader || !window.isSecureContext) throw new Error("A gravação Web NFC precisa de Android com Chrome compatível e HTTPS.");
   const reader = new Reader();
   await reader.write({ records: [{ recordType: "url", data: url }] });
+}
+
+export async function writeNfcUrl(url: string, timeoutMs = 30_000) {
+  if (!Capacitor.isNativePlatform()) {
+    await writeWebNfcUrl(url);
+    return undefined;
+  }
+  return writeNativeNfcUrl(url, timeoutMs);
 }
 
 export async function stopNfcRead() {
