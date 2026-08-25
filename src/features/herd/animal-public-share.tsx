@@ -223,14 +223,30 @@ export function AnimalPublicShare({ animal }: { animal: Animal }) {
             </article>
           </div>
 
-          <div className="public-share-qr-wrap"><img src={qrUrl} alt={`QR Code da ficha pública de ${animal.name || animal.identification}`} /></div>
-          <div className="public-share-link">{publicUrl}</div>
+          <section className="hydra-id-access-card" aria-label="QR Code e link público do Hydra ID">
+            <header className="hydra-id-access-head">
+              <span><QrCode size={21} /></span>
+              <div>
+                <small>ACESSO PÚBLICO</small>
+                <strong>QR Code do Hydra ID</strong>
+                <em>Escaneie para abrir a identidade deste animal.</em>
+              </div>
+            </header>
 
-          <div className="public-share-actions">
-            <button className="secondary-button" onClick={() => void copyLink()} disabled={photoBusy || writing || originBusy}><Copy size={17} /> Copiar link</button>
-            <button className="secondary-button" onClick={() => void shareLink()} disabled={photoBusy || writing || originBusy}><Share2 size={17} /> Compartilhar</button>
-            {canWriteNfc && <button className="primary-button full" onClick={() => void writeTag()} disabled={writing || photoBusy || originBusy}><Radio size={17} /> {writing ? "Aproxime a etiqueta…" : "Gravar Hydra ID na etiqueta"}</button>}
-          </div>
+            <div className="hydra-id-access-qr"><img src={qrUrl} alt={`QR Code da ficha pública de ${animal.name || animal.identification}`} /></div>
+
+            <div className="hydra-id-access-link">
+              <small>LINK DA IDENTIDADE</small>
+              <div>{publicUrl}</div>
+            </div>
+
+            <div className="hydra-id-access-actions">
+              <button className="secondary-button" onClick={() => void copyLink()} disabled={photoBusy || writing || originBusy}><Copy size={17} /> Copiar link</button>
+              <button className="secondary-button" onClick={() => void shareLink()} disabled={photoBusy || writing || originBusy}><Share2 size={17} /> Compartilhar</button>
+            </div>
+          </section>
+
+          {canWriteNfc && <button className="primary-button hydra-id-nfc-write" onClick={() => void writeTag()} disabled={writing || photoBusy || originBusy}><Radio size={17} /> {writing ? "Aproxime a etiqueta…" : "Gravar Hydra ID na etiqueta"}</button>}
 
           <p className="public-share-note"><Nfc size={15} /> Nome da fazenda e município ajudam a identificar a origem do animal. Dados pessoais continuam privados.</p>
         </div>
