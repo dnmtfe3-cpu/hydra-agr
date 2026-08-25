@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useSyncExternalStore } from "react";
+import { installHydraTapSounds, playHydraSound } from "../services/interaction-sounds";
 
 type OverlayEntry = {
   token: symbol;
@@ -21,6 +22,8 @@ let toastId = 0;
 let bodyOverflowBeforeOverlay = "";
 let bodyScrollLocked = false;
 const emptyToasts: AppToast[] = [];
+
+if (typeof document !== "undefined") installHydraTapSounds();
 
 function emitOverlayChange() {
   const active = overlays.length > 0;
@@ -100,6 +103,12 @@ export function showAppToast(message: string, tone: AppToast["tone"] = "success"
   const toast = { id: ++toastId, message, tone } satisfies AppToast;
   toasts = [...toasts, toast].slice(-3);
   toastListeners.forEach((listener) => listener());
+
+  const normalized = message.toLocaleLowerCase("pt-BR");
+  if (tone === "error") playHydraSound("error");
+  else if (normalized.includes("nfc") || normalized.includes("tag")) playHydraSound("nfc");
+  else if (tone === "success") playHydraSound("success");
+
   window.setTimeout(() => dismissToast(toast.id), tone === "error" ? 4300 : 2800);
   return toast.id;
 }
