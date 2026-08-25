@@ -2,6 +2,7 @@ type HydraSound = "tap" | "success" | "nfc" | "error";
 
 let audioContext: AudioContext | null = null;
 let lastTapAt = 0;
+let tapSoundsInstalled = false;
 
 function context() {
   if (typeof window === "undefined") return null;
@@ -35,28 +36,29 @@ export function playHydraSound(sound: HydraSound) {
       const now = Date.now();
       if (now - lastTapAt < 70) return;
       lastTapAt = now;
-      tone(520, 0.045, 0.018, 0, "sine");
+      tone(520, 0.045, 0.014);
       return;
     }
     if (sound === "success") {
-      tone(620, 0.075, 0.025);
-      tone(820, 0.09, 0.022, 0.065);
+      tone(620, 0.075, 0.022);
+      tone(820, 0.09, 0.02, 0.065);
       return;
     }
     if (sound === "nfc") {
-      tone(740, 0.07, 0.03);
-      tone(980, 0.09, 0.028, 0.07);
-      tone(1240, 0.11, 0.024, 0.14);
+      tone(740, 0.07, 0.028);
+      tone(980, 0.09, 0.026, 0.07);
+      tone(1240, 0.11, 0.022, 0.14);
       return;
     }
-    tone(260, 0.12, 0.02, 0, "triangle");
+    tone(260, 0.12, 0.018, 0, "triangle");
   } catch {
-    // Áudio é apenas feedback; nunca deve bloquear a interface.
+    // O feedback sonoro nunca deve bloquear uma ação do app.
   }
 }
 
 export function installHydraTapSounds() {
-  if (typeof document === "undefined") return () => {};
+  if (typeof document === "undefined" || tapSoundsInstalled) return () => {};
+  tapSoundsInstalled = true;
   const handlePointer = (event: PointerEvent) => {
     if (event.button !== 0) return;
     const target = event.target instanceof Element ? event.target.closest("button,[role='button']") : null;
@@ -64,5 +66,8 @@ export function installHydraTapSounds() {
     playHydraSound("tap");
   };
   document.addEventListener("pointerdown", handlePointer, { passive: true });
-  return () => document.removeEventListener("pointerdown", handlePointer);
+  return () => {
+    document.removeEventListener("pointerdown", handlePointer);
+    tapSoundsInstalled = false;
+  };
 }
