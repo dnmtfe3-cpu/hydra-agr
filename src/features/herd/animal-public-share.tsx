@@ -7,6 +7,7 @@ import { uploadPublicImage } from "../../services/media-service";
 import { canWriteNfcUrl, writeNfcUrl } from "../../services/nfc-service";
 import { requireSupabase } from "../../services/supabase";
 import { buildPublicAnimalUrl, type PublicAnimalOrigin } from "./public-animal-card";
+import "./hydra-id-share-cards.css";
 
 function mimeFromPath(path?: string) {
   const normalized = path?.toLowerCase() ?? "";
@@ -163,6 +164,24 @@ export function AnimalPublicShare({ animal }: { animal: Animal }) {
     }
   }
 
+  const photoTitle = photoBusy
+    ? "Preparando..."
+    : publicPhotoPath
+      ? "Disponível"
+      : photoError
+        ? "Sem imagem"
+        : hasPhoto
+          ? "No Hydra ID"
+          : "Não cadastrada";
+
+  const photoCaption = publicPhotoPath
+    ? "Reconhecimento visual"
+    : photoError
+      ? "A ficha continua ativa"
+      : hasPhoto
+        ? "Foto do cadastro"
+        : "Adicione uma foto ao animal";
+
   return (
     <>
       <button className="animal-public-share-button" onClick={() => setOpen(true)}>
@@ -173,11 +192,36 @@ export function AnimalPublicShare({ animal }: { animal: Animal }) {
 
       <Modal open={open} onClose={() => setOpen(false)} eyebrow="HYDRA ID" title="Identidade digital do animal" wide dismissible={!writing && !photoBusy}>
         <div className="public-share-modal">
-          <p className="public-share-intro">O mesmo link pode ser usado no QR Code e gravado dentro da etiqueta NFC. Ao aproximar um celular da tag, a ficha pública abre no navegador com os dados de identificação e a propriedade de origem do animal.</p>
+          <p className="public-share-intro">Uma identidade simples para reconhecer o animal e descobrir de qual propriedade ele veio.</p>
 
-          <div className="public-share-photo-status ready"><MapPin size={18} /><span><strong>{originBusy ? "Localizando origem…" : origin.propertyName || "Origem identificada"}</strong><small>{origin.municipality ? `${origin.municipality} · referência de origem do animal` : "A propriedade vinculada aparece na identidade digital."}</small></span></div>
+          <div className="hydra-id-info-grid">
+            <article className="hydra-id-info-card hydra-id-info-card-wide">
+              <span className="hydra-id-info-icon">{originBusy ? <LoaderCircle size={20} className="spin" /> : <MapPin size={20} />}</span>
+              <div className="hydra-id-info-copy">
+                <small>Propriedade de origem</small>
+                <strong>{originBusy ? "Localizando..." : origin.propertyName || "Propriedade vinculada"}</strong>
+                <em>{origin.municipality || "Origem registrada no Hydra Agro"}</em>
+              </div>
+            </article>
 
-          {hasPhoto && <div className={`public-share-photo-status ${publicPhotoPath ? "ready" : photoError ? "error" : ""}`}>{photoBusy ? <LoaderCircle size={18} className="spin" /> : <ImageIcon size={18} />}<span><strong>{publicPhotoPath ? "Identificação visual pronta" : photoError ? "Identificação visual indisponível" : "Preparando identificação visual"}</strong><small>{publicPhotoPath ? "O retrato deste animal já faz parte da Hydra ID." : photoError ? "A identidade digital continua disponível normalmente, mesmo sem imagem." : "Deixando a ficha pronta para reconhecimento visual."}</small></span></div>}
+            <article className={`hydra-id-info-card is-photo ${photoError ? "is-error" : ""}`}>
+              <span className="hydra-id-info-icon">{photoBusy ? <LoaderCircle size={19} className="spin" /> : <ImageIcon size={19} />}</span>
+              <div className="hydra-id-info-copy">
+                <small>Foto</small>
+                <strong>{photoTitle}</strong>
+                <em>{photoCaption}</em>
+              </div>
+            </article>
+
+            <article className="hydra-id-info-card is-access">
+              <span className="hydra-id-info-icon"><Nfc size={19} /></span>
+              <div className="hydra-id-info-copy">
+                <small>Acesso</small>
+                <strong>NFC + QR</strong>
+                <em>Abre sem login</em>
+              </div>
+            </article>
+          </div>
 
           <div className="public-share-qr-wrap"><img src={qrUrl} alt={`QR Code da ficha pública de ${animal.name || animal.identification}`} /></div>
           <div className="public-share-link">{publicUrl}</div>
@@ -188,7 +232,7 @@ export function AnimalPublicShare({ animal }: { animal: Animal }) {
             {canWriteNfc && <button className="primary-button full" onClick={() => void writeTag()} disabled={writing || photoBusy || originBusy}><Radio size={17} /> {writing ? "Aproxime a etiqueta…" : "Gravar Hydra ID na etiqueta"}</button>}
           </div>
 
-          <p className="public-share-note"><Nfc size={15} /> A Hydra ID pode mostrar o nome da fazenda e o município para facilitar a identificação de animais que escaparem. Telefone, e-mail, endereço detalhado e dados privados continuam escondidos.</p>
+          <p className="public-share-note"><Nfc size={15} /> Nome da fazenda e município ajudam a identificar a origem do animal. Dados pessoais continuam privados.</p>
         </div>
       </Modal>
     </>
