@@ -1,0 +1,140 @@
+.hydra-id-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.hydra-id-info-card {
+  min-width: 0;
+  min-height: 92px;
+  padding: 13px;
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  align-items: start;
+  gap: 10px;
+  border: 1px solid #e0e4dd;
+  border-radius: 20px;
+  background: #fffefb;
+  color: #173629;
+  box-shadow: none;
+}
+
+.hydra-id-info-card-wide {
+  grid-column: 1 / -1;
+  min-height: 78px;
+  grid-template-columns: 42px 1fr;
+  background: #f2f6ef;
+  border-color: #dbe5d9;
+}
+
+.hydra-id-info-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: #eef3e9;
+  color: #3f6e53;
+}
+
+.hydra-id-info-card-wide .hydra-id-info-icon {
+  width: 42px;
+  height: 42px;
+  background: #dfeade;
+  color: #245b40;
+}
+
+.hydra-id-info-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.hydra-id-info-copy small {
+  color: #7d8881;
+  font-size: 7.5px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+
+.hydra-id-info-copy strong {
+  margin-top: 5px;
+  color: #1c3b2d;
+  font-size: 11px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.hydra-id-info-card-wide .hydra-id-info-copy strong {
+  font-family: var(--font-display), "Sora", system-ui, sans-serif;
+  font-size: 13px;
+  letter-spacing: -.02em;
+}
+
+.hydra-id-info-copy em {
+  margin-top: 4px;
+  color: #7c8780;
+  font-size: 7.7px;
+  font-style: normal;
+  line-height: 1.35;
+}
+
+.hydra-id-info-card.is-photo .hydra-id-info-icon {
+  background: #f3eee5;
+  color: #866334;
+}
+
+.hydra-id-info-card.is-access .hydra-id-info-icon {
+  background: #eaf2e8;
+  color: #2f6949;
+}
+
+.hydra-id-info-card.is-error .hydra-id-info-icon {
+  background: #f7ece8;
+  color: #9a5547;
+}
+
+.hydra-id-info-card .spin {
+  animation: hydra-id-card-spin .85s linear infinite;
+}
+
+@keyframes hydra-id-card-spin {
+  to { transform: rotate(360deg); }
+}
+
+.hydra-root.theme-dark .hydra-id-info-card {
+  border-color: #294235;
+  background: #0e1d15;
+  color: #eef3ef;
+}
+
+.hydra-root.theme-dark .hydra-id-info-card-wide {
+  border-color: #315141;
+  background: #12261b;
+}
+
+.hydra-root.theme-dark .hydra-id-info-icon {
+  background: #173326;
+  color: #9dc9a6;
+}
+
+.hydra-root.theme-dark .hydra-id-info-card.is-photo .hydra-id-info-icon {
+  background: #2b241a;
+  color: #d7ad72;
+}
+
+.hydra-root.theme-dark .hydra-id-info-copy small,
+.hydra-root.theme-dark .hydra-id-info-copy em {
+  color: #91a098;
+}
+
+.hydra-root.theme-dark .hydra-id-info-copy strong {
+  color: #eef3ef;
+}
+
+@media (max-width: 350px) {
+  .hydra-id-info-grid { grid-template-columns: 1fr; }
+  .hydra-id-info-card-wide { grid-column: auto; }
+}
