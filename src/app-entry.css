@@ -43,3 +43,6 @@
 
 /* Separação visual entre recursos gratuitos e Hydra Agro+. */
 @import "./premium-gates.css?v=premium-gates-1";
+
+/* Apresentação visual do plano Hydra Agro+. */
+@import "./premium-sales-redesign.css?v=premium-sales-redesign-1";
