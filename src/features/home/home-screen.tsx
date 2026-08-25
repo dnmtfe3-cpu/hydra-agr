@@ -17,6 +17,7 @@ import {
   NotebookTabs,
   Plus,
   RadioTower,
+  Recycle,
   ScanLine,
   Sprout,
   UsersRound,
@@ -25,6 +26,7 @@ import { HydraWordmark } from "../../components/brand";
 import type { Announcement, AppRoute, HydraAccount } from "../../lib/hydra-types";
 import { currentMonthTotals, loadProductionNotebook } from "../../services/family-farming-repository";
 import { requireSupabase } from "../../services/supabase";
+import { NutriCicloPanel } from "../family-farming/nutriciclo-panel";
 import { WeatherWidget } from "./weather-widget";
 
 type Props = {
@@ -53,6 +55,7 @@ function money(value: number) {
 export function HomeScreen({ account, navigate, onQuickAction, announcements }: Props) {
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [productionResult, setProductionResult] = useState<number | null>(null);
+  const [nutriCicloOpen, setNutriCicloOpen] = useState(false);
   const firstName = account.profile.name.split(/\s+/)[0] || "Produtor";
   const welcome = welcomeMessage();
   const today = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "2-digit", month: "long" }).format(new Date());
@@ -132,6 +135,12 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
         <ChevronRight size={19} />
       </button>
 
+      <button className="home-nutriciclo-card" onClick={() => setNutriCicloOpen(true)}>
+        <span><Recycle size={21} /></span>
+        <span><small>DIFERENCIAL HYDRA</small><strong>Hydra NutriCiclo</strong><em>Acompanhe o destino e o aproveitamento do que a família produz.</em></span>
+        <ChevronRight size={18} />
+      </button>
+
       <section className="property-hero">
         <div className="property-hero-top"><div><span className="property-kicker">Propriedade</span><h2>{account.property.name || "Propriedade não cadastrada"}</h2><p>{propertyReady ? `${account.property.mainActivity} · ${account.property.municipality}, ${account.property.state}` : "Complete a ficha da propriedade"}</p></div><button onClick={() => navigate("property")} aria-label="Editar propriedade"><Sprout size={20} /></button></div>
         <div className="property-metrics"><div><UsersRound size={20} /><span><strong>Equipe</strong><small>gestão e operações</small></span></div><div><Cow size={20} /><span><strong>{account.animals.length}</strong><small>{account.animals.length === 1 ? "animal" : "animais"}</small></span></div><div><ClipboardCheck size={20} /><span><strong>{pendingActivities.length}</strong><small>{pendingActivities.length === 1 ? "tarefa pendente" : "tarefas pendentes"}</small></span></div></div>
@@ -151,6 +160,7 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
       </section>
 
       <button className="home-fab-label" onClick={onQuickAction}><Plus size={19} /> Nova ação</button>
+      <NutriCicloPanel account={account} open={nutriCicloOpen} onClose={() => setNutriCicloOpen(false)} />
     </div>
   );
 }
