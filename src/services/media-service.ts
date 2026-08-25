@@ -42,8 +42,9 @@ export async function uploadPublicImage(
   const client = requireSupabase();
   const extension = extensionFor(file.type);
   const path = `${userId}/${stem}.${extension}`;
+  const isHydraIdPhoto = bucket === "community-media" && stem.startsWith("public-animal-");
   const { error } = await client.storage.from(bucket).upload(path, file, {
-    cacheControl: "3600",
+    cacheControl: isHydraIdPhoto ? "0" : "3600",
     contentType: file.type || "image/jpeg",
     upsert: true,
   });
