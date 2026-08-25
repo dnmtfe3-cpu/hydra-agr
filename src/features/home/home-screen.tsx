@@ -121,14 +121,14 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
         <button onClick={() => navigate("monitor")} aria-label="Monitorar" title="Monitorar"><span><RadioTower size={23} /></span></button>
         <button onClick={() => navigate("activities")} aria-label="Tarefas" title="Tarefas"><span><ClipboardCheck size={23} /></span></button>
         <button onClick={() => navigate("assistant")} aria-label="Assistente" title="Assistente"><span><MessageSquareText size={23} /></span></button>
-        <button onClick={() => navigate("property")} aria-label="Propriedade" title="Propriedade"><span><Sprout size={23} /></span></button>
+        <button className="production-shortcut" onClick={() => navigate("production")} aria-label="Caderno da Produção" title="Produção"><span><NotebookTabs size={23} /></span></button>
       </div>
 
       <button className="nfc-banner" onClick={() => navigate("nfc")}><span className="nfc-banner-icon"><ScanLine size={27} /></span><span className="nfc-banner-copy"><small>NFC / RFID</small><strong>Ler identificação do animal</strong><em>{countLabel(identifiedAnimals, "identificado", "identificados")} · {countLabel(account.nfcReadCount, "leitura", "leituras")}</em></span><ChevronRight size={22} /></button>
 
-      <button className="home-production-notebook-card" onClick={() => navigate("production")}>
+      <button className="home-production-notebook-card fair-theme-production" onClick={() => navigate("production")}>
         <span className="home-production-icon"><NotebookTabs size={22} /></span>
-        <span className="home-production-copy"><small>PRODUÇÃO</small><strong>{productionResult === null ? "Comece seu caderno da propriedade" : `${productionResult >= 0 ? "+ " : "− "}${money(productionResult)} resultado este mês`}</strong></span>
+        <span className="home-production-copy"><small>AGRICULTURA FAMILIAR</small><strong>{productionResult === null ? "Comece seu Caderno da Produção" : `${productionResult >= 0 ? "+ " : "− "}${money(productionResult)} resultado este mês`}</strong></span>
         <ChevronRight size={19} />
       </button>
 
