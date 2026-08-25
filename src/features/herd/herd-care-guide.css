@@ -1,1 +1,146 @@
-.herd-care-launch{margin-top:10px;width:100%;display:flex;align-items:center;gap:12px;padding:14px 15px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#f7fbf8,#fffaf1);box-shadow:var(--shadow);text-align:left}.herd-care-launch>span{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#e6f1e9;color:var(--green);flex:0 0 auto}.herd-care-launch>div{flex:1}.herd-care-launch strong,.herd-care-launch small{display:block}.herd-care-launch strong{font-size:12px}.herd-care-launch small{margin-top:3px;color:var(--muted);font-size:9px;line-height:1.45}.herd-care-launch>svg{color:var(--muted)}.herd-care-guide{display:grid;gap:14px}.herd-care-intro{display:flex;align-items:center;gap:11px;padding:13px;border:1px solid var(--line);background:#f7faf7;border-radius:14px}.herd-care-intro>span{width:40px;height:40px;border-radius:12px;background:#e3f0e7;color:var(--green);display:grid;place-items:center}.herd-care-intro strong,.herd-care-intro small{display:block}.herd-care-intro strong{font-size:12px}.herd-care-intro small{margin-top:3px;color:var(--muted);font-size:9px}.herd-care-species{display:flex;gap:7px;overflow:auto;padding-bottom:2px}.herd-care-species button{white-space:nowrap;border:1px solid var(--line);background:white;border-radius:999px;padding:8px 11px;font-size:9px;font-weight:800;color:var(--muted)}.herd-care-species button.active{background:var(--forest);border-color:var(--forest);color:white}.herd-care-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.herd-care-card{border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px}.herd-care-card>span{width:34px;height:34px;border-radius:10px;background:var(--orange-soft);color:var(--orange-dark);display:grid;place-items:center}.herd-care-card h3{font:800 13px Manrope;margin:10px 0 7px}.herd-care-card ul{margin:0;padding-left:17px;color:var(--muted);font-size:9px;line-height:1.55}.herd-care-card li+li{margin-top:4px}.herd-care-warning{display:flex;align-items:flex-start;gap:9px;padding:12px 13px;border:1px solid #efd8ad;background:#fff8e8;border-radius:13px;color:#725a2c}.herd-care-warning svg{flex:0 0 auto;margin-top:1px}.herd-care-warning p{margin:0;font-size:9px;line-height:1.5}@media(max-width:540px){.herd-care-grid{grid-template-columns:1fr}.herd-care-launch{padding:13px}.herd-care-card{padding:13px}}
+.herd-care-launch{margin-top:10px;width:100%;display:flex;align-items:center;gap:12px;padding:14px 15px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#f7fbf8,#fffaf1);box-shadow:var(--shadow);text-align:left}.herd-care-launch>span{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#e6f1e9;color:var(--green);flex:0 0 auto}.herd-care-launch>div{flex:1}.herd-care-launch strong,.herd-care-launch small{display:block}.herd-care-launch strong{font-size:12px}.herd-care-launch small{margin-top:3px;color:var(--muted);font-size:9px;line-height:1.45}.herd-care-launch>svg{color:var(--muted)}.herd-care-guide{display:grid;gap:14px}.herd-care-intro{display:flex;align-items:center;gap:11px;padding:13px;border:1px solid var(--line);background:#f7faf7;border-radius:14px}.herd-care-intro>span{width:40px;height:40px;border-radius:12px;background:#e3f0e7;color:var(--green);display:grid;place-items:center}.herd-care-intro strong,.herd-care-intro small{display:block}.herd-care-intro strong{font-size:12px}.herd-care-intro small{margin-top:3px;color:var(--muted);font-size:9px}.herd-care-species{display:flex;gap:7px;overflow:auto;padding-bottom:2px}.herd-care-species button{white-space:nowrap;border:1px solid var(--line);background:white;border-radius:999px;padding:8px 11px;font-size:9px;font-weight:800;color:var(--muted)}.herd-care-species button.active{background:var(--forest);border-color:var(--forest);color:white}.herd-care-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.herd-care-card{border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px}.herd-care-card>span{width:34px;height:34px;border-radius:10px;background:var(--orange-soft);color:var(--orange-dark);display:grid;place-items:center}.herd-care-card h3{font:800 13px Manrope;margin:10px 0 7px}.herd-care-card ul{margin:0;padding-left:17px;color:var(--muted);font-size:9px;line-height:1.55}.herd-care-card li+li{margin-top:4px}.herd-care-warning{display:flex;align-items:flex-start;gap:9px;padding:12px 13px;border:1px solid #efd8ad;background:#fff8e8;border-radius:13px;color:#725a2c}.herd-care-warning svg{flex:0 0 auto;margin-top:1px}.herd-care-warning p{margin:0;font-size:9px;line-height:1.5}
+
+/* Hydra Agro+ no Rebanho — linguagem visual inspirada nos cards da Home. */
+.herd-plus-lock{
+  margin:0 0 18px;
+  padding:15px;
+  border:1px solid #dde3dc;
+  border-radius:22px;
+  background:#fffefb;
+  color:#173629;
+  box-shadow:none;
+}
+.herd-plus-lock>header{
+  display:grid;
+  grid-template-columns:44px 1fr;
+  align-items:center;
+  gap:11px;
+  padding:1px 1px 13px;
+}
+.herd-plus-lock>header>span{
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:#f3eee2;
+  color:#8b672d;
+}
+.herd-plus-lock>header>div{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+.herd-plus-lock>header small{
+  color:#90764c;
+  font-size:7.5px;
+  font-weight:850;
+  letter-spacing:.045em;
+}
+.herd-plus-lock>header strong{
+  margin-top:3px;
+  font-family:var(--font-display),"Sora",system-ui,sans-serif;
+  font-size:13px;
+  line-height:1.18;
+  letter-spacing:-.02em;
+}
+.herd-plus-lock-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.herd-plus-lock-grid>div{
+  position:relative;
+  min-width:0;
+  min-height:91px;
+  padding:12px;
+  display:grid;
+  grid-template-columns:36px 1fr;
+  align-items:start;
+  gap:9px;
+  border:1px solid #e3e6e0;
+  border-radius:18px;
+  background:#f8f8f4;
+  color:#234333;
+}
+.herd-plus-lock-grid>div>svg:first-child{
+  width:36px;
+  height:36px;
+  padding:9px;
+  border-radius:12px;
+  background:#eaf1e7;
+  color:#467158;
+}
+.herd-plus-lock-grid>div:nth-child(2)>svg:first-child{
+  background:#f3eee5;
+  color:#7c633a;
+}
+.herd-plus-lock-grid>div:nth-child(3)>svg:first-child{
+  background:#edf0e8;
+  color:#5b705e;
+}
+.herd-plus-lock-grid>div:nth-child(4)>svg:first-child{
+  background:#e8f1eb;
+  color:#397051;
+}
+.herd-plus-lock-grid>div>span{
+  min-width:0;
+  padding-right:10px;
+  display:flex;
+  flex-direction:column;
+}
+.herd-plus-lock-grid>div strong{
+  font-size:9.5px;
+  line-height:1.25;
+}
+.herd-plus-lock-grid>div small{
+  margin-top:4px;
+  color:#7b867f;
+  font-size:7.5px;
+  line-height:1.35;
+}
+.herd-plus-lock-grid>div>svg:last-child{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:12px;
+  height:12px;
+  color:#a2aaa4;
+  opacity:.75;
+}
+.herd-plus-lock>p{
+  margin:12px 1px 0;
+  padding-top:11px;
+  border-top:1px solid #e4e7e1;
+  color:#78837c;
+  font-size:8px;
+  line-height:1.45;
+}
+.hydra-root.theme-dark .herd-plus-lock{
+  border-color:#294235;
+  background:#0e1d15;
+  color:#eef3ef;
+}
+.hydra-root.theme-dark .herd-plus-lock>header>span{
+  background:#2c251a;
+  color:#d9b071;
+}
+.hydra-root.theme-dark .herd-plus-lock>header small{color:#c0a06e}
+.hydra-root.theme-dark .herd-plus-lock-grid>div{
+  border-color:#294235;
+  background:#122219;
+  color:#edf3ef;
+}
+.hydra-root.theme-dark .herd-plus-lock-grid>div>svg:first-child{
+  background:#173326;
+  color:#9dc9a6;
+}
+.hydra-root.theme-dark .herd-plus-lock-grid>div:nth-child(2)>svg:first-child{
+  background:#2b241a;
+  color:#d7ad72;
+}
+.hydra-root.theme-dark .herd-plus-lock-grid>div small,
+.hydra-root.theme-dark .herd-plus-lock>p{color:#91a098}
+.hydra-root.theme-dark .herd-plus-lock>p{border-color:#294235}
+@media(max-width:540px){.herd-care-grid{grid-template-columns:1fr}.herd-care-launch{padding:13px}}
+@media(max-width:350px){.herd-plus-lock-grid{grid-template-columns:1fr}.herd-plus-lock-grid>div{min-height:76px}}
