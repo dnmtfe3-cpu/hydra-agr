@@ -40,3 +40,6 @@
 
 /* Destaques do tema da feira: nutrição, alimentação e agricultura familiar. */
 @import "./fair-theme-highlight.css?v=fair-theme-highlight-1";
+
+/* Separação visual entre recursos gratuitos e Hydra Agro+. */
+@import "./premium-gates.css?v=premium-gates-1";
