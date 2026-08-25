@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import { BadgeCheck, Camera, ChevronRight, Beef as Cow, Filter, History, LoaderCircle, Nfc, Pencil, Plus, Search, Sprout, Trash2, Weight } from "lucide-react";
+import { BadgeCheck, Camera, ChevronRight, Beef as Cow, Crown, Filter, History, LoaderCircle, LockKeyhole, Nfc, Pencil, Plus, Search, Sprout, Trash2, Weight } from "lucide-react";
 import { ConfirmDialog, EmptyState, Field, LoadingButton, Modal, ScreenHeader } from "../../components/ui";
 import { showAppToast } from "../../components/modal-system";
 import { makeId, type Animal, type AnimalHistoryEntry, type HydraAccount, type UpdateAccount } from "../../lib/hydra-types";
@@ -58,6 +58,7 @@ export function HerdScreen({ account, updateAccount, openNfc, focusAnimalId, sav
   const [deleteTarget, setDeleteTarget] = useState<Animal | null>(null);
   const photoRef = useRef<HTMLInputElement>(null);
   const selected = account.animals.find((item) => item.id === selectedId) ?? null;
+  const isPlus = account.profile.plan === "Hydra Agro+";
 
   useEffect(() => { if (focusAnimalId) setSelectedId(focusAnimalId); }, [focusAnimalId]);
 
@@ -212,15 +213,26 @@ export function HerdScreen({ account, updateAccount, openNfc, focusAnimalId, sav
       {filtersOpen && <div className="filter-chips">{["Todos", "Bovino", "Caprino", "Ovino", "Equino", "Identificados"].map((item) => <button key={item} className={filter === item ? "active" : ""} onClick={() => setFilter(item)}>{item}</button>)}</div>}
 
       <button className="nfc-inline-card" onClick={() => openNfc()}><span><Nfc size={23} /></span><div><strong>Localizar por NFC/RFID</strong><small>Aproxime uma tag compatível ou digite o código.</small></div><ChevronRight size={19} /></button>
-      <button className="herd-care-launch" onClick={() => setCareOpen(true)}><span><Sprout size={23} /></span><div><strong>Alimentação e manejo</strong><small>Dicas de alimentação, habitat, bem-estar, saúde e uso sustentável por espécie.</small></div><ChevronRight size={19} /></button>
 
-      <HerdProductionTools account={account} updateAccount={updateAccount} />
-      <HerdReproductionTools account={account} updateAccount={updateAccount} />
-      <HerdHealthTools account={account} />
+      {isPlus ? <>
+        <button className="herd-care-launch" onClick={() => setCareOpen(true)}><span><Sprout size={23} /></span><div><strong>Nutrição, alimentação e manejo</strong><small>Orientações, habitat, bem-estar e uso sustentável por espécie.</small></div><ChevronRight size={19} /></button>
+        <HerdProductionTools account={account} updateAccount={updateAccount} />
+        <HerdReproductionTools account={account} updateAccount={updateAccount} />
+        <HerdHealthTools account={account} />
+      </> : <section className="herd-plus-lock" aria-label="Recursos Hydra Agro+">
+        <header><span><Crown size={20} /></span><div><small>HYDRA AGRO+</small><strong>Ferramentas avançadas do rebanho</strong></div></header>
+        <div className="herd-plus-lock-grid">
+          <div><Sprout size={18} /><span><strong>Nutrição e manejo</strong><small>Orientações e acompanhamento</small></span><LockKeyhole size={15} /></div>
+          <div><Cow size={18} /><span><strong>Produção do rebanho</strong><small>Leite, ovos, mel e registros</small></span><LockKeyhole size={15} /></div>
+          <div><History size={18} /><span><strong>Reprodução</strong><small>Prenhez e inseminação</small></span><LockKeyhole size={15} /></div>
+          <div><BadgeCheck size={18} /><span><strong>Saúde e vacinas</strong><small>Calendário e acompanhamento</small></span><LockKeyhole size={15} /></div>
+        </div>
+        <p>Disponível no Hydra Agro+. A gestão básica do animal e o NFC continuam gratuitos.</p>
+      </section>}
 
       {account.animals.length === 0 ? <EmptyState icon={<Cow size={27} />} title="Nenhum animal cadastrado" text="Crie a primeira ficha do rebanho sem preencher dados inventados." action={<button className="primary-button" onClick={openCreate}><Plus size={17} /> Cadastrar animal</button>} /> : filtered.length === 0 ? <EmptyState icon={<Search size={25} />} title="Nenhum resultado" text="Tente outro termo ou remova o filtro." /> : <div className="animal-list">{filtered.map((item) => <button key={item.id} className="animal-card" onClick={() => setSelectedId(item.id)}>{item.photoUrl ? <img className="animal-avatar image" src={item.photoUrl} alt={`Foto de ${item.name || item.identification}`} /> : <span className="animal-avatar"><Cow size={25} /></span>}<div className="animal-copy"><span className="animal-code">{item.identification}</span><strong>{item.name || "Animal sem nome"}</strong><small>{[item.species, item.breed, item.sex].filter(Boolean).join(" · ")}</small></div><div className="animal-side">{item.electronicId && <span className="tag-badge"><Nfc size={13} /> vinculado</span>}<ChevronRight size={19} /></div></button>)}</div>}
 
-      <Modal open={careOpen} onClose={() => setCareOpen(false)} eyebrow="REBANHO" title="Alimentação e manejo" wide tall>
+      <Modal open={careOpen && isPlus} onClose={() => setCareOpen(false)} eyebrow="HYDRA AGRO+" title="Nutrição, alimentação e manejo" wide tall>
         <HerdCareGuide account={account} />
       </Modal>
 
@@ -229,9 +241,9 @@ export function HerdScreen({ account, updateAccount, openNfc, focusAnimalId, sav
           <div className="field-combo"><Field label="Identificação"><input value={animal.identification} onChange={(event) => { setAnimal({ ...animal, identification: event.target.value }); setError(""); }} placeholder="Ex.: BOV-001" autoFocus /></Field><Field label="Nome (opcional)"><input value={animal.name} onChange={(event) => setAnimal({ ...animal, name: event.target.value })} placeholder="Ex.: Estrela" /></Field></div>
           <div className="field-combo"><Field label="Espécie"><select value={animal.species} onChange={(event) => setAnimal({ ...animal, species: event.target.value })}>{["Bovino", "Caprino", "Ovino", "Equino", "Suíno", "Ave", "Outra"].map((item) => <option key={item}>{item}</option>)}</select></Field><Field label="Raça"><input value={animal.breed} onChange={(event) => setAnimal({ ...animal, breed: event.target.value })} placeholder="Informe se souber" /></Field></div>
           <div className="field-combo"><Field label="Sexo"><select value={animal.sex} onChange={(event) => setAnimal({ ...animal, sex: event.target.value })}><option value="">Não informado</option><option>Fêmea</option><option>Macho</option></select></Field><Field label="Nascimento"><input type="date" value={animal.birthDate} onChange={(event) => setAnimal({ ...animal, birthDate: event.target.value })} /></Field></div>
-          <div className="field-combo"><Field label="Peso (kg)"><input inputMode="decimal" value={animal.weight} onChange={(event) => setAnimal({ ...animal, weight: event.target.value })} placeholder="0" /></Field><Field label="Situação"><select value={animal.status} onChange={(event) => setAnimal({ ...animal, status: event.target.value })}><option>Ativo</option><option>Em observação</option><option>Vendido</option><option>Baixa</option></select></Field></div>
+          <div className="field-combo"><Field label="Peso atual (kg)"><input inputMode="decimal" value={animal.weight} onChange={(event) => setAnimal({ ...animal, weight: event.target.value })} placeholder="0" /></Field><Field label="Situação"><select value={animal.status} onChange={(event) => setAnimal({ ...animal, status: event.target.value })}><option>Ativo</option><option>Em observação</option><option>Vendido</option><option>Baixa</option></select></Field></div>
           <Field label="Código NFC/RFID (opcional)" hint="Você também pode usar a Central NFC para ler uma tag real."><input value={animal.electronicId} onChange={(event) => setAnimal({ ...animal, electronicId: event.target.value })} placeholder="Digite o código da tag" /></Field>
-          <Field label="Observações"><textarea value={animal.notes} onChange={(event) => setAnimal({ ...animal, notes: event.target.value })} placeholder="Histórico ou informações importantes" /></Field>
+          <Field label="Observações"><textarea value={animal.notes} onChange={(event) => setAnimal({ ...animal, notes: event.target.value })} placeholder="Informações importantes" /></Field>
           {error && <p className="form-error" role="alert">{error}</p>}<div className="modal-action-row"><button className="secondary-button" type="button" onClick={() => setFormOpen(false)} disabled={saving}>Cancelar</button><LoadingButton className="primary-button" type="submit" loading={saving} loadingLabel="Salvando animal...">{editingId ? "Confirmar alterações" : "Confirmar animal"}</LoadingButton></div>
         </form>
       </Modal>
@@ -245,16 +257,18 @@ export function HerdScreen({ account, updateAccount, openNfc, focusAnimalId, sav
           {selected.weight && <div className="detail-line"><Weight size={19} /><div><span>Último peso informado</span><strong>{selected.weight} kg</strong></div></div>}
           {selected.notes && <div className="detail-note">{selected.notes}</div>}
 
-          <AnimalPublicShare animal={selected} />
-          <WeightEvolution animal={selected} onAdd={() => openWeight(selected)} />
+          {isPlus ? <>
+            <AnimalPublicShare animal={selected} />
+            <WeightEvolution animal={selected} onAdd={() => openWeight(selected)} />
+            {(selected.history?.length ?? 0) > 0 && <div className="animal-history animal-timeline"><h3><History size={17} /> Linha do tempo</h3>{selected.history!.slice().reverse().map((entry) => <div key={entry.id} className={entry.weight ? "is-weight" : ""}><span /><p><strong>{entry.type}</strong>{entry.description}{entry.weight && <b>{entry.weight} kg</b>}<small>{new Date(entry.date).toLocaleString("pt-BR")}</small></p></div>)}</div>}
+          </> : <div className="animal-plus-lock"><Crown size={21} /><div><strong>Histórico avançado no Hydra Agro+</strong><small>Evolução de peso, linha do tempo completa e compartilhamento público/QR.</small></div><LockKeyhole size={16} /></div>}
 
-          {(selected.history?.length ?? 0) > 0 && <div className="animal-history animal-timeline"><h3><History size={17} /> Linha do tempo</h3>{selected.history!.slice().reverse().map((entry) => <div key={entry.id} className={entry.weight ? "is-weight" : ""}><span /><p><strong>{entry.type}</strong>{entry.description}{entry.weight && <b>{entry.weight} kg</b>}<small>{new Date(entry.date).toLocaleString("pt-BR")}</small></p></div>)}</div>}
           {error && <p className="form-error" role="alert">{error}</p>}
           <div className="detail-actions three"><button className="secondary-button" onClick={() => openEdit(selected)}><Pencil size={17} /> Editar</button><button className="secondary-button" onClick={() => openNfc(selected.id)}><Nfc size={17} /> Vincular tag</button><button className="danger-button" onClick={() => { setDeleteError(""); setDeleteTarget(selected); }}><Trash2 size={17} /> Excluir</button></div>
         </div>}
       </Modal>
 
-      <Modal open={weightOpen && Boolean(selected)} onClose={() => { setWeightOpen(false); setWeightError(""); }} eyebrow="PESAGEM" title="Registrar novo peso" dismissible={!weightSaving}>
+      <Modal open={weightOpen && Boolean(selected) && isPlus} onClose={() => { setWeightOpen(false); setWeightError(""); }} eyebrow="HYDRA AGRO+ · PESAGEM" title="Registrar novo peso" dismissible={!weightSaving}>
         <form className="modal-form" onSubmit={saveWeight}>
           <div className="weight-modal-animal"><Weight size={22} /><span><strong>{selected?.name || selected?.identification}</strong><small>O registro entra automaticamente na linha do tempo.</small></span></div>
           <div className="field-combo"><Field label="Data"><input type="date" value={weightDraft.date} onChange={(event) => setWeightDraft({ ...weightDraft, date: event.target.value })} /></Field><Field label="Peso (kg)"><input inputMode="decimal" value={weightDraft.weight} onChange={(event) => { setWeightDraft({ ...weightDraft, weight: event.target.value }); setWeightError(""); }} placeholder="Ex.: 245" autoFocus /></Field></div>
