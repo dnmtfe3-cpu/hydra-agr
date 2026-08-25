@@ -1,0 +1,83 @@
+/* Tema da feira: Nutrição, Alimentação e Agricultura Familiar.
+   Apenas reforça a hierarquia visual das funções já existentes. */
+
+.hydra-root .home-shortcuts-five .production-shortcut > span {
+  background: #fff0df !important;
+  color: #c96b18 !important;
+  border-color: rgba(201, 107, 24, .12) !important;
+}
+
+.hydra-root .home-production-notebook-card.fair-theme-production {
+  border: 1px solid rgba(15, 81, 54, .16) !important;
+  background: #fffdf8 !important;
+  box-shadow: 0 16px 34px -30px rgba(8, 72, 46, .55) !important;
+}
+
+.hydra-root .home-production-notebook-card.fair-theme-production .home-production-icon {
+  background: #e4f1e9 !important;
+  color: #0b5136 !important;
+}
+
+.hydra-root .home-production-notebook-card.fair-theme-production .home-production-copy small {
+  color: #c96b18 !important;
+  letter-spacing: .085em !important;
+  font-weight: 850 !important;
+}
+
+.hydra-root .home-production-notebook-card.fair-theme-production .home-production-copy strong {
+  color: #123f30 !important;
+}
+
+/* Alimentação passa a ter o destaque temático dentro do Rebanho. */
+.hydra-root .herd-care-launch {
+  border-color: rgba(15, 81, 54, .18) !important;
+  background: #f5faf6 !important;
+  box-shadow: 0 14px 30px -30px rgba(8, 72, 46, .62) !important;
+}
+
+.hydra-root .herd-care-launch > span {
+  background: #0b5136 !important;
+  color: #fff !important;
+}
+
+.hydra-root .herd-care-launch strong {
+  color: #123f30 !important;
+}
+
+.hydra-root .herd-care-guide .herd-care-intro {
+  border: 1px solid rgba(15, 81, 54, .13) !important;
+  background: #f5faf6 !important;
+}
+
+.hydra-root .herd-care-guide .herd-care-intro > span {
+  background: #0b5136 !important;
+  color: #fff !important;
+}
+
+.hydra-root .herd-care-grid .herd-care-card:first-child {
+  border-color: rgba(244, 138, 18, .22) !important;
+  background: #fffaf3 !important;
+}
+
+.hydra-root .herd-care-grid .herd-care-card:first-child > span {
+  background: #fff0df !important;
+  color: #c96b18 !important;
+}
+
+/* Modo verde: manter contraste sem sair da paleta. */
+.hydra-root[data-theme="dark"] .home-production-notebook-card.fair-theme-production,
+.hydra-root[data-theme="green"] .home-production-notebook-card.fair-theme-production,
+.hydra-root[data-theme="dark"] .herd-care-launch,
+.hydra-root[data-theme="green"] .herd-care-launch,
+.hydra-root[data-theme="dark"] .herd-care-guide .herd-care-intro,
+.hydra-root[data-theme="green"] .herd-care-guide .herd-care-intro {
+  background: #103f31 !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+
+.hydra-root[data-theme="dark"] .home-production-notebook-card.fair-theme-production .home-production-copy strong,
+.hydra-root[data-theme="green"] .home-production-notebook-card.fair-theme-production .home-production-copy strong,
+.hydra-root[data-theme="dark"] .herd-care-launch strong,
+.hydra-root[data-theme="green"] .herd-care-launch strong {
+  color: #f7f3e9 !important;
+}
