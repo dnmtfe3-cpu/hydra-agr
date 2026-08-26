@@ -40,7 +40,7 @@ $$;
 grant execute on function public.farm_xp_for_owner(uuid) to authenticated;
 
 create or replace function public.property_ranking()
-returns table (position bigint, property_id text, property_name text, municipality text, xp bigint, is_mine boolean)
+returns table ("position" bigint, property_id text, property_name text, municipality text, xp bigint, is_mine boolean)
 language sql stable security definer set search_path = public, auth, pg_temp
 as $$
   with property_scores as (
@@ -49,12 +49,12 @@ as $$
     join public.profiles pr on pr.id = p.owner_user_id
     where nullif(trim(p.name), '') is not null and pr.banned_at is null
   ), ranked as (
-    select row_number() over (order by xp desc, lower(property_name), property_id) position, * from property_scores
+    select row_number() over (order by xp desc, lower(property_name), property_id) as pos, property_scores.* from property_scores
   )
-  select position, property_id, property_name, municipality, xp, owner_user_id = auth.uid()
+  select pos, property_id, property_name, municipality, xp, owner_user_id = auth.uid()
   from ranked
   where auth.uid() is not null and public.is_active_user()
-  order by position
+  order by pos
   limit 50;
 $$;
 
