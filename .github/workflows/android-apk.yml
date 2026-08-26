@@ -48,11 +48,11 @@ jobs:
 
           npm run env:check
 
-      # Mostra problemas de TypeScript, mas não bloqueia a geração do APK.
-      # O Vite ainda falhará normalmente se houver erro real de sintaxe/import.
       - name: Verificar TypeScript
-        continue-on-error: true
         run: npm run lint
+
+      - name: Executar testes
+        run: npm test
 
       - name: Compilar interface web
         run: npx vite build
