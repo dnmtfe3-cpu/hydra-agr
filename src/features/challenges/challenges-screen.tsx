@@ -1,6 +1,7 @@
 "use client";
 
 import "../../ranking.css";
+import "./challenge-xp.css";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowUp, CheckCircle2, Crown, Gift, Info, RefreshCw, Target, Trophy } from "lucide-react";
 import { Modal, ScreenHeader } from "../../components/ui";
@@ -71,9 +72,7 @@ export function ChallengesScreen({ account, onBack }: Props) {
       </section>
 
       <div className="challenge-heading"><h2>Missões</h2><span>{completedMissions}/{missions.length} concluídas</span></div>
-      <div className="challenge-list">
-        {missions.map((mission) => <MissionCard key={mission.id} {...mission} />)}
-      </div>
+      <div className="challenge-list">{missions.map((mission) => <MissionCard key={mission.id} {...mission} />)}</div>
 
       <section className="property-ranking-section" aria-label="Ranking de propriedades">
         <header className="property-ranking-head"><span><Trophy size={22} /></span><div><strong>Ranking de propriedades</strong><small>Top fazendas por XP acumulado.</small></div><button className={rankingLoading ? "loading" : ""} onClick={() => void refreshRanking()} disabled={rankingLoading} aria-label="Atualizar ranking"><RefreshCw size={18} /></button></header>
