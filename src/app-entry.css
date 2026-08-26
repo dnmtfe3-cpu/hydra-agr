@@ -46,3 +46,6 @@
 
 /* Apresentação visual do plano Hydra Agro+. */
 @import "./premium-sales-redesign.css?v=premium-sales-redesign-1";
+
+/* Motion final de produto: transições, feedback de toque, sheets e navegação. */
+@import "./premium-app-motion.css?v=premium-app-motion-1";
