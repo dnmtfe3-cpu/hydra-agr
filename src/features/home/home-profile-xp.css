@@ -1,26 +1,27 @@
 .home-brandbar.profile-brandbar {
   position: relative;
-  min-height: 68px;
-  display: flex;
+  min-height: 78px;
+  display: grid;
+  grid-template-columns: 1fr 76px 1fr;
   align-items: center;
-  justify-content: space-between;
+  width: 100%;
   gap: 10px;
 }
 
 .home-profile-progress {
   --profile-progress: 0%;
-  position: absolute;
-  left: 50%;
-  top: 3px;
-  width: 62px;
-  height: 62px;
+  position: relative;
+  grid-column: 2;
+  justify-self: center;
+  align-self: center;
+  width: 66px;
+  height: 66px;
   padding: 3px;
   border: 0;
   border-radius: 50%;
   background: conic-gradient(#ef7f1a var(--profile-progress), rgba(11, 81, 54, 0.13) 0);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transform: translateX(-50%);
   z-index: 3;
 }
 
@@ -78,6 +79,9 @@
 }
 
 .home-farm-xp {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
   min-width: 0;
   max-width: 122px;
   display: flex;
@@ -104,23 +108,27 @@
 }
 
 .home-brandbar.profile-brandbar .icon-button {
-  margin-left: auto;
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  margin: 0;
   flex: 0 0 auto;
   z-index: 1;
 }
 
 @media (max-width: 370px) {
   .home-brandbar.profile-brandbar {
-    min-height: 62px;
+    min-height: 70px;
+    grid-template-columns: 1fr 66px 1fr;
   }
 
   .home-profile-progress {
-    width: 56px;
-    height: 56px;
+    width: 58px;
+    height: 58px;
   }
 
   .home-farm-xp {
-    max-width: 108px;
+    max-width: 104px;
   }
 
   .home-farm-xp strong {
@@ -139,6 +147,6 @@
   }
 
   .home-profile-progress:active {
-    transform: translateX(-50%) scale(0.95);
+    transform: scale(0.95);
   }
 }
