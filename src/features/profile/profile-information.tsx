@@ -30,15 +30,19 @@ const information = {
     ],
   },
   credits: {
-    eyebrow: "CRÉDITOS",
+    eyebrow: "CRÉDITOS DO PROJETO",
     title: "Créditos",
     icon: <Code2 size={28} />,
-    introduction: "O Hydra Agro é um projeto independente voltado à rotina da propriedade rural.",
+    introduction: "Hydra Agro é um projeto de tecnologia aplicado ao campo, criado para aproximar gestão rural, identificação animal e ferramentas digitais em uma experiência simples.",
     sections: [
-      ["Produto e desenvolvimento", "A concepção, a interface e o desenvolvimento do Hydra Agro são mantidos de forma independente."],
-      ["Tecnologias", "A interface utiliza React e TypeScript, com Supabase para autenticação e dados e Capacitor para recursos do aplicativo móvel."],
-      ["Identificação animal", "A identificação eletrônica utiliza NFC/RFID em aparelhos compatíveis e pode ser associada à ficha de cada animal."],
-      ["Dados da conta", "Indicadores e resultados exibidos pelo aplicativo usam as informações disponíveis nos registros da própria conta."],
+      ["Criador e desenvolvedor", "Daniel — idealização do projeto, desenvolvimento do aplicativo, experiência de uso, identidade do produto e evolução das funcionalidades do Hydra Agro."],
+      ["Origem do projeto", "O Hydra Agro nasceu como um projeto desenvolvido em Brejões, Bahia, com foco em soluções que possam ser demonstradas e aplicadas à realidade de propriedades rurais."],
+      ["Objetivo", "Facilitar tarefas do dia a dia da propriedade reunindo rebanho, identificação NFC/RFID, atividades, equipe, produção, monitoramentos e recursos de comunidade em um único aplicativo."],
+      ["Tecnologias", "Aplicação desenvolvida com React e TypeScript. O Supabase é utilizado em recursos de autenticação, banco de dados e sincronização, enquanto o Capacitor permite integrar o projeto a recursos de dispositivos móveis."],
+      ["Identificação animal", "O sistema permite associar identificadores NFC/RFID aos animais e acessar suas fichas digitais, reunindo informações importantes de identificação e acompanhamento."],
+      ["Design e experiência", "A interface foi planejada para manter uma identidade visual própria do Hydra Agro, priorizando leitura rápida, navegação simples e uso em telas de celular."],
+      ["Desenvolvimento contínuo", "O Hydra Agro continua em evolução. Novas funções, melhorias de desempenho e ajustes de experiência são adicionados conforme o projeto avança e recebe novos testes."],
+      ["Projeto independente", "O Hydra Agro é um projeto independente. Marcas e tecnologias citadas pertencem aos seus respectivos proprietários."],
     ],
   },
   about: {
@@ -66,7 +70,7 @@ export function ProfileInformation({ kind, onClose, onEmail, onInstagram }: { ki
       <div className="legal-sections">
         {content.sections.map(([title, text]) => <section key={title}><h3>{title}</h3><p>{text}</p></section>)}
       </div>
-      <div className="legal-meta"><strong>Hydra Agro · versão 1.2.2</strong><span>Última atualização: 23 de agosto de 2026</span></div>
+      <div className="legal-meta"><strong>Hydra Agro · versão 1.2.2</strong><span>Última atualização: 25 de agosto de 2026</span></div>
       <div className="legal-contact-actions">
         <button className="secondary-button" onClick={onEmail}><Mail size={18} /> Suporte</button>
         <button className="secondary-button" onClick={onInstagram}><Instagram size={18} /> Instagram <ExternalLink size={14} /></button>
