@@ -3,6 +3,8 @@ import { AlertTriangle, CheckCircle2, CloudOff, Copy, Database, Eye, EyeOff, Loc
 import { HydraWordmark } from "./brand";
 import type { SyncStatus } from "../hooks/use-hydra-store";
 import type { AuthResult } from "../lib/hydra-types";
+import { appMessagePtBr } from "../lib/app-messages";
+import "./system-feedback.css";
 
 export function BackendSetupScreen() {
   const envText = "VITE_SUPABASE_URL=...\nVITE_SUPABASE_PUBLISHABLE_KEY=...";
@@ -15,8 +17,31 @@ export function BannedScreen({ reason, logout }: { reason?: string; logout: () =
 
 export function SyncBanner({ status, error, retry }: { status: SyncStatus; error?: string; retry: () => Promise<void> }) {
   if (status === "saved") return null;
+
+  if (status === "saving") {
+    return (
+      <div className="sync-banner saving" role="status" aria-live="polite">
+        <span className="sync-banner-icon"><i className="sync-banner-spinner" /></span>
+        <span className="sync-banner-copy"><strong>Salvando alterações</strong><small>Atualizando seus dados com segurança.</small></span>
+      </div>
+    );
+  }
+
   const offline = status === "offline";
-  return <div className={`sync-banner ${status}`} role="status">{status === "saving" ? <><span className="sync-dot" /> Salvando com segurança…</> : <>{offline ? <CloudOff size={15} /> : <AlertTriangle size={15} />}<span>{offline ? "Sem conexão. Alterações guardadas neste aparelho." : error || "Não foi possível sincronizar."}</span><button onClick={() => void retry()}><RefreshCw size={14} /> Tentar</button></>}</div>;
+  const message = offline
+    ? "Seus registros continuam salvos neste aparelho e serão enviados quando a conexão voltar."
+    : appMessagePtBr(error, "Seus dados continuam salvos. Tente sincronizar novamente.");
+
+  return (
+    <div className={`sync-banner ${status}`} role={offline ? "status" : "alert"} aria-live="polite">
+      <span className="sync-banner-icon">{offline ? <CloudOff size={21} /> : <AlertTriangle size={21} />}</span>
+      <span className="sync-banner-copy">
+        <strong>{offline ? "Você está sem internet" : "Não foi possível sincronizar"}</strong>
+        <small>{message}</small>
+      </span>
+      <button onClick={() => void retry()}><RefreshCw size={14} /> Tentar novamente</button>
+    </div>
+  );
 }
 
 export function PasswordRecoveryScreen({ save, logout }: { save: (password: string) => Promise<AuthResult>; logout: () => Promise<void> }) {
@@ -36,5 +61,5 @@ export function PasswordRecoveryScreen({ save, logout }: { save: (password: stri
     setFeedback({ message: result.message, ok: result.ok });
   }
 
-  return <main className="system-screen"><section className="system-card recovery-card"><span className="system-icon"><LockKeyhole size={29} /></span><span className="eyebrow">RECUPERAÇÃO SEGURA</span><h1>Crie sua nova senha</h1><p>O link foi validado. Escolha uma senha exclusiva para o Hydra Agro.</p><form className="modal-form" onSubmit={submit}><label className="field"><span>Nova senha</span><div className="input-with-action"><input type={show ? "text" : "password"} value={password} onChange={(event) => { setPassword(event.target.value); setFeedback(null); }} autoComplete="new-password" /><button type="button" onClick={() => setShow((value) => !value)} aria-label={show ? "Ocultar senha" : "Mostrar senha"}>{show ? <EyeOff size={18} /> : <Eye size={18} />}</button></div></label><label className="field"><span>Confirmar senha</span><input type={show ? "text" : "password"} value={confirm} onChange={(event) => { setConfirm(event.target.value); setFeedback(null); }} autoComplete="new-password" /></label>{feedback && (feedback.ok ? <p className="form-notice" role="status"><CheckCircle2 size={15} /> {feedback.message}</p> : <p className="form-error" role="alert">{feedback.message}</p>)}<button className="primary-button full" type="submit" disabled={working}>{working ? "Salvando…" : "Atualizar senha"}</button></form><button className="text-button" onClick={() => void logout()}>Sair desta conta</button></section></main>;
+  return <main className="system-screen"><section className="system-card recovery-card"><span className="system-icon"><LockKeyhole size={29} /></span><span className="eyebrow">RECUPERAÇÃO SEGURA</span><h1>Crie sua nova senha</h1><p>O link foi validado. Escolha uma senha exclusiva para o Hydra Agro.</p><form className="modal-form" onSubmit={submit}><label className="field"><span>Nova senha</span><div className="input-with-action"><input type={show ? "text" : "password"} value={password} onChange={(event) => { setPassword(event.target.value); setFeedback(null); }} autoComplete="new-password" /><button type="button" onClick={() => setShow((value) => !value)} aria-label={show ? "Ocultar senha" : "Mostrar senha"}>{show ? <EyeOff size={18} /> : <Eye size={18} />}</button></div></label><label className="field"><span>Confirmar senha</span><input type={show ? "text" : "password"} value={confirm} onChange={(event) => { setConfirm(event.target.value); setFeedback(null); }} autoComplete="new-password" /></label>{feedback && (feedback.ok ? <p className="form-notice" role="status"><CheckCircle2 size={15} /> {feedback.message}</p> : <p className="form-error" role="alert">{appMessagePtBr(feedback.message)}</p>)}<button className="primary-button full" type="submit" disabled={working}>{working ? "Salvando…" : "Atualizar senha"}</button></form><button className="text-button" onClick={() => void logout()}>Sair desta conta</button></section></main>;
 }
