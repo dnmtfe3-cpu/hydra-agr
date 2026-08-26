@@ -2,6 +2,7 @@ import { supabase } from "../../services/supabase";
 import "../community/community-social-runtime";
 import "../community/community-follow-runtime";
 import "../community/community-follow.css";
+import "../community/community-search-report-runtime";
 
 async function syncLevel10Vip() {
   const client = supabase;
