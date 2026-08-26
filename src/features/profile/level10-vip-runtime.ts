@@ -9,6 +9,7 @@ import "../community/community-connections-runtime";
 import "./profile-social-stats-runtime";
 import "./profile-social-stats.css";
 import "./profile-community-removal.css";
+import "./profile-team-tab-runtime";
 
 async function syncLevel10Vip() {
   const client = supabase;
