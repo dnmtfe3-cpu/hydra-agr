@@ -36,7 +36,7 @@ type NavTab = { id: AppRoute; label: string; icon: typeof Home };
 
 const ownerMainTabs: NavTab[] = [
   { id: "home", label: "Início", icon: Home },
-  { id: "operations", label: "Equipe", icon: UsersRound },
+  { id: "community", label: "Comunidade", icon: UsersRound },
   { id: "nfc", label: "NFC", icon: Nfc },
   { id: "herd", label: "Rebanho", icon: Cow },
   { id: "profile", label: "Perfil", icon: UserRound },
