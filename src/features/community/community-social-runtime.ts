@@ -188,7 +188,7 @@ async function loadMessages(peerId: string, list: HTMLElement) {
   await client.from("direct_messages").update({ read_at: new Date().toISOString() }).eq("sender_id", peerId).eq("recipient_id", currentUserId).is("read_at", null);
 }
 
-async function openChat(peerId: string, peerName: string, avatarPath?: string) {
+async function openChat(peerId: string, peerName: string, avatarPath?: string | null) {
   if (!peerId) return;
   const client = supabase;
   if (!client) return;
