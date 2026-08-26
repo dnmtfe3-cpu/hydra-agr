@@ -24,6 +24,7 @@ import {
   UsersRound,
 } from "lucide-react";
 import type { Announcement, AppRoute, HydraAccount } from "../../lib/hydra-types";
+import { farmExperience } from "../../lib/farm-xp";
 import { currentMonthTotals, loadProductionNotebook } from "../../services/family-farming-repository";
 import { requireSupabase } from "../../services/supabase";
 import { NutriCicloPanel } from "../family-farming/nutriciclo-panel";
@@ -50,22 +51,6 @@ function countLabel(count: number, singular: string, plural: string) {
 
 function money(value: number) {
   return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(Math.abs(value));
-}
-
-function farmExperience(account: HydraAccount) {
-  const completedActivities = account.activities.filter((activity) => activity.done).length;
-  const propertyBonus = account.property.municipality && account.property.mainActivity ? 100 : 0;
-  const xp =
-    propertyBonus +
-    account.animals.length * 40 +
-    account.sectors.length * 30 +
-    completedActivities * 20 +
-    account.monitoring.length * 25 +
-    account.nfcReadCount * 5;
-  const level = Math.floor(xp / 500) + 1;
-  const levelXp = xp % 500;
-  const progress = Math.min(100, Math.round((levelXp / 500) * 100));
-  return { xp, level, progress };
 }
 
 export function HomeScreen({ account, navigate, onQuickAction, announcements }: Props) {
@@ -148,7 +133,7 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
         </button>
         <div className="home-farm-xp" aria-label={`${farmXp.xp} XP da fazenda`}>
           <strong>{farmXp.xp.toLocaleString("pt-BR")} XP</strong>
-          <span>XP da fazenda · nível {farmXp.level}</span>
+          <span>{farmXp.lifetimeVip ? "Nível 10 · VIP vitalício" : `XP da fazenda · nível ${farmXp.level}`}</span>
         </div>
         <button className="icon-button bare" onClick={() => navigate("notifications")} aria-label="Notificações"><Bell size={23} />{hasUnreadNotifications && <span className="notification-dot" />}</button>
       </div>
