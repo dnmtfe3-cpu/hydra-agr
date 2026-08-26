@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { AlertCircle, CheckCircle2, ChevronLeft, Info, X } from "lucide-react";
 import { createPortal } from "react-dom";
+import { appMessagePtBr } from "../lib/app-messages";
 import { useAppOverlay, useAppToasts } from "./modal-system";
 
 export function ScreenHeader({
@@ -224,7 +225,7 @@ export function ConfirmDialog({
       <div className="confirm-action">
         <span><X size={27} /></span>
         <p>{text}</p>
-        {error && <p className="form-error" role="alert">{error}</p>}
+        {error && <p className="form-error" role="alert">{appMessagePtBr(error)}</p>}
         <div className="modal-action-row">
           <button className="secondary-button" onClick={onCancel} disabled={busy}>Cancelar</button>
           <LoadingButton className={danger ? "danger-button" : "primary-button"} onClick={() => void onConfirm()} loading={busy} loadingLabel={danger ? "Excluindo..." : "Confirmando..."}>{confirmLabel}</LoadingButton>
@@ -255,12 +256,15 @@ export function AppToastRegion() {
   const toasts = useAppToasts();
   return (
     <div className="app-toast-region" aria-live="polite" aria-atomic="true">
-      {toasts.map((toast) => (
-        <div key={toast.id} className={`app-toast ${toast.tone}`} role={toast.tone === "error" ? "alert" : "status"}>
-          <span aria-hidden="true">{toast.tone === "success" ? <CheckCircle2 size={21} /> : toast.tone === "error" ? <AlertCircle size={21} /> : <Info size={21} />}</span>
-          <p>{toast.message}</p>
-        </div>
-      ))}
+      {toasts.map((toast) => {
+        const title = toast.tone === "success" ? "Tudo certo" : toast.tone === "error" ? "Não foi possível concluir" : "Aviso";
+        return (
+          <div key={toast.id} className={`app-toast ${toast.tone}`} role={toast.tone === "error" ? "alert" : "status"}>
+            <span className="app-toast-icon" aria-hidden="true">{toast.tone === "success" ? <CheckCircle2 size={21} /> : toast.tone === "error" ? <AlertCircle size={21} /> : <Info size={21} />}</span>
+            <span className="app-toast-copy"><strong>{title}</strong><small>{toast.message}</small></span>
+          </div>
+        );
+      })}
     </div>
   );
 }
