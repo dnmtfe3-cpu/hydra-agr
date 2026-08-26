@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import "../../product-polish.css";
 import "./home-production-shortcut.css";
 import "./home-production-notebook-card.css";
+import "./home-profile-xp.css";
 import {
   Bell,
   ChevronRight,
@@ -22,7 +23,6 @@ import {
   Sprout,
   UsersRound,
 } from "lucide-react";
-import { HydraWordmark } from "../../components/brand";
 import type { Announcement, AppRoute, HydraAccount } from "../../lib/hydra-types";
 import { currentMonthTotals, loadProductionNotebook } from "../../services/family-farming-repository";
 import { requireSupabase } from "../../services/supabase";
@@ -52,6 +52,22 @@ function money(value: number) {
   return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(Math.abs(value));
 }
 
+function farmExperience(account: HydraAccount) {
+  const completedActivities = account.activities.filter((activity) => activity.done).length;
+  const propertyBonus = account.property.municipality && account.property.mainActivity ? 100 : 0;
+  const xp =
+    propertyBonus +
+    account.animals.length * 40 +
+    account.sectors.length * 30 +
+    completedActivities * 20 +
+    account.monitoring.length * 25 +
+    account.nfcReadCount * 5;
+  const level = Math.floor(xp / 500) + 1;
+  const levelXp = xp % 500;
+  const progress = Math.min(100, Math.round((levelXp / 500) * 100));
+  return { xp, level, progress };
+}
+
 export function HomeScreen({ account, navigate, onQuickAction, announcements }: Props) {
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [productionResult, setProductionResult] = useState<number | null>(null);
@@ -62,6 +78,13 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
   const pendingActivities = account.activities.filter((activity) => !activity.done);
   const propertyReady = Boolean(account.property.municipality && account.property.mainActivity);
   const identifiedAnimals = account.animals.filter((animal) => animal.electronicId).length;
+  const farmXp = farmExperience(account);
+  const profileInitials = account.profile.name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("") || "P";
 
   useEffect(() => {
     let active = true;
@@ -110,8 +133,23 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
 
   return (
     <div className="screen home-screen page-enter">
-      <div className="home-brandbar">
-        <HydraWordmark />
+      <div className="home-brandbar profile-brandbar">
+        <button
+          className="home-profile-progress"
+          onClick={() => navigate("profile")}
+          aria-label={`Abrir perfil. Nível ${farmXp.level}, ${farmXp.xp} XP da fazenda`}
+          title="Abrir perfil"
+          style={{ "--profile-progress": `${farmXp.progress}%` } as CSSProperties}
+        >
+          <span className="home-profile-avatar">
+            {account.profile.avatarUrl ? <img src={account.profile.avatarUrl} alt="" /> : profileInitials}
+          </span>
+          <span className="home-profile-level" aria-hidden="true">{farmXp.level}</span>
+        </button>
+        <div className="home-farm-xp" aria-label={`${farmXp.xp} XP da fazenda`}>
+          <strong>{farmXp.xp.toLocaleString("pt-BR")} XP</strong>
+          <span>XP da fazenda · nível {farmXp.level}</span>
+        </div>
         <button className="icon-button bare" onClick={() => navigate("notifications")} aria-label="Notificações"><Bell size={23} />{hasUnreadNotifications && <span className="notification-dot" />}</button>
       </div>
 
