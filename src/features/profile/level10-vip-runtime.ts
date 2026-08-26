@@ -1,4 +1,5 @@
 import { supabase } from "../../services/supabase";
+import "../community/community-social-runtime";
 
 async function syncLevel10Vip() {
   const client = supabase;
