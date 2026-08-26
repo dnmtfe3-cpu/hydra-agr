@@ -5,6 +5,7 @@ import "../community/community-follow.css";
 import "../community/community-search-report-runtime";
 import "../community/community-header-fix.css";
 import "../community/community-connections.css";
+import "../community/community-connections-runtime";
 
 async function syncLevel10Vip() {
   const client = supabase;
