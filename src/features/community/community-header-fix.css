@@ -1,0 +1,56 @@
+/* Mantem o titulo da Comunidade livre dos quatro atalhos do cabecalho. */
+.phone-app .community-screen .screen-header-row {
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr) !important;
+  grid-template-rows: auto auto !important;
+  column-gap: 12px !important;
+  row-gap: 12px !important;
+  align-items: start !important;
+}
+
+.phone-app .community-screen .screen-header-row > .icon-button.quiet {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  align-self: start !important;
+}
+
+.phone-app .community-screen .screen-header-row > .screen-heading {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  min-width: 0 !important;
+  padding-right: 0 !important;
+}
+
+.phone-app .community-screen .screen-header-row > .screen-action {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  justify-content: flex-start !important;
+}
+
+.phone-app .community-screen .screen-action .header-action-pair {
+  width: 100% !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+}
+
+.phone-app .community-screen .screen-action .header-action-pair .icon-button {
+  flex: 0 0 44px !important;
+}
+
+@media (max-width: 390px) {
+  .phone-app .community-screen .screen-action .header-action-pair {
+    gap: 7px !important;
+  }
+
+  .phone-app .community-screen .screen-action .header-action-pair .icon-button {
+    width: 42px !important;
+    height: 42px !important;
+    flex-basis: 42px !important;
+  }
+}
