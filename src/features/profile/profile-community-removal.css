@@ -1,0 +1,8 @@
+/* Community now lives in the main bottom navigation. */
+.phone-app .profile-screen .profile-social-tabs {
+  display: none !important;
+}
+
+.phone-app .profile-screen .profile-hero + .profile-social-tabs + .plan-card {
+  margin-top: 22px !important;
+}
