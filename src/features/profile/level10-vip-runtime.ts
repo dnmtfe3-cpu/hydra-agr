@@ -6,6 +6,8 @@ import "../community/community-search-report-runtime";
 import "../community/community-header-fix.css";
 import "../community/community-connections.css";
 import "../community/community-connections-runtime";
+import "./profile-social-stats-runtime";
+import "./profile-social-stats.css";
 
 async function syncLevel10Vip() {
   const client = supabase;
