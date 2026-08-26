@@ -36,21 +36,21 @@ export function playHydraSound(sound: HydraSound) {
       const now = Date.now();
       if (now - lastTapAt < 70) return;
       lastTapAt = now;
-      tone(520, 0.045, 0.014);
+      tone(520, 0.05, 0.021);
       return;
     }
     if (sound === "success") {
-      tone(620, 0.075, 0.022);
-      tone(820, 0.09, 0.02, 0.065);
+      tone(620, 0.08, 0.029);
+      tone(820, 0.095, 0.027, 0.065);
       return;
     }
     if (sound === "nfc") {
-      tone(740, 0.07, 0.028);
-      tone(980, 0.09, 0.026, 0.07);
-      tone(1240, 0.11, 0.022, 0.14);
+      tone(740, 0.075, 0.036);
+      tone(980, 0.095, 0.034, 0.07);
+      tone(1240, 0.115, 0.029, 0.14);
       return;
     }
-    tone(260, 0.12, 0.018, 0, "triangle");
+    tone(260, 0.125, 0.024, 0, "triangle");
   } catch {
     // O feedback sonoro nunca deve bloquear uma ação do app.
   }
