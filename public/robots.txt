@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hydraagro.sbs/sitemap.xml
+Sitemap: https://www.hydraagro.sbs/sitemap.xml
