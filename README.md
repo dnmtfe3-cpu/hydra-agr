@@ -40,9 +40,9 @@ Se encontrar algum problema durante os testes, pode me avisar.
 
 ## Acesso
 
-O acesso ao aplicativo pode ser solicitado pelo Instagram:
+O acesso ao aplicativo e as novidades do projeto ficam no Instagram oficial:
 
-**@daniel.4fe**
+**@hydraagroo**
 
 ## Tecnologias
 
@@ -68,4 +68,3 @@ Ainda tem bastante coisa que quero adicionar e melhorar, então esse repositóri
 **Hydra Agro**
 
 Projeto em desenvolvimento.
-9
