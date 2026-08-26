@@ -1,5 +1,5 @@
 import "./profile-ranking.css";
-import { supabase } from "../../services/supabase";
+import { publicMediaUrl, supabase } from "../../services/supabase";
 
 type RankingFarm = {
   ownerUserId?: string;
@@ -7,6 +7,7 @@ type RankingFarm = {
   municipality: string;
   ownerName?: string;
   avatarPath?: string;
+  avatarUrl?: string;
   xp: number;
   isCurrent?: boolean;
 };
@@ -34,20 +35,33 @@ function formatXp(value: number) {
 
 function avatarMarkup(farm: RankingFarm) {
   const initial = escapeHtml((farm.propertyName.trim()[0] || "F").toUpperCase());
+  if (farm.avatarUrl) {
+    return `<span class="regional-ranking-avatar"><img src="${escapeHtml(farm.avatarUrl)}" alt="" /></span>`;
+  }
   return `<span class="regional-ranking-avatar">${initial}</span>`;
 }
 
-function renderRanking(farms: RankingFarm[], municipality: string, fallback = false) {
+function currentProfileMarkup(name: string, propertyName: string, avatarUrl?: string) {
+  const initial = escapeHtml(((name || propertyName).trim()[0] || "P").toUpperCase());
+  return `<div class="regional-ranking-profile-hero">
+    <span class="regional-ranking-profile-avatar">${avatarUrl ? `<img src="${escapeHtml(avatarUrl)}" alt="" />` : initial}</span>
+    <strong>${escapeHtml(name || "Produtor")}</strong>
+    <small>${escapeHtml(propertyName || "Sua fazenda")}</small>
+  </div>`;
+}
+
+function renderRanking(farms: RankingFarm[], municipality: string, fallback = false, profile?: { name: string; propertyName: string; avatarUrl?: string }) {
   if (!overlay) return;
   const body = overlay.querySelector<HTMLElement>(".regional-ranking-body");
   if (!body) return;
 
   if (farms.length === 0) {
-    body.innerHTML = `<div class="regional-ranking-empty"><strong>Ainda não há fazendas suficientes</strong><p>Quando outras propriedades da região começarem a pontuar, o Top 3 aparece aqui.</p></div>`;
+    body.innerHTML = `${profile ? currentProfileMarkup(profile.name, profile.propertyName, profile.avatarUrl) : ""}<div class="regional-ranking-empty"><strong>Ainda não há fazendas suficientes</strong><p>Quando outras propriedades da região começarem a pontuar, o Top 3 aparece aqui.</p></div>`;
     return;
   }
 
   body.innerHTML = `
+    ${profile ? currentProfileMarkup(profile.name, profile.propertyName, profile.avatarUrl) : ""}
     <div class="regional-ranking-heading">
       <span>RANKING DA REGIÃO</span>
       <strong>Top 3 melhores fazendas</strong>
@@ -111,27 +125,39 @@ async function refreshRanking() {
     return;
   }
 
-  const { data: propertyData } = await client.from("properties").select("name,municipality").eq("owner_user_id", userId).maybeSingle();
+  const [propertyResult, profileResult] = await Promise.all([
+    client.from("properties").select("name,municipality").eq("owner_user_id", userId).maybeSingle(),
+    client.from("profiles").select("full_name,avatar_path").eq("id", userId).maybeSingle(),
+  ]);
+  const propertyData = propertyResult.data;
+  const profileData = profileResult.data;
   const municipality = String(propertyData?.municipality || "");
   const currentPropertyName = String(propertyData?.name || "Sua fazenda");
+  const currentProfileName = String(profileData?.full_name || "Produtor");
+  const currentAvatarUrl = publicMediaUrl("avatars", profileData?.avatar_path ? String(profileData.avatar_path) : undefined);
+  const profile = { name: currentProfileName, propertyName: currentPropertyName, avatarUrl: currentAvatarUrl };
 
   const { data, error } = await client.rpc("regional_farm_ranking", { p_municipality: municipality || null });
   if (!error && Array.isArray(data)) {
-    const farms = (data as Array<Record<string, unknown>>).map((row) => ({
-      ownerUserId: String(row.owner_user_id || ""),
-      propertyName: String(row.property_name || "Propriedade"),
-      municipality: String(row.municipality || municipality),
-      ownerName: String(row.owner_name || ""),
-      avatarPath: row.avatar_path ? String(row.avatar_path) : undefined,
-      xp: Number(row.xp ?? 0),
-      isCurrent: String(row.owner_user_id || "") === userId,
-    }));
-    renderRanking(farms, municipality, false);
+    const farms = (data as Array<Record<string, unknown>>).map((row) => {
+      const avatarPath = row.avatar_path ? String(row.avatar_path) : undefined;
+      return {
+        ownerUserId: String(row.owner_user_id || ""),
+        propertyName: String(row.property_name || "Propriedade"),
+        municipality: String(row.municipality || municipality),
+        ownerName: String(row.owner_name || ""),
+        avatarPath,
+        avatarUrl: publicMediaUrl("avatars", avatarPath),
+        xp: Number(row.xp ?? 0),
+        isCurrent: String(row.owner_user_id || "") === userId,
+      };
+    });
+    renderRanking(farms, municipality, false, profile);
     return;
   }
 
   const fallback = await loadFallback(userId, municipality, currentPropertyName);
-  renderRanking(fallback, municipality, true);
+  renderRanking(fallback, municipality, true, profile);
 }
 
 function openRanking() {
