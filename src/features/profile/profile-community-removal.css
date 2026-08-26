@@ -1,8 +1,63 @@
-/* Community now lives in the main bottom navigation. */
+/* Community now lives in the main bottom navigation.
+   The old profile shortcut becomes a direct Team & Operations shortcut. */
 .phone-app .profile-screen .profile-social-tabs {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  margin: 18px 20px 20px !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.phone-app .profile-screen .profile-social-tabs > button {
+  min-height: 54px !important;
+  border: 1px solid color-mix(in srgb, var(--line) 86%, transparent) !important;
+  border-radius: 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: var(--paper) !important;
+  color: var(--muted) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  box-shadow: 0 12px 26px -24px rgba(12,56,38,.55) !important;
+}
+
+.phone-app .profile-screen .profile-social-tabs > button:first-child {
+  color: var(--forest-700) !important;
+  border-color: color-mix(in srgb, var(--forest-700) 18%, var(--line)) !important;
+  background: color-mix(in srgb, var(--paper) 88%, var(--sage-soft)) !important;
+}
+
+.phone-app .profile-screen .profile-social-tabs > button:nth-child(2) {
+  color: var(--forest-800) !important;
+}
+
+.phone-app .profile-screen .profile-social-tabs > button:nth-child(2) svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.phone-app .profile-screen .profile-social-tabs > button small {
   display: none !important;
 }
 
+.phone-app .profile-screen .profile-social-tabs > button:active {
+  transform: scale(.975) !important;
+}
+
 .phone-app .profile-screen .profile-hero + .profile-social-tabs + .plan-card {
-  margin-top: 22px !important;
+  margin-top: 0 !important;
+}
+
+.hydra-root.theme-dark .phone-app .profile-screen .profile-social-tabs > button {
+  background: #102219 !important;
+  border-color: #294235 !important;
+  color: #c9d5cd !important;
+}
+
+.hydra-root.theme-dark .phone-app .profile-screen .profile-social-tabs > button:first-child {
+  background: #153226 !important;
+  color: #91c69d !important;
 }
