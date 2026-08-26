@@ -3,6 +3,8 @@ import "../community/community-social-runtime";
 import "../community/community-follow-runtime";
 import "../community/community-follow.css";
 import "../community/community-search-report-runtime";
+import "../community/community-header-fix.css";
+import "../community/community-connections.css";
 
 async function syncLevel10Vip() {
   const client = supabase;
