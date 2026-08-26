@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useSyncExternalStore } from "react";
+import { appMessagePtBr } from "../lib/app-messages";
 import { installHydraTapSounds, playHydraSound } from "../services/interaction-sounds";
 
 type OverlayEntry = {
@@ -100,11 +101,15 @@ function dismissToast(id: number) {
 }
 
 export function showAppToast(message: string, tone: AppToast["tone"] = "success") {
-  const toast = { id: ++toastId, message, tone } satisfies AppToast;
+  const displayMessage = appMessagePtBr(
+    message,
+    tone === "error" ? "Não foi possível concluir esta ação. Tente novamente." : "Tudo certo.",
+  );
+  const toast = { id: ++toastId, message: displayMessage, tone } satisfies AppToast;
   toasts = [...toasts, toast].slice(-3);
   toastListeners.forEach((listener) => listener());
 
-  const normalized = message.toLocaleLowerCase("pt-BR");
+  const normalized = displayMessage.toLocaleLowerCase("pt-BR");
   if (tone === "error") playHydraSound("error");
   else if (normalized.includes("nfc") || normalized.includes("tag")) playHydraSound("nfc");
   else if (tone === "success") playHydraSound("success");
