@@ -58,7 +58,7 @@ Registre aparelho, versão Android, versão do APK, data, responsável e evidên
 - [ ] Card Gratuito mostra Hydra Agro+ por R$ 6/mês e abre o fluxo manual pelo Instagram.
 - [ ] “Apoie o Hydra Agro” fica separado da assinatura e não bloqueia funções.
 - [ ] Suporte abre `rlkdn.dev@hydracity.sbs`.
-- [ ] Instagram abre `@daniel.4fe`.
+- [ ] Instagram abre `@hydraagroo`.
 - [ ] Owner cria, edita e exclui aviso e link.
 - [ ] Owner envia aviso individual.
 - [ ] Owner/moderação oculta, restaura e remove publicação.
