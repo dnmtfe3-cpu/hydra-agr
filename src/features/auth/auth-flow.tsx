@@ -255,13 +255,13 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
             {loginStep === "email" ? (
               <form onSubmit={goToPassword}>
                 <div className="auth-icon"><UserRound size={22} /></div>
-                <h1>Bem-vindo de volta</h1>
-                <p className="auth-subtitle">Entre para acessar sua propriedade.</p>
+                <h1>Entrar</h1>
+                <p className="auth-subtitle">Acesse sua conta do Hydra Agro.</p>
                 <button className="google-auth-button" type="button" onClick={() => void submitGoogleLogin()} disabled={submitting}>
                   <span className="google-g" aria-hidden="true">G</span>
                   {submitting ? "Abrindo Google…" : "Continuar com Google"}
                 </button>
-                <div className="auth-divider"><span>ou entre com seu e-mail</span></div>
+                <div className="auth-divider"><span>ou use seu e-mail</span></div>
                 <Field label="E-mail">
                   <input
                     type="email"
@@ -275,13 +275,13 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
                 {notice && <p className="form-notice" role="status">{notice}</p>}
                 {error && <p className="form-error" role="alert">{error}</p>}
                 <button className="primary-button full" type="submit" disabled={submitting}>
-                  Avançar <ArrowRight size={18} />
+                  Continuar <ArrowRight size={18} />
                 </button>
                 <button className="staff-entry-button" type="button" onClick={() => { setLoginStep("staff"); setError(""); setNotice(""); }}>
-                  <UsersRound size={18} /><span><strong>Entrar como funcionário</strong><small>Use o código fornecido pelo dono</small></span><ArrowRight size={17} />
+                  <UsersRound size={18} /><span><strong>Entrar como funcionário</strong><small>Use o código da propriedade</small></span><ArrowRight size={17} />
                 </button>
                 <p className="auth-switch">
-                  Ainda não tem conta?{" "}
+                  Não tem uma conta?{" "}
                   <button type="button" onClick={() => switchMode("signup")}>Criar conta</button>
                 </p>
               </form>
@@ -292,7 +292,7 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
                 </button>
                 <div className="auth-icon"><KeyRound size={22} /></div>
                 <h1>Acesso de funcionário</h1>
-                <p className="auth-subtitle">Digite o código que o dono da propriedade gerou para você.</p>
+                <p className="auth-subtitle">Digite o código fornecido pelo responsável da propriedade.</p>
                 <Field label="Código de acesso" hint="Exemplo: HA-7K3M-9Q2P-4RX8">
                   <input
                     className="staff-code-input"
@@ -307,7 +307,7 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
                     autoFocus
                   />
                 </Field>
-                <div className="staff-code-note"><UsersRound size={17} /><p><strong>Não precisa de Gmail nem senha.</strong><small>O código identifica seu acesso e a propriedade em que você trabalha.</small></p></div>
+                <div className="staff-code-note"><UsersRound size={17} /><p><strong>Sem e-mail ou senha.</strong><small>O código identifica seu acesso à propriedade.</small></p></div>
                 {error && <p className="form-error" role="alert">{error}</p>}
                 <button className="primary-button full" type="submit" disabled={submitting}>
                   {submitting ? "Entrando…" : "Entrar na propriedade"}
@@ -319,7 +319,7 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
                   <ArrowLeft size={17} /> Voltar
                 </button>
                 <div className="auth-icon"><LockKeyhole size={22} /></div>
-                <h1>Digite sua senha</h1>
+                <h1>Senha</h1>
                 <button className="identity-chip" type="button" onClick={() => setLoginStep("email")}>
                   <span>{email.charAt(0).toUpperCase()}</span>{email}
                 </button>
@@ -351,15 +351,15 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
                   <ArrowLeft size={17} /> Voltar
                 </button>
                 <div className="auth-icon"><LockKeyhole size={22} /></div>
-                <h1>Recuperar acesso</h1>
-                <p className="auth-subtitle">Enviaremos um link seguro para você criar uma nova senha.</p>
+                <h1>Redefinir senha</h1>
+                <p className="auth-subtitle">Enviaremos um link para o seu e-mail.</p>
                 <Field label="E-mail cadastrado">
                   <input type="email" value={email} onChange={(event) => { setEmail(event.target.value); setError(""); setNotice(""); }} placeholder="voce@email.com" autoComplete="email" autoFocus />
                 </Field>
                 {notice && <p className="form-notice" role="status">{notice}</p>}
                 {error && <p className="form-error" role="alert">{error}</p>}
                 <button className="primary-button full" type="submit" disabled={submitting}>
-                  {submitting ? "Enviando link…" : "Enviar link de recuperação"}
+                  {submitting ? "Enviando…" : "Enviar link"}
                 </button>
                 <p className="auth-switch">Lembrou a senha? <button type="button" onClick={() => { setLoginStep("password"); setError(""); setNotice(""); }}>Voltar para entrar</button></p>
               </form>
@@ -376,12 +376,12 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
 
             {signupStep === 0 && (
               <form onSubmit={nextSignup} className="signup-panel">
-                <span className="eyebrow">DADOS PESSOAIS</span><h1>Vamos criar sua conta</h1><p className="auth-subtitle">Comece com as informações básicas.</p>
+                <span className="eyebrow">DADOS PESSOAIS</span><h1>Criar conta</h1><p className="auth-subtitle">Digite seus dados para começar.</p>
                 <button className="google-auth-button" type="button" onClick={() => void submitGoogleLogin()} disabled={submitting}>
                   <span className="google-g" aria-hidden="true">G</span>
-                  {submitting ? "Abrindo Google…" : "Criar conta com Google"}
+                  {submitting ? "Abrindo Google…" : "Continuar com Google"}
                 </button>
-                <div className="auth-divider"><span>ou preencha seus dados</span></div>
+                <div className="auth-divider"><span>ou use seu e-mail</span></div>
                 <div className="form-grid">
                   <Field label="Nome completo"><input value={signup.name} onChange={(e) => changeSignup("name", e.target.value)} placeholder="Seu nome" autoComplete="name" /></Field>
                   <Field label="E-mail"><input type="email" value={signup.email} onChange={(e) => changeSignup("email", e.target.value)} placeholder="voce@email.com" autoComplete="email" /></Field>
@@ -393,7 +393,7 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
 
             {signupStep === 1 && (
               <form onSubmit={nextSignup} className="signup-panel">
-                <span className="eyebrow">SEGURANÇA</span><h1>Proteja seu acesso</h1><p className="auth-subtitle">Crie uma senha segura para sua propriedade.</p>
+                <span className="eyebrow">SEGURANÇA</span><h1>Criar senha</h1><p className="auth-subtitle">Use pelo menos 8 caracteres.</p>
                 <div className="form-grid">
                   <Field label="Senha" hint="Use pelo menos 8 caracteres e evite reutilizar senhas."><input type="password" value={signup.password} onChange={(e) => changeSignup("password", e.target.value)} placeholder="Mínimo 8 caracteres" autoComplete="new-password" /></Field>
                   <Field label="Confirmar senha"><input type="password" value={signup.confirmPassword} onChange={(e) => changeSignup("confirmPassword", e.target.value)} placeholder="Repita a senha" autoComplete="new-password" /></Field>
@@ -405,7 +405,7 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
 
             {signupStep === 2 && (
               <form onSubmit={nextSignup} className="signup-panel">
-                <span className="eyebrow">SUA PROPRIEDADE</span><h1>Conte sobre sua terra</h1><p className="auth-subtitle">Esses dados já formarão a ficha da propriedade.</p>
+                <span className="eyebrow">SUA PROPRIEDADE</span><h1>Sua propriedade</h1><p className="auth-subtitle">Informe os dados principais.</p>
                 <div className="form-grid">
                   <Field label="Nome da propriedade"><input value={property.name} onChange={(e) => changeProperty("name", e.target.value)} placeholder="Ex.: Fazenda Boa Vista" /></Field>
                   <div className="municipality-field-grid">
@@ -425,7 +425,7 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
 
             {signupStep === 3 && (
               <form onSubmit={nextSignup} className="signup-panel">
-                <span className="eyebrow">PRODUÇÃO E RECURSOS</span><h1>O que acontece por aí?</h1><p className="auth-subtitle">Escolha a atividade principal e tudo que fizer parte da rotina.</p>
+                <span className="eyebrow">PRODUÇÃO E RECURSOS</span><h1>Produção</h1><p className="auth-subtitle">Selecione as atividades e recursos da propriedade.</p>
                 <Field label="Principal atividade"><select value={property.mainActivity} onChange={(e) => changeProperty("mainActivity", e.target.value)}><option value="">Selecione</option>{activities.map((activity) => <option key={activity}>{activity}</option>)}</select></Field>
                 <Field label="Outras atividades"><div className="choice-grid">{activities.filter((item) => item !== property.mainActivity).map((activity) => { const active = property.otherActivities.includes(activity); return <button type="button" key={activity} className={`choice-chip ${active ? "active" : ""}`} onClick={() => changeProperty("otherActivities", active ? property.otherActivities.filter((item) => item !== activity) : [...property.otherActivities, activity])}>{active && <Check size={14} />} {activity}</button>; })}</div></Field>
                 <Field label="Quantidade aproximada de animais" hint="Pode deixar em branco se não houver rebanho."><input inputMode="numeric" value={property.approximateAnimals} onChange={(e) => changeProperty("approximateAnimals", e.target.value)} placeholder="0" /></Field>
@@ -437,11 +437,11 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
 
             {signupStep === 4 && (
               <div className="signup-panel review-panel">
-                <span className="eyebrow">TUDO CERTO</span><h1>Sua base está pronta, {firstName}</h1><p className="auth-subtitle">Você poderá editar tudo depois no perfil.</p>
+                <span className="eyebrow">TUDO CERTO</span><h1>Revisar dados</h1><p className="auth-subtitle">Confira as informações antes de criar a conta, {firstName}.</p>
                 <div className="review-card"><div className="review-icon"><MapPin size={23} /></div><div><strong>{property.name}</strong><span>{property.municipality}, {property.state}</span><small>{property.area} {property.areaUnit} · {property.mainActivity}</small></div></div>
                 <div className="preview-note">Seus dados serão associados à sua conta e isolados dos demais produtores pelo servidor.</div>
                 {error && <p className="form-error" role="alert">{error}</p>}
-                <div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(3)}>Voltar</button><button className="primary-button" type="button" onClick={finishSignup} disabled={submitting}>{submitting ? "Criando conta…" : "Confirmar e criar conta"}</button></div>
+                <div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(3)}>Voltar</button><button className="primary-button" type="button" onClick={finishSignup} disabled={submitting}>{submitting ? "Criando conta…" : "Criar conta"}</button></div>
               </div>
             )}
           </div>
