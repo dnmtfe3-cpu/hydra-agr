@@ -17,6 +17,7 @@ beforeEach(() => {
 describe("autenticação", () => {
   it("valida o e-mail antes de pedir senha", () => {
     render(<AuthFlow {...handlers} />);
+    fireEvent.click(screen.getByRole("button", { name: /^entrar$/i }));
     const email = screen.getByLabelText(/e-mail/i);
     fireEvent.change(email, { target: { value: "invalido" } });
     fireEvent.submit(email.closest("form")!);
@@ -24,9 +25,12 @@ describe("autenticação", () => {
     expect(handlers.onLogin).not.toHaveBeenCalled();
   });
 
-  it("oferece criação de conta, funcionário e recuperação de senha", () => {
+  it("mantém a entrada principal e oferece os fluxos de conta", () => {
     render(<AuthFlow {...handlers} />);
     expect(screen.getByRole("button", { name: /criar conta/i })).toBeEnabled();
+    expect(screen.getByRole("button", { name: /acesso de funcionário/i })).toBeEnabled();
+
+    fireEvent.click(screen.getByRole("button", { name: /^entrar$/i }));
     expect(screen.getByRole("button", { name: /entrar como funcionário/i })).toBeEnabled();
     fireEvent.change(screen.getByLabelText(/e-mail/i), { target: { value: "produtor@example.com" } });
     fireEvent.click(screen.getByRole("button", { name: /avançar/i }));
@@ -35,7 +39,7 @@ describe("autenticação", () => {
 
   it("abre o acesso de funcionário sem pedir e-mail ou senha", async () => {
     render(<AuthFlow {...handlers} />);
-    fireEvent.click(screen.getByRole("button", { name: /entrar como funcionário/i }));
+    fireEvent.click(screen.getByRole("button", { name: /acesso de funcionário/i }));
     expect(screen.getByRole("heading", { name: /acesso de funcionário/i })).toBeInTheDocument();
     const code = screen.getByLabelText(/código de acesso/i);
     fireEvent.change(code, { target: { value: "HA-7K3M-9Q2P-4RX8" } });
@@ -45,6 +49,7 @@ describe("autenticação", () => {
 
   it("abre a recuperação e solicita o link para o e-mail informado", async () => {
     render(<AuthFlow {...handlers} />);
+    fireEvent.click(screen.getByRole("button", { name: /^entrar$/i }));
     fireEvent.change(screen.getByLabelText(/^e-mail$/i), { target: { value: "produtor@example.com" } });
     fireEvent.click(screen.getByRole("button", { name: /avançar/i }));
     fireEvent.click(screen.getByRole("button", { name: /esqueci minha senha/i }));
