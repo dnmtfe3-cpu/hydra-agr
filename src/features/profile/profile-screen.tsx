@@ -19,7 +19,6 @@ import {
   Menu,
   Palette,
   Pencil,
-  Presentation,
   ShieldCheck,
   Sprout,
   UserRound,
@@ -92,7 +91,6 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
   const coverFileRef = useRef<HTMLInputElement>(null);
   const initials = account.profile.name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "HA";
   const isPlus = account.profile.plan === "Hydra Agro+";
-  const isDemoAccount = account.email.trim().toLowerCase() === "projeto2026@gmail.com";
   const ownPosts = account.posts.filter((post) => post.authorId === account.id).length;
   const heroStyle = account.property.coverUrl
     ? { backgroundImage: `linear-gradient(145deg, rgba(9,58,40,.89), rgba(5,38,26,.94)), url("${account.property.coverUrl}")` } as CSSProperties
@@ -104,7 +102,7 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
     setEditOpen(true);
   }
 
-  function openInjectedMenu(selector: ".theme-menu-row" | ".demo-menu-row") {
+  function openInjectedMenu(selector: ".theme-menu-row") {
     setSettingsOpen(false);
     window.setTimeout(() => document.querySelector<HTMLButtonElement>(selector)?.click(), 180);
   }
@@ -295,7 +293,6 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
             <MenuRow icon={<Palette size={21} />} title="Aparência" subtitle="Modo claro ou escuro" onClick={() => openInjectedMenu(".theme-menu-row")} />
             <MenuRow icon={<Bell size={21} />} title="Notificações" subtitle="Avisos da conta e da propriedade" onClick={() => { setSettingsOpen(false); openNotificationPreferences(); }} />
             <MenuRow icon={<LockKeyhole size={21} />} title="Segurança" subtitle="Alterar e-mail ou senha" onClick={() => { setSettingsOpen(false); setSecurity({ email: account.email, password: "", confirmPassword: "" }); setSecurityFeedback(null); setSecurityOpen(true); }} />
-            {isDemoAccount && <MenuRow icon={<Presentation size={21} />} title="Modo demonstração" subtitle="Roteiro da apresentação" onClick={() => openInjectedMenu(".demo-menu-row")} />}
           </div>
 
           <span className="profile-settings-label">INFORMAÇÕES</span>
