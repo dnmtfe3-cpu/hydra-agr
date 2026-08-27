@@ -26,6 +26,7 @@ import "./herd-weight-history.css";
 import "./public-animal.css";
 import "./authentic-ui.css";
 import "./interaction-polish.css";
+import "./features/profile/profile-mobile-fix.css";
 import "./features/profile/profile-ranking-runtime";
 import "./features/profile/level10-vip-runtime";
 import "./features/community/community-comment-runtime";
