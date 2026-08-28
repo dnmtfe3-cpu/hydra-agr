@@ -1,4 +1,4 @@
-/* Mais ferramentas mantém o mesmo ícone da Home e abre como sheet, igual Nova ação. */
+/* Mais ferramentas: atalho igual aos demais e sheet estável em web/Android. */
 .hydra-root .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more {
   grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
   gap: 4px !important;
@@ -10,12 +10,6 @@
   min-width: 44px !important;
   min-height: 44px !important;
   border-radius: 14px !important;
-}
-
-.hydra-root .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more > button.home-more-tools-shortcut.active > span {
-  background: #dfece3 !important;
-  color: var(--forest-800) !important;
-  box-shadow: inset 0 0 0 1px rgba(31, 101, 71, .12) !important;
 }
 
 .hydra-root .home-screen > button.home-more-tools-source {
@@ -30,32 +24,27 @@ html.home-tools-open body {
 
 html.home-tools-open .bottom-nav {
   visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer {
-  --more-tools-height: min(56dvh, 500px);
+  --more-tools-height: min(620px, calc(100dvh - max(72px, env(safe-area-inset-top, 0px) + 24px)));
   position: fixed !important;
   inset: 0 !important;
   z-index: 1200 !important;
   width: 100vw !important;
   height: 100dvh !important;
-  max-width: none !important;
   margin: 0 !important;
-  padding:
-    calc(100dvh - var(--more-tools-height) + 82px)
-    14px
-    calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+  padding: 0 14px calc(14px + env(safe-area-inset-bottom, 0px)) !important;
   display: flex !important;
   flex-direction: column !important;
-  justify-content: flex-start !important;
+  justify-content: flex-end !important;
   align-items: stretch !important;
   gap: 9px !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  overscroll-behavior: contain !important;
-  background: rgba(5, 28, 19, .48) !important;
-  backdrop-filter: blur(9px) !important;
-  -webkit-backdrop-filter: blur(9px) !important;
+  overflow: hidden !important;
+  background: rgba(5, 28, 19, .46) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
   isolation: isolate !important;
   animation: hydra-more-tools-backdrop 180ms ease-out both !important;
 }
@@ -70,8 +59,8 @@ html.home-tools-open .bottom-nav {
   height: var(--more-tools-height) !important;
   border-radius: 30px 30px 0 0 !important;
   background: var(--paper, #fffefb) !important;
-  box-shadow: 0 -24px 80px rgba(0,0,0,.20) !important;
-  animation: hydra-more-tools-sheet 240ms cubic-bezier(.22,1,.36,1) both !important;
+  box-shadow: 0 -20px 70px rgba(0,0,0,.18) !important;
+  animation: hydra-more-tools-sheet 230ms cubic-bezier(.22,1,.36,1) both !important;
 }
 
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer::after {
@@ -93,22 +82,28 @@ html.home-tools-open .bottom-nav {
   position: relative !important;
   z-index: 3 !important;
   width: 100% !important;
-  flex: 0 0 auto !important;
+  height: 68px !important;
+  min-height: 68px !important;
+  max-height: 68px !important;
+  flex: 0 0 68px !important;
   margin: 0 !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+}
+
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:first-of-type:not(.home-more-tools-close) {
+  margin-top: 86px !important;
 }
 
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .history-home-row,
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-production-notebook-card,
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-nutriciclo-card,
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-spreadsheet-card {
-  min-height: 64px !important;
-  border-radius: 18px !important;
   background: #f8f8f3 !important;
   border: 1px solid rgba(18, 61, 44, .10) !important;
   box-shadow: none !important;
 }
 
-/* X igual ao padrão dos outros modais do app. */
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-more-tools-close {
   position: fixed !important;
   z-index: 5 !important;
@@ -116,7 +111,10 @@ html.home-tools-open .bottom-nav {
   bottom: calc(var(--more-tools-height) - 68px) !important;
   width: 42px !important;
   height: 42px !important;
+  min-width: 42px !important;
   min-height: 42px !important;
+  max-width: 42px !important;
+  max-height: 42px !important;
   padding: 0 !important;
   border: 1px solid rgba(18, 61, 44, .10) !important;
   border-radius: 14px !important;
@@ -127,19 +125,12 @@ html.home-tools-open .bottom-nav {
   box-shadow: none !important;
 }
 
-/* Todos os ícones e destaques usam a mesma linguagem verde/neutra. */
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:not(.home-more-tools-close) > span:first-child,
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer .home-production-icon {
   color: var(--forest-700) !important;
   background: #edf3ee !important;
   border-color: transparent !important;
   box-shadow: none !important;
-}
-
-.hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:not(.home-more-tools-close) > span:first-child svg,
-.hydra-root .home-screen .home-tools-list.home-more-tools-layer .home-production-icon svg {
-  color: var(--forest-700) !important;
-  stroke: currentColor !important;
 }
 
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer small,
@@ -152,11 +143,6 @@ html.home-tools-open .bottom-nav {
   color: var(--forest-950) !important;
 }
 
-.hydra-root.theme-dark .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more > button.home-more-tools-shortcut.active > span {
-  background: #214332 !important;
-  color: #c6e0cc !important;
-}
-
 .hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer::before {
   background: #0d271d !important;
 }
@@ -165,7 +151,7 @@ html.home-tools-open .bottom-nav {
   color: #f4f5ef !important;
 }
 
-.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer > button {
+.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer > button:not(.home-more-tools-close) {
   background: #153428 !important;
   border-color: rgba(255,255,255,.08) !important;
 }
@@ -178,63 +164,14 @@ html.home-tools-open .bottom-nav {
   border-color: rgba(255,255,255,.08) !important;
 }
 
-.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer small,
-.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer .home-production-copy small {
-  color: #9eafa5 !important;
-}
-
-.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer strong,
-.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer em {
-  color: #f4f5ef !important;
-}
-
 @keyframes hydra-more-tools-backdrop {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
 @keyframes hydra-more-tools-sheet {
-  from { transform: translateY(28px); opacity: .72; }
+  from { transform: translateY(24px); opacity: .76; }
   to { transform: translateY(0); opacity: 1; }
-}
-
-/* Splash: fundo único verde e app totalmente bloqueado enquanto ela existe. */
-html:has(.splash-screen),
-html:has(.splash-screen) body,
-html:has(.splash-screen) body #root {
-  background: #09271b !important;
-  background-color: #09271b !important;
-  background-image: none !important;
-  overflow: hidden !important;
-  overscroll-behavior: none !important;
-}
-
-body:has(.splash-screen) .app-shell {
-  display: none !important;
-  pointer-events: none !important;
-}
-
-body:has(.splash-screen) .bottom-nav {
-  display: none !important;
-  pointer-events: none !important;
-}
-
-.splash-screen {
-  position: fixed !important;
-  z-index: 2147483647 !important;
-  inset: -128px -8px -260px -8px !important;
-  width: auto !important;
-  height: auto !important;
-  min-width: calc(100vw + 16px) !important;
-  min-height: calc(100dvh + 388px) !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  overflow: hidden !important;
-  background: #09271b !important;
-  background-color: #09271b !important;
-  pointer-events: all !important;
-  touch-action: none !important;
 }
 
 @media (max-width: 390px) {
@@ -251,14 +188,11 @@ body:has(.splash-screen) .bottom-nav {
   }
 
   .hydra-root .home-screen .home-tools-list.home-more-tools-layer {
-    --more-tools-height: min(59dvh, 510px);
-    padding-top: calc(100dvh - var(--more-tools-height) + 78px) !important;
     padding-left: 11px !important;
     padding-right: 11px !important;
   }
 
   .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-more-tools-close {
     right: 14px !important;
-    bottom: calc(var(--more-tools-height) - 66px) !important;
   }
 }
