@@ -1,13 +1,7 @@
 import { supabase } from "../../services/supabase";
 import "../community/community-social-runtime";
-import "../community/community-follow-runtime";
-import "../community/community-follow.css";
 import "../community/community-search-report-runtime";
 import "../community/community-header-fix.css";
-import "../community/community-connections.css";
-import "../community/community-connections-runtime";
-import "./profile-social-stats-runtime";
-import "./profile-social-stats.css";
 import "./profile-community-removal.css";
 import "./profile-team-tab-runtime";
 
