@@ -27,25 +27,35 @@ function setup() {
   return { account, updateAccount, updateAccountMock, logout, changeCredentials };
 }
 
+function openSettings() {
+  fireEvent.click(screen.getByRole("button", { name: "Abrir menu do perfil" }));
+  expect(screen.getByRole("dialog", { name: "Menu e configurações" })).toBeInTheDocument();
+}
+
+function openSetting(buttonName: string | RegExp) {
+  openSettings();
+  fireEvent.click(screen.getByRole("button", { name: buttonName }));
+}
+
 describe("ações de preferências e segurança", () => {
   it.each([
-    ["Segurança", "E-mail e senha"],
-    ["Notificações do aplicativo", "Notificações do aplicativo"],
-    ["Apoie o Hydra Agro", "Apoie o Hydra Agro"],
-    ["Termos de uso", "Termos de uso"],
-    ["Política de privacidade", "Política de privacidade"],
-    ["Sobre o Hydra Agro", "Sobre o Hydra Agro"],
-  ])("abre %s no modal correto", (buttonName, dialogName) => {
+    [/^Segurança/, "E-mail e senha"],
+    [/^Notificações/, "Notificações do aplicativo"],
+    [/^Apoie o Hydra Agro/, "Apoie o Hydra Agro"],
+    [/^Termos de uso/, "Termos de uso"],
+    [/^Política de privacidade/, "Política de privacidade"],
+    [/^Sobre o Hydra Agro/, "Sobre o Hydra Agro"],
+  ] as const)("abre %s no modal correto", (buttonName, dialogName) => {
     setup();
-    fireEvent.click(screen.getByRole("button", { name: new RegExp(`^${buttonName}`) }));
+    openSetting(buttonName);
     expect(screen.getByRole("dialog", { name: dialogName })).toBeInTheDocument();
   });
 
   it("salva as preferências de notificações no estado da conta", async () => {
     const { account, updateAccountMock } = setup();
-    fireEvent.click(screen.getByRole("button", { name: /^Notificações do aplicativo/ }));
+    openSetting(/^Notificações/);
     fireEvent.click(screen.getByRole("switch", { name: "Avisos do aplicativo" }));
-    fireEvent.click(screen.getByRole("button", { name: "Salvar preferências" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar" }));
 
     await waitFor(() => expect(updateAccountMock).toHaveBeenCalledTimes(1));
     const updater = updateAccountMock.mock.calls[0][0];
@@ -55,17 +65,17 @@ describe("ações de preferências e segurança", () => {
 
   it("altera a senha usando a autenticação existente", async () => {
     const { changeCredentials } = setup();
-    fireEvent.click(screen.getByRole("button", { name: /^Segurança/ }));
+    openSetting(/^Segurança/);
     fireEvent.change(screen.getByLabelText(/^Nova senha/), { target: { value: "senha-segura-123" } });
     fireEvent.change(screen.getByLabelText("Confirmar nova senha"), { target: { value: "senha-segura-123" } });
-    fireEvent.click(screen.getByRole("button", { name: "Confirmar com segurança" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar alterações" }));
 
     await waitFor(() => expect(changeCredentials).toHaveBeenCalledWith({ password: "senha-segura-123" }));
   });
 
   it("mostra conteúdo completo nos termos", () => {
     setup();
-    fireEvent.click(screen.getByRole("button", { name: "Termos de uso" }));
+    openSetting(/^Termos de uso/);
     expect(screen.getByRole("heading", { name: "1. Finalidade da plataforma" })).toBeInTheDocument();
     expect(screen.getByText(/não substitui orientação veterinária/i)).toBeInTheDocument();
   });
@@ -74,7 +84,7 @@ describe("ações de preferências e segurança", () => {
     const { logout } = setup();
     fireEvent.click(screen.getByRole("button", { name: "Sair desta conta" }));
     expect(screen.getByRole("dialog", { name: "Finalizar sessão" })).toBeInTheDocument();
-    expect(screen.getByText("Deseja realmente finalizar sua sessão?")).toBeInTheDocument();
+    expect(screen.getByText("Deseja sair desta conta?")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Sair" }));
     await waitFor(() => expect(logout).toHaveBeenCalledTimes(1));
   });
