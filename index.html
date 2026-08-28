@@ -154,6 +154,36 @@
           animation: none !important;
         }
       }
+
+      /* Splash deve preencher o viewport inteiro, inclusive as safe areas. */
+      html:has(.splash-screen),
+      body:has(.splash-screen),
+      body:has(.splash-screen) #root {
+        background: #09271b !important;
+        overflow: hidden !important;
+      }
+
+      body:has(.splash-screen) .bottom-nav {
+        visibility: hidden !important;
+      }
+
+      .splash-screen {
+        position: fixed !important;
+        z-index: 2147483647 !important;
+        top: calc(-1 * env(safe-area-inset-top, 0px)) !important;
+        right: calc(-1 * env(safe-area-inset-right, 0px)) !important;
+        bottom: calc(-1 * env(safe-area-inset-bottom, 0px)) !important;
+        left: calc(-1 * env(safe-area-inset-left, 0px)) !important;
+        width: auto !important;
+        height: auto !important;
+        min-width: 100vw !important;
+        min-height: calc(100dvh + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)) !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background-color: #09271b !important;
+        overflow: hidden !important;
+      }
     </style>
   </body>
 </html>
