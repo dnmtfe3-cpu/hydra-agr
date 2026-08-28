@@ -128,5 +128,76 @@ function installCompactTypography() {
   document.head.appendChild(style);
 }
 
+function initialsFromName(name?: string | null) {
+  return (name || "Produtor")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("") || "P";
+}
+
+function replaceBrokenProfileImage(image: HTMLImageElement) {
+  if (image.dataset.hydraAvatarFallback === "done") return;
+
+  if (image.matches(".home-profile-avatar img")) {
+    const holder = image.closest<HTMLElement>(".home-profile-avatar");
+    if (!holder) return;
+    image.dataset.hydraAvatarFallback = "done";
+    const name = document.querySelector<HTMLElement>(".greeting-name")?.textContent;
+    holder.replaceChildren(document.createTextNode(initialsFromName(name)));
+    return;
+  }
+
+  if (image.matches("img.profile-avatar.image")) {
+    image.dataset.hydraAvatarFallback = "done";
+    const name = image.closest(".profile-hero")?.querySelector<HTMLElement>("h1")?.textContent;
+    const fallback = document.createElement("span");
+    fallback.className = "profile-avatar";
+    fallback.textContent = initialsFromName(name);
+    image.replaceWith(fallback);
+  }
+}
+
+function installAvatarFallbacks() {
+  document.addEventListener("error", (event) => {
+    if (event.target instanceof HTMLImageElement) replaceBrokenProfileImage(event.target);
+  }, true);
+}
+
+let lastSplashState: boolean | null = null;
+async function syncNativeStatusBarWithSplash() {
+  if (!Capacitor.isNativePlatform()) return;
+  const hasSplash = Boolean(document.querySelector(".splash-screen"));
+  if (hasSplash === lastSplashState) return;
+  lastSplashState = hasSplash;
+
+  try {
+    const { StatusBar, Style } = await import("@capacitor/status-bar");
+    if (hasSplash) {
+      await StatusBar.hide();
+      return;
+    }
+
+    await StatusBar.show();
+    await StatusBar.setStyle({ style: Style.Dark });
+    if (Capacitor.getPlatform() === "android") {
+      await StatusBar.setBackgroundColor({ color: "#f8f6ef" });
+    }
+  } catch {
+    // A interface continua utilizável mesmo se o sistema negar controle da status bar.
+  }
+}
+
+function installSplashStatusBarSync() {
+  if (!Capacitor.isNativePlatform()) return;
+  const observer = new MutationObserver(() => { void syncNativeStatusBarWithSplash(); });
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+  void syncNativeStatusBarWithSplash();
+}
+
 // Aplica antes do primeiro frame: evita o micro-pulo visual de tipografia.
 installCompactTypography();
+installAvatarFallbacks();
+installSplashStatusBarSync();
