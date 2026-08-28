@@ -45,27 +45,29 @@ function savedTheme(): ThemeMode {
 }
 
 function openDailyBriefingPanelFromNotification() {
-  let attempts = 0;
+  let observer: MutationObserver | null = null;
+
   const tryOpen = () => {
-    attempts += 1;
     const homeButton = Array.from(document.querySelectorAll<HTMLButtonElement>(".bottom-nav button"))
       .find((button) => button.textContent?.trim().includes("Início"));
     if (homeButton && !homeButton.classList.contains("active")) {
       homeButton.click();
-      window.setTimeout(tryOpen, 220);
-      return;
+      return false;
     }
 
     const briefingButton = Array.from(document.querySelectorAll<HTMLButtonElement>("button"))
       .find((button) => button.textContent?.includes("HYDRA AVISOS") && button.textContent?.includes("O que fazer hoje"));
-    if (briefingButton) {
-      briefingButton.click();
-      return;
-    }
+    if (!briefingButton) return false;
 
-    if (attempts < 14) window.setTimeout(tryOpen, 180);
+    briefingButton.click();
+    observer?.disconnect();
+    observer = null;
+    return true;
   };
-  window.setTimeout(tryOpen, 120);
+
+  if (tryOpen()) return;
+  observer = new MutationObserver(() => { void tryOpen(); });
+  observer.observe(document.body, { childList: true, subtree: true });
 }
 
 function HydraThemeRoot() {
@@ -76,6 +78,14 @@ function HydraThemeRoot() {
   useEffect(() => {
     try { window.localStorage.setItem(THEME_KEY, theme); } catch { /* armazenamento indisponível */ }
   }, [theme]);
+
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== "android") return;
+    void import("@capacitor/local-notifications").then(async ({ LocalNotifications }) => {
+      const permission = await LocalNotifications.checkPermissions();
+      if (permission.display !== "granted") await LocalNotifications.requestPermissions();
+    }).catch(() => undefined);
+  }, []);
 
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return;
