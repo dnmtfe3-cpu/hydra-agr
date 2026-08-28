@@ -7,6 +7,7 @@ import "./home-production-notebook-card.css";
 import "./home-profile-xp.css";
 import {
   Bell,
+  BellRing,
   ChevronRight,
   ClipboardCheck,
   Beef as Cow,
@@ -28,6 +29,7 @@ import type { Announcement, AppRoute, HydraAccount } from "../../lib/hydra-types
 import { farmExperience } from "../../lib/farm-xp";
 import { currentMonthTotals, loadProductionNotebook } from "../../services/family-farming-repository";
 import { requireSupabase } from "../../services/supabase";
+import { DailyBriefingPanel } from "../daily-briefing/daily-briefing-panel";
 import { NutriCicloPanel } from "../family-farming/nutriciclo-panel";
 import { HydraSpreadsheetPanel } from "../spreadsheets/hydra-spreadsheet-panel";
 import { WeatherWidget } from "./weather-widget";
@@ -60,6 +62,7 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
   const [productionResult, setProductionResult] = useState<number | null>(null);
   const [nutriCicloOpen, setNutriCicloOpen] = useState(false);
   const [spreadsheetOpen, setSpreadsheetOpen] = useState(false);
+  const [dailyBriefingOpen, setDailyBriefingOpen] = useState(false);
   const firstName = account.profile.name.split(/\s+/)[0] || "Produtor";
   const welcome = welcomeMessage();
   const today = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "2-digit", month: "long" }).format(new Date());
@@ -167,6 +170,12 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
         <ChevronRight size={18} />
       </button>
 
+      <button className="home-spreadsheet-card" onClick={() => setDailyBriefingOpen(true)}>
+        <span><BellRing size={21} /></span>
+        <span><small>HYDRA AVISOS</small><strong>O que fazer hoje</strong><em>Resumo diário gratuito com tarefas, pendências, rebanho e NFC.</em></span>
+        <ChevronRight size={18} />
+      </button>
+
       <button className="home-spreadsheet-card" onClick={() => setSpreadsheetOpen(true)}>
         <span><FileSpreadsheet size={21} /></span>
         <span><small>HYDRA PLANILHA</small><strong>Exportar dados da propriedade</strong><em>Rebanho, atividades, alimentação e resumo para Excel ou WhatsApp.</em></span>
@@ -193,6 +202,7 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
 
       <button className="home-fab-label" onClick={onQuickAction}><Plus size={19} /> Nova ação</button>
       <NutriCicloPanel account={account} open={nutriCicloOpen} onClose={() => setNutriCicloOpen(false)} />
+      <DailyBriefingPanel account={account} open={dailyBriefingOpen} onClose={() => setDailyBriefingOpen(false)} />
       <HydraSpreadsheetPanel account={account} open={spreadsheetOpen} onClose={() => setSpreadsheetOpen(false)} />
     </div>
   );
