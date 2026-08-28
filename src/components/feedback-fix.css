@@ -1,0 +1,61 @@
+.app-toast-region {
+  top: max(calc(env(safe-area-inset-top) + 12px), 16px) !important;
+  width: min(calc(100% - 24px), 390px) !important;
+  gap: 8px !important;
+}
+
+.app-toast {
+  min-height: 62px !important;
+  padding: 11px 12px !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  isolation: isolate;
+}
+
+.app-toast-copy small {
+  overflow-wrap: anywhere;
+}
+
+.modal-layer:has(.confirm-action) {
+  align-items: center !important;
+  justify-content: center !important;
+  padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom)) !important;
+}
+
+.modal-layer:has(.confirm-action) .modal-sheet {
+  width: min(100%, 390px) !important;
+  max-height: min(78dvh, 540px) !important;
+  margin: 0 !important;
+  border-radius: 24px !important;
+  overflow: hidden !important;
+}
+
+.modal-layer:has(.confirm-action) .sheet-handle {
+  display: none !important;
+}
+
+.modal-layer:has(.confirm-action) .modal-head {
+  padding-top: 18px !important;
+}
+
+.modal-layer:has(.confirm-action) .confirm-action {
+  padding-bottom: 4px;
+}
+
+.modal-layer:has(.confirm-action) .modal-action-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+
+.modal-layer:has(.confirm-action) .modal-action-row > button {
+  width: 100% !important;
+  min-height: 46px !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 360px) {
+  .modal-layer:has(.confirm-action) .modal-action-row {
+    grid-template-columns: 1fr !important;
+  }
+}
