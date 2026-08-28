@@ -6,6 +6,7 @@ import {
   BellRing,
   CheckCheck,
   ClipboardCheck,
+  Droplets,
   LoaderCircle,
   RadioTower,
   RefreshCw,
@@ -15,7 +16,7 @@ import {
 import { EmptyState, ScreenHeader, Toggle } from "../../components/ui";
 import { showAppToast } from "../../components/modal-system";
 import type { HydraAccount, UpdateAccount } from "../../lib/hydra-types";
-import { requireSupabase } from "../../services/supabase";
+import { supabase } from "../../services/supabase";
 
 type Props = {
   account: HydraAccount;
@@ -37,6 +38,7 @@ function notificationIcon(kind: string) {
   if (normalized.includes("activity") || normalized.includes("task") || normalized.includes("atividade") || normalized.includes("tarefa")) return <ClipboardCheck size={19} />;
   if (normalized.includes("monitor") || normalized.includes("occurrence") || normalized.includes("ocorr")) return <RadioTower size={19} />;
   if (normalized.includes("community") || normalized.includes("comunidade")) return <UsersRound size={19} />;
+  if (normalized.includes("water") || normalized.includes("água") || normalized.includes("agua")) return <Droplets size={19} />;
   if (normalized.includes("admin")) return <ShieldCheck size={19} />;
   return <BellRing size={19} />;
 }
@@ -46,6 +48,7 @@ function notificationKindLabel(kind: string) {
   if (normalized.includes("activity") || normalized.includes("task") || normalized.includes("atividade") || normalized.includes("tarefa")) return "Tarefa";
   if (normalized.includes("monitor") || normalized.includes("occurrence") || normalized.includes("ocorr")) return "Monitoramento";
   if (normalized.includes("community") || normalized.includes("comunidade")) return "Comunidade";
+  if (normalized.includes("water") || normalized.includes("água") || normalized.includes("agua")) return "Água";
   if (normalized.includes("admin")) return "Hydra Agro";
   return "Aviso";
 }
@@ -60,6 +63,17 @@ function dateLabel(value: string) {
 }
 
 export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
+  const localItems = useMemo<NotificationRow[]>(() => (
+    account.notifications.map((message, index) => ({
+      id: `local-${index}-${message}`,
+      title: "Aviso do Hydra Agro",
+      body: message,
+      kind: "local",
+      read_at: null,
+      created_at: new Date(Date.now() - index * 60_000).toISOString(),
+    }))
+  ), [account.notifications]);
+
   const [items, setItems] = useState<NotificationRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -74,9 +88,16 @@ export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
     if (!silent) setLoading(true);
     else setRefreshing(true);
     setError("");
+
+    if (!supabase) {
+      setItems(localItems);
+      setLoading(false);
+      setRefreshing(false);
+      return;
+    }
+
     try {
-      const client = requireSupabase();
-      const { data, error: requestError } = await client
+      const { data, error: requestError } = await supabase
         .from("notifications")
         .select("id,title,body,kind,read_at,created_at")
         .eq("recipient_user_id", account.id)
@@ -85,16 +106,18 @@ export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
       setItems((data ?? []) as NotificationRow[]);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Não foi possível carregar as notificações.");
+      if (localItems.length > 0) setItems(localItems);
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [account.id]);
+  }, [account.id, localItems]);
 
   useEffect(() => {
     void loadNotifications();
-    const client = requireSupabase();
-    const channel = client
+    if (!supabase) return;
+
+    const channel = supabase
       .channel(`hydra-notifications-${account.id}`)
       .on(
         "postgres_changes",
@@ -102,16 +125,23 @@ export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
         () => { void loadNotifications(true); },
       )
       .subscribe();
-    return () => { void client.removeChannel(channel); };
+
+    return () => { void supabase.removeChannel(channel); };
   }, [account.id, loadNotifications]);
 
   async function markRead(item: NotificationRow) {
     if (item.read_at || busyId) return;
     setBusyId(item.id);
+    const readAt = new Date().toISOString();
+
+    if (!supabase || item.id.startsWith("local-")) {
+      setItems((current) => current.map((entry) => entry.id === item.id ? { ...entry, read_at: readAt } : entry));
+      setBusyId(null);
+      return;
+    }
+
     try {
-      const readAt = new Date().toISOString();
-      const client = requireSupabase();
-      const { error: requestError } = await client
+      const { error: requestError } = await supabase
         .from("notifications")
         .update({ read_at: readAt })
         .eq("id", item.id)
@@ -128,10 +158,17 @@ export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
   async function markAllRead() {
     if (unreadCount === 0 || markingAll) return;
     setMarkingAll(true);
+    const readAt = new Date().toISOString();
+
+    if (!supabase) {
+      setItems((current) => current.map((entry) => entry.read_at ? entry : { ...entry, read_at: readAt }));
+      showAppToast("Todas as notificações foram marcadas como lidas");
+      setMarkingAll(false);
+      return;
+    }
+
     try {
-      const readAt = new Date().toISOString();
-      const client = requireSupabase();
-      const { error: requestError } = await client
+      const { error: requestError } = await supabase
         .from("notifications")
         .update({ read_at: readAt })
         .eq("recipient_user_id", account.id)
@@ -158,6 +195,18 @@ export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
     }
   }
 
+  async function changeWaterAlerts(waterAlerts: boolean) {
+    setSettingsBusy(true);
+    try {
+      await updateAccount((current) => ({ ...current, settings: { ...current.settings, waterAlerts } }), { requireRemote: true });
+      showAppToast(waterAlerts ? "Alertas de água ativados" : "Alertas de água pausados");
+    } catch (caught) {
+      showAppToast(caught instanceof Error ? caught.message : "Não foi possível salvar a preferência.", "error");
+    } finally {
+      setSettingsBusy(false);
+    }
+  }
+
   return (
     <div className="screen page-enter extra-screen notifications-screen">
       <ScreenHeader
@@ -171,8 +220,13 @@ export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
         <div className="notification-preference-row">
           <span className="notification-preference-icon"><Bell size={20} /></span>
           <div><strong>Avisos do aplicativo</strong><small>Tarefas, monitoramentos, comunidade e avisos da conta.</small></div>
-          <Toggle checked={account.settings.pushNotifications} label="Avisos do aplicativo" onChange={(value) => void changePushNotifications(value)} />
+          <Toggle checked={account.settings.pushNotifications} label="Notificações do aplicativo" onChange={(value) => void changePushNotifications(value)} />
           {settingsBusy && <LoaderCircle size={15} className="spin notification-setting-loader" />}
+        </div>
+        <div className="notification-preference-row">
+          <span className="notification-preference-icon"><Droplets size={20} /></span>
+          <div><strong>Alertas de água</strong><small>Avisos ligados ao consumo, economia e atenção na propriedade.</small></div>
+          <Toggle checked={account.settings.waterAlerts} label="Alertas de água" onChange={(value) => void changeWaterAlerts(value)} />
         </div>
       </section>
 
