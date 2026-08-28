@@ -83,16 +83,17 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
     <section className="greeting-block"><div><h1><span className="greeting-time">{welcome},</span> <strong className="greeting-name">{firstName}</strong></h1><p className="capitalize">{today}</p></div><WeatherWidget municipality={account.property.municipality} onCompleteProperty={() => navigate("property")} /></section>
     {announcements.length > 0 && <section className="home-announcements" aria-label="Avisos do Hydra Agro">{announcements.slice(0, 3).map((announcement) => <article key={announcement.id} className={announcement.level}><span>{announcement.level === "critical" ? "IMPORTANTE" : announcement.level === "attention" ? "ATENÇÃO" : "AVISO"}</span><strong>{announcement.title}</strong><p>{announcement.body}</p></article>)}</section>}
 
-    <div className="shortcut-row" aria-label="Atalhos principais">
-      <button onClick={() => navigate("herd")} aria-label="Rebanho" title="Rebanho"><span><Cow size={23} /></span></button>
-      <button onClick={() => navigate("nfc")} aria-label="NFC" title="NFC"><span><ScanLine size={23} /></span></button>
+    <div className="shortcut-row home-shortcuts-five" aria-label="Atalhos">
+      <button onClick={() => navigate("community")} aria-label="Comunidade" title="Comunidade"><span><HeartHandshake size={23} /></span></button>
+      <button onClick={() => navigate("monitor")} aria-label="Monitorar" title="Monitorar"><span><RadioTower size={23} /></span></button>
       <button onClick={() => navigate("activities")} aria-label="Tarefas" title="Tarefas"><span><ClipboardCheck size={23} /></span></button>
       <button onClick={() => navigate("assistant")} aria-label="Assistente" title="Assistente"><span><MessageSquareText size={23} /></span></button>
+      <button className="production-shortcut" onClick={() => navigate("production")} aria-label="Caderno da Produção" title="Produção"><span><NotebookTabs size={23} /></span></button>
     </div>
 
     <button className="nfc-banner" onClick={() => navigate("nfc")}><span className="nfc-banner-icon"><ScanLine size={27} /></span><span className="nfc-banner-copy"><small>NFC / RFID</small><strong>Ler identificação do animal</strong><em>{countLabel(identifiedAnimals, "identificado", "identificados")} · {countLabel(account.nfcReadCount, "leitura", "leituras")}</em></span><ChevronRight size={22} /></button>
 
-    <button className="home-spreadsheet-card" onClick={() => setDailyBriefingOpen(true)}><span><BellRing size={21} /></span><span><small>HYDRA AVISOS</small><strong>O que fazer hoje</strong><em>{pendingActivities.length ? countLabel(pendingActivities.length, "tarefa pendente", "tarefas pendentes") : "Tudo em dia na propriedade"}</em></span><ChevronRight size={18} /></button>
+    <button className="home-spreadsheet-card" style={{ marginTop: 18 }} onClick={() => setDailyBriefingOpen(true)}><span><BellRing size={21} /></span><span><small>HYDRA AVISOS</small><strong>O que fazer hoje</strong><em>{pendingActivities.length ? countLabel(pendingActivities.length, "tarefa pendente", "tarefas pendentes") : "Tudo em dia na propriedade"}</em></span><ChevronRight size={18} /></button>
 
     <button className="history-home-row" onClick={() => setToolsOpen((open) => !open)} aria-expanded={toolsOpen}><span><Plus size={19} /></span><div><strong>Mais ferramentas</strong><small>Produção, monitoramento, comunidade e relatórios</small></div><ChevronDown size={18} style={{ transform: toolsOpen ? "rotate(180deg)" : undefined }} /></button>
 
