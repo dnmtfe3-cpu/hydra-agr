@@ -1,0 +1,74 @@
+/* Splash final: centralizada no viewport real e sem moldura verde na transição. */
+html.hydra-splash-active,
+html.hydra-splash-active body,
+html.hydra-splash-active body #root {
+  width: 100% !important;
+  min-width: 100% !important;
+  height: 100% !important;
+  min-height: 100dvh !important;
+  margin: 0 !important;
+  background: #09271b !important;
+  background-color: #09271b !important;
+  background-image: none !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+
+html.hydra-splash-active body .app-shell,
+html.hydra-splash-active body .bottom-nav {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html.hydra-splash-active body .splash-screen {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  inset: 0 !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  min-width: 100vw !important;
+  max-width: none !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  background: #09271b !important;
+  background-color: #09271b !important;
+  background-image: none !important;
+  pointer-events: all !important;
+  touch-action: none !important;
+  transform: none !important;
+}
+
+html.hydra-splash-active body .splash-screen > * {
+  position: relative !important;
+  margin: 0 !important;
+  flex: 0 0 auto !important;
+  transform-origin: center center !important;
+}
+
+/* Fora da splash, as safe areas acompanham o tema do app e não ficam verdes. */
+html:not(.hydra-splash-active):has(.hydra-root.theme-light),
+html:not(.hydra-splash-active):has(.hydra-root.theme-light) body,
+html:not(.hydra-splash-active):has(.hydra-root.theme-light) body #root {
+  background: #f8f6ef !important;
+  background-color: #f8f6ef !important;
+  background-image: none !important;
+}
+
+html:not(.hydra-splash-active):has(.hydra-root.theme-dark),
+html:not(.hydra-splash-active):has(.hydra-root.theme-dark) body,
+html:not(.hydra-splash-active):has(.hydra-root.theme-dark) body #root {
+  background: #08261c !important;
+  background-color: #08261c !important;
+  background-image: none !important;
+}
