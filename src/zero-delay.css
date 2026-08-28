@@ -7,11 +7,6 @@
   scroll-behavior: auto !important;
 }
 
-/* A splash não segura o usuário depois que o app já está pronto. */
-.hydra-root:has(.app-shell) .splash-screen {
-  display: none !important;
-}
-
 .hydra-root button,
 .hydra-root a,
 .hydra-root [role="button"] {
