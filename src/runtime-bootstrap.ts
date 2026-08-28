@@ -23,8 +23,6 @@ async function receiveNativeAuthUrl(url?: string) {
 }
 
 if (Capacitor.isNativePlatform()) {
-  // Este listener é registrado antes do React montar. Assim o retorno do Google
-  // não depende da tela de autenticação já estar pronta para receber appUrlOpen.
   void CapacitorApp.addListener("appUrlOpen", ({ url }) => {
     void receiveNativeAuthUrl(url);
   });
@@ -33,8 +31,6 @@ if (Capacitor.isNativePlatform()) {
     void receiveNativeAuthUrl(result?.url);
   });
 
-  // Fallback para aparelhos que retomam a Activity antes de o evento de URL
-  // chegar ao listener JavaScript.
   void CapacitorApp.addListener("resume", () => {
     void CapacitorApp.getLaunchUrl().then((result) => {
       void receiveNativeAuthUrl(result?.url);
@@ -47,7 +43,6 @@ function installCompactTypography() {
   const style = document.createElement("style");
   style.id = "hydra-global-type-fix";
   style.textContent = `
-    /* Escala final: aplicada depois dos estilos visuais para valer no app inteiro. */
     .hydra-root {
       --type-display: 30px;
       --type-section: 18px;
@@ -132,32 +127,5 @@ function installCompactTypography() {
   document.head.appendChild(style);
 }
 
-function preloadRouteChunks() {
-  const loaders = [
-    () => import("./features/herd/herd-screen"),
-    () => import("./features/monitor/monitor-screen"),
-    () => import("./features/profile/profile-screen"),
-    () => import("./features/community/community-screen"),
-    () => import("./features/challenges/challenges-screen"),
-    () => import("./features/property/property-screen"),
-    () => import("./features/activities/activities-screen"),
-    () => import("./features/operations/operations-screen"),
-    () => import("./features/assistant"),
-    () => import("./features/today"),
-    () => import("./features/history"),
-    () => import("./features/nfc/nfc-screen"),
-    () => import("./features/notifications/notifications-screen"),
-    () => import("./features/premium/plus-screen"),
-    () => import("./features/admin/admin-screen"),
-  ];
-
-  void Promise.allSettled(loaders.map((load) => load()));
-}
-
-// O main.tsx é o próximo módulo do HTML. O frame seguinte garante que este
-// ajuste fique por último na cascata sem causar flash perceptível.
-window.requestAnimationFrame(installCompactTypography);
-
-// As rotas são carregadas durante a splash. Assim a primeira troca de tela
-// não passa pelo fallback "Carregando…" do React.lazy.
-window.setTimeout(preloadRouteChunks, 60);
+// Aplica antes do primeiro frame: evita o micro-pulo visual de tipografia.
+installCompactTypography();
