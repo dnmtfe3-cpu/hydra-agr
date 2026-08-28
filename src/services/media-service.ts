@@ -41,7 +41,8 @@ export async function uploadPublicImage(
   validateImage(file, bucket === "avatars" ? 5 * 1024 * 1024 : 10 * 1024 * 1024);
   const client = requireSupabase();
   const extension = extensionFor(file.type);
-  const path = `${userId}/${stem}.${extension}`;
+  const resolvedStem = bucket === "avatars" && stem === "avatar" ? `avatar-${Date.now()}` : stem;
+  const path = `${userId}/${resolvedStem}.${extension}`;
   const isHydraIdPhoto = bucket === "community-media" && stem.startsWith("public-animal-");
   const { error } = await client.storage.from(bucket).upload(path, file, {
     cacheControl: isHydraIdPhoto ? "0" : "3600",
