@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useLayoutEffect, useRef, useSyncExternalStore } from "react";
 import { appMessagePtBr } from "../lib/app-messages";
 import { installHydraTapSounds, playHydraSound } from "../services/interaction-sounds";
 import "./feedback-fix.css";
@@ -73,7 +73,9 @@ export function useAppOverlay(active: boolean, requestClose?: () => void) {
   const closeRef = useRef(requestClose);
   closeRef.current = requestClose;
 
-  useEffect(() => {
+  // Layout effect mantém o lock de scroll sincronizado com a presença real do modal.
+  // Assim, quando a animação termina e o portal some, o body é liberado no mesmo commit.
+  useLayoutEffect(() => {
     if (!active) return;
     return registerOverlay({
       token: token.current,
