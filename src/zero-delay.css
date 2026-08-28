@@ -1,0 +1,32 @@
+/* Hydra Agro — resposta visual imediata em toda a interface. */
+.hydra-root *,
+.hydra-root *::before,
+.hydra-root *::after {
+  animation-delay: 0s !important;
+  animation-duration: 0.001ms !important;
+  transition-delay: 0s !important;
+  transition-duration: 0s !important;
+  scroll-behavior: auto !important;
+}
+
+.hydra-root .touch-ripple,
+.hydra-root .bottom-nav-indicator {
+  animation: none !important;
+  transition: none !important;
+}
+
+.hydra-root button,
+.hydra-root a,
+.hydra-root [role="button"] {
+  touch-action: manipulation;
+}
+
+.hydra-root .page-enter,
+.hydra-root .route-motion-forward,
+.hydra-root .route-motion-back,
+.hydra-root .is-pressed,
+.hydra-root .is-tapped {
+  animation: none !important;
+  transition: none !important;
+  transform: none;
+}
