@@ -3,6 +3,7 @@ import "./home-more-tools.css";
 const HOME_SELECTOR = ".home-screen";
 const SHORTCUT_CLASS = "home-more-tools-shortcut";
 const SOURCE_CLASS = "home-more-tools-source";
+const LAYER_CLASS = "home-more-tools-layer";
 
 function findMoreToolsSource(screen: HTMLElement) {
   return Array.from(screen.querySelectorAll<HTMLButtonElement>(":scope > button.history-home-row"))
@@ -29,9 +30,18 @@ function buildShortcut(source: HTMLButtonElement) {
   return shortcut;
 }
 
+function closeCurrentTools() {
+  const screen = document.querySelector<HTMLElement>(HOME_SELECTOR);
+  const source = screen ? findMoreToolsSource(screen) : null;
+  if (source?.getAttribute("aria-expanded") === "true") source.click();
+}
+
 function enhanceHome() {
   const screen = document.querySelector<HTMLElement>(HOME_SELECTOR);
-  if (!screen) return;
+  if (!screen) {
+    document.documentElement.classList.remove("home-tools-open");
+    return;
+  }
 
   const shortcuts = screen.querySelector<HTMLElement>(".shortcut-row.home-shortcuts-five");
   const source = findMoreToolsSource(screen);
@@ -55,6 +65,30 @@ function enhanceHome() {
   const expanded = source.getAttribute("aria-expanded") === "true";
   shortcut.classList.toggle("active", expanded);
   shortcut.setAttribute("aria-pressed", expanded ? "true" : "false");
+  document.documentElement.classList.toggle("home-tools-open", expanded);
+
+  const layer = screen.querySelector<HTMLElement>(".home-tools-list");
+  if (!layer) return;
+
+  layer.classList.add(LAYER_CLASS);
+  layer.setAttribute("role", "dialog");
+  layer.setAttribute("aria-modal", "true");
+  layer.setAttribute("aria-label", "Mais ferramentas");
+
+  layer.onclick = (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    if (target === layer) {
+      closeCurrentTools();
+      return;
+    }
+
+    const action = target.closest("button");
+    if (action && layer.contains(action)) {
+      window.setTimeout(closeCurrentTools, 0);
+    }
+  };
 }
 
 let scheduled = false;
@@ -73,6 +107,12 @@ observer.observe(document.documentElement, {
   subtree: true,
   attributes: true,
   attributeFilter: ["aria-expanded"],
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && document.documentElement.classList.contains("home-tools-open")) {
+    closeCurrentTools();
+  }
 });
 
 window.addEventListener("DOMContentLoaded", scheduleEnhance, { once: true });
