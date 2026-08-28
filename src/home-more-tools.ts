@@ -1,4 +1,5 @@
 import "./home-more-tools.css";
+import "./splash-final-fix.css";
 
 const HOME_SELECTOR = ".home-screen";
 const SHORTCUT_CLASS = "home-more-tools-shortcut";
