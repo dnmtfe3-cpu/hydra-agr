@@ -1,7 +1,10 @@
-/* Mobile profile overlap fix */
+/* Mobile profile overlap + spacing fix */
 @media (max-width: 700px) {
   .phone-app .profile-screen {
     overflow-x: hidden !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
   .phone-app .profile-screen .profile-hero {
@@ -19,9 +22,7 @@
     overflow: hidden !important;
   }
 
-  .phone-app .profile-screen .profile-rings {
-    pointer-events: none !important;
-  }
+  .phone-app .profile-screen .profile-rings { pointer-events: none !important; }
 
   .phone-app .profile-screen .profile-top-edit,
   .phone-app .profile-screen .profile-settings-trigger {
@@ -38,14 +39,8 @@
     transform: none !important;
   }
 
-  .phone-app .profile-screen .profile-top-edit {
-    left: 22px !important;
-  }
-
-  .phone-app .profile-screen .profile-settings-trigger {
-    right: 22px !important;
-    left: auto !important;
-  }
+  .phone-app .profile-screen .profile-top-edit { left: 22px !important; }
+  .phone-app .profile-screen .profile-settings-trigger { right: 22px !important; left: auto !important; }
 
   .phone-app .profile-screen .profile-avatar-wrap {
     position: relative !important;
@@ -128,12 +123,10 @@
     transform: none !important;
   }
 
-  .phone-app .profile-screen .profile-social-tabs {
-    margin-top: 18px !important;
-  }
+  .phone-app .profile-screen .profile-social-tabs { margin-top: 18px !important; }
+  .phone-app .profile-screen .plan-card { margin-left: 20px !important; margin-right: 20px !important; }
 
-  .phone-app .profile-screen .plan-card {
-    margin-left: 20px !important;
-    margin-right: 20px !important;
-  }
+  .phone-app .profile-screen .logout-button { margin-bottom: 12px !important; }
+  .phone-app .profile-screen .profile-version { margin: 0 auto 4px !important; padding: 0 !important; }
+  .phone-app .profile-screen > :last-child { margin-bottom: 0 !important; }
 }
