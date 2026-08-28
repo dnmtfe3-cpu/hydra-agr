@@ -115,9 +115,10 @@ export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
 
   useEffect(() => {
     void loadNotifications();
-    if (!supabase) return;
+    const client = supabase;
+    if (!client) return;
 
-    const channel = supabase
+    const channel = client
       .channel(`hydra-notifications-${account.id}`)
       .on(
         "postgres_changes",
@@ -126,7 +127,7 @@ export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
       )
       .subscribe();
 
-    return () => { void supabase.removeChannel(channel); };
+    return () => { void client.removeChannel(channel); };
   }, [account.id, loadNotifications]);
 
   async function markRead(item: NotificationRow) {
