@@ -18,7 +18,6 @@
   box-shadow: inset 0 0 0 1px rgba(31, 101, 71, .12) !important;
 }
 
-/* O botão/card antigo continua servindo apenas como controlador React. */
 .hydra-root .home-screen > button.home-more-tools-source {
   display: none !important;
 }
@@ -33,7 +32,6 @@ html.home-tools-open .bottom-nav {
   visibility: hidden !important;
 }
 
-/* A própria lista vira a camada modal, preservando os onClick reais do React. */
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer {
   --more-tools-height: min(68dvh, 570px);
   position: fixed !important;
@@ -62,7 +60,6 @@ html.home-tools-open .bottom-nav {
   animation: hydra-more-tools-backdrop 180ms ease-out both !important;
 }
 
-/* Superfície inferior no mesmo comportamento visual da Nova ação. */
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer::before {
   content: "" !important;
   position: fixed !important;
@@ -139,34 +136,43 @@ html.home-tools-open .bottom-nav {
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* Splash: enquanto existe, o app abaixo some completamente. Isso impede qualquer faixa do conteúdo na safe area inferior do iPhone. */
+/* Splash: fundo único verde e app totalmente bloqueado enquanto ela existe. */
 html:has(.splash-screen),
-body:has(.splash-screen),
-body:has(.splash-screen) #root {
+html:has(.splash-screen) body,
+html:has(.splash-screen) body #root {
   background: #09271b !important;
+  background-color: #09271b !important;
+  background-image: none !important;
   overflow: hidden !important;
+  overscroll-behavior: none !important;
 }
 
-body:has(.splash-screen) .app-shell,
+body:has(.splash-screen) .app-shell {
+  display: none !important;
+  pointer-events: none !important;
+}
+
 body:has(.splash-screen) .bottom-nav {
-  visibility: hidden !important;
-  opacity: 0 !important;
+  display: none !important;
   pointer-events: none !important;
 }
 
 .splash-screen {
   position: fixed !important;
   z-index: 2147483647 !important;
-  inset: -128px -8px -220px -8px !important;
+  inset: -128px -8px -260px -8px !important;
   width: auto !important;
   height: auto !important;
   min-width: calc(100vw + 16px) !important;
-  min-height: calc(100dvh + 348px) !important;
+  min-height: calc(100dvh + 388px) !important;
   margin: 0 !important;
   padding: 0 !important;
   border: 0 !important;
   overflow: hidden !important;
+  background: #09271b !important;
   background-color: #09271b !important;
+  pointer-events: all !important;
+  touch-action: none !important;
 }
 
 @media (max-width: 390px) {
