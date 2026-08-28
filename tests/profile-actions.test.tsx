@@ -76,7 +76,7 @@ describe("ações de preferências e segurança", () => {
   it("mostra conteúdo completo nos termos", () => {
     setup();
     openSetting(/^Termos de uso/);
-    expect(screen.getByRole("heading", { name: "1. Finalidade da plataforma" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "1. Para que serve" })).toBeInTheDocument();
     expect(screen.getByText(/não substitui orientação veterinária/i)).toBeInTheDocument();
   });
 
