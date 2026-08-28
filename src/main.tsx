@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import ReactDOM from "react-dom/client";
+import { Capacitor } from "@capacitor/core";
 import {
   Check,
   ChevronRight,
@@ -44,6 +45,30 @@ function savedTheme(): ThemeMode {
   }
 }
 
+function openDailyBriefingPanelFromNotification() {
+  let attempts = 0;
+  const tryOpen = () => {
+    attempts += 1;
+    const homeButton = Array.from(document.querySelectorAll<HTMLButtonElement>(".bottom-nav button"))
+      .find((button) => button.textContent?.trim().includes("Início"));
+    if (homeButton && !homeButton.classList.contains("active")) {
+      homeButton.click();
+      window.setTimeout(tryOpen, 220);
+      return;
+    }
+
+    const briefingButton = Array.from(document.querySelectorAll<HTMLButtonElement>("button"))
+      .find((button) => button.textContent?.includes("HYDRA AVISOS") && button.textContent?.includes("O que fazer hoje"));
+    if (briefingButton) {
+      briefingButton.click();
+      return;
+    }
+
+    if (attempts < 14) window.setTimeout(tryOpen, 180);
+  };
+  window.setTimeout(tryOpen, 120);
+}
+
 function HydraThemeRoot() {
   const [theme, setTheme] = useState<ThemeMode>(savedTheme);
   const [appearanceOpen, setAppearanceOpen] = useState(false);
@@ -52,6 +77,19 @@ function HydraThemeRoot() {
   useEffect(() => {
     try { window.localStorage.setItem(THEME_KEY, theme); } catch { /* armazenamento indisponível */ }
   }, [theme]);
+
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+    let handle: { remove: () => Promise<void> } | undefined;
+    void import("@capacitor/local-notifications")
+      .then(({ LocalNotifications }) => LocalNotifications.addListener("localNotificationActionPerformed", (action) => {
+        if (action.notification.extra?.route === "today" && action.notification.extra?.source === "daily-briefing") {
+          openDailyBriefingPanelFromNotification();
+        }
+      }))
+      .then((listener) => { handle = listener; });
+    return () => { void handle?.remove(); };
+  }, []);
 
   useEffect(() => {
     function findProfileMenu() {
