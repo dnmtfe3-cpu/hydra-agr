@@ -3,6 +3,7 @@
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import { appMessagePtBr } from "../lib/app-messages";
 import { installHydraTapSounds, playHydraSound } from "../services/interaction-sounds";
+import "./feedback-fix.css";
 
 type OverlayEntry = {
   token: symbol;
@@ -18,6 +19,7 @@ export type AppToast = {
 const overlays: OverlayEntry[] = [];
 const overlayListeners = new Set<() => void>();
 const toastListeners = new Set<() => void>();
+const toastTimers = new Map<number, number>();
 let toasts: AppToast[] = [];
 let toastId = 0;
 let bodyOverflowBeforeOverlay = "";
@@ -93,11 +95,20 @@ function toastSnapshot() {
   return toasts;
 }
 
+function emitToastChange() {
+  toastListeners.forEach((listener) => listener());
+}
+
 function dismissToast(id: number) {
+  const timer = toastTimers.get(id);
+  if (timer) {
+    window.clearTimeout(timer);
+    toastTimers.delete(id);
+  }
   const next = toasts.filter((toast) => toast.id !== id);
   if (next.length === toasts.length) return;
   toasts = next;
-  toastListeners.forEach((listener) => listener());
+  emitToastChange();
 }
 
 export function showAppToast(message: string, tone: AppToast["tone"] = "success") {
@@ -105,16 +116,30 @@ export function showAppToast(message: string, tone: AppToast["tone"] = "success"
     message,
     tone === "error" ? "Não foi possível concluir esta ação. Tente novamente." : "Tudo certo.",
   );
+
+  // Evita confirmações/avisos duplicados quando a mesma ação dispara mais de uma atualização.
+  const duplicate = toasts.find((toast) => toast.tone === tone && toast.message === displayMessage);
+  if (duplicate) dismissToast(duplicate.id);
+
   const toast = { id: ++toastId, message: displayMessage, tone } satisfies AppToast;
-  toasts = [...toasts, toast].slice(-3);
-  toastListeners.forEach((listener) => listener());
+  const previous = toasts;
+  toasts = [...toasts, toast].slice(-2);
+  previous
+    .filter((item) => !toasts.some((current) => current.id === item.id))
+    .forEach((item) => {
+      const timer = toastTimers.get(item.id);
+      if (timer) window.clearTimeout(timer);
+      toastTimers.delete(item.id);
+    });
+  emitToastChange();
 
   const normalized = displayMessage.toLocaleLowerCase("pt-BR");
   if (tone === "error") playHydraSound("error");
   else if (normalized.includes("nfc") || normalized.includes("tag")) playHydraSound("nfc");
   else if (tone === "success") playHydraSound("success");
 
-  window.setTimeout(() => dismissToast(toast.id), tone === "error" ? 4300 : 2800);
+  const timer = window.setTimeout(() => dismissToast(toast.id), tone === "error" ? 4300 : 3000);
+  toastTimers.set(toast.id, timer);
   return toast.id;
 }
 
