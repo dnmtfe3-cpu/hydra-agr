@@ -1,22 +1,15 @@
-/* Hydra Agro — resposta visual imediata em toda a interface. */
+/* Hydra Agro — sem waits artificiais, mantendo animações naturais. */
 .hydra-root *,
 .hydra-root *::before,
 .hydra-root *::after {
   animation-delay: 0s !important;
-  animation-duration: 0.001ms !important;
   transition-delay: 0s !important;
-  transition-duration: 0s !important;
   scroll-behavior: auto !important;
 }
 
+/* A splash não segura o usuário depois que o app já está pronto. */
 .hydra-root:has(.app-shell) .splash-screen {
   display: none !important;
-}
-
-.hydra-root .touch-ripple,
-.hydra-root .bottom-nav-indicator {
-  animation: none !important;
-  transition: none !important;
 }
 
 .hydra-root button,
@@ -25,12 +18,13 @@
   touch-action: manipulation;
 }
 
+/* Mantém resposta imediata ao toque, mas deixa os componentes usarem
+   suas próprias durações e easing naturais. */
 .hydra-root .page-enter,
 .hydra-root .route-motion-forward,
 .hydra-root .route-motion-back,
 .hydra-root .is-pressed,
 .hydra-root .is-tapped {
-  animation: none !important;
-  transition: none !important;
-  transform: none;
+  animation-delay: 0s !important;
+  transition-delay: 0s !important;
 }
