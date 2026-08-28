@@ -19,8 +19,12 @@ type Connection = {
   is_following: boolean;
 };
 
+type CachedStats = { followers: number; following: number };
+
+const STATS_CACHE_KEY = "hydra.profile-social-stats";
 let activeUserId = "";
 let channelCleanup: (() => void) | null = null;
+let loadingStats: Promise<void> | null = null;
 
 function esc(value: unknown) {
   return String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] || c));
@@ -33,6 +37,45 @@ function avatar(path: unknown, name: string) {
 
 function closeLayer() {
   document.querySelector(".profile-social-list-layer")?.remove();
+}
+
+function readCachedStats(): CachedStats {
+  try {
+    const value = sessionStorage.getItem(STATS_CACHE_KEY);
+    if (!value) return { followers: 0, following: 0 };
+    const parsed = JSON.parse(value) as Partial<CachedStats>;
+    return {
+      followers: Math.max(0, Number(parsed.followers || 0)),
+      following: Math.max(0, Number(parsed.following || 0)),
+    };
+  } catch {
+    return { followers: 0, following: 0 };
+  }
+}
+
+function saveCachedStats(stats: CachedStats) {
+  try { sessionStorage.setItem(STATS_CACHE_KEY, JSON.stringify(stats)); } catch { /* cache indisponível */ }
+}
+
+function renderStats(hero: HTMLElement, values: CachedStats) {
+  let stats = hero.querySelector<HTMLElement>(".profile-instagram-stats");
+  if (!stats) {
+    stats = document.createElement("div");
+    stats.className = "profile-instagram-stats";
+    const bio = hero.querySelector(".profile-bio");
+    if (bio) bio.insertAdjacentElement("beforebegin", stats);
+    else hero.appendChild(stats);
+  }
+
+  const followers = Math.max(0, Number(values.followers || 0));
+  const following = Math.max(0, Number(values.following || 0));
+  if (stats.dataset.followers === String(followers) && stats.dataset.following === String(following)) return;
+
+  stats.dataset.followers = String(followers);
+  stats.dataset.following = String(following);
+  stats.innerHTML = `<button type="button" data-kind="followers"><strong>${followers}</strong><span>seguidores</span></button><button type="button" data-kind="following"><strong>${following}</strong><span>seguindo</span></button>`;
+  stats.querySelector<HTMLButtonElement>("[data-kind='followers']")?.addEventListener("click", () => void openConnections("followers"));
+  stats.querySelector<HTMLButtonElement>("[data-kind='following']")?.addEventListener("click", () => void openConnections("following"));
 }
 
 async function openConnections(kind: "followers" | "following") {
@@ -59,28 +102,30 @@ async function openConnections(kind: "followers" | "following") {
   body.innerHTML = `<div class="profile-social-list">${rows.map((person) => `<div class="profile-social-list-row">${avatar(person.avatar_path, person.full_name)}<span><strong>${esc(person.full_name)}</strong><small>${esc([person.property_name, person.municipality].filter(Boolean).join(" · ") || "Produtor")}</small></span><em>${person.is_following ? "Seguindo" : "Perfil"}</em></div>`).join("")}</div>`;
 }
 
-async function loadStats() {
+async function performLoadStats() {
   const client = supabase;
   const hero = document.querySelector<HTMLElement>(".profile-screen .profile-hero");
   if (!client || !hero) return;
+
+  // Mostra a área social no mesmo frame em que o perfil aparece.
+  renderStats(hero, readCachedStats());
+
   const { data: sessionData } = await client.auth.getSession();
   const userId = sessionData.session?.user.id || "";
   if (!userId) return;
   activeUserId = userId;
+
   const { data, error } = await client.rpc("social_profile", { p_user_id: userId });
   if (error || !Array.isArray(data) || !data[0]) return;
   const profile = data[0] as SocialProfile;
-  let stats = hero.querySelector<HTMLElement>(".profile-instagram-stats");
-  if (!stats) {
-    stats = document.createElement("div");
-    stats.className = "profile-instagram-stats";
-    const bio = hero.querySelector(".profile-bio");
-    if (bio) bio.insertAdjacentElement("beforebegin", stats);
-    else hero.appendChild(stats);
-  }
-  stats.innerHTML = `<button type="button" data-kind="followers"><strong>${Number(profile.followers || 0)}</strong><span>seguidores</span></button><button type="button" data-kind="following"><strong>${Number(profile.following || 0)}</strong><span>seguindo</span></button>`;
-  stats.querySelector<HTMLButtonElement>("[data-kind='followers']")?.addEventListener("click", () => void openConnections("followers"));
-  stats.querySelector<HTMLButtonElement>("[data-kind='following']")?.addEventListener("click", () => void openConnections("following"));
+  const fresh = {
+    followers: Number(profile.followers || 0),
+    following: Number(profile.following || 0),
+  };
+  saveCachedStats(fresh);
+
+  const currentHero = document.querySelector<HTMLElement>(".profile-screen .profile-hero");
+  if (currentHero) renderStats(currentHero, fresh);
 
   if (!channelCleanup) {
     const channel = client.channel(`profile-social-${userId}`)
@@ -90,8 +135,17 @@ async function loadStats() {
   }
 }
 
+function loadStats() {
+  if (loadingStats) return loadingStats;
+  loadingStats = performLoadStats().finally(() => { loadingStats = null; });
+  return loadingStats;
+}
+
 function wireProfile() {
-  if (document.querySelector(".profile-screen .profile-hero")) void loadStats();
+  const hero = document.querySelector<HTMLElement>(".profile-screen .profile-hero");
+  if (!hero) return;
+  renderStats(hero, readCachedStats());
+  void loadStats();
 }
 
 if (typeof document !== "undefined") {
