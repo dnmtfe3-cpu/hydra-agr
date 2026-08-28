@@ -3,6 +3,7 @@ import { Preferences } from "@capacitor/preferences";
 import type { HydraAccount } from "../lib/hydra-types";
 
 const DAILY_ID = 6401;
+export const DAILY_BRIEFING_CHANNEL_ID = "hydra-property-alerts";
 const SETTINGS_KEY = "hydra.daily-briefing";
 
 export type DailyBriefingSettings = {
@@ -81,6 +82,18 @@ export async function scheduleDailyBriefing(account: HydraAccount, settings: Dai
   if (!Capacitor.isNativePlatform()) return { ok: false, reason: "web" as const };
 
   const { LocalNotifications } = await import("@capacitor/local-notifications");
+  if (Capacitor.getPlatform() === "android") {
+    await LocalNotifications.createChannel({
+      id: DAILY_BRIEFING_CHANNEL_ID,
+      name: "Avisos da propriedade",
+      description: "Resumo diário, tarefas e alertas importantes do Hydra Agro.",
+      importance: 5,
+      visibility: 1,
+      vibration: true,
+      lights: true,
+    }).catch(() => undefined);
+  }
+
   await LocalNotifications.cancel({ notifications: [{ id: DAILY_ID }] }).catch(() => undefined);
   if (!settings.enabled) return { ok: true, reason: "disabled" as const };
 
@@ -94,6 +107,7 @@ export async function scheduleDailyBriefing(account: HydraAccount, settings: Dai
       id: DAILY_ID,
       title: briefing.title,
       body: briefing.body,
+      channelId: Capacitor.getPlatform() === "android" ? DAILY_BRIEFING_CHANNEL_ID : undefined,
       schedule: { on: { hour: settings.hour, minute: settings.minute }, repeats: true, allowWhileIdle: true },
       extra: { route: "today", source: "daily-briefing" },
     }],
