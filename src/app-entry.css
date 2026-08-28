@@ -46,3 +46,6 @@
 
 /* Apresentação visual do plano Hydra Agro+. */
 @import "./premium-sales-redesign.css?v=premium-sales-redesign-1";
+
+/* Motion global sem alterar layout. */
+@import "./motion-polish-v2.css?v=motion-polish-v2";
