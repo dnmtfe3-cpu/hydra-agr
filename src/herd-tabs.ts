@@ -1,5 +1,7 @@
+import "./herd-tools-view.css";
+
 const HERD_SELECTOR = ".herd-production-context";
-const TAB_CLASS = "herd-view-tabs";
+const TOOL_CLASS = "herd-tools-panel";
 
 type HerdView = "overview" | "animals";
 
@@ -49,68 +51,64 @@ function applyVisibility(screen: HTMLElement, view: HerdView) {
 
 function animateViewChange(screen: HTMLElement, view: HerdView) {
   if (reducedMotion.matches) return;
-
   const selector = view === "animals"
     ? ":scope > .herd-animal-view-item:not([hidden])"
     : ":scope > .herd-overview-view-item:not([hidden])";
 
-  /* Crossfade simultâneo: sem translate, scale, bounce ou stagger nos ícones. */
   screen.querySelectorAll<HTMLElement>(selector).forEach((block) => {
-    block.animate(
-      [
-        { opacity: 0.18 },
-        { opacity: 1 },
-      ],
-      { duration: 260, easing: smoothEase, fill: "none" },
-    );
+    block.animate([{ opacity: 0.2 }, { opacity: 1 }], {
+      duration: 220,
+      easing: smoothEase,
+      fill: "none",
+    });
   });
 }
 
 function setView(screen: HTMLElement, view: HerdView, animate = false) {
   const previous = screen.dataset.herdView as HerdView | undefined;
   screen.dataset.herdView = view;
-  const tabs = screen.querySelector<HTMLElement>(`:scope > .${TAB_CLASS}`);
-  tabs?.querySelectorAll<HTMLButtonElement>("button").forEach((button) => {
+  const tools = screen.querySelector<HTMLElement>(`:scope > .${TOOL_CLASS}`);
+  tools?.querySelectorAll<HTMLButtonElement>("button[data-view]").forEach((button) => {
     const active = button.dataset.view === view;
     button.classList.toggle("active", active);
-    button.setAttribute("aria-selected", active ? "true" : "false");
-    button.tabIndex = active ? 0 : -1;
+    button.setAttribute("aria-pressed", active ? "true" : "false");
   });
-
   applyVisibility(screen, view);
   if (animate && previous !== view) animateViewChange(screen, view);
-  try { window.sessionStorage.setItem("hydra.herd.view", view); } catch { /* armazenamento indisponível */ }
 }
 
-function createTabs(screen: HTMLElement) {
-  if (screen.querySelector(`:scope > .${TAB_CLASS}`)) return;
-  const nav = document.createElement("nav");
-  nav.className = TAB_CLASS;
-  nav.setAttribute("aria-label", "Seções do rebanho");
-  nav.setAttribute("role", "tablist");
+function createTools(screen: HTMLElement) {
+  let panel = screen.querySelector<HTMLElement>(`:scope > .${TOOL_CLASS}`);
+  if (!panel) {
+    panel = document.createElement("section");
+    panel.className = TOOL_CLASS;
+    panel.setAttribute("aria-label", "Ferramentas do rebanho");
+    panel.innerHTML = `
+      <small>Ferramentas do rebanho</small>
+      <div class="herd-tools-grid">
+        <button type="button" data-view="overview" aria-pressed="true">
+          <span>Visão geral</span>
+          <small>Cuidados, NFC e gestão</small>
+        </button>
+        <button type="button" data-view="animals" aria-pressed="false">
+          <span>Animais cadastrados</span>
+          <small><b data-animal-count>${animalCount(screen)}</b> no rebanho</small>
+        </button>
+      </div>`;
 
-  const overview = document.createElement("button");
-  overview.type = "button";
-  overview.dataset.view = "overview";
-  overview.setAttribute("role", "tab");
-  overview.innerHTML = "<span>Visão geral</span>";
+    panel.addEventListener("click", (event) => {
+      const button = event.target instanceof Element ? event.target.closest<HTMLButtonElement>("button[data-view]") : null;
+      if (!button) return;
+      setView(screen, button.dataset.view === "animals" ? "animals" : "overview", true);
+    });
 
-  const animals = document.createElement("button");
-  animals.type = "button";
-  animals.dataset.view = "animals";
-  animals.setAttribute("role", "tab");
-  animals.innerHTML = `<span>Animais cadastrados</span><small>${animalCount(screen)}</small>`;
+    const header = screen.querySelector(":scope > .screen-header");
+    if (header?.nextSibling) screen.insertBefore(panel, header.nextSibling);
+    else screen.prepend(panel);
+  }
 
-  nav.append(overview, animals);
-  nav.addEventListener("click", (event) => {
-    const button = event.target instanceof Element ? event.target.closest<HTMLButtonElement>("button[data-view]") : null;
-    if (!button) return;
-    setView(screen, button.dataset.view === "animals" ? "animals" : "overview", true);
-  });
-
-  const header = screen.querySelector(":scope > .screen-header");
-  if (header?.nextSibling) screen.insertBefore(nav, header.nextSibling);
-  else screen.prepend(nav);
+  const count = panel.querySelector<HTMLElement>("[data-animal-count]");
+  if (count) count.textContent = String(animalCount(screen));
 }
 
 function enhance() {
@@ -119,15 +117,13 @@ function enhance() {
   if (!screen) return;
 
   screen.classList.add("herd-screen-enhanced");
+  // Remove a navegação antiga para que a lista de animais fique somente em Ferramentas > Animais cadastrados.
+  screen.querySelector(":scope > .herd-view-tabs")?.remove();
   markViewItems(screen);
-  createTabs(screen);
+  createTools(screen);
 
-  const badge = screen.querySelector<HTMLElement>(`:scope > .${TAB_CLASS} button[data-view="animals"] small`);
-  if (badge) badge.textContent = String(animalCount(screen));
-
-  let saved: HerdView = "overview";
-  try { saved = window.sessionStorage.getItem("hydra.herd.view") === "animals" ? "animals" : "overview"; } catch { /* armazenamento indisponível */ }
-  setView(screen, (screen.dataset.herdView as HerdView | undefined) || saved);
+  const current = screen.dataset.herdView === "animals" ? "animals" : "overview";
+  setView(screen, current);
 }
 
 let scheduled = false;
