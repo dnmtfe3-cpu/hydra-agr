@@ -69,7 +69,9 @@ export async function uploadPrivateImage(userId: string, file: File, stem: strin
 
 export async function signedPrivateUrl(path?: string | null) {
   if (!path) return undefined;
-  const { data, error } = await requireSupabase().storage.from("farm-media").createSignedUrl(path, 60 * 60);
+  // 24h evita que capa/fotos privadas desapareçam após o app ficar aberto
+  // ou voltar do segundo plano mantendo estado antigo.
+  const { data, error } = await requireSupabase().storage.from("farm-media").createSignedUrl(path, 60 * 60 * 24);
   if (error) return undefined;
   return data.signedUrl;
 }
