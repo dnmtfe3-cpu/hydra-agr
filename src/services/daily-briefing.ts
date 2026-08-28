@@ -38,26 +38,28 @@ export function buildDailyBriefing(account: HydraAccount) {
   const feeding = dueToday.filter((item) => item.category.toLocaleLowerCase("pt-BR").includes("alimenta"));
   const parts: string[] = [];
 
-  if (dueToday.length) parts.push(`${dueToday.length} atividade${dueToday.length === 1 ? "" : "s"} para hoje`);
-  if (overdue.length) parts.push(`${overdue.length} pendência${overdue.length === 1 ? " atrasada" : "s atrasadas"}`);
+  if (dueToday.length) parts.push(`${dueToday.length} tarefa${dueToday.length === 1 ? "" : "s"} para hoje`);
+  if (overdue.length) parts.push(`${overdue.length} tarefa${overdue.length === 1 ? " atrasada" : "s atrasadas"}`);
   if (feeding.length) parts.push(`${feeding.length} manejo${feeding.length === 1 ? "" : "s"} de alimentação`);
   if (healthAttention.length) parts.push(`${healthAttention.length} animal${healthAttention.length === 1 ? "" : "is"} em atenção`);
   if (withoutNfc.length) parts.push(`${withoutNfc.length} animal${withoutNfc.length === 1 ? "" : "is"} sem NFC/RFID`);
 
-  const farm = account.property.name || "sua propriedade";
-  const title = parts.length ? "Hydra Agro · O que fazer hoje" : "Hydra Agro · Tudo em dia";
-  const body = parts.length ? `${farm}: ${parts.slice(0, 3).join(" · ")}.` : `${farm}: nenhuma atividade urgente registrada para hoje.`;
+  const farm = account.property.name || "Sua propriedade";
+  const title = parts.length ? "O que fazer hoje" : "Tudo em dia";
+  const body = parts.length
+    ? `${farm} • ${parts.slice(0, 3).join(" • ")}.`
+    : `${farm} • nenhuma tarefa urgente para hoje.`;
 
   const lines = [
-    `🌱 Hydra Agro — ${farm}`,
+    `${farm}`,
     "",
-    parts.length ? "Hoje você tem:" : "Tudo em dia por aqui.",
+    parts.length ? "Hoje:" : "Tudo em dia por aqui.",
     ...dueToday.slice(0, 5).map((item) => `• ${item.title}`),
-    ...(overdue.length ? [`• ${overdue.length} pendência${overdue.length === 1 ? " atrasada" : "s atrasadas"}`] : []),
+    ...(overdue.length ? [`• ${overdue.length} tarefa${overdue.length === 1 ? " atrasada" : "s atrasadas"}`] : []),
     ...(healthAttention.length ? [`• ${healthAttention.length} animal${healthAttention.length === 1 ? "" : "is"} em acompanhamento`] : []),
     ...(withoutNfc.length ? [`• ${withoutNfc.length} animal${withoutNfc.length === 1 ? "" : "is"} sem NFC/RFID`] : []),
     "",
-    parts.length ? "Abra o Hydra Agro para conferir os detalhes." : "Nenhuma atividade urgente registrada para hoje.",
+    parts.length ? "Abra o Hydra Agro para ver os detalhes." : "Nenhuma tarefa urgente registrada para hoje.",
   ];
 
   return { title, body, text: lines.join("\n"), dueToday, overdue, healthAttention, withoutNfc };
@@ -86,7 +88,7 @@ export async function scheduleDailyBriefing(account: HydraAccount, settings: Dai
     await LocalNotifications.createChannel({
       id: DAILY_BRIEFING_CHANNEL_ID,
       name: "Avisos da propriedade",
-      description: "Resumo diário, tarefas e alertas importantes do Hydra Agro.",
+      description: "Tarefas e avisos importantes da propriedade.",
       importance: 5,
       visibility: 1,
       vibration: true,
