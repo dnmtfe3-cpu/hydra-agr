@@ -1,19 +1,87 @@
-.app-toast-region {
-  top: max(calc(env(safe-area-inset-top) + 12px), 16px) !important;
-  width: min(calc(100% - 24px), 390px) !important;
+/* Correção final dos avisos: largura estável, safe area e texto sem esmagar no iPhone. */
+html body .app-toast-region {
+  position: fixed !important;
+  z-index: 110 !important;
+  top: max(16px, calc(env(safe-area-inset-top, 0px) + 10px)) !important;
+  bottom: auto !important;
+  left: max(12px, env(safe-area-inset-left, 0px)) !important;
+  right: max(12px, env(safe-area-inset-right, 0px)) !important;
+  width: auto !important;
+  max-width: 390px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
   gap: 8px !important;
+  transform: none !important;
+  pointer-events: none !important;
 }
 
-.app-toast {
-  min-height: 62px !important;
-  padding: 11px 12px !important;
+html body .app-toast {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  min-height: 64px !important;
+  margin: 0 !important;
+  padding: 11px 13px !important;
   border-radius: 18px !important;
+  display: flex !important;
+  grid-template-columns: none !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
   overflow: hidden !important;
   isolation: isolate;
+  pointer-events: auto !important;
 }
 
-.app-toast-copy small {
-  overflow-wrap: anywhere;
+html body .app-toast-icon {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  flex: 0 0 42px !important;
+  border-radius: 14px !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+html body .app-toast-copy {
+  min-width: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+html body .app-toast-copy strong,
+html body .app-toast-copy small {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  text-align: left !important;
+}
+
+html body .app-toast-copy strong {
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+}
+
+html body .app-toast-copy small {
+  margin-top: 3px !important;
+  font-size: 10px !important;
+  line-height: 1.35 !important;
 }
 
 .modal-layer:has(.confirm-action) {
@@ -55,6 +123,24 @@
 }
 
 @media (max-width: 360px) {
+  html body .app-toast-region {
+    left: 10px !important;
+    right: 10px !important;
+  }
+
+  html body .app-toast {
+    padding: 10px 11px !important;
+    gap: 10px !important;
+  }
+
+  html body .app-toast-icon {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    flex-basis: 38px !important;
+  }
+
   .modal-layer:has(.confirm-action) .modal-action-row {
     grid-template-columns: 1fr !important;
   }

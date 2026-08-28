@@ -1,6 +1,8 @@
 import "./herd-tools-view.css";
 
-const HERD_SELECTOR = ".herd-production-context";
+// O toggle de ferramentas existe assim que o Rebanho renderiza, inclusive no plano gratuito.
+// Isso garante que a lista de animais seja escondida antes de qualquer interação.
+const HERD_SELECTOR = ".herd-tools-toggle";
 const TOOL_CLASS = "herd-tools-panel";
 
 type HerdView = "overview" | "animals";
@@ -88,7 +90,7 @@ function createTools(screen: HTMLElement) {
       <div class="herd-tools-grid">
         <button type="button" data-view="overview" aria-pressed="true">
           <span>Visão geral</span>
-          <small>Cuidados, NFC e gestão</small>
+          <small>NFC, manejo e ferramentas</small>
         </button>
         <button type="button" data-view="animals" aria-pressed="false">
           <span>Animais cadastrados</span>
@@ -117,7 +119,6 @@ function enhance() {
   if (!screen) return;
 
   screen.classList.add("herd-screen-enhanced");
-  // Remove a navegação antiga para que a lista de animais fique somente em Ferramentas > Animais cadastrados.
   screen.querySelector(":scope > .herd-view-tabs")?.remove();
   markViewItems(screen);
   createTools(screen);

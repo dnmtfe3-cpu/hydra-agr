@@ -1,3 +1,5 @@
+import "./splash-stability.css";
+
 export function HydraMark({ className = "" }: { className?: string }) {
   return (
     <svg

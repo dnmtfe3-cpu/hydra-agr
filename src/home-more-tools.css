@@ -1,0 +1,42 @@
+/* Mais ferramentas usa exatamente a mesma linguagem dos atalhos redondos da Home. */
+.hydra-root .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more {
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: 4px !important;
+}
+
+.hydra-root .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more > button > span {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  border-radius: 14px !important;
+}
+
+.hydra-root .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more > button.home-more-tools-shortcut.active > span {
+  background: #dfece3 !important;
+  color: var(--forest-800) !important;
+  box-shadow: inset 0 0 0 1px rgba(31, 101, 71, .12) !important;
+}
+
+.hydra-root .home-screen > button.home-more-tools-source {
+  display: none !important;
+}
+
+.hydra-root.theme-dark .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more > button.home-more-tools-shortcut.active > span {
+  background: #214332 !important;
+  color: #c6e0cc !important;
+}
+
+@media (max-width: 390px) {
+  .hydra-root .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more {
+    gap: 2px !important;
+  }
+
+  .hydra-root .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more > button > span {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    border-radius: 13px !important;
+  }
+}

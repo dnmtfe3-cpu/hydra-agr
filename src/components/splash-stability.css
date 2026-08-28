@@ -1,0 +1,46 @@
+/* Splash fixa: evita o centro mudar quando a viewport/safe area do iPhone termina de ajustar. */
+html body #root .hydra-root .splash-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: auto !important;
+  width: 100% !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  max-height: 100vh !important;
+  display: block !important;
+  overflow: hidden !important;
+  transform: none !important;
+  translate: none !important;
+  contain: layout paint;
+}
+
+html body #root .hydra-root .splash-brand {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  margin: 0 !important;
+  transform: translate3d(-50%, -50%, 0) !important;
+  translate: none !important;
+  transform-origin: center !important;
+}
+
+html body #root .hydra-root .splash-expansion,
+html body #root .hydra-root .splash-mark-wrap,
+html body #root .hydra-root .splash-mark {
+  transform-origin: center center !important;
+}
+
+@supports (height: 100svh) {
+  html body #root .hydra-root .splash-screen {
+    height: 100svh !important;
+    min-height: 100svh !important;
+    max-height: 100svh !important;
+  }
+
+  html body #root .hydra-root .splash-brand {
+    top: 50svh !important;
+  }
+}

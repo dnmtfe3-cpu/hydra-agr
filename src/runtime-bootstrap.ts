@@ -2,6 +2,7 @@ import { App as CapacitorApp } from "@capacitor/app";
 import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import { handleAuthCallbackUrl } from "./services/supabase";
+import "./home-more-tools";
 
 const AUTH_PREFIX = "br.com.hydraagro.app://auth/";
 const seenAuthUrls = new Set<string>();
