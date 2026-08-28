@@ -108,6 +108,50 @@ html.home-tools-open .bottom-nav {
   box-shadow: none !important;
 }
 
+/* X igual ao padrão dos outros modais do app. */
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-more-tools-close {
+  position: fixed !important;
+  z-index: 5 !important;
+  right: 18px !important;
+  bottom: calc(var(--more-tools-height) - 68px) !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(18, 61, 44, .10) !important;
+  border-radius: 14px !important;
+  display: grid !important;
+  place-items: center !important;
+  color: var(--forest-800) !important;
+  background: #f4f5f0 !important;
+  box-shadow: none !important;
+}
+
+/* Todos os ícones e destaques usam a mesma linguagem verde/neutra. */
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:not(.home-more-tools-close) > span:first-child,
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer .home-production-icon {
+  color: var(--forest-700) !important;
+  background: #edf3ee !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:not(.home-more-tools-close) > span:first-child svg,
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer .home-production-icon svg {
+  color: var(--forest-700) !important;
+  stroke: currentColor !important;
+}
+
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer small,
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer .home-production-copy small {
+  color: #6f7b74 !important;
+}
+
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer strong,
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer em {
+  color: var(--forest-950) !important;
+}
+
 .hydra-root.theme-dark .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more > button.home-more-tools-shortcut.active > span {
   background: #214332 !important;
   color: #c6e0cc !important;
@@ -124,6 +168,24 @@ html.home-tools-open .bottom-nav {
 .hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer > button {
   background: #153428 !important;
   border-color: rgba(255,255,255,.08) !important;
+}
+
+.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer > button:not(.home-more-tools-close) > span:first-child,
+.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer .home-production-icon,
+.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer > .home-more-tools-close {
+  color: #c6e0cc !important;
+  background: #214332 !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+
+.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer small,
+.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer .home-production-copy small {
+  color: #9eafa5 !important;
+}
+
+.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer strong,
+.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer em {
+  color: #f4f5ef !important;
 }
 
 @keyframes hydra-more-tools-backdrop {
@@ -193,5 +255,10 @@ body:has(.splash-screen) .bottom-nav {
     padding-top: calc(100dvh - var(--more-tools-height) + 78px) !important;
     padding-left: 11px !important;
     padding-right: 11px !important;
+  }
+
+  .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-more-tools-close {
+    right: 14px !important;
+    bottom: calc(var(--more-tools-height) - 66px) !important;
   }
 }
