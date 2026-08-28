@@ -5,6 +5,7 @@ const HOME_SELECTOR = ".home-screen";
 const SHORTCUT_CLASS = "home-more-tools-shortcut";
 const SOURCE_CLASS = "home-more-tools-source";
 const LAYER_CLASS = "home-more-tools-layer";
+const CLOSE_CLASS = "home-more-tools-close";
 
 function syncSplashViewport() {
   const active = Boolean(document.querySelector(".splash-screen"));
@@ -53,6 +54,25 @@ function closeCurrentTools() {
   if (source?.getAttribute("aria-expanded") === "true") source.click();
 }
 
+function ensureCloseButton(layer: HTMLElement) {
+  let close = layer.querySelector<HTMLButtonElement>(`.${CLOSE_CLASS}`);
+  if (close) return close;
+
+  close = document.createElement("button");
+  close.type = "button";
+  close.className = CLOSE_CLASS;
+  close.setAttribute("aria-label", "Fechar Mais ferramentas");
+  close.setAttribute("title", "Fechar");
+  close.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  close.onclick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    closeCurrentTools();
+  };
+  layer.appendChild(close);
+  return close;
+}
+
 function enhanceHome() {
   syncSplashViewport();
 
@@ -93,6 +113,7 @@ function enhanceHome() {
   layer.setAttribute("role", "dialog");
   layer.setAttribute("aria-modal", "true");
   layer.setAttribute("aria-label", "Mais ferramentas");
+  ensureCloseButton(layer);
 
   layer.onclick = (event) => {
     const target = event.target;
@@ -102,6 +123,8 @@ function enhanceHome() {
       closeCurrentTools();
       return;
     }
+
+    if (target.closest(`.${CLOSE_CLASS}`)) return;
 
     const action = target.closest("button");
     if (action && layer.contains(action)) {
