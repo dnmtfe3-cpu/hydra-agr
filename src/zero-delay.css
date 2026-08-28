@@ -9,6 +9,10 @@
   scroll-behavior: auto !important;
 }
 
+.hydra-root:has(.app-shell) .splash-screen {
+  display: none !important;
+}
+
 .hydra-root .touch-ripple,
 .hydra-root .bottom-nav-indicator {
   animation: none !important;
