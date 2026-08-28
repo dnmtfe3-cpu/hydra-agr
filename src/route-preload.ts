@@ -1,7 +1,4 @@
-/*
- * Pré-carrega as funções do app enquanto a splash/tela atual está visível.
- * Assim a primeira abertura de cada função não troca para “Carregando…”.
- */
+/* Pré-carrega as telas antes da primeira navegação para evitar fallback e atraso visual. */
 
 const routeModules = [
   () => import("./features/herd/herd-screen"),
@@ -18,6 +15,7 @@ const routeModules = [
   () => import("./features/nfc/nfc-screen"),
   () => import("./features/notifications/notifications-screen"),
   () => import("./features/premium/plus-screen"),
+  () => import("./features/family-farming/family-farming-screen"),
   () => import("./features/admin/admin-screen"),
 ];
 
