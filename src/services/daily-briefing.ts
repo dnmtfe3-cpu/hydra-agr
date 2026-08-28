@@ -5,6 +5,8 @@ import type { HydraAccount } from "../lib/hydra-types";
 const DAILY_ID = 6401;
 export const DAILY_BRIEFING_CHANNEL_ID = "hydra-property-alerts";
 const SETTINGS_KEY = "hydra.daily-briefing";
+const COPY_VERSION_KEY = "hydra.daily-briefing.copy-version";
+const COPY_VERSION = "2";
 
 export type DailyBriefingSettings = {
   enabled: boolean;
@@ -116,6 +118,20 @@ export async function scheduleDailyBriefing(account: HydraAccount, settings: Dai
   });
 
   return { ok: true, reason: "scheduled" as const };
+}
+
+export async function refreshDailyBriefingCopy(account: HydraAccount) {
+  if (!Capacitor.isNativePlatform()) return;
+  const version = await Preferences.get({ key: COPY_VERSION_KEY });
+  if (version.value === COPY_VERSION) return;
+
+  const settings = await loadDailyBriefingSettings();
+  if (settings.enabled) {
+    const result = await scheduleDailyBriefing(account, settings);
+    if (!result.ok) return;
+  }
+
+  await Preferences.set({ key: COPY_VERSION_KEY, value: COPY_VERSION });
 }
 
 export async function shareDailyBriefing(account: HydraAccount) {
