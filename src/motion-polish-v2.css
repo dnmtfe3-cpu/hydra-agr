@@ -1,0 +1,131 @@
+/* Hydra Agro — motion polish v2. Só movimento/feedback, sem mudar layout. */
+:root {
+  --hydra-ease-out: cubic-bezier(.22,1,.36,1);
+  --hydra-ease-soft: cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes hydra-screen-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hydra-card-in {
+  from { opacity: 0; transform: translateY(10px) scale(.992); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes hydra-sheet-in {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hydra-icon-pop {
+  0% { transform: scale(.9); }
+  65% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+.hydra-root .app-content > .screen,
+.hydra-root .app-content > .profile-screen,
+.hydra-root .app-content > .community-screen {
+  animation: hydra-screen-in 320ms var(--hydra-ease-out) both;
+}
+
+.hydra-root :is(
+  .property-hero,
+  .nfc-banner,
+  .history-home-row,
+  .animal-card,
+  .profile-menu-card,
+  .profile-menu-row,
+  .task-card,
+  .compact-row,
+  .feature-link-grid > button,
+  .weather-current,
+  .nfc-inline-card,
+  .herd-care-launch,
+  .home-tools-list > button
+) {
+  transition:
+    transform 190ms var(--hydra-ease-out),
+    box-shadow 220ms ease,
+    border-color 200ms ease,
+    background-color 200ms ease,
+    opacity 180ms ease;
+}
+
+.hydra-root button:not(:disabled),
+.hydra-root [role="button"] {
+  transition:
+    transform 165ms var(--hydra-ease-out),
+    background-color 190ms ease,
+    border-color 190ms ease,
+    color 190ms ease,
+    opacity 160ms ease,
+    box-shadow 200ms ease;
+}
+
+.hydra-root button:not(:disabled):active,
+.hydra-root [role="button"]:active {
+  transform: scale(.975);
+}
+
+.hydra-root .bottom-nav button > span {
+  transition: transform 210ms var(--hydra-ease-out), background-color 200ms ease, color 200ms ease !important;
+}
+
+.hydra-root .bottom-nav button:active > span {
+  transform: scale(.9) !important;
+}
+
+.hydra-root .bottom-nav button.active > span {
+  animation: hydra-icon-pop 300ms var(--hydra-ease-out) both;
+}
+
+.hydra-root .modal-layer,
+.hydra-root .quick-layer {
+  animation-duration: 190ms !important;
+}
+
+.hydra-root .modal-sheet,
+.hydra-root .quick-sheet {
+  animation: hydra-sheet-in 260ms var(--hydra-ease-out) both !important;
+}
+
+.hydra-root .home-tools-list.home-more-tools-layer > button {
+  animation: hydra-card-in 300ms var(--hydra-ease-out) both;
+}
+
+.hydra-root .home-tools-list.home-more-tools-layer > button:nth-of-type(2) { animation-delay: 25ms; }
+.hydra-root .home-tools-list.home-more-tools-layer > button:nth-of-type(3) { animation-delay: 45ms; }
+.hydra-root .home-tools-list.home-more-tools-layer > button:nth-of-type(4) { animation-delay: 65ms; }
+.hydra-root .home-tools-list.home-more-tools-layer > button:nth-of-type(5) { animation-delay: 85ms; }
+.hydra-root .home-tools-list.home-more-tools-layer > button:nth-of-type(6) { animation-delay: 105ms; }
+
+.hydra-root :is(.animal-list, .post-list, .task-list, .profile-group) > * {
+  animation: hydra-card-in 300ms var(--hydra-ease-out) both;
+}
+
+@media (hover:hover) and (pointer:fine) {
+  .hydra-root :is(
+    .property-hero,
+    .history-home-row,
+    .animal-card,
+    .profile-menu-row,
+    .feature-link-grid > button,
+    .home-tools-list > button
+  ):hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hydra-root *,
+  .hydra-root *::before,
+  .hydra-root *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
