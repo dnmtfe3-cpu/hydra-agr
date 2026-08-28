@@ -10,6 +10,7 @@ import {
   ChevronRight,
   ClipboardCheck,
   Beef as Cow,
+  FileSpreadsheet,
   HeartHandshake,
   History,
   Leaf,
@@ -28,6 +29,7 @@ import { farmExperience } from "../../lib/farm-xp";
 import { currentMonthTotals, loadProductionNotebook } from "../../services/family-farming-repository";
 import { requireSupabase } from "../../services/supabase";
 import { NutriCicloPanel } from "../family-farming/nutriciclo-panel";
+import { HydraSpreadsheetPanel } from "../spreadsheets/hydra-spreadsheet-panel";
 import { WeatherWidget } from "./weather-widget";
 
 type Props = {
@@ -57,6 +59,7 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [productionResult, setProductionResult] = useState<number | null>(null);
   const [nutriCicloOpen, setNutriCicloOpen] = useState(false);
+  const [spreadsheetOpen, setSpreadsheetOpen] = useState(false);
   const firstName = account.profile.name.split(/\s+/)[0] || "Produtor";
   const welcome = welcomeMessage();
   const today = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "2-digit", month: "long" }).format(new Date());
@@ -164,6 +167,12 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
         <ChevronRight size={18} />
       </button>
 
+      <button className="home-spreadsheet-card" onClick={() => setSpreadsheetOpen(true)}>
+        <span><FileSpreadsheet size={21} /></span>
+        <span><small>HYDRA PLANILHA</small><strong>Exportar dados da propriedade</strong><em>Rebanho, atividades, alimentação e resumo para Excel ou WhatsApp.</em></span>
+        <ChevronRight size={18} />
+      </button>
+
       <section className="property-hero">
         <div className="property-hero-top"><div><span className="property-kicker">Propriedade</span><h2>{account.property.name || "Propriedade não cadastrada"}</h2><p>{propertyReady ? `${account.property.mainActivity} · ${account.property.municipality}, ${account.property.state}` : "Complete a ficha da propriedade"}</p></div><button onClick={() => navigate("property")} aria-label="Editar propriedade"><Sprout size={20} /></button></div>
         <div className="property-metrics"><div><UsersRound size={20} /><span><strong>Equipe</strong><small>gestão e operações</small></span></div><div><Cow size={20} /><span><strong>{account.animals.length}</strong><small>{account.animals.length === 1 ? "animal" : "animais"}</small></span></div><div><ClipboardCheck size={20} /><span><strong>{pendingActivities.length}</strong><small>{pendingActivities.length === 1 ? "tarefa pendente" : "tarefas pendentes"}</small></span></div></div>
@@ -184,6 +193,7 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
 
       <button className="home-fab-label" onClick={onQuickAction}><Plus size={19} /> Nova ação</button>
       <NutriCicloPanel account={account} open={nutriCicloOpen} onClose={() => setNutriCicloOpen(false)} />
+      <HydraSpreadsheetPanel account={account} open={spreadsheetOpen} onClose={() => setSpreadsheetOpen(false)} />
     </div>
   );
 }
