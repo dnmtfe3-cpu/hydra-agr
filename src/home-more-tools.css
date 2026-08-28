@@ -44,24 +44,25 @@ html.home-tools-open .bottom-nav {
   max-width: none !important;
   margin: 0 !important;
   padding:
-    calc(100dvh - var(--more-tools-height) + 76px)
+    calc(100dvh - var(--more-tools-height) + 82px)
     14px
     calc(20px + env(safe-area-inset-bottom, 0px)) !important;
   display: flex !important;
   flex-direction: column !important;
-  justify-content: flex-end !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
   gap: 9px !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
   overscroll-behavior: contain !important;
   background: rgba(5, 28, 19, .48) !important;
-  backdrop-filter: blur(3px) !important;
-  -webkit-backdrop-filter: blur(3px) !important;
+  backdrop-filter: blur(9px) !important;
+  -webkit-backdrop-filter: blur(9px) !important;
   isolation: isolate !important;
   animation: hydra-more-tools-backdrop 180ms ease-out both !important;
 }
 
-/* Superfície inferior única, como a sheet de Nova ação. */
+/* Superfície inferior no mesmo comportamento visual da Nova ação. */
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer::before {
   content: "" !important;
   position: fixed !important;
@@ -72,7 +73,7 @@ html.home-tools-open .bottom-nav {
   height: var(--more-tools-height) !important;
   border-radius: 30px 30px 0 0 !important;
   background: var(--paper, #fffefb) !important;
-  box-shadow: 0 -18px 48px rgba(6, 37, 25, .14) !important;
+  box-shadow: 0 -24px 80px rgba(0,0,0,.20) !important;
   animation: hydra-more-tools-sheet 240ms cubic-bezier(.22,1,.36,1) both !important;
 }
 
@@ -81,12 +82,13 @@ html.home-tools-open .bottom-nav {
   position: fixed !important;
   z-index: 2 !important;
   left: 22px !important;
-  bottom: calc(var(--more-tools-height) - 56px) !important;
+  bottom: calc(var(--more-tools-height) - 57px) !important;
   color: var(--forest-950, #09271b) !important;
-  font-size: 20px !important;
+  font-family: var(--font-display, "Sora"), system-ui, sans-serif !important;
+  font-size: 21px !important;
   line-height: 1 !important;
-  font-weight: 850 !important;
-  letter-spacing: -.035em !important;
+  font-weight: 800 !important;
+  letter-spacing: -.04em !important;
   pointer-events: none !important;
 }
 
@@ -98,7 +100,6 @@ html.home-tools-open .bottom-nav {
   margin: 0 !important;
 }
 
-/* Tira aparências de bloco inline herdadas do estado antigo. */
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .history-home-row,
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-production-notebook-card,
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-nutriciclo-card,
@@ -138,26 +139,34 @@ html.home-tools-open .bottom-nav {
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* Splash: overscan real para não sobrar nenhuma faixa embaixo ou nas safe areas. */
+/* Splash: enquanto existe, o app abaixo some completamente. Isso impede qualquer faixa do conteúdo na safe area inferior do iPhone. */
+html:has(.splash-screen),
+body:has(.splash-screen),
+body:has(.splash-screen) #root {
+  background: #09271b !important;
+  overflow: hidden !important;
+}
+
+body:has(.splash-screen) .app-shell,
+body:has(.splash-screen) .bottom-nav {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 .splash-screen {
   position: fixed !important;
   z-index: 2147483647 !important;
-  top: -96px !important;
-  right: -4px !important;
-  bottom: -160px !important;
-  left: -4px !important;
+  inset: -128px -8px -220px -8px !important;
   width: auto !important;
   height: auto !important;
-  min-width: calc(100vw + 8px) !important;
-  min-height: calc(100dvh + 256px) !important;
+  min-width: calc(100vw + 16px) !important;
+  min-height: calc(100dvh + 348px) !important;
   margin: 0 !important;
+  padding: 0 !important;
   border: 0 !important;
   overflow: hidden !important;
   background-color: #09271b !important;
-}
-
-body:has(.splash-screen) .bottom-nav {
-  display: none !important;
 }
 
 @media (max-width: 390px) {
@@ -175,6 +184,7 @@ body:has(.splash-screen) .bottom-nav {
 
   .hydra-root .home-screen .home-tools-list.home-more-tools-layer {
     --more-tools-height: min(72dvh, 590px);
+    padding-top: calc(100dvh - var(--more-tools-height) + 78px) !important;
     padding-left: 11px !important;
     padding-right: 11px !important;
   }
