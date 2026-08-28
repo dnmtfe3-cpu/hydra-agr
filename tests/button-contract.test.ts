@@ -22,7 +22,9 @@ describe("contrato dos botões", () => {
             const attributes = node.attributes.properties.filter(ts.isJsxAttribute);
             const hasClick = attributes.some((attribute) => attribute.name.getText(source) === "onClick");
             const type = attributes.find((attribute) => attribute.name.getText(source) === "type")?.initializer?.getText(source).replace(/["']/g, "");
-            if (!hasClick && type !== "submit") {
+            const ariaCurrent = attributes.find((attribute) => attribute.name.getText(source) === "aria-current")?.initializer?.getText(source).replace(/["']/g, "");
+            const isCurrentNavigationItem = ariaCurrent === "page";
+            if (!hasClick && type !== "submit" && !isCurrentNavigationItem) {
               const position = source.getLineAndCharacterOfPosition(node.getStart(source));
               failures.push(`${relative(root, file)}:${position.line + 1}`);
             }
