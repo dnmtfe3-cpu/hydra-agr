@@ -33,7 +33,7 @@ html.home-tools-open .bottom-nav {
 }
 
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer {
-  --more-tools-height: min(68dvh, 570px);
+  --more-tools-height: min(56dvh, 500px);
   position: fixed !important;
   inset: 0 !important;
   z-index: 1200 !important;
@@ -44,7 +44,7 @@ html.home-tools-open .bottom-nav {
   padding:
     calc(100dvh - var(--more-tools-height) + 82px)
     14px
-    calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+    calc(16px + env(safe-area-inset-bottom, 0px)) !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: flex-start !important;
@@ -251,7 +251,7 @@ body:has(.splash-screen) .bottom-nav {
   }
 
   .hydra-root .home-screen .home-tools-list.home-more-tools-layer {
-    --more-tools-height: min(72dvh, 590px);
+    --more-tools-height: min(59dvh, 510px);
     padding-top: calc(100dvh - var(--more-tools-height) + 78px) !important;
     padding-left: 11px !important;
     padding-right: 11px !important;
