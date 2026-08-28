@@ -5,6 +5,22 @@ const SHORTCUT_CLASS = "home-more-tools-shortcut";
 const SOURCE_CLASS = "home-more-tools-source";
 const LAYER_CLASS = "home-more-tools-layer";
 
+function syncSplashViewport() {
+  const active = Boolean(document.querySelector(".splash-screen"));
+  const dark = Boolean(document.querySelector(".hydra-root.theme-dark"));
+  const color = active ? "#09271b" : dark ? "#08261c" : "#f8f6ef";
+
+  document.documentElement.classList.toggle("hydra-splash-active", active);
+  document.documentElement.style.setProperty("background-color", color, "important");
+  document.body.style.setProperty("background-color", color, "important");
+
+  const root = document.getElementById("root");
+  root?.style.setProperty("background-color", color, "important");
+
+  const themeMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  if (themeMeta) themeMeta.content = color;
+}
+
 function findMoreToolsSource(screen: HTMLElement) {
   return Array.from(screen.querySelectorAll<HTMLButtonElement>(":scope > button.history-home-row"))
     .find((button) => button.textContent?.includes("Mais ferramentas")) ?? null;
@@ -37,6 +53,8 @@ function closeCurrentTools() {
 }
 
 function enhanceHome() {
+  syncSplashViewport();
+
   const screen = document.querySelector<HTMLElement>(HOME_SELECTOR);
   if (!screen) {
     document.documentElement.classList.remove("home-tools-open");
@@ -106,7 +124,7 @@ observer.observe(document.documentElement, {
   childList: true,
   subtree: true,
   attributes: true,
-  attributeFilter: ["aria-expanded"],
+  attributeFilter: ["aria-expanded", "class"],
 });
 
 document.addEventListener("keydown", (event) => {
