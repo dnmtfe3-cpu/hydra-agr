@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import type { Announcement, AppRoute, HydraAccount } from "../../lib/hydra-types";
 import { farmExperience } from "../../lib/farm-xp";
+import { refreshDailyBriefingCopy } from "../../services/daily-briefing";
 import { currentMonthTotals, loadProductionNotebook } from "../../services/family-farming-repository";
 import { requireSupabase } from "../../services/supabase";
 import { DailyBriefingPanel } from "../daily-briefing/daily-briefing-panel";
@@ -63,6 +64,10 @@ export function HomeScreen({ account, navigate, onQuickAction, announcements }: 
     void refreshUnread();
     const channel = client.channel(`hydra-home-notifications-${account.id}`).on("postgres_changes", { event: "*", schema: "public", table: "notifications", filter: `recipient_user_id=eq.${account.id}` }, () => { void refreshUnread(); }).subscribe();
     return () => { active = false; void client.removeChannel(channel); };
+  }, [account.id]);
+
+  useEffect(() => {
+    void refreshDailyBriefingCopy(account).catch(() => undefined);
   }, [account.id]);
 
   useEffect(() => {
