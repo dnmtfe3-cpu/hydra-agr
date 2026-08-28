@@ -1,19 +1,19 @@
-/* Correção final dos avisos: largura estável, safe area e texto sem esmagar no iPhone. */
+/* Avisos compactos e estáveis no iPhone/Android. */
 html body .app-toast-region {
   position: fixed !important;
-  z-index: 110 !important;
-  top: max(16px, calc(env(safe-area-inset-top, 0px) + 10px)) !important;
+  z-index: 2147482000 !important;
+  top: max(10px, calc(env(safe-area-inset-top, 0px) + 8px)) !important;
   bottom: auto !important;
-  left: max(12px, env(safe-area-inset-left, 0px)) !important;
-  right: max(12px, env(safe-area-inset-right, 0px)) !important;
-  width: auto !important;
-  max-width: 390px !important;
-  margin: 0 auto !important;
+  left: 50% !important;
+  right: auto !important;
+  width: min(calc(100% - 24px), 360px) !important;
+  max-width: 360px !important;
+  margin: 0 !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: stretch !important;
   gap: 8px !important;
-  transform: none !important;
+  transform: translateX(-50%) !important;
   pointer-events: none !important;
 }
 
@@ -21,42 +21,74 @@ html body .app-toast {
   box-sizing: border-box !important;
   width: 100% !important;
   min-width: 0 !important;
-  max-width: none !important;
-  min-height: 64px !important;
+  min-height: 58px !important;
   margin: 0 !important;
-  padding: 11px 13px !important;
-  border-radius: 18px !important;
+  padding: 9px 11px !important;
+  border: 1px solid rgba(20, 64, 45, .10) !important;
+  border-radius: 16px !important;
   display: flex !important;
   grid-template-columns: none !important;
   align-items: center !important;
   justify-content: flex-start !important;
-  gap: 12px !important;
+  gap: 10px !important;
   overflow: hidden !important;
-  isolation: isolate;
+  isolation: isolate !important;
+  background: rgba(255, 254, 251, .985) !important;
+  color: #173629 !important;
+  box-shadow: 0 14px 34px -22px rgba(13, 54, 38, .48) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
   pointer-events: auto !important;
 }
 
-html body .app-toast-icon {
-  width: 42px !important;
-  height: 42px !important;
-  min-width: 42px !important;
-  min-height: 42px !important;
-  flex: 0 0 42px !important;
-  border-radius: 14px !important;
-  display: grid !important;
-  place-items: center !important;
-}
-
-html body .app-toast-copy {
-  min-width: 0 !important;
+/* Corrige a regra antiga .app-toast > span que pintava também o bloco de texto. */
+html body .app-toast > .app-toast-copy {
   width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
   max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
   flex: 1 1 auto !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: flex-start !important;
   justify-content: center !important;
-  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: inherit !important;
+  overflow: visible !important;
+}
+
+html body .app-toast > .app-toast-icon {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  flex: 0 0 38px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: #e8f3ec !important;
+  color: #176346 !important;
+  box-shadow: none !important;
+}
+
+html body .app-toast.error > .app-toast-icon {
+  background: #faece9 !important;
+  color: #a54c43 !important;
+}
+
+html body .app-toast.info > .app-toast-icon {
+  background: #e9f2f3 !important;
+  color: #3f7079 !important;
 }
 
 html body .app-toast-copy strong,
@@ -74,14 +106,49 @@ html body .app-toast-copy small {
 }
 
 html body .app-toast-copy strong {
-  font-size: 12px !important;
-  line-height: 1.2 !important;
+  margin: 0 !important;
+  color: #173629 !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.01em !important;
 }
 
 html body .app-toast-copy small {
-  margin-top: 3px !important;
-  font-size: 10px !important;
-  line-height: 1.35 !important;
+  margin-top: 2px !important;
+  color: #758078 !important;
+  font-size: 9.5px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+}
+
+/* Splash sempre acima do app inteiro; nunca deixa a bottom bar aparecer por baixo. */
+html body .splash-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483000 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
+
+html body:has(.splash-screen) .bottom-nav,
+html body:has(.splash-screen) .app-toast-region,
+html body:has(.splash-screen) .sync-banner {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Avatar quebrado não exibe ícone nativo de imagem inválida. */
+html body .home-profile-avatar img,
+html body img.profile-avatar.image {
+  color: transparent !important;
 }
 
 .modal-layer:has(.confirm-action) {
@@ -124,21 +191,20 @@ html body .app-toast-copy small {
 
 @media (max-width: 360px) {
   html body .app-toast-region {
-    left: 10px !important;
-    right: 10px !important;
+    width: calc(100% - 20px) !important;
   }
 
   html body .app-toast {
-    padding: 10px 11px !important;
-    gap: 10px !important;
+    padding: 8px 10px !important;
+    gap: 9px !important;
   }
 
-  html body .app-toast-icon {
-    width: 38px !important;
-    height: 38px !important;
-    min-width: 38px !important;
-    min-height: 38px !important;
-    flex-basis: 38px !important;
+  html body .app-toast > .app-toast-icon {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    flex-basis: 36px !important;
   }
 
   .modal-layer:has(.confirm-action) .modal-action-row {
