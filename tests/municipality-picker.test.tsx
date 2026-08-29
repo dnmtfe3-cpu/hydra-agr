@@ -8,26 +8,20 @@ function Harness({ initialValue = "" }: { initialValue?: string }) {
   return <MunicipalityPicker value={municipality} onChange={setMunicipality} />;
 }
 
-describe("seletor regional de municípios", () => {
-  it("seleciona Brejões sem usar o seletor nativo do navegador", () => {
-    const { container } = render(<Harness />);
+describe("compatibilidade de município", () => {
+  it("não mantém seletor regional nem lista fixa de cidades", () => {
+    const { container } = render(<Harness initialValue="São Paulo" />);
 
     expect(container.querySelector("select")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("combobox", { name: /escolher município/i }));
-    fireEvent.change(screen.getByRole("textbox", { name: /pesquisar cidade/i }), { target: { value: "bre" } });
-    fireEvent.click(screen.getByRole("option", { name: /brejões/i }));
-
-    expect(screen.getByRole("combobox", { name: /escolher município/i })).toHaveTextContent("Brejões");
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: /município/i })).toHaveValue("São Paulo");
+    expect(screen.queryByText(/brejões e cidades vizinhas/i)).not.toBeInTheDocument();
   });
 
-  it("pesquisa sem exigir acentos", () => {
-    render(<Harness initialValue="Brejões" />);
-
-    fireEvent.click(screen.getByRole("combobox", { name: /escolher município/i }));
-    fireEvent.change(screen.getByRole("textbox", { name: /pesquisar cidade/i }), { target: { value: "ubaira" } });
-
-    expect(screen.getByRole("option", { name: /ubaíra/i })).toBeInTheDocument();
-    expect(screen.queryByRole("option", { name: /brejões/i })).not.toBeInTheDocument();
+  it("permite manter um município já identificado sem restringir a região", () => {
+    render(<Harness />);
+    const field = screen.getByRole("textbox", { name: /município/i });
+    fireEvent.change(field, { target: { value: "Manaus" } });
+    expect(field).toHaveValue("Manaus");
   });
 });
