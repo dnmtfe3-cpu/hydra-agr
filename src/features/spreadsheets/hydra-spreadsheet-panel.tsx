@@ -14,10 +14,7 @@ type Props = {
 
 type SheetKind = "herd" | "activities" | "feeding" | "property";
 
-type SpreadsheetFile = {
-  name: string;
-  file: File;
-};
+type SpreadsheetFile = { name: string; file: File };
 
 function csvCell(value: unknown) {
   const text = value === null || value === undefined ? "" : String(value);
@@ -36,12 +33,7 @@ function dateLabel(value?: string) {
 }
 
 function safeName(value: string) {
-  return value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "") || "propriedade";
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "propriedade";
 }
 
 function buildSpreadsheet(account: HydraAccount, kind: SheetKind): SpreadsheetFile {
@@ -54,18 +46,7 @@ function buildSpreadsheet(account: HydraAccount, kind: SheetKind): SpreadsheetFi
     label = "rebanho";
     body = csv(
       ["Identificação", "Nome", "Espécie", "Raça", "Sexo", "Nascimento", "Peso (kg)", "Situação", "NFC/RFID", "Observações"],
-      account.animals.map((animal) => [
-        animal.identification,
-        animal.name || "",
-        animal.species,
-        animal.breed || "",
-        animal.sex || "",
-        dateLabel(animal.birthDate),
-        animal.weight ?? "",
-        animal.status,
-        animal.electronicId || "",
-        animal.notes || "",
-      ]),
+      account.animals.map((animal) => [animal.identification, animal.name || "", animal.species, animal.breed || "", animal.sex || "", dateLabel(animal.birthDate), animal.weight ?? "", animal.status, animal.electronicId || "", animal.notes || ""]),
     );
   }
 
@@ -104,8 +85,13 @@ function buildSpreadsheet(account: HydraAccount, kind: SheetKind): SpreadsheetFi
         ["Propriedade", account.property.name],
         ["Produtor", account.profile.name],
         ["Município", account.property.municipality],
-        ["Estado", account.property.state],
-        ["Localização", account.property.locationDetails || ""],
+        ["UF", account.property.state],
+        ["CEP", account.property.postalCode],
+        ["Código IBGE do município", account.property.municipalityIbgeCode || ""],
+        ["Região", account.property.region || ""],
+        ["Bairro/localidade", account.property.district || ""],
+        ["Logradouro", account.property.street || ""],
+        ["Referência da propriedade", account.property.locationDetails || ""],
         ["Área", `${account.property.area || ""} ${account.property.areaUnit || ""}`.trim()],
         ["Tipo de propriedade", account.property.type],
         ["Atividade principal", account.property.mainActivity],
@@ -137,17 +123,12 @@ function downloadSpreadsheet(spreadsheet: SpreadsheetFile) {
 async function shareSpreadsheet(spreadsheet: SpreadsheetFile) {
   if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [spreadsheet.file] }))) {
     try {
-      await navigator.share({
-        title: "Hydra Planilha",
-        text: "Planilha gerada pelo Hydra Agro.",
-        files: [spreadsheet.file],
-      });
+      await navigator.share({ title: "Hydra Planilha", text: "Planilha gerada pelo Hydra Agro.", files: [spreadsheet.file] });
       return;
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
     }
   }
-
   downloadSpreadsheet(spreadsheet);
   showAppToast("Arquivo baixado. Você já pode enviar pelo WhatsApp.");
 }
@@ -156,7 +137,7 @@ const sheets: { kind: SheetKind; title: string; description: string; icon: typeo
   { kind: "herd", title: "Rebanho", description: "Animais, peso, situação e NFC/RFID.", icon: Cow },
   { kind: "activities", title: "Atividades", description: "Rotina completa, pendências e responsáveis pelos registros.", icon: ClipboardList },
   { kind: "feeding", title: "Alimentação", description: "Registros classificados como alimentação no Hydra.", icon: UtensilsCrossed },
-  { kind: "property", title: "Resumo da propriedade", description: "Dados gerais e indicadores da fazenda.", icon: Sprout },
+  { kind: "property", title: "Resumo da propriedade", description: "Dados gerais, localização e indicadores da fazenda.", icon: Sprout },
 ];
 
 export function HydraSpreadsheetPanel({ account, open, onClose }: Props) {
@@ -166,34 +147,18 @@ export function HydraSpreadsheetPanel({ account, open, onClose }: Props) {
     showAppToast("Planilha gerada com sucesso");
   }
 
-  function share(kind: SheetKind) {
-    void shareSpreadsheet(buildSpreadsheet(account, kind));
-  }
+  function share(kind: SheetKind) { void shareSpreadsheet(buildSpreadsheet(account, kind)); }
 
   return (
     <Modal open={open} onClose={onClose} eyebrow="HYDRA PLANILHA" title="Dados prontos para levar" wide>
-      <div className="hydra-sheet-intro">
-        <span><FileSpreadsheet size={24} /></span>
-        <div><strong>Exportação simples e gratuita</strong><p>Os arquivos abrem no Excel, Google Planilhas e similares. No celular, use compartilhar para enviar pelo WhatsApp.</p></div>
-      </div>
-
+      <div className="hydra-sheet-intro"><span><FileSpreadsheet size={24} /></span><div><strong>Exportação simples e gratuita</strong><p>Os arquivos abrem no Excel, Google Planilhas e similares. No celular, use compartilhar para enviar pelo WhatsApp.</p></div></div>
       <div className="hydra-sheet-list">
         {sheets.map((sheet) => {
           const Icon = sheet.icon;
           const empty = sheet.kind === "herd" ? account.animals.length === 0 : sheet.kind === "activities" ? account.activities.length === 0 : sheet.kind === "feeding" ? !account.activities.some((item) => item.category.trim().toLocaleLowerCase("pt-BR").includes("alimenta")) : false;
-          return (
-            <article className="hydra-sheet-card" key={sheet.kind}>
-              <span className="hydra-sheet-icon"><Icon size={21} /></span>
-              <div className="hydra-sheet-copy"><strong>{sheet.title}</strong><small>{empty ? "Sem registros para exportar agora." : sheet.description}</small></div>
-              <div className="hydra-sheet-actions">
-                <button onClick={() => download(sheet.kind)} aria-label={`Baixar planilha de ${sheet.title}`} title="Baixar"><Download size={18} /></button>
-                <button className="share" onClick={() => share(sheet.kind)} aria-label={`Compartilhar planilha de ${sheet.title}`} title="Compartilhar"><Share2 size={18} /></button>
-              </div>
-            </article>
-          );
+          return <article className="hydra-sheet-card" key={sheet.kind}><span className="hydra-sheet-icon"><Icon size={21} /></span><div className="hydra-sheet-copy"><strong>{sheet.title}</strong><small>{empty ? "Sem registros para exportar agora." : sheet.description}</small></div><div className="hydra-sheet-actions"><button onClick={() => download(sheet.kind)} aria-label={`Baixar planilha de ${sheet.title}`} title="Baixar"><Download size={18} /></button><button className="share" onClick={() => share(sheet.kind)} aria-label={`Compartilhar planilha de ${sheet.title}`} title="Compartilhar"><Share2 size={18} /></button></div></article>;
         })}
       </div>
-
       <p className="hydra-sheet-footnote">Formato CSV com separação compatível com planilhas em português. Nenhum serviço pago é necessário para gerar os arquivos.</p>
     </Modal>
   );
