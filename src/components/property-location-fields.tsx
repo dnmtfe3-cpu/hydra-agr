@@ -48,6 +48,13 @@ export function PropertyLocationFields({ property, onChange, onError, namePlaceh
       setLookupMessage("");
       return;
     }
+    if (!property.state) {
+      const message = "Selecione a UF antes de consultar o CEP.";
+      setLookupState("error");
+      setLookupMessage(message);
+      onError?.(message);
+      return;
+    }
     const key = `${cep}|${property.state}`;
     if (!force && lastLookup.current === key && property.municipality) return;
     const version = ++lookupVersion.current;
@@ -60,7 +67,7 @@ export function PropertyLocationFields({ property, onChange, onError, namePlaceh
       if (mismatch) {
         setLookupState("error");
         setLookupMessage(mismatch);
-        onChange({ ...mergeAddress(property, address), municipality: address.municipality });
+        onChange({ ...property, municipality: "", municipalityIbgeCode: undefined });
         onError?.(mismatch);
         return;
       }
@@ -82,19 +89,20 @@ export function PropertyLocationFields({ property, onChange, onError, namePlaceh
     if (!isValidCep(property.postalCode)) return;
     const timer = window.setTimeout(() => { void lookup(); }, 320);
     return () => window.clearTimeout(timer);
-    // O lookup depende somente dos valores digitados; onChange é estável no fluxo do formulário.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [property.postalCode, property.state]);
 
   function changeUf(uf: string) {
     lastLookup.current = "";
-    setLookupState(property.municipality ? "ready" : "idle");
+    setLookupState("idle");
     setLookupMessage("");
     onError?.("");
     onChange({
       ...property,
       state: uf,
       stateName: brazilStates.find((item) => item.uf === uf)?.name,
+      municipality: "",
+      municipalityIbgeCode: undefined,
     });
   }
 
