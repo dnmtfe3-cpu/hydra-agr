@@ -99,12 +99,15 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
 
   useEffect(() => {
     let active = true;
-    void requireSupabase().rpc("public_animal_by_hydra_code", { p_code: animal.identification })
-      .then(({ data, error }) => {
+    void (async () => {
+      try {
+        const { data, error } = await requireSupabase().rpc("public_animal_by_hydra_code", { p_code: animal.identification });
         if (!active || error || !data || typeof data !== "object") return;
         setLive(data as LiveAnimal);
-      })
-      .catch(() => undefined);
+      } catch {
+        // O snapshot contido no link continua disponível se a consulta ao banco falhar.
+      }
+    })();
     return () => { active = false; };
   }, [animal.identification]);
 
@@ -121,7 +124,7 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
   const isLost = Boolean(live?.lost) || current.status?.toLocaleLowerCase("pt-BR") === "perdido";
   const rawPhotoUrl = current.photoPath ? publicMediaUrl("community-media", current.photoPath) : undefined;
   const photoUrl = rawPhotoUrl ? `${rawPhotoUrl}${rawPhotoUrl.includes("?") ? "&" : "?"}hydra=${Date.now()}` : undefined;
-  const location = [current.municipality, current.state].filter(Boolean).join("/ ");
+  const location = [current.municipality, current.state].filter(Boolean).join(" / ");
 
   async function reportFound() {
     setReporting(true);
