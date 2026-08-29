@@ -117,7 +117,7 @@ export async function scheduleDailyBriefing(account: HydraAccount, settings: Dai
       body: briefing.body,
       channelId: Capacitor.getPlatform() === "android" ? DAILY_BRIEFING_CHANNEL_ID : undefined,
       schedule: { on: { hour: settings.hour, minute: settings.minute }, repeats: true, allowWhileIdle: true },
-      extra: { route: "today", source: "hydra-alert" },
+      extra: { route: "today", source: "daily-briefing", kind: "hydra-alert" },
     }],
   });
 
