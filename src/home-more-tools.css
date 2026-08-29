@@ -1,22 +1,39 @@
-/* Sheet da Nova ação: compacta, ancorada embaixo e estável em web/Android. */
+/* Sheet Nova ação: altura do conteúdo, sem área vazia. */
 .hydra-root .home-screen > button.home-more-tools-source { display: none !important; }
-html.home-tools-open, html.home-tools-open body { overflow: hidden !important; overscroll-behavior: none !important; }
-html.home-tools-open .bottom-nav { visibility: hidden !important; pointer-events: none !important; }
+
+html.home-tools-open,
+html.home-tools-open body {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+
+/* Nada da Home fica visível/acionável enquanto a sheet está aberta. */
+html.home-tools-open .phone-app .home-fab-label,
+html.home-tools-open .bottom-nav {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
 
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer {
-  --more-tools-height: min(500px, calc(100dvh - max(72px, env(safe-area-inset-top, 0px) + 24px)));
+  --tool-row: 61px;
+  --tool-gap: 8px;
+  --tool-count: 5;
+  --sheet-header: 76px;
+  --sheet-bottom: max(14px, env(safe-area-inset-bottom, 0px));
+  --more-tools-height: calc(var(--sheet-header) + (var(--tool-row) * var(--tool-count)) + (var(--tool-gap) * 4) + var(--sheet-bottom));
   position: fixed !important;
   inset: 0 !important;
   z-index: 1200 !important;
   width: 100vw !important;
   height: 100dvh !important;
   margin: 0 !important;
-  padding: 0 14px calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+  padding: 0 14px var(--sheet-bottom) !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: flex-end !important;
   align-items: stretch !important;
-  gap: 8px !important;
+  gap: var(--tool-gap) !important;
   overflow: hidden !important;
   background: rgba(5, 28, 19, .46) !important;
   backdrop-filter: blur(8px) !important;
@@ -44,7 +61,7 @@ html.home-tools-open .bottom-nav { visibility: hidden !important; pointer-events
   position: fixed !important;
   z-index: 2 !important;
   left: 22px !important;
-  bottom: calc(var(--more-tools-height) - 54px) !important;
+  bottom: calc(var(--more-tools-height) - 49px) !important;
   color: var(--forest-950, #09271b) !important;
   font-family: var(--font-display, "Sora"), system-ui, sans-serif !important;
   font-size: 21px !important;
@@ -54,24 +71,21 @@ html.home-tools-open .bottom-nav { visibility: hidden !important; pointer-events
   pointer-events: none !important;
 }
 
-/* Mesma altura das linhas/funcionalidades normais do app. */
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:not(.home-more-tools-close) {
   position: relative !important;
   z-index: 3 !important;
   width: 100% !important;
-  height: 61px !important;
-  min-height: 61px !important;
-  max-height: 61px !important;
-  flex: 0 0 61px !important;
+  height: var(--tool-row) !important;
+  min-height: var(--tool-row) !important;
+  max-height: var(--tool-row) !important;
+  flex: 0 0 var(--tool-row) !important;
   margin: 0 !important;
   padding-top: 8px !important;
   padding-bottom: 8px !important;
   border-radius: 17px !important;
   overflow: hidden !important;
-  transform: translateY(38px) !important;
+  transform: none !important;
 }
-
-.hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:first-of-type:not(.home-more-tools-close) { margin-top: 0 !important; }
 
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .history-home-row,
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-production-notebook-card,
@@ -100,8 +114,7 @@ html.home-tools-open .bottom-nav { visibility: hidden !important; pointer-events
   position: fixed !important;
   z-index: 5 !important;
   right: 18px !important;
-  bottom: calc(var(--more-tools-height) - 65px) !important;
-  transform: none !important;
+  bottom: calc(var(--more-tools-height) - 60px) !important;
   width: 42px !important;
   height: 42px !important;
   min-width: 42px !important;
@@ -135,7 +148,6 @@ html.home-tools-open .bottom-nav { visibility: hidden !important; pointer-events
 
 @media (max-width: 390px) {
   .hydra-root .home-screen .home-tools-list.home-more-tools-layer {
-    --more-tools-height: min(480px, calc(100dvh - max(72px, env(safe-area-inset-top, 0px) + 20px)));
     padding-left: 11px !important;
     padding-right: 11px !important;
   }
