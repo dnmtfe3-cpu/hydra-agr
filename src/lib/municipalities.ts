@@ -1,21 +1,11 @@
 /**
- * Cobertura inicial do Hydra Agro. A lista inclui Brejões e todos os
- * municípios que compartilham limite com ele na malha municipal do IBGE.
+ * Compatibilidade com componentes antigos.
+ * O Hydra Agro não restringe mais municípios: a localização oficial da
+ * propriedade é identificada pelo CEP e pela UF selecionada.
  */
-export const supportedMunicipalities = [
-  "Amargosa",
-  "Brejões",
-  "Milagres",
-  "Nova Itarana",
-  "Santa Inês",
-  "Ubaíra",
-] as const;
-
-export type SupportedMunicipality = (typeof supportedMunicipalities)[number];
+export const supportedMunicipalities: readonly string[] = [];
+export type SupportedMunicipality = string;
 
 export function isSupportedMunicipality(value: string) {
-  const normalized = value.trim().toLocaleLowerCase("pt-BR");
-  return supportedMunicipalities.some(
-    (municipality) => municipality.toLocaleLowerCase("pt-BR") === normalized,
-  );
+  return value.trim().length > 0;
 }
