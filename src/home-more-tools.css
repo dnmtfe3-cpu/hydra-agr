@@ -1,18 +1,7 @@
 /* Sheet da Nova ação: compacta, ancorada embaixo e estável em web/Android. */
-.hydra-root .home-screen > button.home-more-tools-source {
-  display: none !important;
-}
-
-html.home-tools-open,
-html.home-tools-open body {
-  overflow: hidden !important;
-  overscroll-behavior: none !important;
-}
-
-html.home-tools-open .bottom-nav {
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
+.hydra-root .home-screen > button.home-more-tools-source { display: none !important; }
+html.home-tools-open, html.home-tools-open body { overflow: hidden !important; overscroll-behavior: none !important; }
+html.home-tools-open .bottom-nav { visibility: hidden !important; pointer-events: none !important; }
 
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer {
   --more-tools-height: min(500px, calc(100dvh - max(72px, env(safe-area-inset-top, 0px) + 24px)));
@@ -27,7 +16,7 @@ html.home-tools-open .bottom-nav {
   flex-direction: column !important;
   justify-content: flex-end !important;
   align-items: stretch !important;
-  gap: 9px !important;
+  gap: 8px !important;
   overflow: hidden !important;
   background: rgba(5, 28, 19, .46) !important;
   backdrop-filter: blur(8px) !important;
@@ -65,23 +54,24 @@ html.home-tools-open .bottom-nav {
   pointer-events: none !important;
 }
 
-.hydra-root .home-screen .home-tools-list.home-more-tools-layer > button {
+/* Mesma altura das linhas/funcionalidades normais do app. */
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:not(.home-more-tools-close) {
   position: relative !important;
   z-index: 3 !important;
   width: 100% !important;
-  height: 68px !important;
-  min-height: 68px !important;
-  max-height: 68px !important;
-  flex: 0 0 68px !important;
+  height: 61px !important;
+  min-height: 61px !important;
+  max-height: 61px !important;
+  flex: 0 0 61px !important;
   margin: 0 !important;
-  border-radius: 18px !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  border-radius: 17px !important;
   overflow: hidden !important;
   transform: translateY(38px) !important;
 }
 
-.hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:first-of-type:not(.home-more-tools-close) {
-  margin-top: 0 !important;
-}
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:first-of-type:not(.home-more-tools-close) { margin-top: 0 !important; }
 
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .history-home-row,
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-production-notebook-card,
@@ -89,6 +79,20 @@ html.home-tools-open .bottom-nav {
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-spreadsheet-card {
   background: #f8f8f3 !important;
   border: 1px solid rgba(18, 61, 44, .10) !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:not(.home-more-tools-close) > span:first-child,
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer .home-production-icon {
+  width: 39px !important;
+  height: 39px !important;
+  min-width: 39px !important;
+  min-height: 39px !important;
+  flex: 0 0 39px !important;
+  border-radius: 13px !important;
+  color: var(--forest-700) !important;
+  background: #edf3ee !important;
+  border-color: transparent !important;
   box-shadow: none !important;
 }
 
@@ -114,54 +118,20 @@ html.home-tools-open .bottom-nav {
   box-shadow: none !important;
 }
 
-.hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:not(.home-more-tools-close) > span:first-child,
-.hydra-root .home-screen .home-tools-list.home-more-tools-layer .home-production-icon {
-  color: var(--forest-700) !important;
-  background: #edf3ee !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
-
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer small,
-.hydra-root .home-screen .home-tools-list.home-more-tools-layer .home-production-copy small {
-  color: #6f7b74 !important;
-}
-
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer .home-production-copy small { color: #6f7b74 !important; }
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer strong,
-.hydra-root .home-screen .home-tools-list.home-more-tools-layer em {
-  color: var(--forest-950) !important;
-}
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer em { color: var(--forest-950) !important; }
 
-.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer::before {
-  background: #0d271d !important;
-}
-
-.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer::after {
-  color: #f4f5ef !important;
-}
-
-.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer > button:not(.home-more-tools-close) {
-  background: #153428 !important;
-  border-color: rgba(255,255,255,.08) !important;
-}
-
+.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer::before { background: #0d271d !important; }
+.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer::after { color: #f4f5ef !important; }
+.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer > button:not(.home-more-tools-close) { background: #153428 !important; border-color: rgba(255,255,255,.08) !important; }
 .hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer > button:not(.home-more-tools-close) > span:first-child,
 .hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer .home-production-icon,
-.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer > .home-more-tools-close {
-  color: #c6e0cc !important;
-  background: #214332 !important;
-  border-color: rgba(255,255,255,.08) !important;
-}
+.hydra-root.theme-dark .home-screen .home-tools-list.home-more-tools-layer > .home-more-tools-close { color: #c6e0cc !important; background: #214332 !important; border-color: rgba(255,255,255,.08) !important; }
 
-@keyframes hydra-more-tools-backdrop {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes hydra-more-tools-sheet {
-  from { transform: translateY(24px); opacity: .76; }
-  to { transform: translateY(0); opacity: 1; }
-}
+@keyframes hydra-more-tools-backdrop { from { opacity: 0; } to { opacity: 1; } }
+@keyframes hydra-more-tools-sheet { from { transform: translateY(24px); opacity: .76; } to { transform: translateY(0); opacity: 1; } }
 
 @media (max-width: 390px) {
   .hydra-root .home-screen .home-tools-list.home-more-tools-layer {
@@ -169,8 +139,5 @@ html.home-tools-open .bottom-nav {
     padding-left: 11px !important;
     padding-right: 11px !important;
   }
-
-  .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-more-tools-close {
-    right: 14px !important;
-  }
+  .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .home-more-tools-close { right: 14px !important; }
 }
