@@ -5,9 +5,7 @@
 .phone-app .small-button,
 .phone-app .wide-outline-button,
 .phone-app .icon-button,
-.phone-app .home-fab-label {
-  box-shadow: none !important;
-}
+.phone-app .home-fab-label { box-shadow: none !important; }
 
 .phone-app .nfc-banner,
 .phone-app .property-hero,
@@ -17,403 +15,76 @@
 .phone-app .first-action-card,
 .phone-app .calm-state,
 .phone-app .feature-link-grid button,
-.phone-app .home-announcements article {
-  border-radius: 13px !important;
-  box-shadow: none !important;
-}
+.phone-app .home-announcements article { border-radius: 13px !important; box-shadow: none !important; }
+.phone-app .property-hero { background: #174c36 !important; }
+.phone-app .property-hero::before,.phone-app .property-hero::after { display:none !important; }
+.phone-app .property-metrics { display:none !important; }
+.phone-app .property-hero-top { padding-bottom:20px !important; }
+.phone-app .today-home-card { border-color:#e0e4dd !important; background:var(--paper) !important; color:var(--ink) !important; }
+.phone-app .today-home-card > span { border-radius:9px !important; background:var(--sage-soft) !important; color:var(--forest-700) !important; }
+.phone-app .today-home-card > svg { color:#8b958f; }
+.home-summary-section { margin-top:14px !important; }
+.phone-app .home-status-row { width:100%; min-height:58px; margin:0 0 8px; padding:9px 10px; grid-template-columns:34px 1fr auto; gap:9px; border-radius:12px !important; text-align:left; }
+.phone-app .home-status-row > span { width:34px !important; height:34px !important; border-radius:9px !important; }
+.phone-app .home-status-row > div { min-width:0; display:flex; flex-direction:column; }
+.phone-app .home-status-row strong { font-size:9.6px; line-height:1.2; }
+.phone-app .home-status-row small { margin-top:2px; color:#78847c; font-size:7.5px; line-height:1.35; }
+.phone-app .home-status-row.has-attention small { color:#6e746d; }
+.phone-app .home-status-row.is-clear > span { background:#eef3e9 !important; color:#467258 !important; }
+.history-home-row { width:100%; min-height:57px; margin:0 0 12px; padding:9px 11px; border:1px solid #e0e4dd; display:grid; grid-template-columns:34px 1fr auto; gap:9px; align-items:center; background:var(--paper); color:var(--ink); text-align:left; }
+.history-home-row > span { width:34px; height:34px; display:grid; place-items:center; border-radius:9px; background:#f1f2ed; color:#5d6f64; }
+.history-home-row > div { min-width:0; display:flex; flex-direction:column; }
+.history-home-row strong { font-size:9.5px; }
+.history-home-row small { margin-top:2px; color:#7c8780; font-size:7.4px; }
+.history-home-row > svg { color:#949d97; }
+.phone-app .shortcut-row button > span,.phone-app .nfc-banner-icon,.phone-app .task-card-title > svg,.phone-app .first-action-card > span { border-radius:10px !important; }
+.phone-app .shortcut-row button > span { width:52px !important; height:52px !important; border-radius:50% !important; display:grid !important; place-items:center !important; }
+.phone-app .screen-header::after,.phone-app .section-heading h2::after { display:none !important; content:none !important; }
+.phone-app .eyebrow,.phone-app .property-kicker,.phone-app [class*="-kicker"] { letter-spacing:.04em !important; text-transform:none !important; }
+.phone-app .section-heading h2,.phone-app .screen-heading h1 { letter-spacing:-.015em !important; }
+.phone-app .feature-link-grid button { background:var(--paper) !important; }
+.phone-app .feature-link-grid button > svg { color:#557260 !important; }
+.phone-app .quick-grid > button,.phone-app .sector-board-row,.phone-app .monitoring-card { box-shadow:none !important; }
+.phone-app .status-pill,.phone-app .offline-pill,.phone-app .tag-badge,.phone-app .demo-menu-badge,.phone-app .plus-badges em { padding:0 !important; border:0 !important; border-radius:0 !important; background:transparent !important; text-transform:none !important; letter-spacing:.01em !important; box-shadow:none !important; }
+.phone-app .preview-badge { display:none !important; }
+.hydra-root blockquote,.hydra-root [class*="quote"] { quotes:none !important; }
+.hydra-root blockquote::before,.hydra-root blockquote::after,.hydra-root [class*="quote"]::before,.hydra-root [class*="quote"]::after { content:none !important; display:none !important; }
+.phone-app .assistant-hero-metrics,.phone-app .assistant-data-strip,.phone-app .today-metrics { display:none !important; }
+.today-history-link { width:100%; margin-top:16px; padding:10px 2px; border:0; border-top:1px solid #e2e5df; border-bottom:1px solid #e2e5df; display:flex; align-items:center; gap:9px; background:transparent; color:#405c4a; text-align:left; }
+.today-history-link > svg { flex:0 0 auto; }.today-history-link > span { display:flex; flex-direction:column; }.today-history-link strong { font-size:9px; }.today-history-link small { margin-top:2px; color:#7d8881; font-size:7.4px; }
+.hydra-root .project-results-metrics { gap:0 !important; border-top:1px solid #e2e7e0; border-bottom:1px solid #e2e7e0; }
+.hydra-root .project-results-metrics > div { min-height:58px !important; padding:8px !important; border:0 !important; border-right:1px solid #e2e7e0 !important; border-radius:0 !important; background:transparent !important; }
+.hydra-root .project-results-metrics > div:last-child { border-right:0 !important; }.hydra-root .project-results-metrics > div > span { display:none !important; }
+.hydra-root .demo-guide-title > span { display:none !important; }.hydra-root .demo-menu-badge { padding:0 !important; border:0 !important; border-radius:0 !important; background:transparent !important; letter-spacing:.01em !important; text-transform:none !important; font-weight:700 !important; }
+.hydra-root .demo-kicker,.hydra-root .project-results-head > div > span,.hydra-root .demo-readiness-card > header span { letter-spacing:.04em !important; text-transform:none !important; }
+.hydra-root.theme-dark .phone-app .today-home-card,.hydra-root.theme-dark .history-home-row,.hydra-root.theme-dark .phone-app .feature-link-grid button { border-color:#294235 !important; background:#0e1d15 !important; color:#eef3ef !important; }
+.hydra-root.theme-dark .phone-app .today-home-card > span,.hydra-root.theme-dark .history-home-row > span { background:#173326 !important; color:#9dc9a6 !important; }
+.hydra-root.theme-dark .phone-app .home-status-row small,.hydra-root.theme-dark .history-home-row small,.hydra-root.theme-dark .today-history-link small { color:#91a098; }
+.hydra-root.theme-dark .today-history-link { border-color:#294235; color:#b3c7b8; }.hydra-root.theme-dark .project-results-metrics { border-color:#294235 !important; }.hydra-root.theme-dark .project-results-metrics > div { border-color:#294235 !important; background:transparent !important; }
+.phone-app .nfc-banner,.phone-app .property-hero,.phone-app .history-home-row,.phone-app .task-card,.phone-app .first-action-card,.phone-app .calm-state,.phone-app .feature-link-grid button,.phone-app .home-announcements article,.phone-app .monitoring-card,.phone-app .sector-board-row,.phone-app .animal-card,.phone-app .compact-row,.phone-app .profile-menu-card,.phone-app .assistant-hero,.phone-app .assistant-conversation,.phone-app .assistant-quick-grid,.phone-app .today-hero,.phone-app .today-sync-card,.phone-app .today-priority-list,.phone-app .today-activity-list,.phone-app .today-report-card,.phone-app .project-results-card { border-radius:20px !important; }
+.phone-app .primary-button,.phone-app .secondary-button,.phone-app .preview-button,.phone-app .small-button,.phone-app .wide-outline-button,.phone-app .home-fab-label,.phone-app .field input,.phone-app .field select,.phone-app .field textarea,.phone-app .search-box,.phone-app .filter-button,.phone-app .quick-grid > button,.phone-app .assistant-composer-field,.phone-app .assistant-composer > button { border-radius:16px !important; }
+.phone-app .icon-button,.phone-app .nfc-banner-icon,.phone-app .history-home-row > span,.phone-app .first-action-card > span,.phone-app .assistant-quick-icon,.phone-app .assistant-avatar,.phone-app .today-sync-card > span,.phone-app .today-report-card > span,.phone-app .today-priority-list > button > span,.phone-app .bottom-nav button span { border-radius:14px !important; }
+.phone-app .shortcut-row button > span { border-radius:50% !important; }
+.phone-app .home-screen .home-summary-section { margin-top:22px !important; display:grid !important; gap:14px !important; }.phone-app .home-screen .home-summary-section > * { margin-top:0 !important; margin-bottom:0 !important; }.phone-app .home-screen .home-summary-section + .home-section { margin-top:30px !important; }.phone-app .home-screen .feature-link-grid { gap:14px !important; }
 
-.phone-app .property-hero {
-  background: #174c36 !important;
-}
-.phone-app .property-hero::before,
-.phone-app .property-hero::after { display: none !important; }
-
-/* Sem faixas decorativas de estatísticas na Home. */
-.phone-app .property-metrics { display: none !important; }
-.phone-app .property-hero-top { padding-bottom: 20px !important; }
-
-.phone-app .today-home-card {
-  border-color: #e0e4dd !important;
-  background: var(--paper) !important;
-  color: var(--ink) !important;
-}
-.phone-app .today-home-card > span {
-  border-radius: 9px !important;
-  background: var(--sage-soft) !important;
-  color: var(--forest-700) !important;
-}
-.phone-app .today-home-card > svg { color: #8b958f; }
-
-.home-summary-section {
-  margin-top: 14px !important;
-}
-
-.phone-app .home-status-row {
-  width: 100%;
-  min-height: 58px;
-  margin: 0 0 8px;
-  padding: 9px 10px;
-  grid-template-columns: 34px 1fr auto;
-  gap: 9px;
-  border-radius: 12px !important;
-  text-align: left;
-}
-.phone-app .home-status-row > span {
-  width: 34px !important;
-  height: 34px !important;
-  border-radius: 9px !important;
-}
-.phone-app .home-status-row > div {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-.phone-app .home-status-row strong {
-  font-size: 9.6px;
-  line-height: 1.2;
-}
-.phone-app .home-status-row small {
-  margin-top: 2px;
-  color: #78847c;
-  font-size: 7.5px;
-  line-height: 1.35;
-}
-.phone-app .home-status-row.has-attention small {
-  color: #6e746d;
-}
-.phone-app .home-status-row.is-clear > span {
-  background: #eef3e9 !important;
-  color: #467258 !important;
-}
-
-.history-home-row {
-  width: 100%;
-  min-height: 57px;
-  margin: 0 0 12px;
-  padding: 9px 11px;
-  border: 1px solid #e0e4dd;
-  display: grid;
-  grid-template-columns: 34px 1fr auto;
-  gap: 9px;
-  align-items: center;
-  background: var(--paper);
-  color: var(--ink);
-  text-align: left;
-}
-.history-home-row > span {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 9px;
-  background: #f1f2ed;
-  color: #5d6f64;
-}
-.history-home-row > div { min-width: 0; display: flex; flex-direction: column; }
-.history-home-row strong { font-size: 9.5px; }
-.history-home-row small { margin-top: 2px; color: #7c8780; font-size: 7.4px; }
-.history-home-row > svg { color: #949d97; }
-
-.phone-app .shortcut-row button > span,
-.phone-app .nfc-banner-icon,
-.phone-app .task-card-title > svg,
-.phone-app .first-action-card > span {
-  border-radius: 10px !important;
-}
-
-/* Atalhos superiores da Home: ícones circulares, simples e consistentes. */
-.phone-app .shortcut-row button > span {
-  width: 52px !important;
-  height: 52px !important;
-  border-radius: 50% !important;
-  display: grid !important;
-  place-items: center !important;
-}
-
-/* Remove tracinhos/linhas decorativas de cabeçalhos. */
-.phone-app .screen-header::after,
-.phone-app .section-heading h2::after {
-  display: none !important;
-  content: none !important;
-}
-
-.phone-app .eyebrow,
-.phone-app .property-kicker,
-.phone-app [class*="-kicker"] {
-  letter-spacing: .04em !important;
-  text-transform: none !important;
-}
-
-.phone-app .section-heading h2,
-.phone-app .screen-heading h1 {
-  letter-spacing: -.015em !important;
-}
-
-.phone-app .feature-link-grid button {
-  background: var(--paper) !important;
-}
-.phone-app .feature-link-grid button > svg {
-  color: #557260 !important;
-}
-
-.phone-app .quick-grid > button,
-.phone-app .sector-board-row,
-.phone-app .monitoring-card {
-  box-shadow: none !important;
-}
-
-/* Badges só como texto de estado, sem pílulas chamativas. */
-.phone-app .status-pill,
-.phone-app .offline-pill,
-.phone-app .tag-badge,
-.phone-app .demo-menu-badge,
-.phone-app .plus-badges em {
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  text-transform: none !important;
-  letter-spacing: .01em !important;
-  box-shadow: none !important;
-}
-.phone-app .preview-badge { display: none !important; }
-
-/* Quotes sem aspas gigantes ou elementos cenográficos. */
-.hydra-root blockquote,
-.hydra-root [class*="quote"] {
-  quotes: none !important;
-}
-.hydra-root blockquote::before,
-.hydra-root blockquote::after,
-.hydra-root [class*="quote"]::before,
-.hydra-root [class*="quote"]::after {
-  content: none !important;
-  display: none !important;
-}
-
-/* Faixas de métricas deixam de aparecer quando são redundantes. */
-.phone-app .assistant-hero-metrics,
-.phone-app .assistant-data-strip,
-.phone-app .today-metrics {
-  display: none !important;
-}
-
-.today-history-link {
-  width: 100%;
-  margin-top: 16px;
-  padding: 10px 2px;
-  border: 0;
-  border-top: 1px solid #e2e5df;
-  border-bottom: 1px solid #e2e5df;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  background: transparent;
-  color: #405c4a;
-  text-align: left;
-}
-.today-history-link > svg { flex: 0 0 auto; }
-.today-history-link > span { display: flex; flex-direction: column; }
-.today-history-link strong { font-size: 9px; }
-.today-history-link small { margin-top: 2px; color: #7d8881; font-size: 7.4px; }
-
-/* Resultados científicos continuam visíveis, mas sem mini-cards e selos. */
-.hydra-root .project-results-metrics {
-  gap: 0 !important;
-  border-top: 1px solid #e2e7e0;
-  border-bottom: 1px solid #e2e7e0;
-}
-.hydra-root .project-results-metrics > div {
-  min-height: 58px !important;
-  padding: 8px !important;
-  border: 0 !important;
-  border-right: 1px solid #e2e7e0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-}
-.hydra-root .project-results-metrics > div:last-child { border-right: 0 !important; }
-.hydra-root .project-results-metrics > div > span { display: none !important; }
-
-/* Roteiro de feira sem contador extra ou badge decorativo. */
-.hydra-root .demo-guide-title > span { display: none !important; }
-.hydra-root .demo-menu-badge {
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  letter-spacing: .01em !important;
-  text-transform: none !important;
-  font-weight: 700 !important;
-}
-.hydra-root .demo-kicker,
-.hydra-root .project-results-head > div > span,
-.hydra-root .demo-readiness-card > header span {
-  letter-spacing: .04em !important;
-  text-transform: none !important;
-}
-
-.hydra-root.theme-dark .phone-app .today-home-card,
-.hydra-root.theme-dark .history-home-row,
-.hydra-root.theme-dark .phone-app .feature-link-grid button {
-  border-color: #294235 !important;
-  background: #0e1d15 !important;
-  color: #eef3ef !important;
-}
-.hydra-root.theme-dark .phone-app .today-home-card > span,
-.hydra-root.theme-dark .history-home-row > span {
-  background: #173326 !important;
-  color: #9dc9a6 !important;
-}
-.hydra-root.theme-dark .phone-app .home-status-row small,
-.hydra-root.theme-dark .history-home-row small,
-.hydra-root.theme-dark .today-history-link small { color: #91a098; }
-.hydra-root.theme-dark .today-history-link { border-color: #294235; color: #b3c7b8; }
-.hydra-root.theme-dark .hydra-root .project-results-metrics,
-.hydra-root.theme-dark .project-results-metrics {
-  border-color: #294235 !important;
-}
-.hydra-root.theme-dark .project-results-metrics > div {
-  border-color: #294235 !important;
-  background: transparent !important;
-}
-
-/* Arredondamento geral mais suave e consistente. */
-.phone-app .nfc-banner,
-.phone-app .property-hero,
-.phone-app .history-home-row,
-.phone-app .task-card,
-.phone-app .first-action-card,
-.phone-app .calm-state,
-.phone-app .feature-link-grid button,
-.phone-app .home-announcements article,
-.phone-app .monitoring-card,
-.phone-app .sector-board-row,
-.phone-app .animal-card,
-.phone-app .compact-row,
-.phone-app .profile-menu-card,
-.phone-app .assistant-hero,
-.phone-app .assistant-conversation,
-.phone-app .assistant-quick-grid,
-.phone-app .today-hero,
-.phone-app .today-sync-card,
-.phone-app .today-priority-list,
-.phone-app .today-activity-list,
-.phone-app .today-report-card,
-.phone-app .project-results-card {
-  border-radius: 20px !important;
-}
-
-.phone-app .primary-button,
-.phone-app .secondary-button,
-.phone-app .preview-button,
-.phone-app .small-button,
-.phone-app .wide-outline-button,
-.phone-app .home-fab-label,
-.phone-app .field input,
-.phone-app .field select,
-.phone-app .field textarea,
-.phone-app .search-box,
-.phone-app .filter-button,
-.phone-app .quick-grid > button,
-.phone-app .assistant-composer-field,
-.phone-app .assistant-composer > button {
-  border-radius: 16px !important;
-}
-
-.phone-app .icon-button,
-.phone-app .nfc-banner-icon,
-.phone-app .history-home-row > span,
-.phone-app .first-action-card > span,
-.phone-app .assistant-quick-icon,
-.phone-app .assistant-avatar,
-.phone-app .today-sync-card > span,
-.phone-app .today-report-card > span,
-.phone-app .today-priority-list > button > span,
-.phone-app .bottom-nav button span {
-  border-radius: 14px !important;
-}
-
-/* Atalhos principais continuam perfeitamente circulares. */
-.phone-app .shortcut-row button > span {
-  border-radius: 50% !important;
-}
-
-/* Espaçamento refeito: grupos coesos, com respiro entre blocos. */
-.phone-app .home-screen .home-summary-section {
-  margin-top: 22px !important;
-  display: grid !important;
-  gap: 14px !important;
-}
-.phone-app .home-screen .home-summary-section > * {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-.phone-app .home-screen .home-summary-section + .home-section {
-  margin-top: 30px !important;
-}
-.phone-app .home-screen .feature-link-grid {
-  gap: 14px !important;
-}
-
-/* Nova ação fica fixa acima da bottom bar em web, PWA e APK. */
-.phone-app .home-screen {
-  padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 74px) !important;
-}
+/* Nova ação: viewport-fixed, sempre imediatamente acima da navegação inferior. */
+.phone-app .home-screen { padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom, 0px) + 20px) !important; }
 .phone-app .home-screen .home-fab-label {
   position: fixed !important;
   left: 50% !important;
   right: auto !important;
-  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 12px) !important;
+  top: auto !important;
+  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom, 0px) + 8px) !important;
   z-index: 78 !important;
   width: auto !important;
   max-width: calc(100vw - 32px) !important;
   min-height: 46px !important;
   margin: 0 !important;
-  transform: translateX(-50%) !important;
+  transform: translate3d(-50%,0,0) !important;
+  will-change: transform !important;
   box-shadow: 0 12px 28px -18px rgba(9,39,27,.55) !important;
 }
-.phone-app.is-overlay-open .home-fab-label,
-.phone-app:has(.quick-layer) .home-fab-label,
-.phone-app:has(.modal-layer) .home-fab-label {
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-/* Rebanho: cada etapa visual fica separada sem criar espaços exagerados. */
-.phone-app .screen:has(.filter-chips) .screen-header {
-  margin-bottom: 22px !important;
-}
-.phone-app .screen:has(.filter-chips) .search-row {
-  margin-bottom: 12px !important;
-}
-.phone-app .screen:has(.filter-chips) .filter-chips {
-  margin-top: 0 !important;
-  margin-bottom: 20px !important;
-}
-.phone-app .screen:has(.filter-chips) .nfc-inline-card {
-  margin-top: 0 !important;
-  margin-bottom: 14px !important;
-}
-.phone-app .screen:has(.filter-chips) .herd-care-launch {
-  margin-top: 0 !important;
-  margin-bottom: 14px !important;
-}
-.phone-app .screen:has(.filter-chips) .animal-list {
-  gap: 12px !important;
-}
-
-@media (max-width: 390px) {
-  .phone-app .home-screen .home-summary-section {
-    gap: 12px !important;
-  }
-  .phone-app .home-screen .home-summary-section + .home-section {
-    margin-top: 26px !important;
-  }
-  .phone-app .screen:has(.filter-chips) .screen-header {
-    margin-bottom: 20px !important;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .phone-app *, .phone-app *::before, .phone-app *::after { scroll-behavior: auto !important; }
-}
+html.home-tools-open .phone-app .home-fab-label,.phone-app:has(.quick-layer) .home-fab-label,.phone-app:has(.modal-layer) .home-fab-label { opacity:0 !important; pointer-events:none !important; }
+.phone-app .screen:has(.filter-chips) .screen-header { margin-bottom:22px !important; }.phone-app .screen:has(.filter-chips) .search-row { margin-bottom:12px !important; }.phone-app .screen:has(.filter-chips) .filter-chips { margin-top:0 !important; margin-bottom:20px !important; }.phone-app .screen:has(.filter-chips) .nfc-inline-card { margin-top:0 !important; margin-bottom:14px !important; }.phone-app .screen:has(.filter-chips) .herd-care-launch { margin-top:0 !important; margin-bottom:14px !important; }.phone-app .screen:has(.filter-chips) .animal-list { gap:12px !important; }
+@media (max-width:390px){.phone-app .home-screen .home-summary-section{gap:12px !important}.phone-app .home-screen .home-summary-section + .home-section{margin-top:26px !important}.phone-app .screen:has(.filter-chips) .screen-header{margin-bottom:20px !important}}
+@media (prefers-reduced-motion:reduce){.phone-app *,.phone-app *::before,.phone-app *::after{scroll-behavior:auto !important}}
