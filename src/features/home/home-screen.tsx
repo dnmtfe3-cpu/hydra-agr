@@ -2,7 +2,6 @@
 
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import "../../product-polish.css";
-import "../../nova-acao-tools.css";
 import "./home-production-shortcut.css";
 import "./home-production-notebook-card.css";
 import "./home-profile-xp.css";
@@ -12,7 +11,6 @@ import {
   ChevronRight,
   ClipboardCheck,
   Beef as Cow,
-  FileSpreadsheet,
   HeartHandshake,
   History,
   Leaf,
@@ -25,7 +23,6 @@ import {
   ScanLine,
   Sprout,
   UsersRound,
-  X,
 } from "lucide-react";
 import type { Announcement, AppRoute, HydraAccount } from "../../lib/hydra-types";
 import { farmExperience } from "../../lib/farm-xp";
@@ -34,7 +31,6 @@ import { currentMonthTotals, loadProductionNotebook } from "../../services/famil
 import { requireSupabase } from "../../services/supabase";
 import { DailyBriefingPanel } from "../daily-briefing/daily-briefing-panel";
 import { NutriCicloPanel } from "../family-farming/nutriciclo-panel";
-import { HydraSpreadsheetPanel } from "../spreadsheets/hydra-spreadsheet-panel";
 import { WeatherWidget } from "./weather-widget";
 
 type Props = { account: HydraAccount; navigate: (route: AppRoute) => void; onQuickAction: () => void; announcements: Announcement[] };
@@ -46,9 +42,7 @@ function money(value: number) { return new Intl.NumberFormat("pt-BR", { style: "
 export function HomeScreen({ account, navigate, announcements }: Props) {
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [productionResult, setProductionResult] = useState<number | null>(null);
-  const [toolsOpen, setToolsOpen] = useState(false);
   const [nutriCicloOpen, setNutriCicloOpen] = useState(false);
-  const [spreadsheetOpen, setSpreadsheetOpen] = useState(false);
   const [dailyBriefingOpen, setDailyBriefingOpen] = useState(false);
   const firstName = account.profile.name.split(/\s+/)[0] || "Produtor";
   const welcome = welcomeMessage();
@@ -77,19 +71,7 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
     return () => { active = false; };
   }, [account.id, account.access.ownerUserId, account.property.id]);
 
-  useEffect(() => {
-    if (!toolsOpen) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = previousOverflow; };
-  }, [toolsOpen]);
-
   const pendingSetup = [account.animals.length === 0 && { label: "Cadastrar o primeiro animal", icon: <Cow size={21} />, route: "herd" as AppRoute }, account.sectors.length === 0 && { label: "Criar o primeiro setor", icon: <Map size={21} />, route: "monitor" as AppRoute }].filter(Boolean) as { label: string; icon: ReactNode; route: AppRoute }[];
-
-  const closeToolsAnd = (action: () => void) => {
-    setToolsOpen(false);
-    window.setTimeout(action, 0);
-  };
 
   return <div className="screen home-screen page-enter">
     <div className="home-brandbar profile-brandbar">
@@ -113,6 +95,11 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
 
     <button className="home-spreadsheet-card" style={{ marginTop: 18 }} onClick={() => setDailyBriefingOpen(true)}><span><BellRing size={21} /></span><span><small>HYDRA AVISOS</small><strong>O que fazer hoje</strong><em>{pendingActivities.length ? countLabel(pendingActivities.length, "tarefa pendente", "tarefas pendentes") : "Tudo em dia na propriedade"}</em></span><ChevronRight size={18} /></button>
 
+    <div className="home-tools-list home-direct-tools">
+      <button className="home-production-notebook-card fair-theme-production" onClick={() => navigate("production")}><span className="home-production-icon"><NotebookTabs size={22} /></span><span className="home-production-copy"><small>AGRICULTURA FAMILIAR</small><strong>{productionResult === null ? "Caderno da Produção" : `${productionResult >= 0 ? "+ " : "− "}${money(productionResult)} este mês`}</strong></span><ChevronRight size={19} /></button>
+      <button className="home-nutriciclo-card" onClick={() => setNutriCicloOpen(true)}><span><Recycle size={21} /></span><span><small>DIFERENCIAL HYDRA</small><strong>Hydra NutriCiclo</strong><em>Aproveitamento da produção.</em></span><ChevronRight size={18} /></button>
+    </div>
+
     <section className="property-hero"><div className="property-hero-top"><div><span className="property-kicker">Propriedade</span><h2>{account.property.name || "Propriedade não cadastrada"}</h2><p>{propertyReady ? `${account.property.mainActivity} · ${account.property.municipality}, ${account.property.state}` : "Complete a ficha da propriedade"}</p></div><button onClick={() => navigate("property")} aria-label="Editar propriedade"><Sprout size={20} /></button></div><div className="property-metrics"><div><UsersRound size={20} /><span><strong>Equipe</strong><small>gestão e operações</small></span></div><div><Cow size={20} /><span><strong>{account.animals.length}</strong><small>{account.animals.length === 1 ? "animal" : "animais"}</small></span></div><div><ClipboardCheck size={20} /><span><strong>{pendingActivities.length}</strong><small>{pendingActivities.length === 1 ? "tarefa pendente" : "tarefas pendentes"}</small></span></div></div><button className="property-link" onClick={() => navigate("property")}>Ver ficha <ChevronRight size={18} /></button></section>
 
     <section className="home-section home-summary-section"><button className="history-home-row" onClick={() => navigate("history")}><span><History size={19} /></span><div><strong>Histórico da propriedade</strong><small>Tarefas, rebanho, produção e monitoramentos</small></div><ChevronRight size={18} /></button>
@@ -122,24 +109,6 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
       {pendingActivities.length === 0 && pendingSetup.length === 0 && <div className="calm-state"><Leaf size={22} /><div><strong>Sem tarefas pendentes</strong><span>Os registros estão em dia.</span></div></div>}
     </section>
 
-    <button className="home-fab-label" onClick={() => setToolsOpen(true)}><Plus size={19} /> Nova ação</button>
-
-    {toolsOpen && <div className="quick-layer nova-action-layer" role="presentation" onClick={(event) => { if (event.target === event.currentTarget) setToolsOpen(false); }}>
-      <section className="quick-sheet nova-action-sheet" role="dialog" aria-modal="true" aria-label="Nova ação">
-        <header className="nova-action-head">
-          <div><h2>Nova ação</h2></div>
-          <button className="icon-button nova-action-close" onClick={() => setToolsOpen(false)} aria-label="Fechar"><X size={23} /></button>
-        </header>
-        <div className="nova-action-list">
-          <button className="nova-action-row" onClick={() => closeToolsAnd(() => navigate("production"))}><span><NotebookTabs size={21} /></span><div><small>AGRICULTURA FAMILIAR</small><strong>{productionResult === null ? "Caderno da Produção" : `${productionResult >= 0 ? "+ " : "− "}${money(productionResult)} este mês`}</strong></div><ChevronRight size={19} /></button>
-          <button className="nova-action-row" onClick={() => closeToolsAnd(() => setNutriCicloOpen(true))}><span><Recycle size={21} /></span><div><small>DIFERENCIAL HYDRA</small><strong>Hydra NutriCiclo</strong><em>Aproveitamento da produção.</em></div><ChevronRight size={19} /></button>
-          <button className="nova-action-row" onClick={() => closeToolsAnd(() => setSpreadsheetOpen(true))}><span><FileSpreadsheet size={21} /></span><div><small>HYDRA PLANILHA</small><strong>Exportar dados</strong><em>Excel ou WhatsApp.</em></div><ChevronRight size={19} /></button>
-          <button className="nova-action-row" onClick={() => closeToolsAnd(() => navigate("monitor"))}><span><RadioTower size={21} /></span><div><strong>Monitoramento</strong><em>Setores e inspeções da propriedade</em></div><ChevronRight size={19} /></button>
-          <button className="nova-action-row" onClick={() => closeToolsAnd(() => navigate("community"))}><span><HeartHandshake size={21} /></span><div><strong>Comunidade</strong><em>Publicações de produtores</em></div><ChevronRight size={19} /></button>
-        </div>
-      </section>
-    </div>}
-
-    <NutriCicloPanel account={account} open={nutriCicloOpen} onClose={() => setNutriCicloOpen(false)} /><DailyBriefingPanel account={account} open={dailyBriefingOpen} onClose={() => setDailyBriefingOpen(false)} /><HydraSpreadsheetPanel account={account} open={spreadsheetOpen} onClose={() => setSpreadsheetOpen(false)} />
+    <NutriCicloPanel account={account} open={nutriCicloOpen} onClose={() => setNutriCicloOpen(false)} /><DailyBriefingPanel account={account} open={dailyBriefingOpen} onClose={() => setDailyBriefingOpen(false)} />
   </div>;
 }
