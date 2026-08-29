@@ -33,6 +33,12 @@ function closeCurrentTools() {
   if (source?.getAttribute("aria-expanded") === "true") source.click();
 }
 
+function openCurrentTools() {
+  const screen = document.querySelector<HTMLElement>(HOME_SELECTOR);
+  const source = screen ? findMoreToolsSource(screen) : null;
+  if (source?.getAttribute("aria-expanded") !== "true") source?.click();
+}
+
 function ensureCloseButton(layer: HTMLElement) {
   let close = layer.querySelector<HTMLButtonElement>(`.${CLOSE_CLASS}`);
   if (close) return close;
@@ -112,6 +118,15 @@ observer.observe(document.documentElement, {
   attributes: true,
   attributeFilter: ["aria-expanded", "class"],
 });
+
+document.addEventListener("click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest(".home-screen .home-fab-label") : null;
+  if (!target) return;
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+  openCurrentTools();
+}, true);
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && document.documentElement.classList.contains("home-tools-open")) {
