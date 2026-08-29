@@ -1,12 +1,13 @@
 import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 import type { HydraAccount } from "../lib/hydra-types";
+import { buildHydraInsights } from "./hydra-intelligence";
 
 const DAILY_ID = 6401;
 export const DAILY_BRIEFING_CHANNEL_ID = "hydra-property-alerts";
 const SETTINGS_KEY = "hydra.daily-briefing";
 const COPY_VERSION_KEY = "hydra.daily-briefing.copy-version";
-const COPY_VERSION = "2";
+const COPY_VERSION = "3";
 
 export type DailyBriefingSettings = {
   enabled: boolean;
@@ -38,6 +39,8 @@ export function buildDailyBriefing(account: HydraAccount) {
   const healthAttention = account.animals.filter((animal) => isHealthAttention(animal.status));
   const withoutNfc = account.animals.filter((animal) => !animal.electronicId);
   const feeding = dueToday.filter((item) => item.category.toLocaleLowerCase("pt-BR").includes("alimenta"));
+  const insights = buildHydraInsights(account);
+  const importantInsights = insights.filter((item) => item.priority !== "info");
   const parts: string[] = [];
 
   if (dueToday.length) parts.push(`${dueToday.length} tarefa${dueToday.length === 1 ? "" : "s"} para hoje`);
@@ -47,24 +50,25 @@ export function buildDailyBriefing(account: HydraAccount) {
   if (withoutNfc.length) parts.push(`${withoutNfc.length} animal${withoutNfc.length === 1 ? "" : "is"} sem NFC/RFID`);
 
   const farm = account.property.name || "Sua propriedade";
-  const title = parts.length ? "O que fazer hoje" : "Tudo em dia";
-  const body = parts.length
-    ? `${farm} • ${parts.slice(0, 3).join(" • ")}.`
-    : `${farm} • nenhuma tarefa urgente para hoje.`;
+  const topInsight = importantInsights[0];
+  const title = topInsight?.priority === "critical" ? "Hydra Alerta" : parts.length ? "O que fazer hoje" : "Tudo em dia";
+  const body = topInsight
+    ? `${farm} • ${topInsight.title}`
+    : parts.length
+      ? `${farm} • ${parts.slice(0, 3).join(" • ")}.`
+      : `${farm} • nenhuma tarefa urgente para hoje.`;
 
   const lines = [
-    `${farm}`,
+    farm,
     "",
-    parts.length ? "Hoje:" : "Tudo em dia por aqui.",
-    ...dueToday.slice(0, 5).map((item) => `• ${item.title}`),
-    ...(overdue.length ? [`• ${overdue.length} tarefa${overdue.length === 1 ? " atrasada" : "s atrasadas"}`] : []),
-    ...(healthAttention.length ? [`• ${healthAttention.length} animal${healthAttention.length === 1 ? "" : "is"} em acompanhamento`] : []),
-    ...(withoutNfc.length ? [`• ${withoutNfc.length} animal${withoutNfc.length === 1 ? "" : "is"} sem NFC/RFID`] : []),
+    insights.length ? "Hydra IA:" : parts.length ? "Hoje:" : "Tudo em dia por aqui.",
+    ...insights.slice(0, 5).map((item) => `• ${item.title}`),
+    ...(!insights.length ? dueToday.slice(0, 5).map((item) => `• ${item.title}`) : []),
     "",
-    parts.length ? "Abra o Hydra Agro para ver os detalhes." : "Nenhuma tarefa urgente registrada para hoje.",
+    insights.length || parts.length ? "Abra o Hydra Agro para ver os detalhes." : "Nenhuma tarefa urgente registrada para hoje.",
   ];
 
-  return { title, body, text: lines.join("\n"), dueToday, overdue, healthAttention, withoutNfc };
+  return { title, body, text: lines.join("\n"), dueToday, overdue, healthAttention, withoutNfc, insights };
 }
 
 export async function loadDailyBriefingSettings() {
@@ -89,8 +93,8 @@ export async function scheduleDailyBriefing(account: HydraAccount, settings: Dai
   if (Capacitor.getPlatform() === "android") {
     await LocalNotifications.createChannel({
       id: DAILY_BRIEFING_CHANNEL_ID,
-      name: "Avisos da propriedade",
-      description: "Tarefas e avisos importantes da propriedade.",
+      name: "Hydra Alerta",
+      description: "Avisos importantes de animais, atividades, clima, propriedade e Hydra Tag.",
       importance: 5,
       visibility: 1,
       vibration: true,
@@ -113,7 +117,7 @@ export async function scheduleDailyBriefing(account: HydraAccount, settings: Dai
       body: briefing.body,
       channelId: Capacitor.getPlatform() === "android" ? DAILY_BRIEFING_CHANNEL_ID : undefined,
       schedule: { on: { hour: settings.hour, minute: settings.minute }, repeats: true, allowWhileIdle: true },
-      extra: { route: "today", source: "daily-briefing" },
+      extra: { route: "today", source: "hydra-alert" },
     }],
   });
 
@@ -124,13 +128,11 @@ export async function refreshDailyBriefingCopy(account: HydraAccount) {
   if (!Capacitor.isNativePlatform()) return;
   const version = await Preferences.get({ key: COPY_VERSION_KEY });
   if (version.value === COPY_VERSION) return;
-
   const settings = await loadDailyBriefingSettings();
   if (settings.enabled) {
     const result = await scheduleDailyBriefing(account, settings);
     if (!result.ok) return;
   }
-
   await Preferences.set({ key: COPY_VERSION_KEY, value: COPY_VERSION });
 }
 
