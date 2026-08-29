@@ -39,7 +39,7 @@ describe("componente de clima", () => {
   it("carrega município e UF da propriedade e abre os detalhes reais", async () => {
     render(<WeatherWidget municipality="Brejões" state="BA" onCompleteProperty={vi.fn()} />);
 
-    const button = await screen.findByRole("button", { name: /clima em brejões: 25 graus/i });
+    const button = await screen.findByRole("button", { name: /clima em brejões, ba: 25 graus/i });
     fireEvent.click(button);
 
     expect(screen.getByRole("dialog", { name: "Brejões" })).toBeInTheDocument();
