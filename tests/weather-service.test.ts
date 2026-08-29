@@ -34,32 +34,33 @@ beforeEach(() => {
   vi.restoreAllMocks();
 });
 
-describe("clima regional", () => {
-  it("localiza a cidade na Bahia e busca condições reais", async () => {
+describe("clima da propriedade", () => {
+  it("localiza município e UF cadastrados e busca condições reais", async () => {
     const request = vi.fn()
       .mockResolvedValueOnce(okJson(geocoding))
       .mockResolvedValueOnce(okJson(forecast));
     vi.stubGlobal("fetch", request);
 
-    const weather = await loadWeather("Brejões", { force: true });
+    const weather = await loadWeather("Brejões", "BA", { force: true });
 
     expect(request.mock.calls[0][0]).toContain("geocoding-api.open-meteo.com");
     expect(request.mock.calls[1][0]).toContain("api.open-meteo.com/v1/forecast");
-    expect(request.mock.calls[1][0]).toContain("timezone=America%2FBahia");
-    expect(weather).toMatchObject({ municipality: "Brejões", temperature: 25.4, humidity: 71, rainChance: 31, stale: false });
+    expect(request.mock.calls[1][0]).toContain("timezone=auto");
+    expect(weather).toMatchObject({ municipality: "Brejões", state: "BA", temperature: 25.4, humidity: 71, rainChance: 31, stale: false });
   });
 
-  it("reutiliza o cache recente para evitar chamadas repetidas", async () => {
+  it("reutiliza o cache recente por município e UF", async () => {
     const request = vi.fn()
       .mockResolvedValueOnce(okJson(geocoding))
       .mockResolvedValueOnce(okJson(forecast));
     vi.stubGlobal("fetch", request);
 
-    await loadWeather("Brejões", { force: true });
-    const cached = await loadWeather("Brejões");
+    await loadWeather("Brejões", "BA", { force: true });
+    const cached = await loadWeather("Brejões", "BA");
 
     expect(request).toHaveBeenCalledTimes(2);
     expect(cached.temperature).toBe(25.4);
+    expect(cached.state).toBe("BA");
   });
 
   it("identifica códigos meteorológicos sem inventar condição", () => {
