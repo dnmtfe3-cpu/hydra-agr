@@ -1,4 +1,5 @@
 import "./home-more-tools.css";
+import "./nova-acao-tools.css";
 import "./splash-final-fix.css";
 
 const HOME_SELECTOR = ".home-screen";
