@@ -14,6 +14,7 @@ beforeEach(() => {
   loadWeatherMock.mockReset();
   loadWeatherMock.mockResolvedValue({
     municipality: "Brejões",
+    state: "BA",
     latitude: -13.1,
     longitude: -39.8,
     temperature: 25.4,
@@ -35,8 +36,8 @@ beforeEach(() => {
 });
 
 describe("componente de clima", () => {
-  it("carrega a cidade da propriedade e abre os detalhes reais", async () => {
-    render(<WeatherWidget municipality="Brejões" onCompleteProperty={vi.fn()} />);
+  it("carrega município e UF da propriedade e abre os detalhes reais", async () => {
+    render(<WeatherWidget municipality="Brejões" state="BA" onCompleteProperty={vi.fn()} />);
 
     const button = await screen.findByRole("button", { name: /clima em brejões: 25 graus/i });
     fireEvent.click(button);
@@ -45,6 +46,6 @@ describe("componente de clima", () => {
     expect(screen.getByText("71%")).toBeInTheDocument();
     expect(screen.getByText("31%")).toBeInTheDocument();
     expect(screen.getByText(/dados Open-Meteo/i)).toBeInTheDocument();
-    expect(loadWeatherMock).toHaveBeenCalledWith("Brejões");
+    expect(loadWeatherMock).toHaveBeenCalledWith("Brejões", "BA");
   });
 });
