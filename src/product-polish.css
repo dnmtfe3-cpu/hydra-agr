@@ -354,8 +354,29 @@
 .phone-app .home-screen .feature-link-grid {
   gap: 14px !important;
 }
+
+/* Nova ação fica fixa acima da bottom bar em web, PWA e APK. */
+.phone-app .home-screen {
+  padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 74px) !important;
+}
 .phone-app .home-screen .home-fab-label {
-  margin-top: 24px !important;
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 12px) !important;
+  z-index: 78 !important;
+  width: auto !important;
+  max-width: calc(100vw - 32px) !important;
+  min-height: 46px !important;
+  margin: 0 !important;
+  transform: translateX(-50%) !important;
+  box-shadow: 0 12px 28px -18px rgba(9,39,27,.55) !important;
+}
+.phone-app.is-overlay-open .home-fab-label,
+.phone-app:has(.quick-layer) .home-fab-label,
+.phone-app:has(.modal-layer) .home-fab-label {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Rebanho: cada etapa visual fica separada sem criar espaços exagerados. */
