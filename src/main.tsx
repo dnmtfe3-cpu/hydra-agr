@@ -34,7 +34,7 @@ import "./features/community/community-comment-runtime";
 import HydraApp from "./hydra-app";
 import type { HydraAccount } from "./lib/hydra-types";
 import { loadAccount } from "./services/hydra-repository";
-import { supabase } from "./services/supabase";
+import { requireSupabase } from "./services/supabase";
 import { HydraSpreadsheetPanel } from "./features/spreadsheets/hydra-spreadsheet-panel";
 
 type ThemeMode = "light" | "dark";
@@ -61,7 +61,7 @@ function openDailyBriefingPanelFromNotification() {
     }
 
     const briefingButton = Array.from(document.querySelectorAll<HTMLButtonElement>("button"))
-      .find((button) => button.textContent?.includes("HYDRA AVISOS") && button.textContent?.includes("O que fazer hoje"));
+      .find((button) => button.textContent?.includes("O que fazer hoje"));
     if (!briefingButton) return false;
 
     briefingButton.click();
@@ -132,7 +132,8 @@ function HydraThemeRoot() {
     if (spreadsheetLoading) return;
     setSpreadsheetLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const client = requireSupabase();
+      const { data: { user } } = await client.auth.getUser();
       if (!user) return;
       const account = await loadAccount(user);
       setSpreadsheetAccount(account);
