@@ -1,0 +1,8 @@
+.hydra-root .home-screen .home-tools-list.home-more-tools-layer::after {
+  content: "Nova ação" !important;
+}
+
+/* O antigo gatilho Mais ferramentas permanece apenas como estado interno do React. */
+.hydra-root .home-screen > button.home-more-tools-source {
+  display: none !important;
+}
