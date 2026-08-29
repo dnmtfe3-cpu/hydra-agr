@@ -84,7 +84,6 @@ export function clearPublicAnimalParams() {
 type LiveAnimal = {
   identification?: string;
   name?: string;
-  photoPath?: string;
   status?: string;
   propertyName?: string;
   municipality?: string;
@@ -113,7 +112,6 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
     ...animal,
     identification: live?.identification || animal.identification,
     name: live?.name || animal.name,
-    photoPath: live?.photoPath || animal.photoPath,
     status: live?.status || animal.status,
     propertyName: live?.propertyName || animal.propertyName,
     municipality: live?.municipality || animal.municipality,
