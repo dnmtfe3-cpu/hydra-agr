@@ -48,7 +48,7 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
   const welcome = welcomeMessage();
   const today = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "2-digit", month: "long" }).format(new Date());
   const pendingActivities = account.activities.filter((activity) => !activity.done);
-  const propertyReady = Boolean(account.property.municipality && account.property.mainActivity);
+  const propertyReady = Boolean(account.property.name && account.property.municipality && account.property.state);
   const identifiedAnimals = account.animals.filter((animal) => animal.electronicId).length;
   const farmXp = farmExperience(account);
   const profileInitials = account.profile.name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("") || "P";
@@ -61,9 +61,7 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
     return () => { active = false; void client.removeChannel(channel); };
   }, [account.id]);
 
-  useEffect(() => {
-    void refreshDailyBriefingCopy(account).catch(() => undefined);
-  }, [account.id]);
+  useEffect(() => { void refreshDailyBriefingCopy(account).catch(() => undefined); }, [account.id]);
 
   useEffect(() => {
     let active = true;
@@ -80,7 +78,7 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
       <button className="icon-button bare" onClick={() => navigate("notifications")} aria-label="Notificações"><Bell size={23} />{hasUnreadNotifications && <span className="notification-dot" />}</button>
     </div>
 
-    <section className="greeting-block"><div><h1><span className="greeting-time">{welcome},</span> <strong className="greeting-name">{firstName}</strong></h1><p className="capitalize">{today}</p></div><WeatherWidget municipality={account.property.municipality} onCompleteProperty={() => navigate("property")} /></section>
+    <section className="greeting-block"><div><h1><span className="greeting-time">{welcome},</span> <strong className="greeting-name">{firstName}</strong></h1><p className="capitalize">{today}</p></div><WeatherWidget municipality={account.property.municipality} state={account.property.state} onCompleteProperty={() => navigate("property")} /></section>
     {announcements.length > 0 && <section className="home-announcements" aria-label="Avisos do Hydra Agro">{announcements.slice(0, 3).map((announcement) => <article key={announcement.id} className={announcement.level}><span>{announcement.level === "critical" ? "IMPORTANTE" : announcement.level === "attention" ? "ATENÇÃO" : "AVISO"}</span><strong>{announcement.title}</strong><p>{announcement.body}</p></article>)}</section>}
 
     <div className="shortcut-row home-shortcuts-five" aria-label="Atalhos">
@@ -100,10 +98,10 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
       <button className="home-nutriciclo-card" onClick={() => setNutriCicloOpen(true)}><span><Recycle size={21} /></span><span><small>DIFERENCIAL HYDRA</small><strong>Hydra NutriCiclo</strong><em>Aproveitamento da produção.</em></span><ChevronRight size={18} /></button>
     </div>
 
-    <section className="property-hero"><div className="property-hero-top"><div><span className="property-kicker">Propriedade</span><h2>{account.property.name || "Propriedade não cadastrada"}</h2><p>{propertyReady ? `${account.property.mainActivity} · ${account.property.municipality}, ${account.property.state}` : "Complete a ficha da propriedade"}</p></div><button onClick={() => navigate("property")} aria-label="Editar propriedade"><Sprout size={20} /></button></div><div className="property-metrics"><div><UsersRound size={20} /><span><strong>Equipe</strong><small>gestão e operações</small></span></div><div><Cow size={20} /><span><strong>{account.animals.length}</strong><small>{account.animals.length === 1 ? "animal" : "animais"}</small></span></div><div><ClipboardCheck size={20} /><span><strong>{pendingActivities.length}</strong><small>{pendingActivities.length === 1 ? "tarefa pendente" : "tarefas pendentes"}</small></span></div></div><button className="property-link" onClick={() => navigate("property")}>Ver ficha <ChevronRight size={18} /></button></section>
+    <section className="property-hero"><div className="property-hero-top"><div><span className="property-kicker">Propriedade</span><h2>{account.property.name || "Propriedade não cadastrada"}</h2><p>{propertyReady ? `${account.property.mainActivity ? `${account.property.mainActivity} · ` : ""}${account.property.municipality}, ${account.property.state}` : "Complete a localização da propriedade"}</p></div><button onClick={() => navigate("property")} aria-label="Editar propriedade"><Sprout size={20} /></button></div><div className="property-metrics"><div><UsersRound size={20} /><span><strong>Equipe</strong><small>gestão e operações</small></span></div><div><Cow size={20} /><span><strong>{account.animals.length}</strong><small>{account.animals.length === 1 ? "animal" : "animais"}</small></span></div><div><ClipboardCheck size={20} /><span><strong>{pendingActivities.length}</strong><small>{pendingActivities.length === 1 ? "tarefa pendente" : "tarefas pendentes"}</small></span></div></div><button className="property-link" onClick={() => navigate("property")}>Ver ficha <ChevronRight size={18} /></button></section>
 
     <section className="home-section home-summary-section"><button className="history-home-row" onClick={() => navigate("history")}><span><History size={19} /></span><div><strong>Histórico da propriedade</strong><small>Tarefas, rebanho, produção e monitoramentos</small></div><ChevronRight size={18} /></button>
-      {!propertyReady && <button className="first-action-card" onClick={() => navigate("property")}><span><Plus size={24} /></span><div><strong>Complete a ficha da propriedade</strong><p>Localização, área e atividade principal.</p></div><ChevronRight size={21} /></button>}
+      {!propertyReady && <button className="first-action-card" onClick={() => navigate("property")}><span><Plus size={24} /></span><div><strong>Complete a localização da propriedade</strong><p>UF, CEP e nome da propriedade.</p></div><ChevronRight size={21} /></button>}
       {pendingActivities.length > 0 && <div className="task-card"><div className="task-card-title"><ClipboardCheck size={21} /><strong>{pendingActivities.length === 1 ? "Tarefa pendente" : "Tarefas pendentes"}</strong><span>{pendingActivities.length}</span></div>{pendingActivities.slice(0, 3).map((activity) => <button key={activity.id} onClick={() => navigate("activities")}><span>{activity.category}</span><strong>{activity.title}</strong><ChevronRight size={19} /></button>)}</div>}
       {pendingActivities.length === 0 && pendingSetup.length > 0 && <div className="task-card"><div className="task-card-title"><ClipboardCheck size={21} /><strong>Primeiros passos</strong><span>{pendingSetup.length}</span></div>{pendingSetup.map((item) => <button key={item.label} onClick={() => navigate(item.route)}>{item.icon}<strong>{item.label}</strong><ChevronRight size={19} /></button>)}</div>}
       {pendingActivities.length === 0 && pendingSetup.length === 0 && <div className="calm-state"><Leaf size={22} /><div><strong>Sem tarefas pendentes</strong><span>Os registros estão em dia.</span></div></div>}
