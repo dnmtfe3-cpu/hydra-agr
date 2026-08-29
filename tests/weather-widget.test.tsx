@@ -42,7 +42,7 @@ describe("componente de clima", () => {
     const button = await screen.findByRole("button", { name: /clima em brejões, ba: 25 graus/i });
     fireEvent.click(button);
 
-    expect(screen.getByRole("dialog", { name: "Brejões" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Brejões, BA" })).toBeInTheDocument();
     expect(screen.getByText("71%")).toBeInTheDocument();
     expect(screen.getByText("31%")).toBeInTheDocument();
     expect(screen.getByText(/dados Open-Meteo/i)).toBeInTheDocument();
