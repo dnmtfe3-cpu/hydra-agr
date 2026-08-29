@@ -1,17 +1,4 @@
-/* Mais ferramentas: atalho igual aos demais e sheet estável em web/Android. */
-.hydra-root .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more {
-  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-  gap: 4px !important;
-}
-
-.hydra-root .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more > button > span {
-  width: 44px !important;
-  height: 44px !important;
-  min-width: 44px !important;
-  min-height: 44px !important;
-  border-radius: 14px !important;
-}
-
+/* Sheet da Nova ação: compacta, ancorada embaixo e estável em web/Android. */
 .hydra-root .home-screen > button.home-more-tools-source {
   display: none !important;
 }
@@ -28,7 +15,7 @@ html.home-tools-open .bottom-nav {
 }
 
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer {
-  --more-tools-height: min(620px, calc(100dvh - max(72px, env(safe-area-inset-top, 0px) + 24px)));
+  --more-tools-height: min(500px, calc(100dvh - max(72px, env(safe-area-inset-top, 0px) + 24px)));
   position: fixed !important;
   inset: 0 !important;
   z-index: 1200 !important;
@@ -64,11 +51,11 @@ html.home-tools-open .bottom-nav {
 }
 
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer::after {
-  content: "Mais ferramentas" !important;
+  content: "Nova ação" !important;
   position: fixed !important;
   z-index: 2 !important;
   left: 22px !important;
-  bottom: calc(var(--more-tools-height) - 57px) !important;
+  bottom: calc(var(--more-tools-height) - 54px) !important;
   color: var(--forest-950, #09271b) !important;
   font-family: var(--font-display, "Sora"), system-ui, sans-serif !important;
   font-size: 21px !important;
@@ -91,8 +78,9 @@ html.home-tools-open .bottom-nav {
   overflow: hidden !important;
 }
 
+/* Sem spacer artificial: a lista fica mais baixa, encaixada no fundo da sheet. */
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:first-of-type:not(.home-more-tools-close) {
-  margin-top: 86px !important;
+  margin-top: 0 !important;
 }
 
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > .history-home-row,
@@ -108,7 +96,7 @@ html.home-tools-open .bottom-nav {
   position: fixed !important;
   z-index: 5 !important;
   right: 18px !important;
-  bottom: calc(var(--more-tools-height) - 68px) !important;
+  bottom: calc(var(--more-tools-height) - 65px) !important;
   width: 42px !important;
   height: 42px !important;
   min-width: 42px !important;
@@ -175,19 +163,8 @@ html.home-tools-open .bottom-nav {
 }
 
 @media (max-width: 390px) {
-  .hydra-root .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more {
-    gap: 2px !important;
-  }
-
-  .hydra-root .home-screen .shortcut-row.home-shortcuts-five.home-shortcuts-with-more > button > span {
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    min-height: 40px !important;
-    border-radius: 13px !important;
-  }
-
   .hydra-root .home-screen .home-tools-list.home-more-tools-layer {
+    --more-tools-height: min(480px, calc(100dvh - max(72px, env(safe-area-inset-top, 0px) + 20px)));
     padding-left: 11px !important;
     padding-right: 11px !important;
   }
