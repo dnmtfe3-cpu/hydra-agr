@@ -25,10 +25,8 @@ import {
   UsersRound,
 } from "lucide-react";
 import { Field, LoadingButton, Modal, Toggle } from "../../components/ui";
-import { MunicipalityPicker } from "../../components/municipality-picker";
 import { showAppToast } from "../../components/modal-system";
 import type { AppLink, AppRoute, AuthResult, HydraAccount, UpdateAccount } from "../../lib/hydra-types";
-import { isSupportedMunicipality } from "../../lib/municipalities";
 import { hydraSupport } from "../../lib/support";
 import { ProfileInformation, type ProfileInformationKind } from "./profile-information";
 
@@ -48,8 +46,6 @@ type ProfileDraft = {
   phone: string;
   bio: string;
   propertyName: string;
-  municipality: string;
-  state: string;
   locationDetails: string;
 };
 
@@ -59,8 +55,6 @@ function draftFromAccount(account: HydraAccount): ProfileDraft {
     phone: account.phone,
     bio: account.profile.bio || "",
     propertyName: account.property.name,
-    municipality: account.property.municipality,
-    state: account.property.state || "BA",
     locationDetails: account.property.locationDetails || "",
   };
 }
@@ -111,7 +105,6 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
     event.preventDefault();
     if (!profile.name.trim()) { setError("Informe o seu nome."); return; }
     if (!profile.propertyName.trim()) { setError("Informe o nome da propriedade."); return; }
-    if (!isSupportedMunicipality(profile.municipality)) { setError("Escolha Brejões ou um município vizinho atendido."); return; }
     setSaving("profile");
     setError("");
     try {
@@ -122,8 +115,6 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
         property: {
           ...current.property,
           name: profile.propertyName.trim(),
-          municipality: profile.municipality,
-          state: "BA",
           locationDetails: profile.locationDetails.trim() || undefined,
         },
       }), { requireRemote: true });
@@ -201,10 +192,7 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
     try {
       await updateAccount((current) => ({
         ...current,
-        settings: {
-          ...current.settings,
-          pushNotifications: notificationDraft.pushNotifications,
-        },
+        settings: { ...current.settings, pushNotifications: notificationDraft.pushNotifications },
       }), { requireRemote: true });
       setNotificationsOpen(false);
       showAppToast("Preferências de notificação salvas");
@@ -244,6 +232,9 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
   }
 
   const isAdmin = ["moderator", "admin", "owner"].includes(account.role);
+  const locationSummary = account.property.municipality && account.property.state
+    ? `${account.property.municipality}, ${account.property.state}${account.property.postalCode ? ` · CEP ${account.property.postalCode}` : ""}`
+    : "Complete UF e CEP em Minha propriedade";
 
   return (
     <div className="screen profile-screen page-enter">
@@ -279,7 +270,7 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
         <span className="group-label">MINHA CONTA</span>
         <div className="profile-menu-card">
           <MenuRow icon={<UserRound size={21} />} title="Dados pessoais" subtitle={account.email} onClick={openEditor} />
-          <MenuRow icon={<Sprout size={21} />} title="Minha propriedade" subtitle="Dados, produção e tecnologia" onClick={() => navigate("property")} />
+          <MenuRow icon={<Sprout size={21} />} title="Minha propriedade" subtitle={locationSummary} onClick={() => navigate("property")} />
           <MenuRow icon={<UsersRound size={21} />} title="Equipe e operações" subtitle="Funcionários, relatórios e ocorrências" onClick={() => navigate("operations" as AppRoute)} />
         </div>
       </section>
@@ -322,10 +313,10 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
           </div>
           <Field label="Nome"><input value={profile.name} onChange={(event) => setProfile({ ...profile, name: event.target.value })} /></Field>
           <Field label="Sobre você (opcional)"><textarea value={profile.bio} onChange={(event) => setProfile({ ...profile, bio: event.target.value })} placeholder="Uma breve apresentação para a comunidade" maxLength={180} /></Field>
-          <Field label="Telefone (opcional)"><input type="tel" value={profile.phone} onChange={(event) => setProfile({ ...profile, phone: event.target.value })} placeholder="(75) 99999-9999" /></Field>
+          <Field label="Telefone (opcional)"><input type="tel" value={profile.phone} onChange={(event) => setProfile({ ...profile, phone: event.target.value })} placeholder="(00) 99999-9999" /></Field>
           <Field label="Nome da propriedade"><input value={profile.propertyName} onChange={(event) => setProfile({ ...profile, propertyName: event.target.value })} /></Field>
           <Field label="Localização ou referência (opcional)"><input value={profile.locationDetails} onChange={(event) => setProfile({ ...profile, locationDetails: event.target.value })} placeholder="Ex.: Comunidade Lagoa Nova" /></Field>
-          <div className="municipality-field-grid"><Field label="Cidade"><MunicipalityPicker value={profile.municipality} onChange={(municipality) => { setProfile({ ...profile, municipality }); setError(""); }} /></Field><Field label="Estado"><div className="state-readonly"><span>BA</span><strong>Bahia</strong></div></Field></div>
+          <Field label="Localização da propriedade" hint="Para alterar UF ou CEP, abra Minha propriedade."><input value={locationSummary} disabled /></Field>
           <Field label="E-mail" hint="Altere o e-mail em Segurança."><input value={account.email} disabled /></Field>
           {error && <p className="form-error" role="alert">{error}</p>}
           <div className="modal-action-row"><button className="secondary-button" type="button" onClick={() => setEditOpen(false)} disabled={saving === "profile" || Boolean(uploading)}>Cancelar</button><LoadingButton className="primary-button" type="submit" loading={saving === "profile"} loadingLabel="Salvando perfil…" disabled={Boolean(uploading)}>Salvar alterações</LoadingButton></div>
@@ -337,11 +328,7 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
           <p className="preference-intro">Escolha se deseja receber avisos do Hydra Agro.</p>
           <div className="preference-status"><CheckCircle2 size={19} /><span><strong>Notificações</strong><small>Os avisos também ficam disponíveis na central de notificações.</small></span></div>
           <div className="preference-options">
-            <div>
-              <span className="preference-option-icon"><BellRing size={21} /></span>
-              <span><strong>Avisos do aplicativo</strong><small>Propriedade, administração, tarefas e monitoramentos.</small></span>
-              <Toggle checked={notificationDraft.pushNotifications} label="Avisos do aplicativo" onChange={(pushNotifications) => setNotificationDraft({ ...notificationDraft, pushNotifications })} />
-            </div>
+            <div><span className="preference-option-icon"><BellRing size={21} /></span><span><strong>Avisos do aplicativo</strong><small>Propriedade, administração, tarefas e monitoramentos.</small></span><Toggle checked={notificationDraft.pushNotifications} label="Avisos do aplicativo" onChange={(pushNotifications) => setNotificationDraft({ ...notificationDraft, pushNotifications })} /></div>
           </div>
           {preferenceError && <p className="form-error" role="alert">{preferenceError}</p>}
           <button className="wide-outline-button" onClick={() => { setNotificationsOpen(false); window.setTimeout(() => navigate("notifications"), 240); }} disabled={saving === "notifications"}>Ver notificações</button>
@@ -363,16 +350,10 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
 
       <Modal open={supportOpen} onClose={() => setSupportOpen(false)} eyebrow="APOIO VOLUNTÁRIO" title="Apoie o Hydra Agro">
         <div className="support-modal">
-          <span><HeartHandshake size={31} /></span>
-          <h3>Ajude o projeto a continuar</h3>
-          <p>O apoio voluntário contribui com manutenção, testes e novas ferramentas para o Hydra Agro.</p>
+          <span><HeartHandshake size={31} /></span><h3>Ajude o projeto a continuar</h3><p>O apoio voluntário contribui com manutenção, testes e novas ferramentas para o Hydra Agro.</p>
           <div className="support-separation-note"><Crown size={18} /><span><strong>Apoio não é assinatura</strong><small>A contribuição é opcional, não libera o Hydra Agro+ e não bloqueia funções gratuitas.</small></span></div>
-          <div className="support-channel-grid">
-            <button onClick={() => openInstagram("support")}><Instagram size={21} /><span><strong>Quero apoiar o projeto</strong><small>Conversar no Instagram · {hydraSupport.instagramHandle}</small></span><ExternalLink size={16} /></button>
-            <button onClick={() => openSupportEmail("Quero apoiar o Hydra Agro")}><Mail size={21} /><span><strong>Falar por e-mail</strong><small>{hydraSupport.email}</small></span><ExternalLink size={16} /></button>
-          </div>
-          <button className="wide-outline-button" onClick={() => void copySupportMessage()}>Copiar mensagem de apoio</button>
-          <button className="secondary-button full" onClick={() => setSupportOpen(false)}>Agora não</button>
+          <div className="support-channel-grid"><button onClick={() => openInstagram("support")}><Instagram size={21} /><span><strong>Quero apoiar o projeto</strong><small>Conversar no Instagram · {hydraSupport.instagramHandle}</small></span><ExternalLink size={16} /></button><button onClick={() => openSupportEmail("Quero apoiar o Hydra Agro")}><Mail size={21} /><span><strong>Falar por e-mail</strong><small>{hydraSupport.email}</small></span><ExternalLink size={16} /></button></div>
+          <button className="wide-outline-button" onClick={() => void copySupportMessage()}>Copiar mensagem de apoio</button><button className="secondary-button full" onClick={() => setSupportOpen(false)}>Agora não</button>
         </div>
       </Modal>
 
