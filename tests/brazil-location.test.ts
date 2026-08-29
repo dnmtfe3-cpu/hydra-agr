@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   brazilStates,
   cepStateMismatch,
@@ -8,6 +8,12 @@ import {
   lookupBrazilianCep,
   PostalCodeLookupError,
 } from "../src/lib/brazil-location";
+
+const originalOnline = navigator.onLine;
+
+afterEach(() => {
+  Object.defineProperty(navigator, "onLine", { configurable: true, value: originalOnline });
+});
 
 describe("localização nacional do Hydra Agro", () => {
   it("contém as 27 UFs brasileiras sem digitação livre", () => {
@@ -85,7 +91,17 @@ describe("localização nacional do Hydra Agro", () => {
     } satisfies Partial<PostalCodeLookupError>);
   });
 
+  it("mostra mensagem específica quando está sem internet", async () => {
+    Object.defineProperty(navigator, "onLine", { configurable: true, value: false });
+    const fetcher = vi.fn(async () => { throw new TypeError("Failed to fetch"); });
+    await expect(lookupBrazilianCep("01001-000", fetcher as unknown as typeof fetch)).rejects.toMatchObject({
+      code: "offline",
+      message: "Sem internet para consultar o CEP. Verifique a conexão e tente novamente.",
+    } satisfies Partial<PostalCodeLookupError>);
+  });
+
   it("não expõe erro técnico quando a consulta falha", async () => {
+    Object.defineProperty(navigator, "onLine", { configurable: true, value: true });
     const fetcher = vi.fn(async () => { throw new TypeError("Failed to fetch"); });
     await expect(lookupBrazilianCep("01001-000", fetcher as unknown as typeof fetch)).rejects.toMatchObject({
       code: "unavailable",
