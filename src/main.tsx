@@ -5,6 +5,7 @@ import { Capacitor } from "@capacitor/core";
 import {
   Check,
   ChevronRight,
+  FileSpreadsheet,
   Moon,
   Palette,
   Sun,
@@ -31,6 +32,10 @@ import "./features/profile/profile-ranking-runtime";
 import "./features/profile/level10-vip-runtime";
 import "./features/community/community-comment-runtime";
 import HydraApp from "./hydra-app";
+import type { HydraAccount } from "./lib/hydra-types";
+import { loadAccount } from "./services/hydra-repository";
+import { supabase } from "./services/supabase";
+import { HydraSpreadsheetPanel } from "./features/spreadsheets/hydra-spreadsheet-panel";
 
 type ThemeMode = "light" | "dark";
 
@@ -74,6 +79,9 @@ function HydraThemeRoot() {
   const [theme, setTheme] = useState<ThemeMode>(savedTheme);
   const [appearanceOpen, setAppearanceOpen] = useState(false);
   const [profileMenuTarget, setProfileMenuTarget] = useState<HTMLElement | null>(null);
+  const [spreadsheetOpen, setSpreadsheetOpen] = useState(false);
+  const [spreadsheetAccount, setSpreadsheetAccount] = useState<HydraAccount | null>(null);
+  const [spreadsheetLoading, setSpreadsheetLoading] = useState(false);
 
   useEffect(() => {
     try { window.localStorage.setItem(THEME_KEY, theme); } catch { /* armazenamento indisponível */ }
@@ -120,19 +128,46 @@ function HydraThemeRoot() {
     setAppearanceOpen(false);
   }
 
-  const appearanceRow = profileMenuTarget ? createPortal(
-    <button className="profile-menu-row theme-menu-row" onClick={() => setAppearanceOpen(true)}>
-      <span className="profile-menu-icon"><Palette size={21} /></span>
-      <div><strong>Aparência</strong><small>{theme === "dark" ? "Modo escuro" : "Modo claro"}</small></div>
-      <ChevronRight size={19} />
-    </button>,
+  async function openSpreadsheet() {
+    if (spreadsheetLoading) return;
+    setSpreadsheetLoading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const account = await loadAccount(user);
+      setSpreadsheetAccount(account);
+      setSpreadsheetOpen(true);
+    } catch (error) {
+      console.error("[Hydra Agro] Não foi possível abrir a Hydra Planilha:", error);
+    } finally {
+      setSpreadsheetLoading(false);
+    }
+  }
+
+  const profileRows = profileMenuTarget ? createPortal(
+    <>
+      <button className="profile-menu-row profile-spreadsheet-row" onClick={() => void openSpreadsheet()} disabled={spreadsheetLoading}>
+        <span className="profile-menu-icon"><FileSpreadsheet size={21} /></span>
+        <div><strong>Hydra Planilha</strong><small>{spreadsheetLoading ? "Carregando dados…" : "Exportar dados para Excel ou WhatsApp"}</small></div>
+        <ChevronRight size={19} />
+      </button>
+      <button className="profile-menu-row theme-menu-row" onClick={() => setAppearanceOpen(true)}>
+        <span className="profile-menu-icon"><Palette size={21} /></span>
+        <div><strong>Aparência</strong><small>{theme === "dark" ? "Modo escuro" : "Modo claro"}</small></div>
+        <ChevronRight size={19} />
+      </button>
+    </>,
     profileMenuTarget,
   ) : null;
 
   return (
     <div className={`hydra-root theme-${theme}`}>
       <HydraApp />
-      {appearanceRow}
+      {profileRows}
+
+      {spreadsheetAccount && (
+        <HydraSpreadsheetPanel account={spreadsheetAccount} open={spreadsheetOpen} onClose={() => setSpreadsheetOpen(false)} />
+      )}
 
       {appearanceOpen && (
         <div className="theme-dialog-backdrop" onMouseDown={() => setAppearanceOpen(false)}>
