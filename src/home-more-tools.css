@@ -76,9 +76,9 @@ html.home-tools-open .bottom-nav {
   margin: 0 !important;
   border-radius: 18px !important;
   overflow: hidden !important;
+  transform: translateY(38px) !important;
 }
 
-/* Sem spacer artificial: a lista fica mais baixa, encaixada no fundo da sheet. */
 .hydra-root .home-screen .home-tools-list.home-more-tools-layer > button:first-of-type:not(.home-more-tools-close) {
   margin-top: 0 !important;
 }
@@ -97,6 +97,7 @@ html.home-tools-open .bottom-nav {
   z-index: 5 !important;
   right: 18px !important;
   bottom: calc(var(--more-tools-height) - 65px) !important;
+  transform: none !important;
   width: 42px !important;
   height: 42px !important;
   min-width: 42px !important;
