@@ -165,6 +165,23 @@ function installAvatarFallbacks() {
   }, true);
 }
 
+function installSplashVisibilityLock() {
+  let splashSeen = false;
+  const html = document.documentElement;
+  html.classList.add("hydra-splash-active");
+
+  const sync = () => {
+    const hasSplash = Boolean(document.querySelector(".splash-screen"));
+    if (hasSplash) splashSeen = true;
+    if (hasSplash || !splashSeen) html.classList.add("hydra-splash-active");
+    else html.classList.remove("hydra-splash-active");
+  };
+
+  const observer = new MutationObserver(sync);
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+  sync();
+}
+
 let lastSplashState: boolean | null = null;
 async function syncNativeStatusBarWithSplash() {
   if (!Capacitor.isNativePlatform()) return;
@@ -198,4 +215,5 @@ function installSplashStatusBarSync() {
 
 installCompactTypography();
 installAvatarFallbacks();
+installSplashVisibilityLock();
 installSplashStatusBarSync();
