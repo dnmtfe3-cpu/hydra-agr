@@ -1,8 +1,152 @@
-.hydra-root .home-screen .home-tools-list.home-more-tools-layer::after {
-  content: "Nova ação" !important;
+.hydra-root .nova-action-layer {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 1500 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  background: rgba(5, 28, 19, .50) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  overscroll-behavior: none !important;
 }
 
-/* O antigo gatilho Mais ferramentas permanece apenas como estado interno do React. */
-.hydra-root .home-screen > button.home-more-tools-source {
-  display: none !important;
+.hydra-root .nova-action-sheet {
+  position: relative !important;
+  width: min(100%, 540px) !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: calc(100dvh - max(72px, env(safe-area-inset-top, 0px) + 20px)) !important;
+  margin: 0 !important;
+  padding: 18px 14px calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+  border-radius: 28px 28px 0 0 !important;
+  overflow-y: auto !important;
+  background: var(--paper, #fffefb) !important;
+  box-shadow: 0 -24px 80px rgba(0, 0, 0, .24) !important;
+}
+
+.hydra-root .nova-action-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+  margin: 0 0 14px !important;
+  padding: 0 2px !important;
+}
+
+.hydra-root .nova-action-head h2 {
+  margin: 0 !important;
+  color: var(--forest-950, #09271b) !important;
+  font-family: var(--font-display, "Sora"), system-ui, sans-serif !important;
+  font-size: 24px !important;
+  line-height: 1.05 !important;
+  font-weight: 800 !important;
+  letter-spacing: -.04em !important;
+}
+
+.hydra-root .nova-action-close {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  border-radius: 14px !important;
+  color: var(--forest-800) !important;
+  background: #f4f5f0 !important;
+  border: 1px solid rgba(18, 61, 44, .10) !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .nova-action-list {
+  display: grid !important;
+  gap: 8px !important;
+}
+
+.hydra-root .nova-action-row {
+  width: 100% !important;
+  min-height: 61px !important;
+  padding: 8px 12px !important;
+  border: 1px solid rgba(18, 61, 44, .10) !important;
+  border-radius: 17px !important;
+  display: grid !important;
+  grid-template-columns: 39px minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 10px !important;
+  text-align: left !important;
+  color: var(--forest-950) !important;
+  background: #f8f8f3 !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .nova-action-row > span {
+  width: 39px !important;
+  height: 39px !important;
+  border-radius: 13px !important;
+  display: grid !important;
+  place-items: center !important;
+  color: var(--forest-700) !important;
+  background: #edf3ee !important;
+}
+
+.hydra-root .nova-action-row > div {
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.hydra-root .nova-action-row small {
+  margin: 0 0 2px !important;
+  color: #6f7b74 !important;
+  font-size: 8px !important;
+  font-weight: 800 !important;
+  letter-spacing: .06em !important;
+}
+
+.hydra-root .nova-action-row strong {
+  color: var(--forest-950) !important;
+  font-size: 11px !important;
+  line-height: 1.25 !important;
+}
+
+.hydra-root .nova-action-row em {
+  margin-top: 2px !important;
+  color: var(--muted, #6f7b74) !important;
+  font-size: 8.5px !important;
+  line-height: 1.25 !important;
+  font-style: normal !important;
+}
+
+.hydra-root .nova-action-row > svg {
+  color: #8c9991 !important;
+  flex: none !important;
+}
+
+.hydra-root.theme-dark .nova-action-sheet {
+  background: #0d271d !important;
+}
+
+.hydra-root.theme-dark .nova-action-head h2,
+.hydra-root.theme-dark .nova-action-row strong {
+  color: #f4f5ef !important;
+}
+
+.hydra-root.theme-dark .nova-action-row {
+  background: #153428 !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+
+.hydra-root.theme-dark .nova-action-row > span,
+.hydra-root.theme-dark .nova-action-close {
+  color: #c6e0cc !important;
+  background: #214332 !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+
+@media (max-width: 390px) {
+  .hydra-root .nova-action-sheet {
+    padding-left: 11px !important;
+    padding-right: 11px !important;
+  }
 }
