@@ -166,6 +166,7 @@ export type CommunityPost = {
   authorAvatarUrl?: string;
   propertyName?: string;
   municipality?: string;
+  state?: string;
   text: string;
   date: string;
   image?: string;
@@ -179,7 +180,15 @@ export type Property = {
   id?: string;
   name: string;
   municipality: string;
+  municipalityIbgeCode?: string;
   state: string;
+  stateName?: string;
+  postalCode: string;
+  region?: string;
+  street?: string;
+  district?: string;
+  addressComplement?: string;
+  ddd?: string;
   locationDetails?: string;
   coverPath?: string;
   coverUrl?: string;
@@ -322,7 +331,8 @@ export function makeId(prefix: string) {
 export const emptyProperty: Property = {
   name: "",
   municipality: "",
-  state: "BA",
+  state: "",
+  postalCode: "",
   area: "",
   areaUnit: "hectares",
   type: "",
