@@ -51,4 +51,4 @@
 @import "./motion-polish-v2.css?v=motion-polish-v2";
 
 /* No navegador de notebook/PC, preserva exatamente o fluxo do aplicativo mobile. */
-@import "./desktop-phone-shell.css?v=desktop-phone-shell-1";
+@import "./desktop-phone-shell.css";
