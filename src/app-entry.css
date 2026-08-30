@@ -9,13 +9,11 @@
 @import "./premium-modals.css";
 @import "./staff-access.css";
 @import "./nfc-platform-note.css";
-@import "./desktop-format-only.css";
 @import "./pull-to-refresh.css";
 @import "./mobile-flow-fix.css";
 @import "./bottom-nav-compact.css";
 @import "./bottom-nav-runtime-fix.css";
 @import "./auth-center-fix.css";
-@import "./desktop-mobile-home-fix.css";
 @import "./final-ui-polish.css";
 @import "./home-shortcuts-icons.css";
 @import "./navigation-profile-cleanup.css";
@@ -32,9 +30,6 @@
 /* Redesign visual final de Equipe/Funcionários e Rebanho. */
 @import "./management-redesign-v3.css?v=management-redesign-v3";
 
-/* Correção do Rebanho apenas no desktop/web. */
-@import "./herd-desktop-fix.css?v=herd-desktop-fix-1";
-
 /* Correção final do Rebanho no celular. */
 @import "./herd-mobile-fix.css?v=herd-mobile-fix-1";
 
@@ -49,6 +44,3 @@
 
 /* Motion global sem alterar layout. */
 @import "./motion-polish-v2.css?v=motion-polish-v2";
-
-/* No navegador de notebook/PC, preserva exatamente o fluxo do aplicativo mobile. */
-@import "./desktop-phone-shell.css";
