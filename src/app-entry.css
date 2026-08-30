@@ -49,3 +49,7 @@
 
 /* Motion global sem alterar layout. */
 @import "./motion-polish-v2.css?v=motion-polish-v2";
+
+/* A normalização precisa ser a última camada estrutural do desktop. */
+@import "./desktop-layout-normalize.css?v=desktop-layout-normalize-2";
+@import "./desktop-stability.css?v=desktop-stability-1";
