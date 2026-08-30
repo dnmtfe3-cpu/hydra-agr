@@ -1,5 +1,14 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const authEmailMocks = vi.hoisted(() => ({
+  requestLoginCode: vi.fn(async () => undefined),
+  verifyLoginCode: vi.fn(async () => ({ session: {}, user: {} })),
+  requestBrandedPasswordRecovery: vi.fn(async () => undefined),
+}));
+
+vi.mock("../src/services/auth-email-service", () => authEmailMocks);
+
 import { AuthFlow } from "../src/features/auth/auth-flow";
 
 const handlers = {
@@ -35,6 +44,7 @@ describe("autenticação", () => {
     fireEvent.change(screen.getByLabelText(/e-mail/i), { target: { value: "produtor@example.com" } });
     fireEvent.click(screen.getByRole("button", { name: /avançar/i }));
     expect(screen.getByRole("button", { name: /esqueci minha senha/i })).toBeEnabled();
+    expect(screen.getByRole("button", { name: /entrar com código/i })).toBeEnabled();
   });
 
   it("abre o acesso de funcionário sem pedir e-mail ou senha", async () => {
@@ -47,7 +57,24 @@ describe("autenticação", () => {
     expect(handlers.onStaffLogin).toHaveBeenCalledWith("HA-7K3M-9Q2P-4RX8");
   });
 
-  it("abre a recuperação e solicita o link para o e-mail informado", async () => {
+  it("envia e valida o código de acesso pelo e-mail", async () => {
+    render(<AuthFlow {...handlers} />);
+    fireEvent.click(screen.getByRole("button", { name: /^entrar$/i }));
+    fireEvent.change(screen.getByLabelText(/^e-mail$/i), { target: { value: "produtor@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: /avançar/i }));
+    fireEvent.click(screen.getByRole("button", { name: /entrar com código/i }));
+
+    await waitFor(() => expect(authEmailMocks.requestLoginCode).toHaveBeenCalledWith("produtor@example.com"));
+    expect(await screen.findByRole("heading", { name: /código de acesso/i })).toBeInTheDocument();
+
+    const code = screen.getByLabelText(/^código$/i);
+    fireEvent.change(code, { target: { value: "123456" } });
+    fireEvent.click(screen.getByRole("button", { name: /confirmar código/i }));
+
+    await waitFor(() => expect(authEmailMocks.verifyLoginCode).toHaveBeenCalledWith("produtor@example.com", "123456"));
+  });
+
+  it("abre a recuperação e envia o link pelo e-mail do Hydra Agro", async () => {
     render(<AuthFlow {...handlers} />);
     fireEvent.click(screen.getByRole("button", { name: /^entrar$/i }));
     fireEvent.change(screen.getByLabelText(/^e-mail$/i), { target: { value: "produtor@example.com" } });
@@ -57,7 +84,8 @@ describe("autenticação", () => {
     expect(screen.getByRole("heading", { name: /recuperar acesso/i })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /enviar link de recuperação/i }));
 
-    expect(handlers.onResetPassword).toHaveBeenCalledWith("produtor@example.com");
-    expect(await screen.findByRole("status")).toHaveTextContent("ok");
+    await waitFor(() => expect(authEmailMocks.requestBrandedPasswordRecovery).toHaveBeenCalledWith("produtor@example.com"));
+    expect(await screen.findByRole("status")).toHaveTextContent(/se houver uma conta/i);
+    expect(handlers.onResetPassword).not.toHaveBeenCalled();
   });
 });
