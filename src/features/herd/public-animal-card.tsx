@@ -130,8 +130,24 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
     setReporting(true);
     setReportError("");
     try {
-      const { error } = await requireSupabase().rpc("report_found_animal", { p_code: animal.identification, p_message: null });
+      const client = requireSupabase();
+      const { data, error } = await client.rpc("report_found_animal", { p_code: animal.identification, p_message: null });
       if (error) throw error;
+
+      const reportId = data && typeof data === "object" && "reportId" in data
+        ? String((data as { reportId?: unknown }).reportId ?? "")
+        : "";
+
+      if (reportId) {
+        try {
+          await client.functions.invoke("found-animal-email", {
+            body: { reportId, hydraCode: animal.identification },
+          });
+        } catch {
+          // O aviso interno já foi registrado; falha de e-mail não deve invalidar a ocorrência.
+        }
+      }
+
       setReported(true);
     } catch {
       setReportError("Não foi possível enviar o aviso agora. Tente novamente em instantes.");
@@ -187,7 +203,7 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
         {isLost && (
           <section className="public-animal-section">
             {reported ? (
-              <div className="public-animal-validation"><span className="public-animal-validation-icon"><ShieldCheck size={21} /></span><div><strong>Aviso enviado</strong><p>O proprietário recebeu uma notificação dentro do Hydra Agro. Seus dados pessoais não foram compartilhados.</p></div></div>
+              <div className="public-animal-validation"><span className="public-animal-validation-icon"><ShieldCheck size={21} /></span><div><strong>Aviso enviado</strong><p>O proprietário recebeu uma notificação dentro do Hydra Agro e, quando disponível, também por e-mail. Seus dados pessoais não foram compartilhados.</p></div></div>
             ) : (
               <button className="public-animal-open" onClick={() => void reportFound()} disabled={reporting}>{reporting ? "Enviando aviso…" : "Encontrei este animal"}</button>
             )}
