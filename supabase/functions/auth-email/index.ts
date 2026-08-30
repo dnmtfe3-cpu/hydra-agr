@@ -2,18 +2,31 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, x-hydra-client, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, x-hydra-client, x-supabase-api-version, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-type Purpose = "login_code" | "password_recovery";
+type Purpose = "login_code" | "signup" | "password_reset" | "password_change";
+type ChallengePurpose = Exclude<Purpose, "login_code">;
 
 type GuardRow = {
   id: string;
-  purpose: Purpose;
+  purpose: string;
   window_started_at: string;
   last_sent_at: string | null;
   request_count: number;
+};
+
+type ChallengeRow = {
+  id: string;
+  email: string;
+  purpose: ChallengePurpose;
+  code_hash: string;
+  expires_at: string;
+  attempts: number;
+  verified_at: string | null;
+  verification_token_hash: string | null;
+  consumed_at: string | null;
 };
 
 function json(body: Record<string, unknown>, status = 200) {
@@ -38,19 +51,36 @@ async function digest(value: string) {
   return Array.from(new Uint8Array(hash)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
-function emailCodeHtml(code: string) {
+function randomCode() {
+  const value = crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000;
+  return String(value).padStart(6, "0");
+}
+
+function randomToken() {
+  return Array.from(crypto.getRandomValues(new Uint8Array(32))).map((byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function challengeTitle(purpose: ChallengePurpose) {
+  if (purpose === "signup") return "Confirme a criação da sua conta";
+  if (purpose === "password_change") return "Confirme a troca da sua senha";
+  return "Confirme a recuperação da sua senha";
+}
+
+function challengeCopy(purpose: ChallengePurpose) {
+  if (purpose === "signup") return "Digite este código no Hydra Agro para confirmar seu e-mail e criar a conta.";
+  if (purpose === "password_change") return "Digite este código no Hydra Agro antes de salvar uma nova senha.";
+  return "Digite este código no Hydra Agro para continuar a recuperação da sua senha.";
+}
+
+function emailCodeHtml(code: string, title = "Seu código de acesso", copy = "Use este código para entrar com segurança. Ele é de uso único.") {
   const safeCode = escapeHtml(code);
-  return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Código de acesso Hydra Agro</title></head>
-  <body style="margin:0;background:#f4f1e9;font-family:Arial,Helvetica,sans-serif;color:#10281d"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="padding:28px 14px;background:#f4f1e9"><tr><td align="center"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;background:#fffefb;border:1px solid #e3e5df;border-radius:24px;overflow:hidden"><tr><td style="padding:32px 36px;background:#0B5136"><div style="font-size:13px;letter-spacing:1.7px;text-transform:uppercase;color:#d8eadf;font-weight:700">Hydra Agro</div><div style="margin-top:12px;font-size:30px;line-height:1.15;color:#fff;font-weight:800">Seu código de acesso</div><div style="margin-top:9px;font-size:15px;line-height:1.55;color:#d8eadf">Use este código para entrar com segurança. Ele é de uso único.</div></td></tr><tr><td style="padding:34px 36px 38px"><div style="padding:22px 12px;text-align:center;background:#f6f7f2;border:1px solid #e6e9e2;border-radius:18px;font-size:35px;line-height:1;letter-spacing:9px;font-weight:800;color:#0B5136">${safeCode}</div><p style="margin:22px 0 0;font-size:14px;line-height:1.6;color:#657169">Não compartilhe este código. Se você não tentou entrar no Hydra Agro, ignore este e-mail.</p><p style="margin:24px 0 0;padding-top:20px;border-top:1px solid #eceee8;font-size:12px;line-height:1.55;color:#879089">Hydra Agro • acesso seguro</p></td></tr></table></td></tr></table></body></html>`;
+  const safeTitle = escapeHtml(title);
+  const safeCopy = escapeHtml(copy);
+  return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safeTitle}</title></head>
+  <body style="margin:0;background:#f4f1e9;font-family:Arial,Helvetica,sans-serif;color:#10281d"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="padding:28px 14px;background:#f4f1e9"><tr><td align="center"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;background:#fffefb;border:1px solid #e3e5df;border-radius:24px;overflow:hidden"><tr><td style="padding:32px 36px;background:#0B5136"><div style="font-size:13px;letter-spacing:1.7px;text-transform:uppercase;color:#d8eadf;font-weight:700">Hydra Agro</div><div style="margin-top:12px;font-size:30px;line-height:1.15;color:#fff;font-weight:800">${safeTitle}</div><div style="margin-top:9px;font-size:15px;line-height:1.55;color:#d8eadf">${safeCopy}</div></td></tr><tr><td style="padding:34px 36px 38px"><div style="padding:22px 12px;text-align:center;background:#f6f7f2;border:1px solid #e6e9e2;border-radius:18px;font-size:35px;line-height:1;letter-spacing:9px;font-weight:800;color:#0B5136">${safeCode}</div><p style="margin:22px 0 0;font-size:14px;line-height:1.6;color:#657169">O código expira em 10 minutos e não deve ser compartilhado.</p><p style="margin:24px 0 0;padding-top:20px;border-top:1px solid #eceee8;font-size:12px;line-height:1.55;color:#879089">Hydra Agro • verificação segura</p></td></tr></table></td></tr></table></body></html>`;
 }
 
-function recoveryHtml(actionLink: string) {
-  const link = escapeHtml(actionLink);
-  return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Redefinir senha Hydra Agro</title></head>
-  <body style="margin:0;background:#f4f1e9;font-family:Arial,Helvetica,sans-serif;color:#10281d"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="padding:28px 14px;background:#f4f1e9"><tr><td align="center"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;background:#fffefb;border:1px solid #e3e5df;border-radius:24px;overflow:hidden"><tr><td style="padding:32px 36px;background:#0B5136"><div style="font-size:13px;letter-spacing:1.7px;text-transform:uppercase;color:#d8eadf;font-weight:700">Hydra Agro</div><div style="margin-top:12px;font-size:30px;line-height:1.15;color:#fff;font-weight:800">Redefina sua senha</div><div style="margin-top:9px;font-size:15px;line-height:1.55;color:#d8eadf">Recebemos uma solicitação para criar uma nova senha para sua conta.</div></td></tr><tr><td style="padding:34px 36px 38px"><p style="margin:0;font-size:15px;line-height:1.65;color:#59675e">Toque no botão abaixo para continuar pelo fluxo seguro do Supabase. O link é temporário e só deve ser usado por você.</p><table role="presentation" cellspacing="0" cellpadding="0" style="margin-top:26px"><tr><td style="background:#FF8A12;border-radius:14px"><a href="${link}" style="display:inline-block;padding:15px 24px;color:#fff;text-decoration:none;font-size:16px;font-weight:800">Criar nova senha</a></td></tr></table><p style="margin:25px 0 0;padding-top:20px;border-top:1px solid #eceee8;font-size:12px;line-height:1.6;color:#879089">Se você não solicitou a troca de senha, ignore este e-mail. Sua senha atual continuará válida.</p></td></tr></table></td></tr></table></body></html>`;
-}
-
-async function checkGuard(admin: ReturnType<typeof createClient>, id: string, purpose: Purpose, minSeconds: number, maxPerHour: number) {
+async function checkGuard(admin: ReturnType<typeof createClient>, id: string, purpose: string, minSeconds: number, maxPerHour: number) {
   const now = Date.now();
   const { data, error } = await admin.from("auth_email_rate_limits").select("id,purpose,window_started_at,last_sent_at,request_count").eq("id", id).maybeSingle();
   if (error) throw error;
@@ -64,9 +94,35 @@ async function checkGuard(admin: ReturnType<typeof createClient>, id: string, pu
   return { allowed: true, count: Number(row.request_count) + 1, windowStartedAt: row.window_started_at };
 }
 
-async function saveGuard(admin: ReturnType<typeof createClient>, id: string, purpose: Purpose, count: number, windowStartedAt: string) {
+async function saveGuard(admin: ReturnType<typeof createClient>, id: string, purpose: string, count: number, windowStartedAt: string) {
   const now = new Date().toISOString();
-  await admin.from("auth_email_rate_limits").upsert({ id, purpose, request_count: count, window_started_at: windowStartedAt, last_sent_at: now, updated_at: now }, { onConflict: "id" });
+  const { error } = await admin.from("auth_email_rate_limits").upsert({ id, purpose, request_count: count, window_started_at: windowStartedAt, last_sent_at: now, updated_at: now }, { onConflict: "id" });
+  if (error) throw error;
+}
+
+async function latestChallenge(admin: ReturnType<typeof createClient>, email: string, purpose: ChallengePurpose) {
+  const { data, error } = await admin.from("auth_email_challenges")
+    .select("id,email,purpose,code_hash,expires_at,attempts,verified_at,verification_token_hash,consumed_at")
+    .eq("email", email)
+    .eq("purpose", purpose)
+    .is("consumed_at", null)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  return data as ChallengeRow | null;
+}
+
+async function verifyChallenge(admin: ReturnType<typeof createClient>, serviceRoleKey: string, email: string, purpose: ChallengePurpose, code: string) {
+  const challenge = await latestChallenge(admin, email, purpose);
+  if (!challenge || new Date(challenge.expires_at).getTime() <= Date.now()) return { ok: false as const, message: "Código expirado. Solicite um novo código." };
+  if (challenge.attempts >= 5) return { ok: false as const, message: "Muitas tentativas. Solicite um novo código." };
+  const codeHash = await digest(`${serviceRoleKey}:${purpose}:${email}:${code}`);
+  if (codeHash !== challenge.code_hash) {
+    await admin.from("auth_email_challenges").update({ attempts: challenge.attempts + 1, updated_at: new Date().toISOString() }).eq("id", challenge.id);
+    return { ok: false as const, message: "Código inválido. Confira e tente novamente." };
+  }
+  return { ok: true as const, challenge };
 }
 
 Deno.serve(async (req) => {
@@ -75,7 +131,9 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    const purpose = body?.purpose === "password_recovery" ? "password_recovery" : body?.purpose === "login_code" ? "login_code" : null;
+    const action = body?.action === "verify" ? "verify" : "request";
+    const rawPurpose = String(body?.purpose ?? "");
+    const purpose: Purpose | null = ["login_code", "signup", "password_reset", "password_change"].includes(rawPurpose) ? rawPurpose as Purpose : null;
     const email = String(body?.email ?? "").trim().toLowerCase();
     const platform = body?.platform === "native" ? "native" : "web";
     if (!purpose || !/^\S+@\S+\.\S+$/.test(email) || email.length > 254) return json({ ok: false, message: "Informe um e-mail válido." }, 400);
@@ -85,12 +143,31 @@ Deno.serve(async (req) => {
     const resendKey = Deno.env.get("RESEND_API_KEY")?.trim();
     const from = Deno.env.get("HYDRA_EMAIL_FROM")?.trim();
     const appUrl = (Deno.env.get("HYDRA_APP_URL")?.trim() || "https://www.hydraagro.sbs").replace(/\/$/, "");
-    if (!supabaseUrl || !serviceRoleKey || !resendKey || !from) {
-      console.error("auth-email missing server configuration");
-      return json({ ok: false, message: "O envio por e-mail está temporariamente indisponível." }, 503);
-    }
+    if (!supabaseUrl || !serviceRoleKey || !resendKey || !from) return json({ ok: false, message: "O envio por e-mail está temporariamente indisponível." }, 503);
 
     const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { autoRefreshToken: false, persistSession: false } });
+
+    if (action === "verify") {
+      if (purpose === "login_code") return json({ ok: false, message: "Use a validação de login do Supabase." }, 400);
+      const code = String(body?.code ?? "").replace(/\D/g, "").slice(0, 6);
+      if (code.length !== 6) return json({ ok: false, message: "Digite o código de 6 dígitos." }, 400);
+      const verified = await verifyChallenge(admin, serviceRoleKey, email, purpose, code);
+      if (!verified.ok) return json({ ok: false, message: verified.message }, 400);
+
+      if (purpose === "password_reset") {
+        const redirectTo = platform === "native" ? "br.com.hydraagro.app://auth/recovery" : `${appUrl}/auth/recovery`;
+        const { data, error } = await admin.auth.admin.generateLink({ type: "recovery", email, options: { redirectTo } } as never);
+        if (error || !data?.properties?.action_link) return json({ ok: false, message: "Não foi possível iniciar a troca de senha agora." }, 503);
+        await admin.from("auth_email_challenges").update({ verified_at: new Date().toISOString(), consumed_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq("id", verified.challenge.id);
+        return json({ ok: true, actionLink: data.properties.action_link });
+      }
+
+      const verificationToken = randomToken();
+      const verificationTokenHash = await digest(`${serviceRoleKey}:${purpose}:${email}:${verificationToken}`);
+      await admin.from("auth_email_challenges").update({ verified_at: new Date().toISOString(), verification_token_hash: verificationTokenHash, updated_at: new Date().toISOString() }).eq("id", verified.challenge.id);
+      return json({ ok: true, verificationToken });
+    }
+
     const ip = (req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip") || "unknown").split(",")[0].trim();
     const emailGuardId = await digest(`hydra:${purpose}:email:${email}`);
     const ipGuardId = await digest(`hydra:${purpose}:ip:${ip}`);
@@ -103,40 +180,37 @@ Deno.serve(async (req) => {
       return json({ ok: false, code: "RATE_LIMIT", retryAfter, message: retryAfter <= 90 ? `Aguarde ${retryAfter} segundos para tentar novamente.` : "Muitas solicitações. Tente novamente mais tarde." }, 429);
     }
 
-    const redirectTo = platform === "native" ? "br.com.hydraagro.app://auth/recovery" : `${appUrl}/auth/recovery`;
-    const params = purpose === "login_code"
-      ? { type: "magiclink" as const, email }
-      : { type: "recovery" as const, email, options: { redirectTo } };
-    const { data, error } = await admin.auth.admin.generateLink(params as never);
+    let code = "";
+    let subject = "";
+    let html = "";
+
+    if (purpose === "login_code") {
+      const { data, error } = await admin.auth.admin.generateLink({ type: "magiclink", email } as never);
+      if (error || !data?.properties) return json({ ok: true });
+      code = String((data.properties as unknown as { email_otp?: string }).email_otp ?? "").replace(/\D/g, "").slice(0, 10);
+      if (!/^\d{6,10}$/.test(code)) return json({ ok: false, message: "Não foi possível preparar o e-mail agora." }, 503);
+      subject = `${code} é seu código do Hydra Agro`;
+      html = emailCodeHtml(code);
+    } else {
+      code = randomCode();
+      const codeHash = await digest(`${serviceRoleKey}:${purpose}:${email}:${code}`);
+      const now = new Date();
+      await admin.from("auth_email_challenges").update({ consumed_at: now.toISOString(), updated_at: now.toISOString() }).eq("email", email).eq("purpose", purpose).is("consumed_at", null);
+      const { error } = await admin.from("auth_email_challenges").insert({ email, purpose, code_hash: codeHash, expires_at: new Date(now.getTime() + 10 * 60 * 1000).toISOString() });
+      if (error) throw error;
+      subject = `${code} é seu código de verificação do Hydra Agro`;
+      html = emailCodeHtml(code, challengeTitle(purpose), challengeCopy(purpose));
+    }
 
     await Promise.all([
       saveGuard(admin, emailGuardId, purpose, emailGuard.count ?? 1, emailGuard.windowStartedAt ?? new Date().toISOString()),
       saveGuard(admin, ipGuardId, purpose, ipGuard.count ?? 1, ipGuard.windowStartedAt ?? new Date().toISOString()),
     ]);
 
-    if (error || !data?.properties) {
-      if (error) console.info("auth-email generateLink skipped", error.code || error.message);
-      return json({ ok: true });
-    }
-
-    const properties = data.properties as unknown as { email_otp?: string; action_link?: string };
-    const isCode = purpose === "login_code";
-    const code = String(properties.email_otp ?? "").replace(/\D/g, "").slice(0, 10);
-    const actionLink = String(properties.action_link ?? "");
-    if ((isCode && !/^\d{6,10}$/.test(code)) || (!isCode && !/^https:\/\//i.test(actionLink))) {
-      console.error("auth-email generated payload missing expected property", purpose);
-      return json({ ok: false, message: "Não foi possível preparar o e-mail agora. Tente novamente." }, 503);
-    }
-
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from,
-        to: [email],
-        subject: isCode ? `${code} é seu código do Hydra Agro` : "Redefina sua senha do Hydra Agro",
-        html: isCode ? emailCodeHtml(code) : recoveryHtml(actionLink),
-      }),
+      body: JSON.stringify({ from, to: [email], subject, html }),
     });
     if (!response.ok) {
       console.error("auth-email resend error", response.status, await response.text());
