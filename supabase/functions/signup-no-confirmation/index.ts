@@ -22,12 +22,6 @@ function escapeHtml(value: unknown) {
     .replaceAll("'", "&#039;");
 }
 
-async function digest(value: string) {
-  const bytes = new TextEncoder().encode(value);
-  const hash = await crypto.subtle.digest("SHA-256", bytes);
-  return Array.from(new Uint8Array(hash)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
-}
-
 function firstName(value: string) {
   return value.trim().split(/\s+/)[0] || "produtor";
 }
@@ -71,25 +65,21 @@ Deno.serve(async (req) => {
     const email = String(payload?.email ?? "").trim().toLowerCase();
     const phone = String(payload?.phone ?? "").trim();
     const password = String(payload?.password ?? "");
-    const verificationToken = String(payload?.verificationToken ?? "").trim();
     const property = payload?.property && typeof payload.property === "object" ? payload.property : {};
 
     if (name.length < 2) return json({ ok: false, message: "Informe seu nome completo." });
     if (!/^\S+@\S+\.\S+$/.test(email)) return json({ ok: false, message: "Informe um e-mail válido." });
     if (password.length < 8) return json({ ok: false, message: "A senha precisa ter pelo menos 8 caracteres." });
-    if (verificationToken.length < 32) return json({ ok: false, code: "EMAIL_CODE_REQUIRED", message: "Confirme o código enviado ao seu e-mail antes de criar a conta." }, 403);
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     if (!supabaseUrl || !serviceRoleKey) return json({ ok: false, message: "Não foi possível criar a conta agora. Tente novamente em instantes." }, 503);
 
     const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { autoRefreshToken: false, persistSession: false } });
-    const verificationTokenHash = await digest(`${serviceRoleKey}:signup:${email}:${verificationToken}`);
     const { data: challenge, error: challengeError } = await admin.from("auth_email_challenges")
       .select("id,expires_at,verified_at,consumed_at")
       .eq("email", email)
       .eq("purpose", "signup")
-      .eq("verification_token_hash", verificationTokenHash)
       .not("verified_at", "is", null)
       .is("consumed_at", null)
       .order("created_at", { ascending: false })
@@ -98,7 +88,7 @@ Deno.serve(async (req) => {
 
     if (challengeError) throw challengeError;
     if (!challenge || new Date(String(challenge.expires_at)).getTime() <= Date.now()) {
-      return json({ ok: false, code: "EMAIL_CODE_REQUIRED", message: "A confirmação do e-mail expirou. Solicite um novo código." }, 403);
+      return json({ ok: false, code: "EMAIL_CODE_REQUIRED", message: "Confirme o código enviado ao seu e-mail antes de criar a conta." }, 403);
     }
 
     const { data, error } = await admin.auth.admin.createUser({
@@ -118,7 +108,6 @@ Deno.serve(async (req) => {
     }
 
     await admin.from("auth_email_challenges").update({ consumed_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq("id", String(challenge.id));
-
     const propertyName = typeof property?.name === "string" ? property.name.trim() : "";
     const welcomeEmailSent = await sendWelcomeEmail({ email, name, propertyName });
     return json({ ok: true, userId: data.user.id, welcomeEmailSent });
