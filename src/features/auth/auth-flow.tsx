@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -8,6 +8,7 @@ import {
   EyeOff,
   KeyRound,
   LockKeyhole,
+  MailCheck,
   MapPin,
   UserRound,
   UsersRound,
@@ -17,6 +18,7 @@ import { PropertyLocationFields } from "../../components/property-location-field
 import { Field } from "../../components/ui";
 import { isValidCep } from "../../lib/brazil-location";
 import { emptyProperty, type AuthResult, type Property, type SignupPayload } from "../../lib/hydra-types";
+import { requestBrandedPasswordRecovery, requestLoginCode, verifyLoginCode } from "../../services/auth-email-service";
 
 type Props = {
   onLogin: (email: string, password: string) => Promise<AuthResult>;
@@ -34,12 +36,14 @@ function formatStaffCode(value: string) {
   return compact ? `HA${groups.length ? `-${groups.join("-")}` : ""}` : "";
 }
 
-export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onResetPassword }: Props) {
+export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup }: Props) {
   const [view, setView] = useState<"landing" | "auth">("landing");
   const [mode, setMode] = useState<"login" | "signup">("login");
-  const [loginStep, setLoginStep] = useState<"email" | "password" | "recovery" | "staff">("email");
+  const [loginStep, setLoginStep] = useState<"email" | "password" | "code" | "recovery" | "staff">("email");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginCode, setLoginCode] = useState("");
+  const [codeCooldown, setCodeCooldown] = useState(0);
   const [staffCode, setStaffCode] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -51,15 +55,30 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
 
   const firstName = useMemo(() => signup.name.trim().split(/\s+/)[0] || "Produtor", [signup.name]);
 
+  useEffect(() => {
+    if (codeCooldown <= 0) return;
+    const timer = window.setInterval(() => setCodeCooldown((current) => Math.max(0, current - 1)), 1000);
+    return () => window.clearInterval(timer);
+  }, [codeCooldown > 0]);
+
   function changeSignup(field: keyof typeof signup, value: string) {
     setSignup((current) => ({ ...current, [field]: value }));
     setError("");
   }
 
+  function validLoginEmail() {
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
+      setError("Digite um e-mail válido para continuar.");
+      return false;
+    }
+    return true;
+  }
+
   function goToPassword(event: FormEvent) {
     event.preventDefault();
-    if (!/^\S+@\S+\.\S+$/.test(email)) { setError("Digite um e-mail válido para continuar."); return; }
+    if (!validLoginEmail()) return;
     setError("");
+    setNotice("");
     setLoginStep("password");
   }
 
@@ -70,6 +89,54 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
     const result = await onLogin(email, password);
     setSubmitting(false);
     if (!result.ok) setError(result.message);
+  }
+
+  async function sendLoginCode() {
+    if (!validLoginEmail()) return;
+    setError("");
+    setNotice("");
+    setSubmitting(true);
+    try {
+      await requestLoginCode(email);
+      setLoginCode("");
+      setCodeCooldown(60);
+      setLoginStep("code");
+      setNotice("Enviamos um código de acesso para seu e-mail.");
+    } catch (sendError) {
+      setError(sendError instanceof Error ? sendError.message : "Não foi possível enviar o código agora.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function submitLoginCode(event: FormEvent) {
+    event.preventDefault();
+    const cleanCode = loginCode.replace(/\D/g, "");
+    if (cleanCode.length < 6) { setError("Digite o código completo enviado ao seu e-mail."); return; }
+    setError("");
+    setSubmitting(true);
+    try {
+      await verifyLoginCode(email, cleanCode);
+    } catch (verifyError) {
+      setError(verifyError instanceof Error ? verifyError.message : "Não foi possível validar o código agora.");
+      setSubmitting(false);
+    }
+  }
+
+  async function resendLoginCode() {
+    if (codeCooldown > 0 || submitting) return;
+    setError("");
+    setNotice("");
+    setSubmitting(true);
+    try {
+      await requestLoginCode(email);
+      setCodeCooldown(60);
+      setNotice("Um novo código foi enviado para seu e-mail.");
+    } catch (sendError) {
+      setError(sendError instanceof Error ? sendError.message : "Não foi possível reenviar o código agora.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   async function submitGoogleLogin() {
@@ -136,13 +203,18 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
     event.preventDefault();
     if (!/^\S+@\S+\.\S+$/.test(email)) { setError("Digite o e-mail cadastrado para recuperar o acesso."); return; }
     setError(""); setNotice(""); setSubmitting(true);
-    const result = await onResetPassword(email);
-    setSubmitting(false);
-    if (result.ok) setNotice(result.message); else setError(result.message);
+    try {
+      await requestBrandedPasswordRecovery(email);
+      setNotice("Se houver uma conta com este e-mail, você receberá um link seguro para criar uma nova senha.");
+    } catch (resetError) {
+      setError(resetError instanceof Error ? resetError.message : "Não foi possível enviar a recuperação agora.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   function switchMode(next: "login" | "signup") {
-    setMode(next); setLoginStep("email"); setError(""); setNotice("");
+    setMode(next); setLoginStep("email"); setLoginCode(""); setCodeCooldown(0); setError(""); setNotice("");
   }
 
   function openAuth(next: "login" | "signup", step: "email" | "staff" = "email") {
@@ -214,13 +286,29 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup, onRes
                 {notice && <p className="form-notice" role="status">{notice}</p>}
                 {error && <p className="form-error" role="alert">{error}</p>}
                 <button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Entrando…" : "Entrar"}</button>
+                <div className="auth-divider"><span>ou</span></div>
+                <button className="secondary-button full" type="button" onClick={() => void sendLoginCode()} disabled={submitting}><MailCheck size={18} /> {submitting ? "Enviando código…" : "Entrar com código"}</button>
+              </form>
+            ) : loginStep === "code" ? (
+              <form onSubmit={submitLoginCode}>
+                <button className="auth-back" type="button" onClick={() => { setLoginStep("password"); setLoginCode(""); setError(""); setNotice(""); }}><ArrowLeft size={17} /> Voltar</button>
+                <div className="auth-icon"><MailCheck size={22} /></div>
+                <h1>Código de acesso</h1>
+                <p className="auth-subtitle">Digite o código que enviamos para seu e-mail.</p>
+                <button className="identity-chip" type="button" onClick={() => { setLoginStep("email"); setLoginCode(""); }}><span>{email.charAt(0).toUpperCase()}</span>{email}</button>
+                <Field label="Código" hint="O código é de uso único e expira automaticamente."><input className="login-code-input" type="text" inputMode="numeric" pattern="[0-9]*" value={loginCode} onChange={(event) => { setLoginCode(event.target.value.replace(/\D/g, "").slice(0, 10)); setError(""); }} placeholder="000000" autoComplete="one-time-code" maxLength={10} autoFocus /></Field>
+                {notice && <p className="form-notice" role="status">{notice}</p>}
+                {error && <p className="form-error" role="alert">{error}</p>}
+                <button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Validando…" : "Confirmar código"}</button>
+                <button className="text-button" type="button" onClick={() => void resendLoginCode()} disabled={submitting || codeCooldown > 0}>{codeCooldown > 0 ? `Reenviar código em ${codeCooldown}s` : "Reenviar código"}</button>
+                <p className="auth-switch">Prefere sua senha? <button type="button" onClick={() => { setLoginStep("password"); setError(""); setNotice(""); }}>Entrar com senha</button></p>
               </form>
             ) : (
               <form onSubmit={submitPasswordReset}>
                 <button className="auth-back" type="button" onClick={() => { setLoginStep("password"); setError(""); setNotice(""); }}><ArrowLeft size={17} /> Voltar</button>
                 <div className="auth-icon"><LockKeyhole size={22} /></div>
                 <h1>Recuperar acesso</h1>
-                <p className="auth-subtitle">Enviaremos um link seguro para você criar uma nova senha.</p>
+                <p className="auth-subtitle">Enviaremos pelo Hydra Agro um link seguro e temporário para você criar uma nova senha.</p>
                 <Field label="E-mail cadastrado"><input type="email" value={email} onChange={(event) => { setEmail(event.target.value); setError(""); setNotice(""); }} placeholder="voce@email.com" autoComplete="email" autoFocus /></Field>
                 {notice && <p className="form-notice" role="status">{notice}</p>}
                 {error && <p className="form-error" role="alert">{error}</p>}
