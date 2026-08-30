@@ -2,7 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, x-hydra-client, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
@@ -114,7 +114,6 @@ Deno.serve(async (req) => {
       saveGuard(admin, ipGuardId, purpose, ipGuard.count ?? 1, ipGuard.windowStartedAt ?? new Date().toISOString()),
     ]);
 
-    // Resposta genérica evita revelar se o e-mail possui conta.
     if (error || !data?.properties) {
       if (error) console.info("auth-email generateLink skipped", error.code || error.message);
       return json({ ok: true });
