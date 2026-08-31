@@ -2,6 +2,7 @@ import { BadgeCheck, Beef as Cow, ExternalLink, Fingerprint, MapPin, Nfc, Shield
 import { useEffect, useMemo, useState } from "react";
 import type { Animal } from "../../lib/hydra-types";
 import { publicMediaUrl, requireSupabase } from "../../services/supabase";
+import "./found-animal-contact-runtime";
 
 export type PublicAnimalOrigin = {
   propertyName?: string;
@@ -131,33 +132,40 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
     setReportError("");
     try {
       const client = requireSupabase();
+      const { data: authData } = await client.auth.getUser();
+      if (!authData.user) {
+        setReportError("Para avisar o proprietário com seu perfil e contato, entre na sua conta do Hydra Agro neste navegador e abra a Hydra Tag novamente.");
+        return;
+      }
+
       const { data, error } = await client.rpc("report_found_animal", { p_code: animal.identification, p_message: null });
       if (error) throw error;
 
       const reportId = data && typeof data === "object" && "reportId" in data
         ? String((data as { reportId?: unknown }).reportId ?? "")
         : "";
+      if (!reportId) throw new Error("Ocorrência sem identificador.");
 
-      if (reportId) {
-        try {
-          await client.functions.invoke("found-animal-email", {
-            body: { reportId, hydraCode: animal.identification },
-          });
-        } catch {
-          // O aviso interno já foi registrado; falha de e-mail não deve invalidar a ocorrência.
-        }
+      const { data: emailData, error: emailError } = await client.functions.invoke("found-animal-email", {
+        body: { reportId, hydraCode: animal.identification },
+      });
+      if (emailError || !emailData?.ok) {
+        setReported(true);
+        setReportError(String(emailData?.message || "O aviso foi registrado no Hydra Agro, mas o e-mail não pôde ser enviado agora."));
+        return;
       }
 
       setReported(true);
-    } catch {
-      setReportError("Não foi possível enviar o aviso agora. Tente novamente em instantes.");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "";
+      setReportError(message.includes("login") ? message : "Não foi possível enviar o aviso agora. Tente novamente em instantes.");
     } finally {
       setReporting(false);
     }
   }
 
   return (
-    <main className="public-animal-page">
+    <main className="public-animal-page" style={{ height: "100dvh", overflowY: "auto", WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}>
       <section className="public-animal-shell">
         <header className="public-animal-brand">
           <span className="public-animal-logo"><Cow size={27} /></span>
@@ -203,7 +211,7 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
         {isLost && (
           <section className="public-animal-section">
             {reported ? (
-              <div className="public-animal-validation"><span className="public-animal-validation-icon"><ShieldCheck size={21} /></span><div><strong>Aviso enviado</strong><p>O proprietário recebeu uma notificação dentro do Hydra Agro e, quando disponível, também por e-mail. Seus dados pessoais não foram compartilhados.</p></div></div>
+              <div className="public-animal-validation"><span className="public-animal-validation-icon"><ShieldCheck size={21} /></span><div><strong>Aviso registrado</strong><p>O proprietário recebeu a ocorrência no Hydra Agro. Quando o e-mail é enviado, ele recebe seu nome, contato e botões para abrir seu perfil e conversar com você.</p></div></div>
             ) : (
               <button className="public-animal-open" onClick={() => void reportFound()} disabled={reporting}>{reporting ? "Enviando aviso…" : "Encontrei este animal"}</button>
             )}
@@ -213,7 +221,7 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
 
         <div className="public-animal-privacy">
           <ShieldCheck size={20} />
-          <p><strong>Privacidade protegida</strong><small>Esta ficha não mostra telefone, e-mail, CEP nem endereço da propriedade. O aviso de animal encontrado é enviado internamente pelo Hydra Agro.</small></p>
+          <p><strong>Privacidade protegida</strong><small>Esta ficha não mostra telefone, e-mail, CEP nem endereço da propriedade. Ao informar que encontrou o animal, seu perfil e contato ficam disponíveis somente ao proprietário vinculado à ocorrência.</small></p>
         </div>
 
         <button className="public-animal-open" onClick={onOpenApp}><ExternalLink size={18} /> Abrir Hydra Agro</button>
