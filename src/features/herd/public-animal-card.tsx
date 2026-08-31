@@ -1,8 +1,9 @@
-import { BadgeCheck, Beef as Cow, ExternalLink, Fingerprint, MapPin, Nfc, ShieldCheck, TriangleAlert } from "lucide-react";
+import { BadgeCheck, Beef as Cow, ExternalLink, Fingerprint, LogIn, MapPin, Nfc, ShieldCheck, TriangleAlert } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import type { Animal } from "../../lib/hydra-types";
 import { publicMediaUrl, requireSupabase } from "../../services/supabase";
 import "./found-animal-contact-runtime";
+import { PENDING_FOUND_ANIMAL_URL_KEY } from "./found-animal-login-return-runtime";
 
 export type PublicAnimalOrigin = {
   propertyName?: string;
@@ -97,6 +98,24 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
   const [reporting, setReporting] = useState(false);
   const [reported, setReported] = useState(false);
   const [reportError, setReportError] = useState("");
+  const [finderLoggedIn, setFinderLoggedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    const client = requireSupabase();
+    void client.auth.getUser().then(({ data }) => {
+      if (active) setFinderLoggedIn(Boolean(data.user));
+    }).catch(() => {
+      if (active) setFinderLoggedIn(false);
+    });
+    const { data: listener } = client.auth.onAuthStateChange((_event, session) => {
+      if (active) setFinderLoggedIn(Boolean(session?.user));
+    });
+    return () => {
+      active = false;
+      listener.subscription.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -127,14 +146,29 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
   const photoUrl = rawPhotoUrl ? `${rawPhotoUrl}${rawPhotoUrl.includes("?") ? "&" : "?"}hydra=${Date.now()}` : undefined;
   const location = [current.municipality, current.state].filter(Boolean).join(" / ");
 
+  function openLoginForReport() {
+    try {
+      window.sessionStorage.setItem(PENDING_FOUND_ANIMAL_URL_KEY, window.location.href);
+    } catch {
+      // Se o navegador bloquear sessionStorage, o login ainda continua disponível.
+    }
+    window.location.assign(clearPublicAnimalParams());
+  }
+
   async function reportFound() {
+    if (finderLoggedIn === false) {
+      openLoginForReport();
+      return;
+    }
+
     setReporting(true);
     setReportError("");
     try {
       const client = requireSupabase();
       const { data: authData } = await client.auth.getUser();
       if (!authData.user) {
-        setReportError("Para avisar o proprietário com seu perfil e contato, entre na sua conta do Hydra Agro neste navegador e abra a Hydra Tag novamente.");
+        setFinderLoggedIn(false);
+        openLoginForReport();
         return;
       }
 
@@ -212,8 +246,13 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
           <section className="public-animal-section">
             {reported ? (
               <div className="public-animal-validation"><span className="public-animal-validation-icon"><ShieldCheck size={21} /></span><div><strong>Aviso registrado</strong><p>O proprietário recebeu a ocorrência no Hydra Agro. Quando o e-mail é enviado, ele recebe seu nome, contato e botões para abrir seu perfil e conversar com você.</p></div></div>
+            ) : finderLoggedIn === false ? (
+              <>
+                <button className="public-animal-open" onClick={openLoginForReport}><LogIn size={18} /> Entrar para avisar o proprietário</button>
+                <p className="public-animal-login-note">Você volta automaticamente para esta Hydra Tag depois do login.</p>
+              </>
             ) : (
-              <button className="public-animal-open" onClick={() => void reportFound()} disabled={reporting}>{reporting ? "Enviando aviso…" : "Encontrei este animal"}</button>
+              <button className="public-animal-open" onClick={() => void reportFound()} disabled={reporting || finderLoggedIn === null}>{reporting ? "Enviando aviso…" : finderLoggedIn === null ? "Verificando acesso…" : "Encontrei este animal"}</button>
             )}
             {reportError && <p className="form-error" role="alert">{reportError}</p>}
           </section>
