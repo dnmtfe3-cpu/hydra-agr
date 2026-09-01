@@ -1,4 +1,5 @@
 import { supabase } from "../../services/supabase";
+import "../notifications/web-push-runtime";
 import "../community/community-social-runtime";
 import "../community/community-search-report-runtime";
 import "../community/community-header-fix.css";
