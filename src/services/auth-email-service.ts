@@ -1,5 +1,5 @@
 import { Capacitor } from "@capacitor/core";
-import { requireSupabase } from "./supabase";
+import { clearPendingSignupProof, requireSupabase, setPendingSignupProof } from "./supabase";
 
 type ChallengePurpose = "signup" | "password_reset" | "password_change";
 
@@ -32,6 +32,7 @@ async function invokeAuthEmail(body: Record<string, unknown>) {
 }
 
 async function requestChallenge(purpose: ChallengePurpose, email: string) {
+  if (purpose === "signup") clearPendingSignupProof();
   return invokeAuthEmail({
     action: "request",
     purpose,
@@ -87,6 +88,7 @@ export async function requestSignupCode(email: string) {
 export async function verifySignupCode(email: string, code: string) {
   const result = await verifyChallenge("signup", email, code);
   if (!result.verificationToken) throw new Error("Não foi possível confirmar seu e-mail agora.");
+  setPendingSignupProof(result.verificationToken);
   return result.verificationToken;
 }
 
