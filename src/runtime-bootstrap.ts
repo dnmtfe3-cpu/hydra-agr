@@ -1,3 +1,4 @@
+import "./student-hub-inject";
 import { App as CapacitorApp } from "@capacitor/app";
 import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
