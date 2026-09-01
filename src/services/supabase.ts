@@ -10,6 +10,17 @@ export const backendConfigured =
   supabaseKey.length > 20 &&
   !supabaseKey.includes("SUBSTITUA");
 
+let pendingSignupProof = "";
+
+export function setPendingSignupProof(token: string) {
+  const normalized = token.trim();
+  pendingSignupProof = /^[a-f0-9]{64}$/i.test(normalized) ? normalized : "";
+}
+
+export function clearPendingSignupProof() {
+  pendingSignupProof = "";
+}
+
 const authStorage = {
   async getItem(key: string) {
     return (await Preferences.get({ key })).value;
@@ -21,6 +32,29 @@ const authStorage = {
     await Preferences.remove({ key });
   },
 };
+
+async function hydraFetch(input: RequestInfo | URL, init?: RequestInit) {
+  const rawUrl = typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
+  const isSignupRequest = rawUrl.includes("/functions/v1/signup-no-confirmation");
+  const headers = new Headers(init?.headers);
+
+  if (isSignupRequest && pendingSignupProof) {
+    headers.set("x-hydra-signup-proof", pendingSignupProof);
+  }
+
+  const response = await fetch(input, { ...init, headers });
+
+  if (isSignupRequest && pendingSignupProof && response.ok) {
+    try {
+      const result = await response.clone().json();
+      if (result?.ok === true) clearPendingSignupProof();
+    } catch {
+      // A prova expira no servidor mesmo se a resposta não puder ser lida.
+    }
+  }
+
+  return response;
+}
 
 export const supabase: SupabaseClient | null = backendConfigured
   ? createClient(supabaseUrl, supabaseKey, {
@@ -37,6 +71,7 @@ export const supabase: SupabaseClient | null = backendConfigured
       },
       global: {
         headers: { "x-hydra-client": "hydra-agro-mobile/1.2.2" },
+        fetch: hydraFetch,
       },
     })
   : null;
