@@ -5,6 +5,7 @@ import {
   Bell,
   BellRing,
   CheckCheck,
+  ChevronRight,
   ClipboardCheck,
   Droplets,
   LoaderCircle,
@@ -16,22 +17,12 @@ import {
 import { EmptyState, ScreenHeader, Toggle } from "../../components/ui";
 import { showAppToast } from "../../components/modal-system";
 import type { HydraAccount, UpdateAccount } from "../../lib/hydra-types";
+import { refreshDailyBriefingCopy } from "../../services/daily-briefing";
 import { supabase } from "../../services/supabase";
+import { DailyBriefingPanel } from "../daily-briefing/daily-briefing-panel";
 
-type Props = {
-  account: HydraAccount;
-  updateAccount: UpdateAccount;
-  onBack: () => void;
-};
-
-type NotificationRow = {
-  id: string;
-  title: string;
-  body: string;
-  kind: string;
-  read_at: string | null;
-  created_at: string;
-};
+type Props = { account: HydraAccount; updateAccount: UpdateAccount; onBack: () => void; };
+type NotificationRow = { id: string; title: string; body: string; kind: string; read_at: string | null; created_at: string; };
 
 function notificationIcon(kind: string) {
   const normalized = kind.toLowerCase();
@@ -42,7 +33,6 @@ function notificationIcon(kind: string) {
   if (normalized.includes("admin")) return <ShieldCheck size={19} />;
   return <BellRing size={19} />;
 }
-
 function notificationKindLabel(kind: string) {
   const normalized = kind.toLowerCase();
   if (normalized.includes("activity") || normalized.includes("task") || normalized.includes("atividade") || normalized.includes("tarefa")) return "Tarefa";
@@ -52,214 +42,49 @@ function notificationKindLabel(kind: string) {
   if (normalized.includes("admin")) return "Hydra Agro";
   return "Aviso";
 }
-
 function dateLabel(value: string) {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "";
-  const today = new Date();
-  const sameDay = date.toDateString() === today.toDateString();
-  if (sameDay) return `Hoje, ${new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" }).format(date)}`;
+  const date = new Date(value); if (Number.isNaN(date.getTime())) return ""; const today = new Date();
+  if (date.toDateString() === today.toDateString()) return `Hoje, ${new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" }).format(date)}`;
   return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }).format(date).replace(" de ", " ");
 }
 
 export function NotificationsScreen({ account, updateAccount, onBack }: Props) {
-  const localItems = useMemo<NotificationRow[]>(() => (
-    account.notifications.map((message, index) => ({
-      id: `local-${index}-${message}`,
-      title: "Aviso do Hydra Agro",
-      body: message,
-      kind: "local",
-      read_at: null,
-      created_at: new Date(Date.now() - index * 60_000).toISOString(),
-    }))
-  ), [account.notifications]);
-
+  const localItems = useMemo<NotificationRow[]>(() => account.notifications.map((message, index) => ({ id: `local-${index}-${message}`, title: "Aviso do Hydra Agro", body: message, kind: "local", read_at: null, created_at: new Date(Date.now() - index * 60_000).toISOString() })), [account.notifications]);
   const [items, setItems] = useState<NotificationRow[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [busyId, setBusyId] = useState<string | null>(null);
-  const [markingAll, setMarkingAll] = useState(false);
-  const [settingsBusy, setSettingsBusy] = useState(false);
-  const [error, setError] = useState("");
-
+  const [loading, setLoading] = useState(true); const [refreshing, setRefreshing] = useState(false); const [busyId, setBusyId] = useState<string | null>(null); const [markingAll, setMarkingAll] = useState(false); const [settingsBusy, setSettingsBusy] = useState(false); const [error, setError] = useState(""); const [dailyBriefingOpen, setDailyBriefingOpen] = useState(false);
   const unreadCount = useMemo(() => items.filter((item) => !item.read_at).length, [items]);
+  const pendingActivities = account.activities.filter((activity) => !activity.done);
+
+  useEffect(() => { void refreshDailyBriefingCopy(account).catch(() => undefined); }, [account.id]);
 
   const loadNotifications = useCallback(async (silent = false) => {
-    if (!silent) setLoading(true);
-    else setRefreshing(true);
-    setError("");
-
-    if (!supabase) {
-      setItems(localItems);
-      setLoading(false);
-      setRefreshing(false);
-      return;
-    }
-
-    try {
-      const { data, error: requestError } = await supabase
-        .from("notifications")
-        .select("id,title,body,kind,read_at,created_at")
-        .eq("recipient_user_id", account.id)
-        .order("created_at", { ascending: false });
-      if (requestError) throw requestError;
-      setItems((data ?? []) as NotificationRow[]);
-    } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Não foi possível carregar as notificações.");
-      if (localItems.length > 0) setItems(localItems);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
+    if (!silent) setLoading(true); else setRefreshing(true); setError("");
+    if (!supabase) { setItems(localItems); setLoading(false); setRefreshing(false); return; }
+    try { const { data, error: requestError } = await supabase.from("notifications").select("id,title,body,kind,read_at,created_at").eq("recipient_user_id", account.id).order("created_at", { ascending: false }); if (requestError) throw requestError; setItems((data ?? []) as NotificationRow[]); }
+    catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível carregar as notificações."); if (localItems.length > 0) setItems(localItems); }
+    finally { setLoading(false); setRefreshing(false); }
   }, [account.id, localItems]);
 
-  useEffect(() => {
-    void loadNotifications();
-    const client = supabase;
-    if (!client) return;
+  useEffect(() => { void loadNotifications(); const client = supabase; if (!client) return; const channel = client.channel(`hydra-notifications-${account.id}`).on("postgres_changes", { event: "*", schema: "public", table: "notifications", filter: `recipient_user_id=eq.${account.id}` }, () => { void loadNotifications(true); }).subscribe(); return () => { void client.removeChannel(channel); }; }, [account.id, loadNotifications]);
 
-    const channel = client
-      .channel(`hydra-notifications-${account.id}`)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "notifications", filter: `recipient_user_id=eq.${account.id}` },
-        () => { void loadNotifications(true); },
-      )
-      .subscribe();
+  async function markRead(item: NotificationRow) { if (item.read_at || busyId) return; setBusyId(item.id); const readAt = new Date().toISOString(); if (!supabase || item.id.startsWith("local-")) { setItems((current) => current.map((entry) => entry.id === item.id ? { ...entry, read_at: readAt } : entry)); setBusyId(null); return; } try { const { error: requestError } = await supabase.from("notifications").update({ read_at: readAt }).eq("id", item.id).eq("recipient_user_id", account.id); if (requestError) throw requestError; setItems((current) => current.map((entry) => entry.id === item.id ? { ...entry, read_at: readAt } : entry)); } catch (caught) { showAppToast(caught instanceof Error ? caught.message : "Não foi possível marcar a notificação como lida.", "error"); } finally { setBusyId(null); } }
+  async function markAllRead() { if (unreadCount === 0 || markingAll) return; setMarkingAll(true); const readAt = new Date().toISOString(); if (!supabase) { setItems((current) => current.map((entry) => entry.read_at ? entry : { ...entry, read_at: readAt })); showAppToast("Todas as notificações foram marcadas como lidas"); setMarkingAll(false); return; } try { const { error: requestError } = await supabase.from("notifications").update({ read_at: readAt }).eq("recipient_user_id", account.id).is("read_at", null); if (requestError) throw requestError; setItems((current) => current.map((entry) => entry.read_at ? entry : { ...entry, read_at: readAt })); showAppToast("Todas as notificações foram marcadas como lidas"); } catch (caught) { showAppToast(caught instanceof Error ? caught.message : "Não foi possível atualizar as notificações.", "error"); } finally { setMarkingAll(false); } }
+  async function changePushNotifications(pushNotifications: boolean) { setSettingsBusy(true); try { await updateAccount((current) => ({ ...current, settings: { ...current.settings, pushNotifications } }), { requireRemote: true }); showAppToast(pushNotifications ? "Avisos do aplicativo ativados" : "Avisos do aplicativo pausados"); } catch (caught) { showAppToast(caught instanceof Error ? caught.message : "Não foi possível salvar a preferência.", "error"); } finally { setSettingsBusy(false); } }
+  async function changeWaterAlerts(waterAlerts: boolean) { setSettingsBusy(true); try { await updateAccount((current) => ({ ...current, settings: { ...current.settings, waterAlerts } }), { requireRemote: true }); showAppToast(waterAlerts ? "Alertas de água ativados" : "Alertas de água pausados"); } catch (caught) { showAppToast(caught instanceof Error ? caught.message : "Não foi possível salvar a preferência.", "error"); } finally { setSettingsBusy(false); } }
 
-    return () => { void client.removeChannel(channel); };
-  }, [account.id, loadNotifications]);
+  return <div className="screen page-enter extra-screen notifications-screen">
+    <ScreenHeader title="Notificações" subtitle={unreadCount > 0 ? `${unreadCount} ${unreadCount === 1 ? "aviso não lido" : "avisos não lidos"}` : "Nenhum aviso novo."} onBack={onBack} action={<button className="icon-button notification-refresh" onClick={() => void loadNotifications(true)} disabled={refreshing} aria-label="Atualizar notificações">{refreshing ? <LoaderCircle size={19} className="spin" /> : <RefreshCw size={19} />}</button>} />
 
-  async function markRead(item: NotificationRow) {
-    if (item.read_at || busyId) return;
-    setBusyId(item.id);
-    const readAt = new Date().toISOString();
+    <button className="history-home-row hydra-alert-shortcut" onClick={() => setDailyBriefingOpen(true)}><span><BellRing size={19} /></span><div><strong>O que fazer hoje</strong><small>{pendingActivities.length ? `${pendingActivities.length} ${pendingActivities.length === 1 ? "tarefa pendente" : "tarefas pendentes"}` : "Tudo em dia na propriedade"}</small></div><ChevronRight size={18} /></button>
 
-    if (!supabase || item.id.startsWith("local-")) {
-      setItems((current) => current.map((entry) => entry.id === item.id ? { ...entry, read_at: readAt } : entry));
-      setBusyId(null);
-      return;
-    }
+    <section className="notification-preferences" aria-label="Preferências de notificação">
+      <div className="notification-preference-row"><span className="notification-preference-icon"><Bell size={20} /></span><div><strong>Avisos do aplicativo</strong><small>Tarefas, monitoramentos, comunidade e avisos da conta.</small></div><Toggle checked={account.settings.pushNotifications} label="Notificações do aplicativo" onChange={(value) => void changePushNotifications(value)} />{settingsBusy && <LoaderCircle size={15} className="spin notification-setting-loader" />}</div>
+      <div className="notification-preference-row"><span className="notification-preference-icon"><Droplets size={20} /></span><div><strong>Alertas de água</strong><small>Avisos ligados ao consumo, economia e atenção na propriedade.</small></div><Toggle checked={account.settings.waterAlerts} label="Alertas de água" onChange={(value) => void changeWaterAlerts(value)} /></div>
+    </section>
 
-    try {
-      const { error: requestError } = await supabase
-        .from("notifications")
-        .update({ read_at: readAt })
-        .eq("id", item.id)
-        .eq("recipient_user_id", account.id);
-      if (requestError) throw requestError;
-      setItems((current) => current.map((entry) => entry.id === item.id ? { ...entry, read_at: readAt } : entry));
-    } catch (caught) {
-      showAppToast(caught instanceof Error ? caught.message : "Não foi possível marcar a notificação como lida.", "error");
-    } finally {
-      setBusyId(null);
-    }
-  }
-
-  async function markAllRead() {
-    if (unreadCount === 0 || markingAll) return;
-    setMarkingAll(true);
-    const readAt = new Date().toISOString();
-
-    if (!supabase) {
-      setItems((current) => current.map((entry) => entry.read_at ? entry : { ...entry, read_at: readAt }));
-      showAppToast("Todas as notificações foram marcadas como lidas");
-      setMarkingAll(false);
-      return;
-    }
-
-    try {
-      const { error: requestError } = await supabase
-        .from("notifications")
-        .update({ read_at: readAt })
-        .eq("recipient_user_id", account.id)
-        .is("read_at", null);
-      if (requestError) throw requestError;
-      setItems((current) => current.map((entry) => entry.read_at ? entry : { ...entry, read_at: readAt }));
-      showAppToast("Todas as notificações foram marcadas como lidas");
-    } catch (caught) {
-      showAppToast(caught instanceof Error ? caught.message : "Não foi possível atualizar as notificações.", "error");
-    } finally {
-      setMarkingAll(false);
-    }
-  }
-
-  async function changePushNotifications(pushNotifications: boolean) {
-    setSettingsBusy(true);
-    try {
-      await updateAccount((current) => ({ ...current, settings: { ...current.settings, pushNotifications } }), { requireRemote: true });
-      showAppToast(pushNotifications ? "Avisos do aplicativo ativados" : "Avisos do aplicativo pausados");
-    } catch (caught) {
-      showAppToast(caught instanceof Error ? caught.message : "Não foi possível salvar a preferência.", "error");
-    } finally {
-      setSettingsBusy(false);
-    }
-  }
-
-  async function changeWaterAlerts(waterAlerts: boolean) {
-    setSettingsBusy(true);
-    try {
-      await updateAccount((current) => ({ ...current, settings: { ...current.settings, waterAlerts } }), { requireRemote: true });
-      showAppToast(waterAlerts ? "Alertas de água ativados" : "Alertas de água pausados");
-    } catch (caught) {
-      showAppToast(caught instanceof Error ? caught.message : "Não foi possível salvar a preferência.", "error");
-    } finally {
-      setSettingsBusy(false);
-    }
-  }
-
-  return (
-    <div className="screen page-enter extra-screen notifications-screen">
-      <ScreenHeader
-        title="Notificações"
-        subtitle={unreadCount > 0 ? `${unreadCount} ${unreadCount === 1 ? "aviso não lido" : "avisos não lidos"}` : "Nenhum aviso novo."}
-        onBack={onBack}
-        action={<button className="icon-button notification-refresh" onClick={() => void loadNotifications(true)} disabled={refreshing} aria-label="Atualizar notificações">{refreshing ? <LoaderCircle size={19} className="spin" /> : <RefreshCw size={19} />}</button>}
-      />
-
-      <section className="notification-preferences" aria-label="Preferências de notificação">
-        <div className="notification-preference-row">
-          <span className="notification-preference-icon"><Bell size={20} /></span>
-          <div><strong>Avisos do aplicativo</strong><small>Tarefas, monitoramentos, comunidade e avisos da conta.</small></div>
-          <Toggle checked={account.settings.pushNotifications} label="Notificações do aplicativo" onChange={(value) => void changePushNotifications(value)} />
-          {settingsBusy && <LoaderCircle size={15} className="spin notification-setting-loader" />}
-        </div>
-        <div className="notification-preference-row">
-          <span className="notification-preference-icon"><Droplets size={20} /></span>
-          <div><strong>Alertas de água</strong><small>Avisos ligados ao consumo, economia e atenção na propriedade.</small></div>
-          <Toggle checked={account.settings.waterAlerts} label="Alertas de água" onChange={(value) => void changeWaterAlerts(value)} />
-        </div>
-      </section>
-
-      <div className="notification-list-head">
-        <div><span>RECENTES</span><strong>Seus avisos</strong></div>
-        {unreadCount > 0 && <button onClick={() => void markAllRead()} disabled={markingAll}>{markingAll ? <LoaderCircle size={15} className="spin" /> : <CheckCheck size={16} />} Marcar todas</button>}
-      </div>
-
-      {error && <div className="notification-error"><Bell size={18} /><span>{error}</span><button onClick={() => void loadNotifications()}>Tentar novamente</button></div>}
-
-      {loading ? (
-        <div className="notification-loading" role="status"><LoaderCircle size={25} className="spin" /><span>Carregando avisos…</span></div>
-      ) : items.length === 0 ? (
-        <EmptyState icon={<Bell size={26} />} title="Nenhuma notificação" text="Quando houver algo importante, o aviso aparece aqui." />
-      ) : (
-        <div className="notification-list notification-list-v2">
-          {items.map((item) => {
-            const unread = !item.read_at;
-            return (
-              <button key={item.id} className={`notification-item ${unread ? "unread" : "read"}`} onClick={() => void markRead(item)} disabled={busyId === item.id}>
-                <span className={`notification-item-icon kind-${item.kind.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>{notificationIcon(item.kind)}</span>
-                <span className="notification-item-copy">
-                  <span className="notification-item-meta"><em>{notificationKindLabel(item.kind)}</em><time>{dateLabel(item.created_at)}</time></span>
-                  <strong>{item.title}</strong>
-                  <small>{item.body}</small>
-                </span>
-                <span className="notification-item-state">{busyId === item.id ? <LoaderCircle size={15} className="spin" /> : unread ? <i aria-label="Não lida" /> : <CheckCheck size={15} />}</span>
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
+    <div className="notification-list-head"><div><span>RECENTES</span><strong>Seus avisos</strong></div>{unreadCount > 0 && <button onClick={() => void markAllRead()} disabled={markingAll}>{markingAll ? <LoaderCircle size={15} className="spin" /> : <CheckCheck size={16} />} Marcar todas</button>}</div>
+    {error && <div className="notification-error"><Bell size={18} /><span>{error}</span><button onClick={() => void loadNotifications()}>Tentar novamente</button></div>}
+    {loading ? <div className="notification-loading" role="status"><LoaderCircle size={25} className="spin" /><span>Carregando avisos…</span></div> : items.length === 0 ? <EmptyState icon={<Bell size={26} />} title="Nenhuma notificação" text="Quando houver algo importante, o aviso aparece aqui." /> : <div className="notification-list notification-list-v2">{items.map((item) => { const unread = !item.read_at; return <button key={item.id} className={`notification-item ${unread ? "unread" : "read"}`} onClick={() => void markRead(item)} disabled={busyId === item.id}><span className={`notification-item-icon kind-${item.kind.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>{notificationIcon(item.kind)}</span><span className="notification-item-copy"><span className="notification-item-meta"><em>{notificationKindLabel(item.kind)}</em><time>{dateLabel(item.created_at)}</time></span><strong>{item.title}</strong><small>{item.body}</small></span><span className="notification-item-state">{busyId === item.id ? <LoaderCircle size={15} className="spin" /> : unread ? <i aria-label="Não lida" /> : <CheckCheck size={15} />}</span></button>; })}</div>}
+    <DailyBriefingPanel account={account} open={dailyBriefingOpen} onClose={() => setDailyBriefingOpen(false)} />
+  </div>;
 }
