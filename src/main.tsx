@@ -2,14 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import ReactDOM from "react-dom/client";
 import { Capacitor } from "@capacitor/core";
-import {
-  Check,
-  ChevronRight,
-  FileSpreadsheet,
-  Moon,
-  Palette,
-  Sun,
-} from "lucide-react";
+import { Check, ChevronRight, FileSpreadsheet, Moon, Palette, Sun } from "lucide-react";
 import "@fontsource/manrope/latin-400.css";
 import "@fontsource/manrope/latin-500.css";
 import "@fontsource/manrope/latin-600.css";
@@ -39,41 +32,30 @@ import { requireSupabase } from "./services/supabase";
 import { HydraSpreadsheetPanel } from "./features/spreadsheets/hydra-spreadsheet-panel";
 
 type ThemeMode = "light" | "dark";
-
 const THEME_KEY = "hydra-agro.theme";
-
-function savedTheme(): ThemeMode {
-  try {
-    return window.localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light";
-  } catch {
-    return "light";
-  }
-}
+function savedTheme(): ThemeMode { try { return window.localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light"; } catch { return "light"; } }
 
 function openDailyBriefingPanelFromNotification() {
   let observer: MutationObserver | null = null;
-
   const tryOpen = () => {
-    const homeButton = Array.from(document.querySelectorAll<HTMLButtonElement>(".bottom-nav button"))
-      .find((button) => button.textContent?.trim().includes("Início"));
-    if (homeButton && !homeButton.classList.contains("active")) {
-      homeButton.click();
-      return false;
-    }
-
+    const notificationButton = Array.from(document.querySelectorAll<HTMLButtonElement>("button"))
+      .find((button) => button.getAttribute("aria-label") === "Notificações");
     const briefingButton = Array.from(document.querySelectorAll<HTMLButtonElement>("button"))
       .find((button) => button.textContent?.includes("O que fazer hoje"));
+    if (!briefingButton && notificationButton) { notificationButton.click(); return false; }
     if (!briefingButton) return false;
-
-    briefingButton.click();
-    observer?.disconnect();
-    observer = null;
-    return true;
+    briefingButton.click(); observer?.disconnect(); observer = null; return true;
   };
-
   if (tryOpen()) return;
   observer = new MutationObserver(() => { void tryOpen(); });
   observer.observe(document.body, { childList: true, subtree: true });
+}
+
+function openNotificationsScreen() {
+  window.focus();
+  const button = Array.from(document.querySelectorAll<HTMLButtonElement>("button"))
+    .find((item) => item.getAttribute("aria-label") === "Notificações");
+  button?.click();
 }
 
 function HydraThemeRoot() {
@@ -84,121 +66,50 @@ function HydraThemeRoot() {
   const [spreadsheetAccount, setSpreadsheetAccount] = useState<HydraAccount | null>(null);
   const [spreadsheetLoading, setSpreadsheetLoading] = useState(false);
 
+  useEffect(() => { try { window.localStorage.setItem(THEME_KEY, theme); } catch { /* armazenamento indisponível */ } }, [theme]);
+
   useEffect(() => {
-    try { window.localStorage.setItem(THEME_KEY, theme); } catch { /* armazenamento indisponível */ }
-  }, [theme]);
+    if (Capacitor.isNativePlatform() || typeof window === "undefined" || !("Notification" in window)) return;
+    const client = requireSupabase();
+    let channel: ReturnType<typeof client.channel> | null = null;
+    let active = true;
+    const subscribeForUser = async () => {
+      const { data: { user } } = await client.auth.getUser();
+      if (!active || !user) return;
+      channel = client.channel(`hydra-web-system-notifications-${user.id}`).on("postgres_changes", { event: "INSERT", schema: "public", table: "notifications", filter: `recipient_user_id=eq.${user.id}` }, (payload) => {
+        if (Notification.permission !== "granted") return;
+        const row = payload.new as { title?: string; body?: string; id?: string };
+        const notification = new Notification(row.title || "Hydra Agro", { body: row.body || "Você recebeu um novo aviso.", tag: row.id || undefined, icon: "/icons/icon-192.png" });
+        notification.onclick = () => { notification.close(); openNotificationsScreen(); };
+      }).subscribe();
+    };
+    void subscribeForUser();
+    return () => { active = false; if (channel) void client.removeChannel(channel); };
+  }, []);
 
   useEffect(() => {
     if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== "android") return;
-    void import("@capacitor/local-notifications").then(async ({ LocalNotifications }) => {
-      const permission = await LocalNotifications.checkPermissions();
-      if (permission.display !== "granted") await LocalNotifications.requestPermissions();
-    }).catch(() => undefined);
+    void import("@capacitor/local-notifications").then(async ({ LocalNotifications }) => { const permission = await LocalNotifications.checkPermissions(); if (permission.display !== "granted") await LocalNotifications.requestPermissions(); }).catch(() => undefined);
   }, []);
 
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return;
     let handle: { remove: () => Promise<void> } | undefined;
-    void import("@capacitor/local-notifications")
-      .then(({ LocalNotifications }) => LocalNotifications.addListener("localNotificationActionPerformed", (action) => {
-        if (action.notification.extra?.route === "today" && action.notification.extra?.source === "daily-briefing") {
-          openDailyBriefingPanelFromNotification();
-        }
-      }))
-      .then((listener) => { handle = listener; });
+    void import("@capacitor/local-notifications").then(({ LocalNotifications }) => LocalNotifications.addListener("localNotificationActionPerformed", (action) => { if (action.notification.extra?.route === "today" && action.notification.extra?.source === "daily-briefing") openDailyBriefingPanelFromNotification(); })).then((listener) => { handle = listener; });
     return () => { void handle?.remove(); };
   }, []);
 
   useEffect(() => {
-    function findProfileMenu() {
-      const groups = Array.from(document.querySelectorAll<HTMLElement>(".profile-screen .profile-group"));
-      const accountGroup = groups.find((group) => group.querySelector(".group-label")?.textContent?.trim() === "MINHA CONTA");
-      const nextTarget = accountGroup?.querySelector<HTMLElement>(".profile-menu-card") ?? null;
-      setProfileMenuTarget((current) => current === nextTarget ? current : nextTarget);
-      if (!nextTarget) setAppearanceOpen(false);
-    }
-
-    findProfileMenu();
-    const observer = new MutationObserver(findProfileMenu);
-    observer.observe(document.body, { childList: true, subtree: true });
-    return () => observer.disconnect();
+    function findProfileMenu() { const groups = Array.from(document.querySelectorAll<HTMLElement>(".profile-screen .profile-group")); const accountGroup = groups.find((group) => group.querySelector(".group-label")?.textContent?.trim() === "MINHA CONTA"); const nextTarget = accountGroup?.querySelector<HTMLElement>(".profile-menu-card") ?? null; setProfileMenuTarget((current) => current === nextTarget ? current : nextTarget); if (!nextTarget) setAppearanceOpen(false); }
+    findProfileMenu(); const observer = new MutationObserver(findProfileMenu); observer.observe(document.body, { childList: true, subtree: true }); return () => observer.disconnect();
   }, []);
 
-  function chooseTheme(next: ThemeMode) {
-    setTheme(next);
-    setAppearanceOpen(false);
-  }
+  function chooseTheme(next: ThemeMode) { setTheme(next); setAppearanceOpen(false); }
+  async function openSpreadsheet() { if (spreadsheetLoading) return; setSpreadsheetLoading(true); try { const client = requireSupabase(); const { data: { user } } = await client.auth.getUser(); if (!user) return; const account = await loadAccount(user); setSpreadsheetAccount(account); setSpreadsheetOpen(true); } catch (error) { console.error("[Hydra Agro] Não foi possível abrir a Hydra Planilha:", error); } finally { setSpreadsheetLoading(false); } }
 
-  async function openSpreadsheet() {
-    if (spreadsheetLoading) return;
-    setSpreadsheetLoading(true);
-    try {
-      const client = requireSupabase();
-      const { data: { user } } = await client.auth.getUser();
-      if (!user) return;
-      const account = await loadAccount(user);
-      setSpreadsheetAccount(account);
-      setSpreadsheetOpen(true);
-    } catch (error) {
-      console.error("[Hydra Agro] Não foi possível abrir a Hydra Planilha:", error);
-    } finally {
-      setSpreadsheetLoading(false);
-    }
-  }
+  const profileRows = profileMenuTarget ? createPortal(<><button className="profile-menu-row profile-spreadsheet-row" onClick={() => void openSpreadsheet()} disabled={spreadsheetLoading}><span className="profile-menu-icon"><FileSpreadsheet size={21} /></span><div><strong>Hydra Planilha</strong><small>{spreadsheetLoading ? "Carregando dados…" : "Exportar dados para Excel ou WhatsApp"}</small></div><ChevronRight size={19} /></button><button className="profile-menu-row theme-menu-row" onClick={() => setAppearanceOpen(true)}><span className="profile-menu-icon"><Palette size={21} /></span><div><strong>Aparência</strong><small>{theme === "dark" ? "Modo escuro" : "Modo claro"}</small></div><ChevronRight size={19} /></button></>, profileMenuTarget) : null;
 
-  const profileRows = profileMenuTarget ? createPortal(
-    <>
-      <button className="profile-menu-row profile-spreadsheet-row" onClick={() => void openSpreadsheet()} disabled={spreadsheetLoading}>
-        <span className="profile-menu-icon"><FileSpreadsheet size={21} /></span>
-        <div><strong>Hydra Planilha</strong><small>{spreadsheetLoading ? "Carregando dados…" : "Exportar dados para Excel ou WhatsApp"}</small></div>
-        <ChevronRight size={19} />
-      </button>
-      <button className="profile-menu-row theme-menu-row" onClick={() => setAppearanceOpen(true)}>
-        <span className="profile-menu-icon"><Palette size={21} /></span>
-        <div><strong>Aparência</strong><small>{theme === "dark" ? "Modo escuro" : "Modo claro"}</small></div>
-        <ChevronRight size={19} />
-      </button>
-    </>,
-    profileMenuTarget,
-  ) : null;
-
-  return (
-    <div className={`hydra-root theme-${theme}`}>
-      <HydraApp />
-      {profileRows}
-
-      {spreadsheetAccount && (
-        <HydraSpreadsheetPanel account={spreadsheetAccount} open={spreadsheetOpen} onClose={() => setSpreadsheetOpen(false)} />
-      )}
-
-      {appearanceOpen && (
-        <div className="theme-dialog-backdrop" onMouseDown={() => setAppearanceOpen(false)}>
-          <section className="theme-dialog" role="dialog" aria-modal="true" aria-labelledby="theme-dialog-title" onMouseDown={(event) => event.stopPropagation()}>
-            <span className="theme-dialog-kicker">APARÊNCIA</span>
-            <h2 id="theme-dialog-title">Escolher tema</h2>
-            <p>Use o visual que ficar mais confortável para você. A escolha fica salva neste aparelho.</p>
-            <div className="theme-option-list">
-              <button className={`theme-option ${theme === "light" ? "active" : ""}`} onClick={() => chooseTheme("light")}>
-                <span><Sun size={21} /></span>
-                <div><strong>Claro</strong><small>Visual original do Hydra Agro</small></div>
-                {theme === "light" && <Check size={19} />}
-              </button>
-              <button className={`theme-option ${theme === "dark" ? "active" : ""}`} onClick={() => chooseTheme("dark")}>
-                <span><Moon size={21} /></span>
-                <div><strong>Escuro</strong><small>Verde profundo com contraste suave</small></div>
-                {theme === "dark" && <Check size={19} />}
-              </button>
-            </div>
-            <button className="theme-dialog-close" onClick={() => setAppearanceOpen(false)}>Cancelar</button>
-          </section>
-        </div>
-      )}
-    </div>
-  );
+  return <div className={`hydra-root theme-${theme}`}><HydraApp />{profileRows}{spreadsheetAccount && <HydraSpreadsheetPanel account={spreadsheetAccount} open={spreadsheetOpen} onClose={() => setSpreadsheetOpen(false)} />}{appearanceOpen && <div className="theme-dialog-backdrop" onMouseDown={() => setAppearanceOpen(false)}><section className="theme-dialog" role="dialog" aria-modal="true" aria-labelledby="theme-dialog-title" onMouseDown={(event) => event.stopPropagation()}><span className="theme-dialog-kicker">APARÊNCIA</span><h2 id="theme-dialog-title">Escolher tema</h2><p>Use o visual que ficar mais confortável para você. A escolha fica salva neste aparelho.</p><div className="theme-option-list"><button className={`theme-option ${theme === "light" ? "active" : ""}`} onClick={() => chooseTheme("light")}><span><Sun size={21} /></span><div><strong>Claro</strong><small>Visual original do Hydra Agro</small></div>{theme === "light" && <Check size={19} />}</button><button className={`theme-option ${theme === "dark" ? "active" : ""}`} onClick={() => chooseTheme("dark")}><span><Moon size={21} /></span><div><strong>Escuro</strong><small>Verde profundo com contraste suave</small></div>{theme === "dark" && <Check size={19} />}</button></div><button className="theme-dialog-close" onClick={() => setAppearanceOpen(false)}>Cancelar</button></section></div>}</div>;
 }
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <HydraThemeRoot />
-  </React.StrictMode>,
-);
+ReactDOM.createRoot(document.getElementById("root")!).render(<React.StrictMode><HydraThemeRoot /></React.StrictMode>);
