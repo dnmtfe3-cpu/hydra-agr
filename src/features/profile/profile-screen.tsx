@@ -288,6 +288,7 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
 
           <span className="profile-settings-label">INFORMAÇÕES</span>
           <div className="profile-menu-card">
+            <MenuRow icon={<FileText size={21} />} title="Jurídico" subtitle="LGPD, responsabilidades e direitos" onClick={() => { setSettingsOpen(false); setInfo("legal"); }} />
             <MenuRow icon={<FileText size={21} />} title="Termos de uso" onClick={() => { setSettingsOpen(false); setInfo("terms"); }} />
             <MenuRow icon={<ShieldCheck size={21} />} title="Política de privacidade" onClick={() => { setSettingsOpen(false); setInfo("privacy"); }} />
             <MenuRow icon={<CircleHelp size={21} />} title="Créditos" subtitle="Projeto, desenvolvimento e tecnologias" onClick={() => { setSettingsOpen(false); setInfo("credits"); }} />
@@ -357,8 +358,8 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
         </div>
       </Modal>
 
-      <Modal open={Boolean(info)} onClose={() => setInfo(null)} eyebrow="HYDRA AGRO" title={info === "terms" ? "Termos de uso" : info === "privacy" ? "Política de privacidade" : info === "credits" ? "Créditos" : "Sobre o Hydra Agro"} wide>
-        {info && <ProfileInformation kind={info} onClose={() => setInfo(null)} onEmail={() => openSupportEmail(info === "privacy" ? "Privacidade e dados — Hydra Agro" : "Informações — Hydra Agro")} onInstagram={() => openInstagram("support")} />}
+      <Modal open={Boolean(info)} onClose={() => setInfo(null)} eyebrow="HYDRA AGRO" title={info === "legal" ? "Informações jurídicas" : info === "terms" ? "Termos de uso" : info === "privacy" ? "Política de privacidade" : info === "credits" ? "Créditos" : "Sobre o Hydra Agro"} wide>
+        {info && <ProfileInformation kind={info} onClose={() => setInfo(null)} onEmail={() => openSupportEmail(info === "legal" ? "Jurídico e privacidade — Hydra Agro" : info === "privacy" ? "Privacidade e dados — Hydra Agro" : "Informações — Hydra Agro")} onInstagram={() => openInstagram("support")} />}
       </Modal>
 
       <Modal open={logoutConfirm} onClose={() => setLogoutConfirm(false)} eyebrow="CONFIRMAÇÃO" title="Finalizar sessão" centered dismissible={saving !== "logout"}>
