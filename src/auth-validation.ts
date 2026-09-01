@@ -1,9 +1,7 @@
-import { supabase } from "./services/supabase";
-
 const submitBypass = new WeakSet<HTMLFormElement>();
 const emailPattern = /^\S+@\S+\.\S+$/;
 
-let lastVerifiedLoginEmail = "";
+let lastLoginEmail = "";
 let pendingPasswordLogin: { email: string; submittedAt: number; sawUnmount: boolean } | null = null;
 let restoreBusy = false;
 
@@ -22,19 +20,6 @@ function showInlineError(form: HTMLFormElement, message: string) {
   const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
   if (submit) submit.before(error);
   else form.appendChild(error);
-}
-
-async function emailExists(email: string) {
-  if (!supabase) return null;
-
-  const { data, error } = await supabase.functions.invoke("auth-email-status", {
-    body: { email: email.trim().toLowerCase() },
-  });
-  if (error) throw error;
-
-  const response = data as { ok?: boolean; exists?: boolean; message?: string } | null;
-  if (!response?.ok) throw new Error(response?.message || "Não foi possível verificar este e-mail agora.");
-  return Boolean(response.exists);
 }
 
 function isOwnerLoginEmailStep(form: HTMLFormElement) {
@@ -56,16 +41,16 @@ function isSignupFirstStep(form: HTMLFormElement) {
 
 function rememberPasswordAttempt(form: HTMLFormElement) {
   const passwordInput = form.querySelector<HTMLInputElement>('input[autocomplete="current-password"]');
-  if (!passwordInput || !lastVerifiedLoginEmail) return;
+  if (!passwordInput || !lastLoginEmail) return;
 
   pendingPasswordLogin = {
-    email: lastVerifiedLoginEmail,
+    email: lastLoginEmail,
     submittedAt: Date.now(),
     sawUnmount: false,
   };
 }
 
-async function validateEmailBeforeSubmit(event: SubmitEvent) {
+function validateEmailBeforeSubmit(event: SubmitEvent) {
   const form = event.target instanceof HTMLFormElement ? event.target : null;
   if (!form) return;
 
@@ -82,41 +67,12 @@ async function validateEmailBeforeSubmit(event: SubmitEvent) {
 
   const emailInput = form.querySelector<HTMLInputElement>('input[type="email"]');
   const email = emailInput?.value.trim().toLowerCase() ?? "";
-  if (!emailPattern.test(email) || !supabase) return;
+  if (!emailPattern.test(email)) return;
 
-  event.preventDefault();
-  event.stopImmediatePropagation();
-  removeInlineError(form);
-
-  const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
-  const oldDisabled = submit?.disabled ?? false;
-  if (submit) submit.disabled = true;
-
-  try {
-    const exists = await emailExists(email);
-
-    if (loginStep && exists === false) {
-      lastVerifiedLoginEmail = "";
-      showInlineError(form, "E-mail não encontrado. Confira o endereço ou crie uma conta.");
-      emailInput?.focus();
-      return;
-    }
-
-    if (signupStep && exists === true) {
-      showInlineError(form, "Este e-mail já está vinculado a uma conta. Entre na conta existente ou use outro e-mail.");
-      emailInput?.focus();
-      return;
-    }
-
-    if (loginStep) lastVerifiedLoginEmail = email;
-
-    submitBypass.add(form);
-    form.requestSubmit();
-  } catch {
-    showInlineError(form, "Não foi possível verificar este e-mail agora. Tente novamente.");
-  } finally {
-    if (submit?.isConnected) submit.disabled = oldDisabled;
-  }
+  // Não consultamos previamente se o e-mail existe. Essa checagem permitia
+  // enumeração de contas. O servidor de autenticação permanece como fonte
+  // de verdade e as mensagens mostradas ao usuário são deliberadamente neutras.
+  if (loginStep) lastLoginEmail = email;
 }
 
 function normalizeAuthMessages() {
@@ -124,8 +80,14 @@ function normalizeAuthMessages() {
   if (passwordInput) {
     document.querySelectorAll<HTMLElement>(".auth-card .form-error").forEach((node) => {
       const message = node.textContent?.trim().toLowerCase() ?? "";
-      if (message.includes("e-mail ou senha incorretos") || message.includes("invalid login credentials")) {
-        node.textContent = "Senha incorreta. Tente novamente.";
+      if (
+        message.includes("e-mail ou senha incorretos") ||
+        message.includes("senha incorreta") ||
+        message.includes("invalid login credentials") ||
+        message.includes("usuário não encontrado") ||
+        message.includes("usuario nao encontrado")
+      ) {
+        node.textContent = "E-mail ou senha inválidos.";
         passwordInput.setAttribute("aria-invalid", "true");
       }
     });
@@ -139,7 +101,7 @@ function normalizeAuthMessages() {
       message.includes("already registered") ||
       message.includes("already been registered")
     ) {
-      node.textContent = "Este e-mail já está vinculado a uma conta. Entre na conta existente ou use outro e-mail.";
+      node.textContent = "Não foi possível concluir o cadastro com esses dados. Confira as informações ou tente entrar na sua conta.";
     }
   });
 }
@@ -160,7 +122,6 @@ function restorePasswordScreenAfterFailedLogin() {
     return;
   }
 
-  // Login concluído: não existe nada para restaurar.
   if (document.querySelector(".bottom-nav, .profile-screen, .home-screen")) {
     pendingPasswordLogin = null;
     return;
@@ -169,8 +130,6 @@ function restorePasswordScreenAfterFailedLogin() {
   const authCard = document.querySelector<HTMLElement>(".auth-card");
   const landing = document.querySelector<HTMLElement>(".auth-landing");
 
-  // Durante a tentativa o store desmonta temporariamente a autenticação.
-  // Só restauramos depois de confirmar esse unmount, evitando falso erro antes da resposta.
   if (!authCard && !landing) {
     pending.sawUnmount = true;
     return;
@@ -185,11 +144,9 @@ function restorePasswordScreenAfterFailedLogin() {
       const form = passwordInput.closest("form");
       if (!form) return;
 
-      // Mantém o usuário exatamente na etapa da senha, preserva o e-mail e
-      // limpa somente a senha incorreta para que ele possa tentar outra vez.
       setReactInputValue(passwordInput, "");
       passwordInput.setAttribute("aria-invalid", "true");
-      showInlineError(form, "Senha incorreta. Tente novamente.");
+      showInlineError(form, "E-mail ou senha inválidos.");
       passwordInput.focus({ preventScroll: true });
       pendingPasswordLogin = null;
       return;
@@ -200,7 +157,7 @@ function restorePasswordScreenAfterFailedLogin() {
       const emailInput = emailForm.querySelector<HTMLInputElement>('input[type="email"]');
       if (!emailInput) return;
       setReactInputValue(emailInput, pending.email);
-      lastVerifiedLoginEmail = pending.email;
+      lastLoginEmail = pending.email;
       submitBypass.add(emailForm);
       emailForm.requestSubmit();
       return;
@@ -214,7 +171,7 @@ function restorePasswordScreenAfterFailedLogin() {
 }
 
 document.addEventListener("submit", (event) => {
-  void validateEmailBeforeSubmit(event);
+  validateEmailBeforeSubmit(event);
 }, true);
 
 document.addEventListener("input", (event) => {
