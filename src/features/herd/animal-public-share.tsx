@@ -10,210 +10,54 @@ import { loadAnimalPassport, loadHydraTagHistory, setAnimalLostMode, type Animal
 import { buildPublicAnimalUrl, type PublicAnimalOrigin } from "./public-animal-card";
 import "./hydra-id-share-cards.css";
 
-function mimeFromPath(path?: string) {
-  const normalized = path?.toLowerCase() ?? "";
-  if (normalized.endsWith(".png")) return "image/png";
-  if (normalized.endsWith(".webp")) return "image/webp";
-  return "image/jpeg";
+const HYDRA_PUBLIC_ORIGIN = "https://www.hydraagro.sbs";
+function productionPublicUrl(value: string) {
+  try {
+    const url = new URL(value);
+    const production = new URL(HYDRA_PUBLIC_ORIGIN);
+    url.protocol = production.protocol;
+    url.host = production.host;
+    return url.toString();
+  } catch {
+    return value;
+  }
 }
 
-function formatDate(value: string) {
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? value : date.toLocaleString("pt-BR");
-}
+function mimeFromPath(path?: string) { const normalized = path?.toLowerCase() ?? ""; if (normalized.endsWith(".png")) return "image/png"; if (normalized.endsWith(".webp")) return "image/webp"; return "image/jpeg"; }
+function formatDate(value: string) { const date = new Date(value); return Number.isNaN(date.getTime()) ? value : date.toLocaleString("pt-BR"); }
 
 export function AnimalPublicShare({ animal }: { animal: Animal }) {
-  const [open, setOpen] = useState(false);
-  const [writing, setWriting] = useState(false);
-  const [photoBusy, setPhotoBusy] = useState(false);
-  const [photoError, setPhotoError] = useState("");
-  const [publicPhotoPath, setPublicPhotoPath] = useState<string>();
-  const [origin, setOrigin] = useState<PublicAnimalOrigin>({});
-  const [originBusy, setOriginBusy] = useState(false);
-  const [status, setStatus] = useState(animal.status);
-  const [modeBusy, setModeBusy] = useState(false);
-  const [passport, setPassport] = useState<AnimalPassportItem[]>([]);
-  const [tagHistory, setTagHistory] = useState<HydraTagHistoryItem[]>([]);
-  const [historyBusy, setHistoryBusy] = useState(false);
+  const [open, setOpen] = useState(false); const [writing, setWriting] = useState(false); const [photoBusy, setPhotoBusy] = useState(false); const [photoError, setPhotoError] = useState(""); const [publicPhotoPath, setPublicPhotoPath] = useState<string>(); const [origin, setOrigin] = useState<PublicAnimalOrigin>({}); const [originBusy, setOriginBusy] = useState(false); const [status, setStatus] = useState(animal.status); const [modeBusy, setModeBusy] = useState(false); const [passport, setPassport] = useState<AnimalPassportItem[]>([]); const [tagHistory, setTagHistory] = useState<HydraTagHistoryItem[]>([]); const [historyBusy, setHistoryBusy] = useState(false);
   const photoSourceKey = `${animal.id}|${animal.photoPath ?? ""}|${animal.photoUrl ?? ""}`;
   const publicAnimal = useMemo(() => ({ ...animal, status }), [animal, status]);
-  const publicUrl = useMemo(() => buildPublicAnimalUrl(publicAnimal, publicPhotoPath, origin), [publicAnimal, publicPhotoPath, origin]);
+  const publicUrl = useMemo(() => productionPublicUrl(buildPublicAnimalUrl(publicAnimal, publicPhotoPath, origin)), [publicAnimal, publicPhotoPath, origin]);
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=10&data=${encodeURIComponent(publicUrl)}`;
-  const canWriteNfc = canWriteNfcUrl();
-  const hasPhoto = Boolean(animal.photoPath || animal.photoUrl);
-  const isLost = status.toLocaleLowerCase("pt-BR") === "perdido";
+  const canWriteNfc = canWriteNfcUrl(); const hasPhoto = Boolean(animal.photoPath || animal.photoUrl); const isLost = status.toLocaleLowerCase("pt-BR") === "perdido";
 
-  useEffect(() => {
-    setPublicPhotoPath(undefined);
-    setPhotoError("");
-  }, [photoSourceKey]);
-
+  useEffect(() => { setPublicPhotoPath(undefined); setPhotoError(""); }, [photoSourceKey]);
   useEffect(() => setStatus(animal.status), [animal.status]);
 
   async function prepareOrigin() {
-    if (origin.propertyName || origin.municipality) return origin;
-    setOriginBusy(true);
-    try {
-      const client = requireSupabase();
-      const { data: animalRow, error: animalError } = await client.from("animals").select("owner_user_id").eq("id", animal.id).maybeSingle();
-      if (animalError) throw animalError;
-      const ownerUserId = animalRow?.owner_user_id ? String(animalRow.owner_user_id) : "";
-      if (!ownerUserId) return {};
-      const { data: propertyRow, error: propertyError } = await client.from("properties").select("name,municipality,state").eq("owner_user_id", ownerUserId).maybeSingle();
-      if (propertyError) throw propertyError;
-      const nextOrigin: PublicAnimalOrigin = {
-        propertyName: propertyRow?.name ? String(propertyRow.name) : undefined,
-        municipality: propertyRow?.municipality ? String(propertyRow.municipality) : undefined,
-        state: propertyRow?.state ? String(propertyRow.state) : undefined,
-      };
-      setOrigin(nextOrigin);
-      return nextOrigin;
-    } catch {
-      return {};
-    } finally {
-      setOriginBusy(false);
-    }
+    if (origin.propertyName || origin.municipality) return origin; setOriginBusy(true);
+    try { const client = requireSupabase(); const { data: animalRow, error: animalError } = await client.from("animals").select("owner_user_id").eq("id", animal.id).maybeSingle(); if (animalError) throw animalError; const ownerUserId = animalRow?.owner_user_id ? String(animalRow.owner_user_id) : ""; if (!ownerUserId) return {}; const { data: propertyRow, error: propertyError } = await client.from("properties").select("name,municipality,state").eq("owner_user_id", ownerUserId).maybeSingle(); if (propertyError) throw propertyError; const nextOrigin: PublicAnimalOrigin = { propertyName: propertyRow?.name ? String(propertyRow.name) : undefined, municipality: propertyRow?.municipality ? String(propertyRow.municipality) : undefined, state: propertyRow?.state ? String(propertyRow.state) : undefined }; setOrigin(nextOrigin); return nextOrigin; } catch { return {}; } finally { setOriginBusy(false); }
   }
 
   async function preparePublicPhoto() {
-    if (publicPhotoPath) return publicPhotoPath;
-    if (!hasPhoto) return undefined;
-    setPhotoBusy(true);
-    setPhotoError("");
-    try {
-      const client = requireSupabase();
-      const { data: userData, error: userError } = await client.auth.getUser();
-      if (userError || !userData.user) throw userError ?? new Error("Sessão não encontrada.");
-      let blob: Blob;
-      let contentType = mimeFromPath(animal.photoPath);
-      if (animal.photoPath) {
-        const { data, error } = await client.storage.from("farm-media").download(animal.photoPath);
-        if (error || !data) throw error ?? new Error("Não foi possível acessar a foto privada do animal.");
-        blob = data;
-        if (blob.type?.startsWith("image/")) contentType = blob.type;
-      } else if (animal.photoUrl) {
-        const response = await fetch(`${animal.photoUrl}${animal.photoUrl.includes("?") ? "&" : "?"}hydra=${Date.now()}`, { cache: "no-store" });
-        if (!response.ok) throw new Error("Não foi possível preparar a foto do animal.");
-        blob = await response.blob();
-        if (blob.type?.startsWith("image/")) contentType = blob.type;
-      } else return undefined;
-      const extension = contentType.includes("png") ? "png" : contentType.includes("webp") ? "webp" : "jpg";
-      const file = new File([blob], `animal-${animal.id}.${extension}`, { type: contentType });
-      const path = await uploadPublicImage("community-media", userData.user.id, file, `public-animal-${animal.id}`);
-      setPublicPhotoPath(path);
-      return path;
-    } catch (caught) {
-      const message = caught instanceof Error ? caught.message : "Não foi possível incluir a foto na ficha pública.";
-      setPhotoError(message);
-      showAppToast(message, "error");
-      return undefined;
-    } finally {
-      setPhotoBusy(false);
-    }
+    if (publicPhotoPath) return publicPhotoPath; if (!hasPhoto) return undefined; setPhotoBusy(true); setPhotoError("");
+    try { const client = requireSupabase(); const { data: userData, error: userError } = await client.auth.getUser(); if (userError || !userData.user) throw userError ?? new Error("Sessão não encontrada."); let blob: Blob; let contentType = mimeFromPath(animal.photoPath); if (animal.photoPath) { const { data, error } = await client.storage.from("farm-media").download(animal.photoPath); if (error || !data) throw error ?? new Error("Não foi possível acessar a foto privada do animal."); blob = data; if (blob.type?.startsWith("image/")) contentType = blob.type; } else if (animal.photoUrl) { const response = await fetch(`${animal.photoUrl}${animal.photoUrl.includes("?") ? "&" : "?"}hydra=${Date.now()}`, { cache: "no-store" }); if (!response.ok) throw new Error("Não foi possível preparar a foto do animal."); blob = await response.blob(); if (blob.type?.startsWith("image/")) contentType = blob.type; } else return undefined; const extension = contentType.includes("png") ? "png" : contentType.includes("webp") ? "webp" : "jpg"; const file = new File([blob], `animal-${animal.id}.${extension}`, { type: contentType }); const path = await uploadPublicImage("community-media", userData.user.id, file, `public-animal-${animal.id}`); setPublicPhotoPath(path); return path; } catch (caught) { const message = caught instanceof Error ? caught.message : "Não foi possível incluir a foto na ficha pública."; setPhotoError(message); showAppToast(message, "error"); return undefined; } finally { setPhotoBusy(false); }
   }
 
-  async function refreshEvolution() {
-    setHistoryBusy(true);
-    try {
-      const [passportItems, tagItems] = await Promise.all([loadAnimalPassport(animal.id), loadHydraTagHistory(animal.id)]);
-      setPassport(passportItems);
-      setTagHistory(tagItems);
-    } catch {
-      setPassport([]);
-      setTagHistory([]);
-    } finally {
-      setHistoryBusy(false);
-    }
-  }
+  async function refreshEvolution() { setHistoryBusy(true); try { const [passportItems, tagItems] = await Promise.all([loadAnimalPassport(animal.id), loadHydraTagHistory(animal.id)]); setPassport(passportItems); setTagHistory(tagItems); } catch { setPassport([]); setTagHistory([]); } finally { setHistoryBusy(false); } }
+  useEffect(() => { if (!open) return; void prepareOrigin(); void refreshEvolution(); if (hasPhoto && !publicPhotoPath && !photoBusy) void preparePublicPhoto(); }, [open, hasPhoto, publicPhotoPath, photoSourceKey]);
 
-  useEffect(() => {
-    if (!open) return;
-    void prepareOrigin();
-    void refreshEvolution();
-    if (hasPhoto && !publicPhotoPath && !photoBusy) void preparePublicPhoto();
-  }, [open, hasPhoto, publicPhotoPath, photoSourceKey]);
-
-  async function currentPublicUrl() {
-    const [photoPath, currentOrigin] = await Promise.all([preparePublicPhoto(), prepareOrigin()]);
-    return buildPublicAnimalUrl(publicAnimal, photoPath, currentOrigin);
-  }
-
-  async function copyLink() {
-    try { await navigator.clipboard.writeText(await currentPublicUrl()); showAppToast("Link público copiado"); }
-    catch { showAppToast("Não foi possível copiar o link.", "error"); }
-  }
-
-  async function shareLink() {
-    const url = await currentPublicUrl();
-    if (!navigator.share) { await copyLink(); return; }
-    try { await navigator.share({ title: `${animal.name || animal.identification} · Hydra Agro`, text: "Hydra Tag do animal", url }); }
-    catch { /* compartilhamento cancelado */ }
-  }
-
-  async function writeTag() {
-    setWriting(true);
-    try { await writeNfcUrl(await currentPublicUrl()); showAppToast("Hydra ID gravado na etiqueta NFC"); }
-    catch (caught) { showAppToast(caught instanceof Error ? caught.message : "Não foi possível gravar a etiqueta.", "error"); }
-    finally { setWriting(false); }
-  }
-
-  async function toggleLostMode() {
-    setModeBusy(true);
-    try {
-      const result = await setAnimalLostMode(animal.id, !isLost);
-      setStatus(result.status);
-      await refreshEvolution();
-      showAppToast(!isLost ? "Animal marcado como perdido" : "Animal marcado como encontrado");
-    } catch (caught) {
-      showAppToast(caught instanceof Error ? caught.message : "Não foi possível alterar o status.", "error");
-    } finally {
-      setModeBusy(false);
-    }
-  }
+  async function currentPublicUrl() { const [photoPath, currentOrigin] = await Promise.all([preparePublicPhoto(), prepareOrigin()]); return productionPublicUrl(buildPublicAnimalUrl(publicAnimal, photoPath, currentOrigin)); }
+  async function copyLink() { try { await navigator.clipboard.writeText(await currentPublicUrl()); showAppToast("Link público copiado"); } catch { showAppToast("Não foi possível copiar o link.", "error"); } }
+  async function shareLink() { const url = await currentPublicUrl(); if (!navigator.share) { await copyLink(); return; } try { await navigator.share({ title: `${animal.name || animal.identification} · Hydra Agro`, text: "Hydra Tag do animal", url }); } catch { /* compartilhamento cancelado */ } }
+  async function writeTag() { setWriting(true); try { await writeNfcUrl(await currentPublicUrl()); showAppToast("Hydra ID gravado na etiqueta NFC"); } catch (caught) { showAppToast(caught instanceof Error ? caught.message : "Não foi possível gravar a etiqueta.", "error"); } finally { setWriting(false); } }
+  async function toggleLostMode() { setModeBusy(true); try { const result = await setAnimalLostMode(animal.id, !isLost); setStatus(result.status); await refreshEvolution(); showAppToast(!isLost ? "Animal marcado como perdido" : "Animal marcado como encontrado"); } catch (caught) { showAppToast(caught instanceof Error ? caught.message : "Não foi possível alterar o status.", "error"); } finally { setModeBusy(false); } }
 
   const photoTitle = photoBusy ? "Preparando..." : publicPhotoPath ? "Disponível" : photoError ? "Sem imagem" : hasPhoto ? "No Hydra ID" : "Não cadastrada";
   const photoCaption = publicPhotoPath ? "Reconhecimento visual" : photoError ? "A ficha continua ativa" : hasPhoto ? "Foto do cadastro" : "Adicione uma foto ao animal";
 
-  return (
-    <>
-      <button className="animal-public-share-button" onClick={() => setOpen(true)}>
-        <span><QrCode size={20} /></span><div><strong>Hydra ID · NFC / QR</strong><small>Ficha pública, passaporte e histórico da Hydra Tag</small></div><ChevronRight size={18} />
-      </button>
-
-      <Modal open={open} onClose={() => setOpen(false)} eyebrow="HYDRA TAG" title="Identidade digital do animal" wide dismissible={!writing && !photoBusy && !modeBusy}>
-        <div className="public-share-modal">
-          {isLost && <div className="hydra-id-access-card"><header className="hydra-id-access-head"><span><AlertTriangle size={21} /></span><div><small>MODO ANIMAL PERDIDO</small><strong>Animal marcado como perdido</strong><em>O mesmo link público da Hydra Tag já mostra este status.</em></div></header></div>}
-
-          <div className="hydra-id-info-grid">
-            <article className="hydra-id-info-card hydra-id-info-card-wide"><span className="hydra-id-info-icon">{originBusy ? <LoaderCircle size={20} className="spin" /> : <MapPin size={20} />}</span><div className="hydra-id-info-copy"><small>Propriedade de origem</small><strong>{originBusy ? "Localizando..." : origin.propertyName || "Propriedade vinculada"}</strong><em>{[origin.municipality, origin.state].filter(Boolean).join("/ ") || "Origem registrada no Hydra Agro"}</em></div></article>
-            <article className={`hydra-id-info-card is-photo ${photoError ? "is-error" : ""}`}><span className="hydra-id-info-icon">{photoBusy ? <LoaderCircle size={19} className="spin" /> : <ImageIcon size={19} />}</span><div className="hydra-id-info-copy"><small>Foto</small><strong>{photoTitle}</strong><em>{photoCaption}</em></div></article>
-            <article className="hydra-id-info-card is-access"><span className="hydra-id-info-icon"><Nfc size={19} /></span><div className="hydra-id-info-copy"><small>Acesso</small><strong>NFC + QR</strong><em>Fluxo atual preservado</em></div></article>
-          </div>
-
-          <button className={isLost ? "secondary-button" : "danger-button"} onClick={() => void toggleLostMode()} disabled={modeBusy}>{modeBusy ? <LoaderCircle size={17} className="spin" /> : <AlertTriangle size={17} />} {isLost ? "Animal encontrado" : "Marcar como perdido"}</button>
-
-          <section className="hydra-id-access-card" aria-label="QR Code e link público do Hydra ID">
-            <header className="hydra-id-access-head"><span><QrCode size={21} /></span><div><small>ACESSO PÚBLICO</small><strong>QR Code do Hydra ID</strong><em>O endereço permanece o mesmo; os dados públicos são atualizados pelo banco.</em></div></header>
-            <div className="hydra-id-access-qr"><img src={qrUrl} alt={`QR Code da ficha pública de ${animal.name || animal.identification}`} /></div>
-            <div className="hydra-id-access-link"><small>LINK DA IDENTIDADE</small><div>{publicUrl}</div></div>
-            <div className="hydra-id-access-actions"><button className="secondary-button" onClick={() => void copyLink()} disabled={photoBusy || writing || originBusy}><Copy size={17} /> Copiar link</button><button className="secondary-button" onClick={() => void shareLink()} disabled={photoBusy || writing || originBusy}><Share2 size={17} /> Compartilhar</button></div>
-          </section>
-
-          {canWriteNfc && <button className="primary-button hydra-id-nfc-write" onClick={() => void writeTag()} disabled={writing || photoBusy || originBusy}><Radio size={17} /> {writing ? "Aproxime a etiqueta…" : "Gravar Hydra ID na etiqueta"}</button>}
-
-          <section className="hydra-id-access-card">
-            <header className="hydra-id-access-head"><span><BadgeCheck size={21} /></span><div><small>PASSAPORTE DIGITAL</small><strong>Histórico do animal</strong><em>Cadastro, saúde, pesagens, ocorrências e alterações registradas.</em></div></header>
-            {historyBusy ? <p className="public-share-note"><LoaderCircle size={15} className="spin" /> Carregando passaporte…</p> : passport.length ? <div className="animal-history animal-timeline">{passport.slice(0, 20).map((item) => <div key={item.id}><span /><p><strong>{item.title}</strong>{item.details || item.type}<small>{formatDate(item.date)}</small></p></div>)}</div> : <p className="public-share-note">Nenhum evento adicional registrado ainda.</p>}
-          </section>
-
-          <section className="hydra-id-access-card">
-            <header className="hydra-id-access-head"><span><History size={21} /></span><div><small>HISTÓRICO DA HYDRA TAG</small><strong>Eventos da identificação</strong><em>Vinculação, leituras disponíveis, modo perdido e recuperação não são apagados.</em></div></header>
-            {historyBusy ? <p className="public-share-note"><LoaderCircle size={15} className="spin" /> Carregando histórico…</p> : tagHistory.length ? <div className="animal-history animal-timeline">{tagHistory.slice(0, 20).map((item) => <div key={item.id}><span /><p><strong>{item.type}</strong>{item.details}<small>{formatDate(item.date)}</small></p></div>)}</div> : <p className="public-share-note">A Hydra Tag ainda não possui eventos técnicos registrados.</p>}
-          </section>
-
-          <p className="public-share-note"><Nfc size={15} /> Telefone, e-mail, CEP e endereço detalhado nunca são exibidos na ficha pública.</p>
-        </div>
-      </Modal>
-    </>
-  );
+  return <><button className="animal-public-share-button" onClick={() => setOpen(true)}><span><QrCode size={20} /></span><div><strong>Hydra ID · NFC / QR</strong><small>Ficha pública, passaporte e histórico da Hydra Tag</small></div><ChevronRight size={18} /></button><Modal open={open} onClose={() => setOpen(false)} eyebrow="HYDRA TAG" title="Identidade digital do animal" wide dismissible={!writing && !photoBusy && !modeBusy}><div className="public-share-modal">{isLost && <div className="hydra-id-access-card"><header className="hydra-id-access-head"><span><AlertTriangle size={21} /></span><div><small>MODO ANIMAL PERDIDO</small><strong>Animal marcado como perdido</strong><em>O mesmo link público da Hydra Tag já mostra este status.</em></div></header></div>}<div className="hydra-id-info-grid"><article className="hydra-id-info-card hydra-id-info-card-wide"><span className="hydra-id-info-icon">{originBusy ? <LoaderCircle size={20} className="spin" /> : <MapPin size={20} />}</span><div className="hydra-id-info-copy"><small>Propriedade de origem</small><strong>{originBusy ? "Localizando..." : origin.propertyName || "Propriedade vinculada"}</strong><em>{[origin.municipality, origin.state].filter(Boolean).join("/ ") || "Origem registrada no Hydra Agro"}</em></div></article><article className={`hydra-id-info-card is-photo ${photoError ? "is-error" : ""}`}><span className="hydra-id-info-icon">{photoBusy ? <LoaderCircle size={19} className="spin" /> : <ImageIcon size={19} />}</span><div className="hydra-id-info-copy"><small>Foto</small><strong>{photoTitle}</strong><em>{photoCaption}</em></div></article><article className="hydra-id-info-card is-access"><span className="hydra-id-info-icon"><Nfc size={19} /></span><div className="hydra-id-info-copy"><small>Acesso</small><strong>NFC + QR</strong><em>Fluxo atual preservado</em></div></article></div><button className={isLost ? "secondary-button" : "danger-button"} onClick={() => void toggleLostMode()} disabled={modeBusy}>{modeBusy ? <LoaderCircle size={17} className="spin" /> : <AlertTriangle size={17} />} {isLost ? "Animal encontrado" : "Marcar como perdido"}</button><section className="hydra-id-access-card" aria-label="QR Code e link público do Hydra ID"><header className="hydra-id-access-head"><span><QrCode size={21} /></span><div><small>ACESSO PÚBLICO</small><strong>QR Code do Hydra ID</strong><em>O endereço permanece o mesmo; os dados públicos são atualizados pelo banco.</em></div></header><div className="hydra-id-access-qr"><img src={qrUrl} alt={`QR Code da ficha pública de ${animal.name || animal.identification}`} /></div><div className="hydra-id-access-link"><small>LINK DA IDENTIDADE</small><div>{publicUrl}</div></div><div className="hydra-id-access-actions"><button className="secondary-button" onClick={() => void copyLink()} disabled={photoBusy || writing || originBusy}><Copy size={17} /> Copiar link</button><button className="secondary-button" onClick={() => void shareLink()} disabled={photoBusy || writing || originBusy}><Share2 size={17} /> Compartilhar</button></div></section>{canWriteNfc && <button className="primary-button hydra-id-nfc-write" onClick={() => void writeTag()} disabled={writing || photoBusy || originBusy}><Radio size={17} /> {writing ? "Aproxime a etiqueta…" : "Gravar Hydra ID na etiqueta"}</button>}<section className="hydra-id-access-card"><header className="hydra-id-access-head"><span><BadgeCheck size={21} /></span><div><small>PASSAPORTE DIGITAL</small><strong>Histórico do animal</strong><em>Cadastro, saúde, pesagens, ocorrências e alterações registradas.</em></div></header>{historyBusy ? <p className="public-share-note"><LoaderCircle size={15} className="spin" /> Carregando passaporte…</p> : passport.length ? <div className="animal-history animal-timeline">{passport.slice(0, 20).map((item) => <div key={item.id}><span /><p><strong>{item.title}</strong>{item.details || item.type}<small>{formatDate(item.date)}</small></p></div>)}</div> : <p className="public-share-note">Nenhum evento adicional registrado ainda.</p>}</section><section className="hydra-id-access-card"><header className="hydra-id-access-head"><span><History size={21} /></span><div><small>HISTÓRICO DA HYDRA TAG</small><strong>Eventos da identificação</strong><em>Vinculação, leituras disponíveis, modo perdido e recuperação não são apagados.</em></div></header>{historyBusy ? <p className="public-share-note"><LoaderCircle size={15} className="spin" /> Carregando histórico…</p> : tagHistory.length ? <div className="animal-history animal-timeline">{tagHistory.slice(0, 20).map((item) => <div key={item.id}><span /><p><strong>{item.type}</strong>{item.details}<small>{formatDate(item.date)}</small></p></div>)}</div> : <p className="public-share-note">A Hydra Tag ainda não possui eventos técnicos registrados.</p>}</section><p className="public-share-note"><Nfc size={15} /> Telefone, e-mail, CEP e endereço detalhado nunca são exibidos na ficha pública.</p></div></Modal></>;
 }
