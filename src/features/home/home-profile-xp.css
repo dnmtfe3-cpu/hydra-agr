@@ -116,6 +116,11 @@
   z-index: 1;
 }
 
+/* O nome e a foto da fazenda ficam apenas em Destaques; remove o resumo duplicado. */
+html body #root .hydra-root .home-screen .property-hero {
+  display: none !important;
+}
+
 @media (max-width: 370px) {
   .home-brandbar.profile-brandbar { min-height: 70px; gap: 10px !important; }
   .home-profile-progress { width: 58px; height: 58px; }
