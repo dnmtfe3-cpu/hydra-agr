@@ -1,5 +1,6 @@
 @import "./features/profile/profile-dribbble-reference-v2.css";
 @import "./features/profile/profile-app-polish-v3.css";
+@import "./hydra-reference-detail-polish.css";
 
 /* Hydra Agro — navegação e motion finais. */
 @keyframes hydraRouteForwardFinal { from { opacity:0; transform:translate3d(18px,0,0) scale(.995) } to { opacity:1; transform:translate3d(0,0,0) scale(1) } }
