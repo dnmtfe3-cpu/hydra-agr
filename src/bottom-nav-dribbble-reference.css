@@ -24,7 +24,6 @@ html body #root .hydra-root .phone-app .bottom-nav.bottom-nav {
   z-index: 220 !important;
 }
 
-/* Superfície branca com um U verdadeiro em volta do +. */
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::before {
   content: "" !important;
   position: absolute !important;
@@ -71,6 +70,7 @@ html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button {
 }
 
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:first-of-type {
+  position: relative !important;
   width: 42px !important;
   height: 42px !important;
   min-width: 42px !important;
@@ -84,7 +84,7 @@ html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:fi
   color: inherit !important;
   background: transparent !important;
   box-shadow: none !important;
-  transform: translateY(-1px) !important;
+  transform: translateY(-4px) !important;
   pointer-events: none !important;
 }
 
@@ -114,28 +114,31 @@ html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > small {
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3)),
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3)) { color:#174c36 !important; }
 
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3)) > span:first-of-type,
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3)) > span:first-of-type {
-  color:#174c36 !important;
-  transform:translateY(-5px) !important;
-}
-
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3))::after,
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3))::after {
+/* O ponto pertence ao próprio círculo do ícone. Assim sempre acompanha exatamente a opção selecionada. */
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3)) > span:first-of-type::after,
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3)) > span:first-of-type::after {
   content:"" !important;
+  display:block !important;
   position:absolute !important;
   left:50% !important;
-  top:55px !important;
+  top:calc(100% + 3px) !important;
   width:6px !important;
   height:6px !important;
   margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
   border-radius:50% !important;
   background:#174c36 !important;
   transform:translateX(-50%) !important;
   pointer-events:none !important;
 }
 
-/* + fica fisicamente separado da superfície branca e encaixado no U. */
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3))::after,
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3))::after {
+  content:none !important;
+  display:none !important;
+}
+
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) {
   align-self:start !important;
   height:104px !important;
@@ -210,6 +213,4 @@ html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > butto
   }
   html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) { height:98px !important; min-height:98px !important; margin-top:-31px !important; }
   html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) > span:first-of-type { width:62px !important; height:62px !important; min-width:62px !important; min-height:62px !important; }
-  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3))::after,
-  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3))::after { top:52px !important; }
 }
