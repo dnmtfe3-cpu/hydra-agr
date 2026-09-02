@@ -49,6 +49,8 @@ import "./features/auth/auth-no-social-final.css";
 import "./features/auth/auth-entry-polish.css";
 import "./bottom-nav-blur-final.css";
 import "./splash-single-run-final.css";
+import "./hydra-design-system-final.css";
+import "./app-reveal-after-splash.css";
 
 type ThemeMode = "light" | "dark";
 const THEME_KEY = "hydra-agro.theme";
