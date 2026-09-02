@@ -1,0 +1,168 @@
+/* Login e cadastro: visual superior limpo + folha branca, sem alterar a lógica de autenticação. */
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) {
+  position: relative !important;
+  min-height: 100dvh !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  background: #174c36 !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell)::before {
+  content: "" !important;
+  position: absolute !important;
+  top: max(46px, calc(env(safe-area-inset-top) + 25px)) !important;
+  left: 50% !important;
+  width: min(48vw, 190px) !important;
+  aspect-ratio: 1 !important;
+  background: rgba(255,255,255,.12) !important;
+  -webkit-mask: url("/hydra-mark.svg") center / contain no-repeat !important;
+  mask: url("/hydra-mark.svg") center / contain no-repeat !important;
+  transform: translateX(-50%) !important;
+  pointer-events: none !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell)::after {
+  content: "Hydra Agro" !important;
+  position: absolute !important;
+  top: max(185px, calc(env(safe-area-inset-top) + 164px)) !important;
+  left: 50% !important;
+  color: rgba(255,255,255,.86) !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+  font-weight: 500 !important;
+  letter-spacing: .01em !important;
+  transform: translateX(-50%) !important;
+  pointer-events: none !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-card,
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-card.auth-card-wide {
+  position: relative !important;
+  z-index: 2 !important;
+  width: min(100%, 430px) !important;
+  max-width: 430px !important;
+  min-height: 71dvh !important;
+  margin: 29dvh auto 0 !important;
+  padding: 25px 22px max(34px, calc(env(safe-area-inset-bottom) + 22px)) !important;
+  border: 0 !important;
+  border-radius: 31px 31px 0 0 !important;
+  background: #fbfcfa !important;
+  box-shadow: 0 -10px 34px rgba(8,39,25,.11) !important;
+  backdrop-filter: none !important;
+}
+
+html body #root .hydra-root .auth-shell-signup:not(.auth-code-shell) .auth-reference-card {
+  margin-top: 24dvh !important;
+  min-height: 76dvh !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-brand {
+  margin: 0 auto 18px !important;
+  color: #174c36 !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-brand > svg,
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-brand > *:first-child {
+  width: 32px !important;
+  height: 32px !important;
+  flex-basis: 32px !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-mode-tabs {
+  min-height: 50px !important;
+  margin-bottom: 26px !important;
+  padding: 4px !important;
+  border: 1px solid #e1e5e1 !important;
+  border-radius: 999px !important;
+  background: #f0f2ef !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-mode-tabs button {
+  min-height: 40px !important;
+  border-radius: 999px !important;
+  font-size: 12px !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-heading {
+  margin-bottom: 24px !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-heading h1 {
+  font-size: 26px !important;
+  line-height: 1.04 !important;
+  letter-spacing: -.04em !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-heading p {
+  margin-top: 8px !important;
+  color: #808a84 !important;
+  font-size: 11.5px !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .field :is(input,select,textarea) {
+  min-height: 51px !important;
+  border-color: #dce2dc !important;
+  border-radius: 16px !important;
+  background: #fff !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) :is(.primary-button,.secondary-button) {
+  min-height: 52px !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .primary-button {
+  box-shadow: 0 8px 20px rgba(23,76,54,.12) !important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .staff-entry-button {
+  margin-top: 15px !important;
+  padding: 9px 11px !important;
+  border: 1px solid #e5e9e5 !important;
+  border-radius: 17px !important;
+  background: #f7f8f6 !important;
+}
+
+/* O provedor social foi removido da interface: não deixa o divisor órfão. */
+html body #root .hydra-root .auth-reference-shell .auth-divider:has(+ .google-auth-button) {
+  display: none !important;
+}
+
+@media (max-height: 700px) {
+  html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell)::before {
+    top: max(30px, calc(env(safe-area-inset-top) + 16px)) !important;
+    width: 126px !important;
+  }
+  html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell)::after {
+    top: max(145px, calc(env(safe-area-inset-top) + 125px)) !important;
+  }
+  html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-card {
+    margin-top: 25dvh !important;
+    min-height: 75dvh !important;
+  }
+  html body #root .hydra-root .auth-shell-signup:not(.auth-code-shell) .auth-reference-card {
+    margin-top: 21dvh !important;
+  }
+}
+
+@media (min-width: 700px) {
+  html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) {
+    padding: 24px !important;
+    align-items: center !important;
+    background: #e8eee9 !important;
+  }
+  html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell)::before,
+  html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell)::after {
+    display: none !important;
+  }
+  html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-card,
+  html body #root .hydra-root .auth-shell-signup:not(.auth-code-shell) .auth-reference-card {
+    min-height: auto !important;
+    margin: 0 auto !important;
+    border-radius: 31px !important;
+    box-shadow: 0 24px 70px rgba(20,46,33,.10) !important;
+  }
+}
