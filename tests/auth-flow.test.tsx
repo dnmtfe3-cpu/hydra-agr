@@ -32,7 +32,6 @@ beforeEach(() => {
 describe("autenticação", () => {
   it("valida o e-mail antes de pedir senha", () => {
     render(<AuthFlow {...handlers} />);
-    fireEvent.click(screen.getByRole("button", { name: /^entrar$/i }));
     const email = screen.getByLabelText(/e-mail/i);
     fireEvent.change(email, { target: { value: "invalido" } });
     fireEvent.submit(email.closest("form")!);
@@ -40,12 +39,11 @@ describe("autenticação", () => {
     expect(handlers.onLogin).not.toHaveBeenCalled();
   });
 
-  it("mantém senha, Google, código e funcionário disponíveis", () => {
+  it("mantém login, criação de conta, código e funcionário disponíveis", () => {
     render(<AuthFlow {...handlers} />);
-    expect(screen.getByRole("button", { name: /criar conta/i })).toBeEnabled();
+    expect(screen.getByRole("tab", { name: /^login$/i })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tab", { name: /criar conta/i })).toBeEnabled();
     expect(screen.getByRole("button", { name: /acesso de funcionário/i })).toBeEnabled();
-    fireEvent.click(screen.getByRole("button", { name: /^entrar$/i }));
-    expect(screen.getByRole("button", { name: /continuar com google/i })).toBeEnabled();
     fireEvent.change(screen.getByLabelText(/e-mail/i), { target: { value: "produtor@example.com" } });
     fireEvent.click(screen.getByRole("button", { name: /avançar/i }));
     expect(screen.getByRole("button", { name: /esqueci minha senha/i })).toBeEnabled();
@@ -63,7 +61,6 @@ describe("autenticação", () => {
 
   it("envia e valida o código de acesso pelo e-mail", async () => {
     render(<AuthFlow {...handlers} />);
-    fireEvent.click(screen.getByRole("button", { name: /^entrar$/i }));
     fireEvent.change(screen.getByLabelText(/^e-mail$/i), { target: { value: "produtor@example.com" } });
     fireEvent.click(screen.getByRole("button", { name: /avançar/i }));
     fireEvent.click(screen.getByRole("button", { name: /entrar com código/i }));
@@ -76,7 +73,6 @@ describe("autenticação", () => {
 
   it("exige código antes de abrir a troca de senha", async () => {
     render(<AuthFlow {...handlers} />);
-    fireEvent.click(screen.getByRole("button", { name: /^entrar$/i }));
     fireEvent.change(screen.getByLabelText(/^e-mail$/i), { target: { value: "produtor@example.com" } });
     fireEvent.click(screen.getByRole("button", { name: /avançar/i }));
     fireEvent.click(screen.getByRole("button", { name: /esqueci minha senha/i }));
