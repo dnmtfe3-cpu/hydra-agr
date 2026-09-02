@@ -1,3 +1,5 @@
+export {};
+
 const AUTH_ANIMALS = [
   { kind: "bovino", label: "Bovinos", emoji: "🐄" },
   { kind: "caprino", label: "Caprinos", emoji: "🐐" },
