@@ -1,4 +1,4 @@
-/* Hydra Agro — estilos do app. Movimento suave nas trocas, microinterações e experiência NFC. */
+/* Hydra Agro — estilos base do app. A navegação final é carregada uma única vez em main.tsx. */
 
 @import "./professional-polish.css";
 @import "./visual-fixes.css";
@@ -11,11 +11,8 @@
 @import "./nfc-platform-note.css";
 @import "./pull-to-refresh.css";
 @import "./mobile-flow-fix.css";
-@import "./bottom-nav-compact.css";
-@import "./bottom-nav-runtime-fix.css";
 @import "./auth-center-fix.css";
 @import "./final-ui-polish.css";
-@import "./home-shortcuts-icons.css";
 @import "./navigation-profile-cleanup.css";
 @import "./mobile-final-cleanup.css";
 @import "./herd-static.css";
@@ -27,19 +24,13 @@
 @import "./nfc-only-motion.css?v=nfc-only-motion-3";
 @import "./home-nfc-scanner.css?v=home-nfc-scanner-1";
 
-/* Redesign visual final de Equipe/Funcionários e Rebanho. */
+/* Redesign visual de Equipe/Funcionários e Rebanho. */
 @import "./management-redesign-v3.css?v=management-redesign-v3";
-
-/* Correção final do Rebanho no celular. */
 @import "./herd-mobile-fix.css?v=herd-mobile-fix-1";
 
-/* Destaques do tema da feira: nutrição, alimentação e agricultura familiar. */
+/* Recursos e premium. */
 @import "./fair-theme-highlight.css?v=fair-theme-highlight-1";
-
-/* Separação visual entre recursos gratuitos e Hydra Agro+. */
 @import "./premium-gates.css?v=premium-gates-1";
-
-/* Apresentação visual do plano Hydra Agro+. */
 @import "./premium-sales-redesign.css?v=premium-sales-redesign-1";
 
 /* Motion global sem alterar layout. */
