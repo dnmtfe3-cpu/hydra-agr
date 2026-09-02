@@ -1,11 +1,10 @@
-/* Remove qualquer divisor/faixa escura entre o conteúdo e a navegação inferior. */
+/* Remove seams do conteúdo sem interferir na bottom navigation final. */
 @media (max-width: 899px) {
   .hydra-root .app-shell,
   .hydra-root .phone-app,
   .hydra-root .phone-app .app-content,
   .hydra-root .phone-app .app-content > .screen,
-  .hydra-root .phone-app .app-content > .profile-screen,
-  .hydra-root .phone-app .bottom-nav.bottom-nav {
+  .hydra-root .phone-app .app-content > .profile-screen {
     border: 0 !important;
     border-block: 0 !important;
     outline: 0 !important;
@@ -17,9 +16,7 @@
   .hydra-root .phone-app::before,
   .hydra-root .phone-app::after,
   .hydra-root .phone-app .app-content::before,
-  .hydra-root .phone-app .app-content::after,
-  .hydra-root .phone-app .bottom-nav.bottom-nav::before,
-  .hydra-root .phone-app .bottom-nav.bottom-nav::after {
+  .hydra-root .phone-app .app-content::after {
     content: none !important;
     display: none !important;
     border: 0 !important;
@@ -27,16 +24,7 @@
     box-shadow: none !important;
   }
 
-  .hydra-root .phone-app .bottom-nav.bottom-nav {
-    background-clip: padding-box !important;
-  }
-
-  /*
-    Safari/PWA podia desenhar uma linha de composição exatamente no fim do
-    bloco de 100dvh do Perfil enquanto a página estava rolada. Não era a
-    borda da bottom bar. Mantemos a superfície contínua e cobrimos o seam
-    do limite do viewport com a própria cor da tela.
-  */
+  /* Cobre apenas o seam do fim do viewport no Perfil. */
   .hydra-root .phone-app:has(.profile-screen),
   .hydra-root .app-content:has(.profile-screen) {
     background: var(--cream) !important;
