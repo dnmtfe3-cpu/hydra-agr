@@ -1,17 +1,18 @@
-/* Bottom navigation do Hydra Agro baseada na referência enviada.
- * Geometria: cápsula branca flutuante + recorte circular real + ação central elevada.
- * A lógica de rotas permanece no React; esta camada controla só apresentação e hit-area.
+/* Hydra Agro — bottom navigation fiel à referência enviada.
+ * Barra branca flutuante, recorte central em U, botão verde elevado e item ativo com ponto.
+ * Não altera rotas nem comportamento React.
  */
 
-html body #root .hydra-root .phone-app .bottom-nav {
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav {
   position: fixed !important;
   left: 50% !important;
   right: auto !important;
-  bottom: max(14px, env(safe-area-inset-bottom)) !important;
+  bottom: max(15px, env(safe-area-inset-bottom)) !important;
   width: min(calc(100% - 30px), 374px) !important;
-  height: 70px !important;
-  min-height: 70px !important;
-  padding: 0 9px !important;
+  height: 72px !important;
+  min-height: 72px !important;
+  margin: 0 !important;
+  padding: 0 10px !important;
   display: grid !important;
   grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
   align-items: center !important;
@@ -25,36 +26,38 @@ html body #root .hydra-root .phone-app .bottom-nav {
   transform: translateX(-50%) !important;
   isolation: isolate !important;
   pointer-events: auto !important;
-  z-index: 150 !important;
+  z-index: 220 !important;
 }
 
-/* Superfície branca com o U real da referência recortado no centro. */
-html body #root .hydra-root .phone-app .bottom-nav::before {
+/* A superfície é desenhada aqui. O círculo transparente vira o recorte em U real. */
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::before {
   content: "" !important;
+  display: block !important;
   position: absolute !important;
   inset: 0 !important;
+  border: 0 !important;
   border-radius: 25px !important;
-  background: #fff !important;
-  -webkit-mask: radial-gradient(circle 42px at 50% 0px, transparent 0 40px, #000 41px) !important;
-  mask: radial-gradient(circle 42px at 50% 0px, transparent 0 40px, #000 41px) !important;
-  filter: drop-shadow(0 12px 19px rgba(17, 44, 31, .08)) !important;
+  background: radial-gradient(circle 43px at 50% -2px, transparent 0 40px, #fff 41px) !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 10px 16px rgba(20, 46, 33, .09)) !important;
   pointer-events: none !important;
-  z-index: -1 !important;
+  z-index: 0 !important;
 }
 
-html body #root .hydra-root .phone-app .bottom-nav::after,
-html body #root .hydra-root .phone-app .bottom-nav-indicator {
-  display: none !important;
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::after,
+html body #root .hydra-root .phone-app .bottom-nav .bottom-nav-indicator {
   content: none !important;
+  display: none !important;
 }
 
-html body #root .hydra-root .phone-app .bottom-nav > button {
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button {
   position: relative !important;
   z-index: 2 !important;
   width: 100% !important;
   min-width: 0 !important;
-  height: 70px !important;
-  min-height: 70px !important;
+  height: 72px !important;
+  min-height: 72px !important;
   margin: 0 !important;
   padding: 0 !important;
   display: grid !important;
@@ -62,6 +65,7 @@ html body #root .hydra-root .phone-app .bottom-nav > button {
   overflow: visible !important;
   border: 0 !important;
   border-radius: 18px !important;
+  outline: 0 !important;
   color: #c4c8c5 !important;
   background: transparent !important;
   background-image: none !important;
@@ -73,7 +77,7 @@ html body #root .hydra-root .phone-app .bottom-nav > button {
   -webkit-tap-highlight-color: transparent !important;
 }
 
-html body #root .hydra-root .phone-app .bottom-nav > button > span:first-of-type {
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:first-of-type {
   width: 42px !important;
   height: 42px !important;
   min-width: 42px !important;
@@ -88,22 +92,22 @@ html body #root .hydra-root .phone-app .bottom-nav > button > span:first-of-type
   background: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
-  transform: translateY(-2px) !important;
+  transform: translateY(-1px) !important;
   pointer-events: none !important;
 }
 
-html body #root .hydra-root .phone-app .bottom-nav > button > span:first-of-type svg {
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:first-of-type svg {
   width: 23px !important;
   height: 23px !important;
   color: inherit !important;
   stroke: currentColor !important;
   fill: none !important;
-  stroke-width: 2 !important;
+  stroke-width: 1.9 !important;
   pointer-events: none !important;
 }
 
-/* Os rótulos continuam no DOM para acessibilidade, sem ocupar espaço visual. */
-html body #root .hydra-root .phone-app .bottom-nav > button > small {
+/* Rótulos continuam acessíveis, sem poluir a barra. */
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > small {
   position: absolute !important;
   width: 1px !important;
   height: 1px !important;
@@ -116,146 +120,133 @@ html body #root .hydra-root .phone-app .bottom-nav > button > small {
   border: 0 !important;
 }
 
-/* Item lateral ativo: somente ícone verde + bolinha abaixo, como a referência. */
-html body #root .hydra-root .phone-app .bottom-nav > button.active:not(:nth-of-type(3)),
-html body #root .hydra-root .phone-app .bottom-nav > button[aria-current="page"]:not(:nth-of-type(3)) {
+/* Item lateral ativo: ícone verde + ponto abaixo, como na referência. */
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3)),
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3)) {
   color: #174c36 !important;
-  background: transparent !important;
 }
 
-html body #root .hydra-root .phone-app .bottom-nav > button.active:not(:nth-of-type(3)) > span:first-of-type,
-html body #root .hydra-root .phone-app .bottom-nav > button[aria-current="page"]:not(:nth-of-type(3)) > span:first-of-type {
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3)) > span:first-of-type,
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3)) > span:first-of-type {
   color: #174c36 !important;
   transform: translateY(-6px) !important;
 }
 
-html body #root .hydra-root .phone-app .bottom-nav > button.active:not(:nth-of-type(3))::after,
-html body #root .hydra-root .phone-app .bottom-nav > button[aria-current="page"]:not(:nth-of-type(3))::after {
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3))::after,
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3))::after {
   content: "" !important;
+  display: block !important;
   position: absolute !important;
   left: 50% !important;
   bottom: 9px !important;
   width: 6px !important;
   height: 6px !important;
-  border-radius: 999px !important;
+  border: 0 !important;
+  border-radius: 50% !important;
   background: #174c36 !important;
   transform: translateX(-50%) !important;
   pointer-events: none !important;
 }
 
-/* Terceiro botão: o próprio hit-box sobe junto com o círculo.
- * Assim a parte que sai da barra também recebe toque/click.
- */
-html body #root .hydra-root .phone-app .bottom-nav > button:nth-of-type(3) {
+/* O terceiro item é a ação elevada. O hit-box sobe com o círculo para o toque funcionar inteiro. */
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) {
   align-self: start !important;
-  height: 98px !important;
-  min-height: 98px !important;
-  margin-top: -30px !important;
+  height: 104px !important;
+  min-height: 104px !important;
+  margin-top: -32px !important;
   z-index: 8 !important;
   color: #fff !important;
   background: transparent !important;
   pointer-events: auto !important;
 }
 
-html body #root .hydra-root .phone-app .bottom-nav > button:nth-of-type(3) > span:first-of-type,
-html body #root .hydra-root .phone-app .bottom-nav > button.nav-create > span:first-of-type,
-html body #root .hydra-root .phone-app .bottom-nav > button.nav-nfc > span:first-of-type {
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) > span:first-of-type,
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-create > span:first-of-type,
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc > span:first-of-type {
   position: absolute !important;
   left: 50% !important;
   top: 0 !important;
-  width: 68px !important;
-  height: 68px !important;
-  min-width: 68px !important;
-  min-height: 68px !important;
+  width: 66px !important;
+  height: 66px !important;
+  min-width: 66px !important;
+  min-height: 66px !important;
   margin: 0 !important;
   padding: 0 !important;
   display: grid !important;
   place-items: center !important;
-  border: 7px solid #f3f4f1 !important;
+  border: 5px solid #f3f4f1 !important;
   border-radius: 50% !important;
   color: #fff !important;
   background: #174c36 !important;
   background-color: #174c36 !important;
   background-image: none !important;
-  box-shadow: 0 5px 11px rgba(23, 76, 54, .11) !important;
+  box-shadow: 0 7px 15px rgba(23, 76, 54, .14) !important;
   transform: translateX(-50%) !important;
   pointer-events: none !important;
 }
 
-html body #root .hydra-root .phone-app .bottom-nav > button:nth-of-type(3) > span:first-of-type svg,
-html body #root .hydra-root .phone-app .bottom-nav > button.nav-create > span:first-of-type svg,
-html body #root .hydra-root .phone-app .bottom-nav > button.nav-nfc > span:first-of-type svg {
-  width: 26px !important;
-  height: 26px !important;
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) > span:first-of-type svg,
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-create > span:first-of-type svg,
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc > span:first-of-type svg {
+  width: 25px !important;
+  height: 25px !important;
   color: #fff !important;
   stroke: currentColor !important;
-  stroke-width: 2.05 !important;
+  stroke-width: 2 !important;
 }
 
-html body #root .hydra-root .phone-app .bottom-nav:not(.is-hidden),
-html body #root .hydra-root .phone-app .bottom-nav:not(.is-hidden) > button {
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav:not(.is-hidden),
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav:not(.is-hidden) > button {
   pointer-events: auto !important;
 }
 
-html body #root .hydra-root .phone-app .bottom-nav.is-hidden {
+html body #root .hydra-root .phone-app .bottom-nav.bottom-nav.is-hidden {
   opacity: 0 !important;
   pointer-events: none !important;
-  transform: translate(-50%, calc(100% + 48px)) !important;
+  transform: translate(-50%, calc(100% + 52px)) !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  html body #root .hydra-root .phone-app .bottom-nav > button:not(:nth-of-type(3)) > span:first-of-type {
-    transition: color 160ms ease, transform 160ms ease !important;
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:not(:nth-of-type(3)) > span:first-of-type {
+    transition: color 150ms ease, transform 150ms ease !important;
   }
-  html body #root .hydra-root .phone-app .bottom-nav > button:nth-of-type(3):active > span:first-of-type,
-  html body #root .hydra-root .phone-app .bottom-nav > button:nth-of-type(3).is-tapped > span:first-of-type {
-    transform: translateX(-50%) scale(.94) !important;
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3):active > span:first-of-type,
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3).is-tapped > span:first-of-type {
+    transform: translateX(-50%) scale(.95) !important;
   }
 }
 
-/* Tema escuro: mesma geometria e o mesmo verde da marca. */
-html body #root .hydra-root.theme-dark .phone-app .bottom-nav::before {
-  background: #13231b !important;
+html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav::before {
+  background: radial-gradient(circle 43px at 50% -2px, transparent 0 40px, #13231b 41px) !important;
 }
-html body #root .hydra-root.theme-dark .phone-app .bottom-nav > button {
+
+html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button {
   color: #6d7771 !important;
 }
-html body #root .hydra-root.theme-dark .phone-app .bottom-nav > button.active:not(:nth-of-type(3)),
-html body #root .hydra-root.theme-dark .phone-app .bottom-nav > button[aria-current="page"]:not(:nth-of-type(3)) {
-  color: #174c36 !important;
-}
-html body #root .hydra-root.theme-dark .phone-app .bottom-nav > button.active:not(:nth-of-type(3))::after,
-html body #root .hydra-root.theme-dark .phone-app .bottom-nav > button[aria-current="page"]:not(:nth-of-type(3))::after {
-  background: #174c36 !important;
-}
-html body #root .hydra-root.theme-dark .phone-app .bottom-nav > button:nth-of-type(3) > span:first-of-type,
-html body #root .hydra-root.theme-dark .phone-app .bottom-nav > button.nav-create > span:first-of-type,
-html body #root .hydra-root.theme-dark .phone-app .bottom-nav > button.nav-nfc > span:first-of-type {
+
+html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) > span:first-of-type {
   border-color: #0d1d15 !important;
   background: #174c36 !important;
 }
 
 @media (max-width: 360px) {
-  html body #root .hydra-root .phone-app .bottom-nav {
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav {
     width: calc(100% - 22px) !important;
-    height: 66px !important;
-    min-height: 66px !important;
+    height: 68px !important;
+    min-height: 68px !important;
   }
-  html body #root .hydra-root .phone-app .bottom-nav::before {
-    -webkit-mask: radial-gradient(circle 39px at 50% 0, transparent 0 37px, #000 38px) !important;
-    mask: radial-gradient(circle 39px at 50% 0, transparent 0 37px, #000 38px) !important;
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::before {
+    background: radial-gradient(circle 40px at 50% -2px, transparent 0 37px, #fff 38px) !important;
   }
-  html body #root .hydra-root .phone-app .bottom-nav > button:nth-of-type(3) {
-    height: 92px !important;
-    min-height: 92px !important;
-    margin-top: -28px !important;
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) {
+    height: 98px !important;
+    min-height: 98px !important;
+    margin-top: -30px !important;
   }
-  html body #root .hydra-root .phone-app .bottom-nav > button:nth-of-type(3) > span:first-of-type,
-  html body #root .hydra-root .phone-app .bottom-nav > button.nav-create > span:first-of-type,
-  html body #root .hydra-root .phone-app .bottom-nav > button.nav-nfc > span:first-of-type {
-    width: 64px !important;
-    height: 64px !important;
-    min-width: 64px !important;
-    min-height: 64px !important;
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) > span:first-of-type {
+    width: 62px !important;
+    height: 62px !important;
+    min-width: 62px !important;
+    min-height: 62px !important;
   }
 }
