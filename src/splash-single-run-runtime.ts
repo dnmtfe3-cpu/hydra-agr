@@ -2,9 +2,10 @@ import { Capacitor } from "@capacitor/core";
 
 const html = document.documentElement;
 const themeMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+const SPLASH_GREEN = "#073D2A";
 
 function keepSplashGreen() {
-  if (themeMeta && themeMeta.content.toLowerCase() !== "#174c36") themeMeta.content = "#174c36";
+  if (themeMeta && themeMeta.content.toLowerCase() !== SPLASH_GREEN.toLowerCase()) themeMeta.content = SPLASH_GREEN;
 }
 
 if (Capacitor.isNativePlatform()) {
