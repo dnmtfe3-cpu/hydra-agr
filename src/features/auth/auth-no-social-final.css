@@ -1,17 +1,89 @@
-/* Solicitação de produto: autenticação social não aparece no fluxo do Hydra Agro. */
-html body #root .hydra-root .google-auth-button,
-html body #root .hydra-root button.apple-auth-button,
-html body #root .hydra-root .apple-auth-button {
-  display: none !important;
+/* Provedores sociais ainda não liberados: aparecem apenas como prévia "Em breve". */
+html body #root .hydra-root .auth-shell .google-auth-button,
+html body #root .hydra-root .auth-shell button.apple-auth-button,
+html body #root .hydra-root .auth-shell .apple-auth-button {
+  width: calc(50% - 5px) !important;
+  min-height: 52px !important;
+  margin-top: 0 !important;
+  padding: 7px 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 9px !important;
+  vertical-align: top !important;
+  border: 1px solid #dde3de !important;
+  border-radius: 17px !important;
+  color: #26302b !important;
+  background: rgba(255,255,255,.92) !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  cursor: default !important;
+  pointer-events: none !important;
 }
 
-html body #root .hydra-root .google-auth-button + .auth-divider,
-html body #root .hydra-root .apple-auth-button + .auth-divider {
-  display: none !important;
+html body #root .hydra-root .auth-shell .google-auth-button {
+  margin-right: 10px !important;
 }
 
-/* Sem os provedores sociais, o primeiro campo começa com respiro semelhante à referência. */
-html body #root .hydra-root .auth-content form > .auth-subtitle + .google-auth-button + .auth-divider + .field,
-html body #root .hydra-root .signup-panel > .auth-subtitle + .google-auth-button + .auth-divider + .form-grid {
-  margin-top: 22px !important;
+html body #root .hydra-root .auth-shell :is(.google-auth-button,.apple-auth-button):disabled {
+  opacity: 1 !important;
+  color: #26302b !important;
+  -webkit-text-fill-color: #26302b !important;
+}
+
+html body #root .hydra-root .auth-shell .auth-provider-mark {
+  width: 30px !important;
+  height: 30px !important;
+  flex: 0 0 30px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 50% !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 600 !important;
+}
+
+html body #root .hydra-root .auth-shell .auth-provider-mark-google {
+  color: #4285f4 !important;
+  background: #f4f7ff !important;
+}
+
+html body #root .hydra-root .auth-shell .auth-provider-mark-apple {
+  color: #171d19 !important;
+  background: #f1f2f0 !important;
+}
+
+html body #root .hydra-root .auth-shell .auth-provider-copy {
+  min-width: 0 !important;
+  display: grid !important;
+  gap: 1px !important;
+  text-align: left !important;
+}
+
+html body #root .hydra-root .auth-shell .auth-provider-copy strong {
+  color: #26302b !important;
+  font-size: 11px !important;
+  line-height: 1.15 !important;
+  font-weight: 500 !important;
+}
+
+html body #root .hydra-root .auth-shell .auth-provider-copy small {
+  color: #9aa19d !important;
+  font-size: 8.5px !important;
+  line-height: 1.15 !important;
+  font-weight: 500 !important;
+}
+
+html body #root .hydra-root .auth-shell .auth-divider {
+  display: flex !important;
+  margin: 20px 0 14px !important;
+}
+
+@media (max-width: 350px) {
+  html body #root .hydra-root .auth-shell .google-auth-button,
+  html body #root .hydra-root .auth-shell button.apple-auth-button {
+    width: 100% !important;
+    margin-right: 0 !important;
+  }
+  html body #root .hydra-root .auth-shell .google-auth-button { margin-bottom: 8px !important; }
 }
