@@ -1,0 +1,146 @@
+:root,
+html body #root .hydra-root {
+  /* Hydra Agro — fonte única de verdade */
+  --hydra-green: #0B5136;
+  --hydra-green-dark: #073D2A;
+  --hydra-orange: #FF8A12;
+  --hydra-cream: #FAF8F1;
+  --hydra-card: #FFFFFF;
+  --hydra-text: #17201B;
+  --hydra-text-secondary: #68716C;
+  --hydra-border: rgba(7, 61, 42, .10);
+  --hydra-disabled: #A8AEA9;
+
+  --ref-green: var(--hydra-green);
+  --ref-green-deep: var(--hydra-green-dark);
+  --ref-green-dark: var(--hydra-green-dark);
+  --ha-green-950: var(--hydra-green-dark);
+  --ha-green-900: var(--hydra-green-dark);
+  --ha-green-800: var(--hydra-green);
+  --ha-green-700: var(--hydra-green);
+  --ha-green-600: var(--hydra-green);
+  --forest-950: var(--hydra-green-dark);
+  --forest-900: var(--hydra-green-dark);
+  --forest-800: var(--hydra-green);
+  --forest-700: var(--hydra-green);
+  --forest-600: var(--hydra-green);
+  --hf-green: var(--hydra-green);
+  --hf-green-deep: var(--hydra-green-dark);
+
+  --type-screen-title: 26px;
+  --type-section-title: 18px;
+  --type-card-title: 14px;
+  --type-body: 13px;
+  --type-secondary: 12px;
+  --type-label: 11px;
+  --type-caption: 10px;
+  --line-tight: 1.18;
+  --line-normal: 1.45;
+
+  --radius-control: 14px;
+  --radius-card: 20px;
+  --radius-sheet: 26px;
+  --space-page: 16px;
+  --space-section: 22px;
+  --space-card: 16px;
+  --control-height: 48px;
+  --icon-sm: 18px;
+  --icon-md: 21px;
+  --icon-lg: 24px;
+  --shadow-card: 0 8px 26px rgba(7, 61, 42, .055);
+  --shadow-floating: 0 14px 38px rgba(7, 61, 42, .13);
+}
+
+html body #root .hydra-root {
+  color: var(--hydra-text);
+  background: var(--hydra-cream);
+  font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+/* Verde principal: componentes equivalentes não ganham tons próprios por página. */
+html body #root .hydra-root :is(.primary-button, .primary-action, .auth-primary, .save-button, .plan-button, .comment-form button[type="submit"], .community-tabs .active, .theme-option.active) {
+  background-color: var(--hydra-green) !important;
+  border-color: var(--hydra-green) !important;
+}
+
+html body #root .hydra-root :is(.screen-header h1, .section-title, .card-title, .profile-group strong, .settings-row strong) {
+  font-family: inherit !important;
+}
+
+html body #root .hydra-root :is(.screen-header h1, .screen-title) {
+  font-size: var(--type-screen-title) !important;
+  font-weight: 600 !important;
+  line-height: var(--line-tight) !important;
+}
+
+html body #root .hydra-root :is(.section-title, .section-heading h2, .profile-section h2) {
+  font-size: var(--type-section-title) !important;
+  font-weight: 600 !important;
+  line-height: 1.25 !important;
+}
+
+html body #root .hydra-root :is(.card-title, .card h3, .list-card h3) {
+  font-size: var(--type-card-title) !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+}
+
+html body #root .hydra-root :is(p, .body-copy, .card p) {
+  line-height: var(--line-normal);
+}
+
+html body #root .hydra-root :is(.secondary-text, .muted, small) {
+  color: var(--hydra-text-secondary);
+}
+
+html body #root .hydra-root :is(button, .button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html body #root .hydra-root :is(.primary-button, .secondary-button, .auth-primary, .auth-secondary) {
+  min-height: var(--control-height);
+  border-radius: var(--radius-control) !important;
+  font-size: var(--type-body) !important;
+  font-weight: 600 !important;
+}
+
+html body #root .hydra-root :is(.primary-button, .secondary-button, .auth-primary, .auth-secondary):active:not(:disabled) {
+  transform: scale(.985);
+}
+
+html body #root .hydra-root button:disabled {
+  cursor: default;
+  opacity: .52;
+}
+
+/* Superfícies equivalentes. Não transforma conteúdo solto em card. */
+html body #root .hydra-root :is(.card, .list-card, .settings-card, .profile-menu-card, .community-card) {
+  border-color: var(--hydra-border) !important;
+}
+
+/* Splash e chrome usam a paleta oficial. */
+html body #root .hydra-root .splash-screen {
+  background: var(--hydra-green) !important;
+}
+
+html.hydra-splash-active,
+html.hydra-splash-active body,
+html.hydra-splash-active body #root,
+html.hydra-splash-active body .splash-screen {
+  background-color: #0B5136 !important;
+}
+
+/* Bottom nav: mesmo verde oficial, sem criar uma variante própria. */
+html body #root .hydra-root .bottom-nav button.active:not(.nav-create),
+html body #root .hydra-root .bottom-nav button.active:not(.nav-create) svg {
+  color: var(--hydra-green) !important;
+  stroke: var(--hydra-green) !important;
+}
+html body #root .hydra-root .bottom-nav .nav-create {
+  background: var(--hydra-green) !important;
+}
+
+/* NFC continua laranja por função/identidade, não é convertido para verde. */
+html body #root .hydra-root :is(.nfc-accent, .hydra-tag-accent) {
+  color: var(--hydra-orange) !important;
+}
