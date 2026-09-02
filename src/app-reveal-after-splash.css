@@ -1,0 +1,27 @@
+/* A interface entra suavemente após a splash; não deixa a Home aparecer crua. */
+html body #root .hydra-root .app-shell {
+  animation: hydra-app-reveal 360ms cubic-bezier(.22,.72,.28,1) both;
+}
+
+@keyframes hydra-app-reveal {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* A bottom bar chega um instante depois do conteúdo, sem parecer outra splash. */
+html body #root .hydra-root .bottom-nav:not(.is-hidden) {
+  animation: hydra-nav-reveal 420ms 70ms cubic-bezier(.22,.72,.28,1) both;
+}
+
+@keyframes hydra-nav-reveal {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body #root .hydra-root .app-shell,
+  html body #root .hydra-root .bottom-nav:not(.is-hidden) {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+  }
+}
