@@ -321,6 +321,47 @@ html body #root .hydra-root:not(.theme-dark) .home-feature-media {
   overflow: hidden !important;
 }
 
+/* Home: a faixa verde termina com cantos inferiores arredondados e o clima sobrepõe a curva. */
+html body #root .hydra-root:not(.theme-dark) .home-screen {
+  position: relative !important;
+  isolation: isolate !important;
+  background: var(--hydra-ref-bg) !important;
+  background-image: none !important;
+  overflow-x: clip !important;
+}
+html body #root .hydra-root:not(.theme-dark) .home-screen::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: max(278px, calc(246px + env(safe-area-inset-top))) !important;
+  border-radius: 0 0 32px 32px !important;
+  background: #174c36 !important;
+  background-image: none !important;
+  pointer-events: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) .home-screen::after {
+  content: none !important;
+  display: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) .home-screen > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+html body #root .hydra-root:not(.theme-dark) .home-screen .greeting-block {
+  overflow: visible !important;
+}
+html body #root .hydra-root:not(.theme-dark) .home-screen .weather-card,
+html body #root .hydra-root:not(.theme-dark) .home-screen .weather-widget,
+html body #root .hydra-root:not(.theme-dark) .home-screen .weather-current {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
 /* Bottom bar recebe a mesma linha fina das superfícies da referência. */
 html body #root .hydra-root:not(.theme-dark) .bottom-nav.bottom-nav {
   border: 1px solid rgba(23,76,54,.08) !important;
@@ -331,5 +372,8 @@ html body #root .hydra-root:not(.theme-dark) .bottom-nav.bottom-nav {
   html body #root .hydra-root:not(.theme-dark) {
     --hydra-ref-radius-xl: 24px;
     --hydra-ref-radius-lg: 20px;
+  }
+  html body #root .hydra-root:not(.theme-dark) .home-screen::before {
+    border-radius: 0 0 28px 28px !important;
   }
 }
