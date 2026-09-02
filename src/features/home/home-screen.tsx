@@ -2,7 +2,6 @@
 
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import "../../product-polish.css";
-import "./home-production-shortcut.css";
 import "./home-profile-xp.css";
 import {
   Bell,
@@ -13,11 +12,7 @@ import {
   Leaf,
   Map,
   MapPin,
-  MessageSquareText,
-  NotebookTabs,
   Plus,
-  RadioTower,
-  Recycle,
   ScanLine,
   Sprout,
   UsersRound,
@@ -26,7 +21,6 @@ import type { Announcement, AppRoute, HydraAccount } from "../../lib/hydra-types
 import { farmExperience } from "../../lib/farm-xp";
 import { refreshDailyBriefingCopy } from "../../services/daily-briefing";
 import { requireSupabase } from "../../services/supabase";
-import { NutriCicloPanel } from "../family-farming/nutriciclo-panel";
 import { WeatherWidget } from "./weather-widget";
 
 type Props = { account: HydraAccount; navigate: (route: AppRoute) => void; onQuickAction: () => void; announcements: Announcement[] };
@@ -36,7 +30,6 @@ function countLabel(count: number, singular: string, plural: string) { return `$
 
 export function HomeScreen({ account, navigate, announcements }: Props) {
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
-  const [nutriCicloOpen, setNutriCicloOpen] = useState(false);
   const firstName = account.profile.name.split(/\s+/)[0] || "Produtor";
   const welcome = welcomeMessage();
   const today = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "2-digit", month: "long" }).format(new Date());
@@ -86,15 +79,6 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
 
     {announcements.length > 0 && <section className="home-announcements" aria-label="Avisos do Hydra Agro">{announcements.slice(0, 3).map((announcement) => <article key={announcement.id} className={announcement.level}><span>{announcement.level === "critical" ? "IMPORTANTE" : announcement.level === "attention" ? "ATENÇÃO" : "AVISO"}</span><strong>{announcement.title}</strong><p>{announcement.body}</p></article>)}</section>}
 
-    <div className="home-section-title"><div><small>ATALHOS</small><h2>Gestão rápida</h2></div></div>
-    <div className="shortcut-row home-shortcuts-five" aria-label="Atalhos">
-      <button onClick={() => setNutriCicloOpen(true)} aria-label="Hydra NutriCiclo" title="Hydra NutriCiclo"><span><Recycle size={22} /></span><small>NutriCiclo</small></button>
-      <button onClick={() => navigate("monitor")} aria-label="Monitorar" title="Monitorar"><span><RadioTower size={22} /></span><small>Monitorar</small></button>
-      <button onClick={() => navigate("activities")} aria-label="Tarefas" title="Tarefas"><span><ClipboardCheck size={22} /></span><small>Tarefas</small></button>
-      <button onClick={() => navigate("assistant")} aria-label="Assistente" title="Assistente"><span><MessageSquareText size={22} /></span><small>Assistente</small></button>
-      <button className="production-shortcut" onClick={() => navigate("production")} aria-label="Caderno da Produção" title="Agricultura familiar"><span><NotebookTabs size={22} /></span><small>Produção</small></button>
-    </div>
-
     <div className="home-section-title home-feature-title"><div><small>DESTAQUES</small><h2>Sua propriedade hoje</h2></div></div>
     <div className="home-feature-grid">
       <button className={`home-feature-card ${account.property.coverUrl ? "has-photo" : ""}`} onClick={() => navigate("property")}>
@@ -121,7 +105,5 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
         {pendingActivities.length === 0 && pendingSetup.length === 0 && <div className="calm-state"><Leaf size={22} /><div><strong>Sem tarefas pendentes</strong><span>Os registros estão em dia.</span></div></div>}
       </section>
     </div>
-
-    <NutriCicloPanel account={account} open={nutriCicloOpen} onClose={() => setNutriCicloOpen(false)} />
   </div>;
 }
