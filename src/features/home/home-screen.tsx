@@ -15,7 +15,6 @@ import {
   Plus,
   ScanLine,
   Sprout,
-  UsersRound,
 } from "lucide-react";
 import type { Announcement, AppRoute, HydraAccount } from "../../lib/hydra-types";
 import { farmExperience } from "../../lib/farm-xp";
@@ -94,8 +93,6 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
     <div className="home-dashboard-grid">
       <div className="home-dashboard-primary">
         <button className="nfc-banner" onClick={() => navigate("nfc")}><span className="nfc-banner-icon"><ScanLine size={26} /></span><span className="nfc-banner-copy"><small>HYDRA TAG · NFC / RFID</small><strong>Ler identificação do animal</strong><em>{countLabel(identifiedAnimals, "identificado", "identificados")} · {countLabel(account.nfcReadCount, "leitura", "leituras")}</em></span><ChevronRight size={20} /></button>
-
-        <section className="property-hero"><div className="property-hero-top"><div><span className="property-kicker">RESUMO</span><h2>{account.property.name || "Propriedade não cadastrada"}</h2><p>{propertyReady ? `${account.property.mainActivity ? `${account.property.mainActivity} · ` : ""}${account.property.municipality}, ${account.property.state}` : "Complete a localização da propriedade"}</p></div><button onClick={() => navigate("property")} aria-label="Editar propriedade"><Sprout size={20} /></button></div><div className="property-metrics"><div><UsersRound size={19} /><span><strong>Equipe</strong><small>gestão e operações</small></span></div><div><Cow size={19} /><span><strong>{account.animals.length}</strong><small>{account.animals.length === 1 ? "animal" : "animais"}</small></span></div><div><ClipboardCheck size={19} /><span><strong>{pendingActivities.length}</strong><small>{pendingActivities.length === 1 ? "tarefa pendente" : "tarefas pendentes"}</small></span></div></div><button className="property-link" onClick={() => navigate("property")}>Ver detalhes <ChevronRight size={17} /></button></section>
       </div>
 
       <section className="home-section home-summary-section"><button className="history-home-row" onClick={() => navigate("history")}><span><History size={19} /></span><div><strong>Histórico da propriedade</strong><small>Tarefas, rebanho, produção e monitoramentos</small></div><ChevronRight size={18} /></button>
