@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { App as CapacitorApp } from "@capacitor/app";
 import { Capacitor } from "@capacitor/core";
-import { ClipboardCheck, Beef as Cow, History, Home, MapPin, Nfc, Plus, Send, UserRound, UsersRound, X } from "lucide-react";
+import { ClipboardCheck, Beef as Cow, History, Home, MapPin, Nfc, Plus, Send, Trophy, UserRound, UsersRound, X } from "lucide-react";
 import { SplashBrand } from "./components/brand";
 import { requestCloseTopOverlay, useAppOverlay, useModalNavigation } from "./components/modal-system";
 import { BackendSetupScreen, BannedScreen, PasswordRecoveryScreen, SyncBanner } from "./components/system-state";
@@ -37,8 +37,8 @@ type NavTab = { id: AppRoute; label: string; icon: typeof Home };
 const ownerMainTabs: NavTab[] = [
   { id: "home", label: "Início", icon: Home },
   { id: "community", label: "Comunidade", icon: UsersRound },
-  { id: "nfc", label: "NFC", icon: Nfc },
-  { id: "herd", label: "Rebanho", icon: Cow },
+  { id: "nfc", label: "Adicionar", icon: Plus },
+  { id: "challenges", label: "Desafios", icon: Trophy },
   { id: "profile", label: "Perfil", icon: UserRound },
 ];
 
@@ -305,6 +305,10 @@ export default function HydraApp() {
   }
 
   function openMainTab(tab: AppRoute) {
+    if (!isStaff && tab === "nfc") {
+      openQuick();
+      return;
+    }
     if (tab === "nfc") setNfcAnimalId(undefined);
     navigate(tab);
   }
@@ -360,6 +364,7 @@ export default function HydraApp() {
 
   const activeTab: AppRoute = mainRouteIds.includes(route)
     ? route
+    : !isStaff && route === "challenges" ? "challenges"
     : !isStaff && (route === "monitor" || route === "property" || route === "plus" || route === "admin") ? "profile"
     : "home";
   const activeIndex = mainTabs.findIndex((tab) => tab.id === activeTab);
@@ -376,7 +381,8 @@ export default function HydraApp() {
           <span className="bottom-nav-indicator" aria-hidden="true" />
           {mainTabs.map((tab) => {
             const Icon = tab.icon;
-            return <button key={tab.id} className={`${activeTab === tab.id ? "active" : ""} ${tab.id === "nfc" ? "nav-nfc" : ""}`.trim()} onClick={() => openMainTab(tab.id)} aria-current={activeTab === tab.id ? "page" : undefined}><span><Icon size={21} strokeWidth={activeTab === tab.id ? 2.5 : 2} /></span><small>{tab.label}</small></button>;
+            const isQuickAction = !isStaff && tab.id === "nfc";
+            return <button key={tab.id} className={`${activeTab === tab.id && !isQuickAction ? "active" : ""} ${isQuickAction ? "nav-nfc nav-create" : ""}`.trim()} onClick={() => openMainTab(tab.id)} aria-label={isQuickAction ? "Abrir nova ação" : undefined} aria-current={activeTab === tab.id && !isQuickAction ? "page" : undefined}><span><Icon size={isQuickAction ? 25 : 21} strokeWidth={isQuickAction ? 2.35 : activeTab === tab.id ? 2.5 : 2} /></span><small>{tab.label}</small></button>;
           })}
         </nav>
 
