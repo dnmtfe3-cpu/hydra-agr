@@ -1,35 +1,35 @@
-/* Bottom bar final: fixa na base da tela. Mantém o recorte do botão central e um blur discreto atrás. */
+/* Bottom bar final: fixa na base, arredondada, sem conteúdo visível por trás. */
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav {
-  bottom: 0 !important;
-  width: min(100%, 430px) !important;
-  height: calc(74px + env(safe-area-inset-bottom)) !important;
-  min-height: calc(74px + env(safe-area-inset-bottom)) !important;
-  padding: 0 12px env(safe-area-inset-bottom) !important;
-  border-radius: 25px 25px 0 0 !important;
+  bottom: max(6px, env(safe-area-inset-bottom)) !important;
+  width: min(calc(100% - 20px), 410px) !important;
+  height: 74px !important;
+  min-height: 74px !important;
+  padding: 0 12px !important;
+  border-radius: 27px !important;
+  overflow: visible !important;
 }
 
+/* Fundo sólido da barra: preserva o arredondado e impede o conteúdo de aparecer atrás. */
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::after {
   content: "" !important;
   display: block !important;
   position: absolute !important;
-  left: 0 !important;
-  right: 0 !important;
-  top: -12px !important;
-  bottom: 0 !important;
-  border-radius: 30px 30px 0 0 !important;
-  background: rgba(250,248,241,.76) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(.92) !important;
-  backdrop-filter: blur(18px) saturate(.92) !important;
-  box-shadow: none !important;
+  inset: 0 !important;
+  border-radius: 27px !important;
+  background: #ffffff !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: 0 8px 24px rgba(7,61,42,.08) !important;
   pointer-events: none !important;
   z-index: 0 !important;
 }
 
+/* A camada com o recorte central continua acima do fundo sólido. */
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::before {
   inset: 0 !important;
-  border-radius: 25px 25px 0 0 !important;
-  background: rgba(255,255,255,.97) !important;
-  box-shadow: 0 -5px 18px rgba(7,61,42,.055) !important;
+  border-radius: 27px !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
   z-index: 1 !important;
 }
 
@@ -49,25 +49,27 @@ html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-ty
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) > span:first-of-type,
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-create > span:first-of-type,
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc > span:first-of-type {
-  border-color: rgba(250,248,241,.98) !important;
+  border-color: #faf8f1 !important;
   box-shadow: 0 6px 16px rgba(11,81,54,.13) !important;
 }
 
-html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav::after {
-  background: rgba(13,29,21,.78) !important;
-}
+html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav::after,
 html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav::before {
-  background: rgba(19,35,27,.97) !important;
+  background: #13231b !important;
 }
 html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) > span:first-of-type {
-  border-color: rgba(13,29,21,.98) !important;
+  border-color: #0d1d15 !important;
 }
 
 @media (max-width:360px) {
   html body #root .hydra-root .phone-app .bottom-nav.bottom-nav {
-    width: 100% !important;
-    height: calc(70px + env(safe-area-inset-bottom)) !important;
-    min-height: calc(70px + env(safe-area-inset-bottom)) !important;
+    bottom: max(5px, env(safe-area-inset-bottom)) !important;
+    width: calc(100% - 14px) !important;
+    height: 70px !important;
+    min-height: 70px !important;
+    border-radius: 25px !important;
   }
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::before,
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::after { border-radius:25px !important; }
   html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button { height:70px !important; min-height:70px !important; }
 }
