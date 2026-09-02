@@ -33,6 +33,7 @@ import { requireSupabase } from "./services/supabase";
 import { HydraSpreadsheetPanel } from "./features/spreadsheets/hydra-spreadsheet-panel";
 import "./dribbble-agriculture-reference.css";
 import "./dribbble-agriculture-fidelity.css";
+import "./hydra-identity-final.css";
 
 type ThemeMode = "light" | "dark";
 const THEME_KEY = "hydra-agro.theme";
