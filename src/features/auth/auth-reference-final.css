@@ -1,0 +1,414 @@
+/* Hydra Agro — autenticação inspirada na referência enviada, preservando toda a lógica existente. */
+html body #root .hydra-root .auth-landing,
+html body #root .hydra-root .auth-shell {
+  min-height:100dvh!important;
+  background:#f7f8f5!important;
+  color:#17221c!important;
+}
+
+/* Entrada limpa: remove mosaico/fotos e usa a própria marca. */
+html body #root .hydra-root .auth-landing {
+  display:grid!important;
+  place-items:center!important;
+  padding:max(34px,env(safe-area-inset-top)) 22px max(28px,env(safe-area-inset-bottom))!important;
+  overflow:hidden!important;
+}
+html body #root .hydra-root .auth-landing-mosaic,
+html body #root .hydra-root .auth-landing-shade { display:none!important; }
+html body #root .hydra-root .auth-landing-content {
+  position:relative!important;
+  inset:auto!important;
+  width:min(100%,420px)!important;
+  margin:0 auto!important;
+  padding:0!important;
+  text-align:center!important;
+  color:#17221c!important;
+}
+html body #root .hydra-root .auth-landing-mark-wrap {
+  width:74px!important;
+  height:74px!important;
+  margin:0 auto 22px!important;
+  filter:none!important;
+  animation:none!important;
+}
+html body #root .hydra-root .auth-landing-kicker {
+  margin:0 0 8px!important;
+  color:#66716b!important;
+  font-size:11px!important;
+  font-weight:500!important;
+  letter-spacing:.04em!important;
+  text-transform:none!important;
+}
+html body #root .hydra-root .auth-landing-content h1 {
+  margin:0!important;
+  color:#17221c!important;
+  font-family:"Manrope",system-ui,sans-serif!important;
+  font-size:clamp(30px,8vw,38px)!important;
+  line-height:1.04!important;
+  font-weight:500!important;
+  letter-spacing:-.045em!important;
+}
+html body #root .hydra-root .auth-landing-content h1 strong {
+  color:#174c36!important;
+  font-weight:500!important;
+}
+html body #root .hydra-root .auth-landing-copy {
+  max-width:320px!important;
+  margin:14px auto 24px!important;
+  color:#818a85!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+}
+html body #root .hydra-root .auth-landing-actions {
+  padding:4px!important;
+  gap:4px!important;
+  border:1px solid #e0e5df!important;
+  border-radius:18px!important;
+  background:#eef1ed!important;
+}
+html body #root .hydra-root :is(.auth-landing-primary,.auth-landing-secondary) {
+  min-height:48px!important;
+  border:0!important;
+  border-radius:14px!important;
+  box-shadow:none!important;
+  font-size:13px!important;
+  font-weight:500!important;
+}
+html body #root .hydra-root .auth-landing-primary {
+  color:#fff!important;
+  background:#174c36!important;
+}
+html body #root .hydra-root .auth-landing-secondary {
+  color:#4f5954!important;
+  background:transparent!important;
+  backdrop-filter:none!important;
+}
+html body #root .hydra-root .auth-landing-staff {
+  min-height:50px!important;
+  margin-top:12px!important;
+  border:1px solid #dfe4df!important;
+  border-radius:16px!important;
+  color:#174c36!important;
+  background:#fff!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  font-size:12px!important;
+  font-weight:500!important;
+}
+html body #root .hydra-root .auth-landing-staff > svg {
+  width:20px!important;
+  height:20px!important;
+  padding:0!important;
+  color:#174c36!important;
+  background:transparent!important;
+}
+
+/* Tela de formulário */
+html body #root .hydra-root .auth-shell {
+  padding:max(22px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom))!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow-y:auto!important;
+}
+html body #root .hydra-root .auth-shell .signup-motion-bg { display:none!important; }
+html body #root .hydra-root .auth-card,
+html body #root .hydra-root .auth-card.auth-card-wide {
+  width:min(100%,430px)!important;
+  max-width:430px!important;
+  margin:auto!important;
+  padding:26px 20px 22px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+}
+html body #root .hydra-root .auth-form-mark {
+  display:grid!important;
+  place-items:center!important;
+  width:58px!important;
+  height:58px!important;
+  margin:0 auto 18px!important;
+  filter:none!important;
+}
+html body #root .hydra-root .auth-form-mark > * { width:100%!important; height:100%!important; }
+html body #root .hydra-root .auth-content,
+html body #root .hydra-root .signup-flow,
+html body #root .hydra-root .signup-panel {
+  width:100%!important;
+}
+html body #root .hydra-root .auth-content form,
+html body #root .hydra-root .signup-panel {
+  text-align:left!important;
+}
+
+html body #root .hydra-root .auth-card h1,
+html body #root .hydra-root .signup-panel h1 {
+  margin:0 0 7px!important;
+  color:#17221c!important;
+  font-family:"Manrope",system-ui,sans-serif!important;
+  font-size:clamp(27px,7.4vw,34px)!important;
+  line-height:1.05!important;
+  font-weight:500!important;
+  letter-spacing:-.045em!important;
+  text-align:center!important;
+}
+html body #root .hydra-root .auth-subtitle {
+  max-width:320px!important;
+  margin:0 auto 22px!important;
+  color:#818a85!important;
+  font-size:12px!important;
+  line-height:1.45!important;
+  text-align:center!important;
+}
+html body #root .hydra-root .auth-icon {
+  display:none!important;
+}
+html body #root .hydra-root .eyebrow {
+  display:block!important;
+  margin-bottom:8px!important;
+  color:#174c36!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  letter-spacing:.08em!important;
+  text-align:center!important;
+}
+
+html body #root .hydra-root :is(.auth-home-back,.auth-back) {
+  min-height:38px!important;
+  margin:0 0 18px!important;
+  padding:0 2px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  border:0!important;
+  color:#4f5954!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  font-size:12px!important;
+  font-weight:500!important;
+}
+
+html body #root .hydra-root .google-auth-button {
+  width:100%!important;
+  min-height:50px!important;
+  margin:0 0 16px!important;
+  padding:0 16px!important;
+  border:1px solid #dce2dc!important;
+  border-radius:16px!important;
+  color:#27312c!important;
+  background:#fff!important;
+  box-shadow:none!important;
+  font-size:13px!important;
+  font-weight:500!important;
+}
+html body #root .hydra-root .google-g {
+  width:22px!important;
+  height:22px!important;
+  display:grid!important;
+  place-items:center!important;
+  font-size:14px!important;
+}
+html body #root .hydra-root .auth-divider {
+  margin:14px 0 18px!important;
+  color:#a0a7a3!important;
+}
+html body #root .hydra-root .auth-divider::before,
+html body #root .hydra-root .auth-divider::after { background:#e4e8e3!important; }
+html body #root .hydra-root .auth-divider span {
+  padding:0 10px!important;
+  background:#f7f8f5!important;
+  font-size:10px!important;
+}
+
+html body #root .hydra-root .auth-shell .field {
+  margin-bottom:14px!important;
+}
+html body #root .hydra-root .auth-shell .field > span,
+html body #root .hydra-root .auth-shell .field label {
+  margin-bottom:6px!important;
+  color:#5e6863!important;
+  font-size:11px!important;
+  font-weight:500!important;
+  letter-spacing:0!important;
+}
+html body #root .hydra-root .auth-shell .field :is(input,select,textarea) {
+  width:100%!important;
+  min-height:50px!important;
+  padding:0 14px!important;
+  border:1px solid #dce2dc!important;
+  border-radius:15px!important;
+  color:#17221c!important;
+  background:#fff!important;
+  box-shadow:none!important;
+  font-size:13px!important;
+  font-weight:400!important;
+}
+html body #root .hydra-root .auth-shell .field :is(input,select,textarea):focus {
+  border-color:#174c36!important;
+  box-shadow:0 0 0 3px rgba(23,76,54,.08)!important;
+  outline:none!important;
+  transform:none!important;
+}
+html body #root .hydra-root .auth-shell .input-with-action > button {
+  right:10px!important;
+  width:34px!important;
+  height:34px!important;
+  color:#737d78!important;
+}
+
+html body #root .hydra-root .auth-shell :is(.primary-button,.secondary-button) {
+  min-height:50px!important;
+  border-radius:16px!important;
+  box-shadow:none!important;
+  font-size:13px!important;
+  font-weight:500!important;
+}
+html body #root .hydra-root .auth-shell .primary-button {
+  border:0!important;
+  color:#fff!important;
+  background:#174c36!important;
+}
+html body #root .hydra-root .auth-shell .secondary-button {
+  border:1px solid #dce2dc!important;
+  color:#344039!important;
+  background:#fff!important;
+}
+html body #root .hydra-root .auth-shell .text-button {
+  min-height:34px!important;
+  padding:0!important;
+  color:#174c36!important;
+  background:transparent!important;
+  font-size:11px!important;
+  font-weight:500!important;
+}
+html body #root .hydra-root .auth-switch {
+  margin:18px 0 0!important;
+  color:#89918d!important;
+  font-size:11px!important;
+  text-align:center!important;
+}
+html body #root .hydra-root .auth-switch button {
+  color:#174c36!important;
+  font-weight:500!important;
+}
+
+html body #root .hydra-root .staff-entry-button {
+  min-height:58px!important;
+  margin-top:14px!important;
+  padding:10px 13px!important;
+  border:1px solid #dfe4df!important;
+  border-radius:16px!important;
+  color:#27312c!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+html body #root .hydra-root .staff-entry-button > svg:first-child {
+  width:34px!important;
+  height:34px!important;
+  padding:7px!important;
+  border-radius:11px!important;
+  color:#174c36!important;
+  background:#eef3f0!important;
+}
+html body #root .hydra-root .staff-entry-button strong { font-size:12px!important; font-weight:500!important; }
+html body #root .hydra-root .staff-entry-button small { color:#8a938e!important; font-size:10px!important; }
+
+html body #root .hydra-root .identity-chip {
+  min-height:38px!important;
+  margin:0 auto 16px!important;
+  padding:4px 10px 4px 5px!important;
+  border:1px solid #dfe4df!important;
+  border-radius:999px!important;
+  color:#4d5852!important;
+  background:#fff!important;
+  font-size:11px!important;
+}
+html body #root .hydra-root .identity-chip > span {
+  width:28px!important;
+  height:28px!important;
+  border-radius:50%!important;
+  background:#174c36!important;
+  color:#fff!important;
+}
+
+/* Código por e-mail: visual de verificação, não um input comum. */
+html body #root .hydra-root .auth-shell .login-code-input {
+  min-height:58px!important;
+  padding:0 10px!important;
+  text-align:center!important;
+  font-size:24px!important;
+  line-height:1!important;
+  font-weight:500!important;
+  letter-spacing:.32em!important;
+  font-variant-numeric:tabular-nums!important;
+  color:#17221c!important;
+  border:1px solid #d8dfd9!important;
+  border-radius:16px!important;
+  background:#fff!important;
+}
+
+html body #root .hydra-root .signup-topline {
+  margin-bottom:20px!important;
+  display:grid!important;
+  grid-template-columns:auto 1fr!important;
+  align-items:center!important;
+  gap:12px!important;
+}
+html body #root .hydra-root .signup-topline .auth-back { margin:0!important; }
+html body #root .hydra-root .step-dots {
+  justify-self:end!important;
+  display:flex!important;
+  gap:5px!important;
+}
+html body #root .hydra-root .step-dots > span {
+  width:7px!important;
+  height:7px!important;
+  border-radius:999px!important;
+  background:#d9ded9!important;
+}
+html body #root .hydra-root .step-dots > span.active {
+  width:24px!important;
+  background:#174c36!important;
+}
+html body #root .hydra-root .step-dots > span.done { background:#9eb5a9!important; }
+
+html body #root .hydra-root .form-grid {
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:0!important;
+}
+html body #root .hydra-root .form-actions {
+  display:grid!important;
+  grid-template-columns:1fr 1.35fr!important;
+  gap:10px!important;
+  margin-top:6px!important;
+}
+html body #root .hydra-root .review-card {
+  padding:14px!important;
+  border:1px solid #dfe4df!important;
+  border-radius:17px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+html body #root .hydra-root .review-icon {
+  color:#174c36!important;
+  background:#eef3f0!important;
+}
+
+html body #root .hydra-root .form-error,
+html body #root .hydra-root .form-notice {
+  margin:10px 0!important;
+  padding:10px 12px!important;
+  border-radius:12px!important;
+  font-size:11px!important;
+  line-height:1.4!important;
+}
+
+@media (max-width:360px) {
+  html body #root .hydra-root .auth-card,
+  html body #root .hydra-root .auth-card.auth-card-wide { padding-left:14px!important; padding-right:14px!important; }
+  html body #root .hydra-root .auth-card h1,
+  html body #root .hydra-root .signup-panel h1 { font-size:26px!important; }
+}
