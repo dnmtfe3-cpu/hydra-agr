@@ -22,6 +22,7 @@ import "./authentic-ui.css";
 import "./auth-email-code.css";
 import "./interaction-polish.css";
 import "./features/profile/profile-mobile-fix.css";
+import "./hydra-agro-visual-system.css";
 import "./features/profile/profile-ranking-runtime";
 import "./features/profile/level10-vip-runtime";
 import "./features/community/community-comment-runtime";

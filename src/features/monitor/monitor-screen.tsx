@@ -152,6 +152,19 @@ export function MonitorScreen({ account, updateAccount, saveMonitoringPhoto, cre
         action={<button className="icon-button accent" onClick={openNewSector} aria-label="Criar setor"><Plus size={21} /></button>}
       />
 
+      <section className="monitor-overview" aria-label="Resumo do monitoramento">
+        <div className="monitor-overview-heading">
+          <span><RadioTower size={26} /></span>
+          <div><small>VISÃO DA PROPRIEDADE</small><strong>Inspeções e setores</strong></div>
+        </div>
+        <div className="monitor-overview-metrics">
+          <div><strong>{account.sectors.length}</strong><small>{account.sectors.length === 1 ? "setor" : "setores"}</small></div>
+          <div><strong>{account.monitoring.length}</strong><small>{account.monitoring.length === 1 ? "registro" : "registros"}</small></div>
+          <div><strong>{account.monitoring.filter((item) => Boolean(item.occurrence?.trim())).length}</strong><small>ocorrências</small></div>
+        </div>
+        {account.sectors.length > 0 && <button onClick={() => { setRecord((current) => ({ ...current, sectorId: current.sectorId || account.sectors[0].id })); setRecordOpen(true); }}><Plus size={17} /> Registrar inspeção</button>}
+      </section>
+
       <div className="segmented-control">
         <button className={tab === "sectors" ? "active" : ""} onClick={() => setTab("sectors")}>Quadro <span>{account.sectors.length}</span></button>
         <button className={tab === "history" ? "active" : ""} onClick={() => setTab("history")}>Histórico <span>{account.monitoring.length}</span></button>

@@ -1,0 +1,1001 @@
+/*
+ * Hydra Agro visual system — 2026
+ * A single, final presentation layer for every authenticated screen.
+ * It intentionally changes only layout and appearance; feature state and data
+ * continue to come from the existing React components and Supabase services.
+ */
+
+.hydra-root {
+  --ha-green-950: #052d20;
+  --ha-green-900: #073d2a;
+  --ha-green-800: #0b5136;
+  --ha-green-700: #176548;
+  --ha-green-100: #e8f1eb;
+  --ha-green-050: #f3f7f2;
+  --ha-orange: #ff8a12;
+  --ha-orange-soft: #fff1df;
+  --ha-canvas: #faf8f1;
+  --ha-surface: #ffffff;
+  --ha-surface-soft: #f4f4ee;
+  --ha-ink: #12271e;
+  --ha-muted: #68766f;
+  --ha-border: #e5e5dc;
+  --ha-danger: #b8443c;
+  --ha-radius-xl: 28px;
+  --ha-radius-lg: 22px;
+  --ha-radius-md: 16px;
+  --ha-space: clamp(16px, 4.8vw, 24px);
+  --ha-nav-space: calc(100px + env(safe-area-inset-bottom));
+  --ha-shadow-card: 0 10px 28px rgba(12, 55, 39, .055);
+  --forest-950: var(--ha-green-950);
+  --forest-900: var(--ha-green-900);
+  --forest-800: var(--ha-green-800);
+  --forest-700: var(--ha-green-700);
+  --forest-100: var(--ha-green-100);
+  --orange: var(--ha-orange);
+  --orange-soft: var(--ha-orange-soft);
+  --cream: var(--ha-canvas);
+  --paper: var(--ha-surface);
+  --ink: var(--ha-ink);
+  --muted: var(--ha-muted);
+  --line: var(--ha-border);
+  --shadow: var(--ha-shadow-card);
+}
+
+.hydra-root.theme-dark {
+  --ha-canvas: #071f17;
+  --ha-surface: #0c2b20;
+  --ha-surface-soft: #113529;
+  --ha-ink: #f4f7f2;
+  --ha-muted: #a8b7af;
+  --ha-border: rgba(230, 242, 234, .12);
+  --ha-green-100: #153c2e;
+  --ha-green-050: #0e3024;
+  --ha-shadow-card: 0 12px 32px rgba(0, 0, 0, .16);
+}
+
+.hydra-root .app-shell {
+  min-height: 100dvh;
+  background: var(--ha-green-900);
+}
+
+.hydra-root .phone-app {
+  width: min(100%, 560px);
+  min-height: 100dvh;
+  background: var(--ha-canvas);
+  box-shadow: 0 0 60px rgba(3, 32, 22, .22);
+}
+
+.hydra-root .app-content,
+.hydra-root .route-loading {
+  min-height: 100dvh;
+  background: var(--ha-canvas);
+}
+
+.hydra-root .screen {
+  width: 100%;
+  min-height: 100dvh;
+  padding: max(24px, calc(env(safe-area-inset-top) + 18px)) var(--ha-space) var(--ha-nav-space);
+  color: var(--ha-ink);
+  background: var(--ha-canvas);
+}
+
+.hydra-root .screen.extra-screen,
+.hydra-root .monitor-screen,
+.hydra-root .profile-screen,
+.hydra-root .community-screen {
+  padding-bottom: var(--ha-nav-space);
+}
+
+/* Type and global hierarchy */
+.hydra-root h1,
+.hydra-root h2,
+.hydra-root h3,
+.hydra-root strong {
+  text-rendering: optimizeLegibility;
+}
+
+.hydra-root .screen-header {
+  margin: 0 0 24px;
+  padding: 0;
+}
+
+.hydra-root .screen-header::after { display: none; }
+
+.hydra-root .screen-header-row {
+  min-height: 50px;
+  align-items: center;
+  gap: 12px;
+}
+
+.hydra-root .screen-heading h1 {
+  margin: 2px 0 0;
+  color: var(--ha-ink);
+  font-family: var(--font-display), "Sora", sans-serif;
+  font-size: clamp(25px, 7vw, 32px);
+  line-height: 1.08;
+  letter-spacing: -.045em;
+}
+
+.hydra-root .screen-heading p {
+  max-width: 36rem;
+  margin: 6px 0 0;
+  color: var(--ha-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.hydra-root .eyebrow {
+  margin: 0 0 5px;
+  color: var(--ha-green-700);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .14em;
+}
+
+.hydra-root .section-heading {
+  min-height: 32px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.hydra-root .section-heading h2 {
+  color: var(--ha-ink);
+  font-family: var(--font-display), "Sora", sans-serif;
+  font-size: 17px;
+  letter-spacing: -.025em;
+}
+
+/* Shared surfaces and controls */
+.hydra-root .content-section,
+.hydra-root .property-section-card,
+.hydra-root .task-card,
+.hydra-root .compact-list,
+.hydra-root .setting-card,
+.hydra-root .profile-menu-card,
+.hydra-root .preference-options,
+.hydra-root .legal-sections section,
+.hydra-root .admin-metric-grid article,
+.hydra-root .moderation-list article {
+  border: 1px solid var(--ha-border);
+  border-radius: var(--ha-radius-lg);
+  background: var(--ha-surface);
+  box-shadow: none;
+}
+
+.hydra-root .primary-button,
+.hydra-root .secondary-button,
+.hydra-root .danger-button,
+.hydra-root .wide-outline-button,
+.hydra-root .preview-button,
+.hydra-root .small-button {
+  min-height: 50px;
+  border-radius: 15px;
+  box-shadow: none;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.hydra-root .primary-button,
+.hydra-root .small-button {
+  background: var(--ha-green-800);
+  color: #fff;
+}
+
+.hydra-root .secondary-button,
+.hydra-root .preview-button {
+  color: var(--ha-green-800);
+  background: var(--ha-green-100);
+}
+
+.hydra-root .wide-outline-button {
+  border: 1px solid var(--ha-border);
+  color: var(--ha-green-800);
+  background: var(--ha-surface);
+}
+
+.hydra-root .icon-button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--ha-border);
+  border-radius: 50%;
+  color: var(--ha-ink);
+  background: var(--ha-surface);
+  box-shadow: none;
+}
+
+.hydra-root .icon-button.accent {
+  border: 0;
+  color: #fff;
+  background: var(--ha-orange);
+}
+
+.hydra-root .icon-button.quiet {
+  border-color: transparent;
+  background: var(--ha-surface-soft);
+}
+
+.hydra-root .field > span {
+  margin-bottom: 8px;
+  color: var(--ha-ink);
+  font-size: 11px;
+  letter-spacing: .02em;
+  text-transform: none;
+}
+
+.hydra-root .field input,
+.hydra-root .field select,
+.hydra-root .field textarea {
+  min-height: 52px;
+  border: 1px solid var(--ha-border);
+  border-radius: 15px;
+  color: var(--ha-ink);
+  background: var(--ha-surface-soft);
+}
+
+.hydra-root .field input:focus,
+.hydra-root .field select:focus,
+.hydra-root .field textarea:focus {
+  border-color: var(--ha-green-700);
+  background: var(--ha-surface);
+  box-shadow: 0 0 0 3px rgba(11, 81, 54, .12);
+}
+
+/* Home — green masthead, weather focus and real daily data */
+.hydra-root .home-screen {
+  padding-top: 0;
+  overflow: hidden;
+}
+
+.hydra-root .home-screen::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0 0 auto;
+  height: 360px;
+  background: var(--ha-green-800);
+  pointer-events: none;
+}
+
+.hydra-root .home-screen > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hydra-root .home-brandbar {
+  min-height: 72px;
+  margin: 0 calc(var(--ha-space) * -1);
+  padding: max(18px, calc(env(safe-area-inset-top) + 12px)) var(--ha-space) 8px;
+  color: #fff;
+  background: transparent;
+}
+
+.hydra-root .home-profile-progress {
+  width: 46px;
+  height: 46px;
+  border: 2px solid rgba(255, 255, 255, .52);
+  background: rgba(255, 255, 255, .14);
+}
+
+.hydra-root .home-farm-xp strong,
+.hydra-root .home-farm-xp span { color: #fff; }
+.hydra-root .home-farm-xp span { opacity: .72; }
+.hydra-root .home-brandbar .icon-button { color: #fff; }
+
+.hydra-root .greeting-block {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  margin: 10px 0 22px;
+}
+
+.hydra-root .greeting-block h1 {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-display), "Sora", sans-serif;
+  font-size: clamp(25px, 7vw, 32px);
+  letter-spacing: -.045em;
+}
+
+.hydra-root .greeting-time { font-weight: 500; opacity: .78; }
+.hydra-root .greeting-name { color: #fff; }
+.hydra-root .greeting-block > div > p {
+  margin: 5px 0 0;
+  color: rgba(255, 255, 255, .72);
+  font-size: 11px;
+}
+
+.hydra-root .home-screen .climate-chip {
+  width: 100%;
+  min-height: 108px;
+  padding: 20px;
+  border: 0;
+  border-radius: var(--ha-radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+  color: var(--ha-ink);
+  background: var(--ha-surface);
+  box-shadow: var(--ha-shadow-card);
+  text-align: left;
+}
+
+.hydra-root .home-screen .climate-chip > svg {
+  width: 48px;
+  height: 48px;
+  padding: 11px;
+  border-radius: 17px;
+  color: var(--ha-orange);
+  background: var(--ha-orange-soft);
+}
+
+.hydra-root .home-screen .climate-chip > span {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 7px 12px;
+}
+
+.hydra-root .home-screen .climate-chip strong {
+  grid-row: 1 / 3;
+  color: var(--ha-green-900);
+  font-family: var(--font-display), "Sora", sans-serif;
+  font-size: 34px;
+  letter-spacing: -.06em;
+}
+
+.hydra-root .home-screen .climate-chip span:not(.button-spinner) {
+  color: var(--ha-muted);
+  font-size: 12px;
+}
+
+.hydra-root .shortcut-row {
+  margin: 18px 0 22px;
+  gap: 10px;
+}
+
+.hydra-root .shortcut-row button > span {
+  width: 52px;
+  height: 52px;
+  border: 0;
+  border-radius: 17px;
+  color: var(--ha-green-800);
+  background: var(--ha-surface);
+  box-shadow: none;
+}
+
+.hydra-root .nfc-banner {
+  min-height: 82px;
+  padding: 12px;
+  border: 1px solid #f2d1ab;
+  border-left: 0;
+  border-radius: var(--ha-radius-lg);
+  background: var(--ha-orange-soft);
+  box-shadow: none;
+}
+
+.hydra-root .nfc-banner-icon {
+  color: #fff;
+  background: var(--ha-orange);
+}
+
+.hydra-root .nfc-banner-icon::after { display: none; }
+.hydra-root .nfc-banner-copy small,
+.hydra-root .nfc-banner > svg { color: #be5a00; }
+
+.hydra-root .property-hero {
+  margin-top: 18px;
+  border-radius: var(--ha-radius-xl);
+  background: var(--ha-green-800);
+  box-shadow: none;
+}
+
+.hydra-root .property-hero::before,
+.hydra-root .property-hero::after { display: none; }
+.hydra-root .property-hero-top { padding: 22px 20px 16px; }
+.hydra-root .property-hero h2 { font-size: 22px; }
+.hydra-root .property-metrics { padding: 6px 18px 18px; }
+.hydra-root .property-metrics > div { color: #cbe5d7; }
+.hydra-root .property-link { background: rgba(0, 0, 0, .08); }
+.hydra-root .home-section { margin-top: 22px; }
+
+/* Animal, property and sector composition */
+.hydra-root .search-row { margin-bottom: 12px; }
+
+.hydra-root .search-box {
+  min-height: 50px;
+  border: 1px solid var(--ha-border);
+  border-radius: 16px;
+  background: var(--ha-surface);
+}
+
+.hydra-root .filter-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  border-color: var(--ha-border);
+  background: var(--ha-surface);
+}
+
+.hydra-root .nfc-inline-card,
+.hydra-root .herd-care-launch {
+  min-height: 76px;
+  margin: 12px 0;
+  border: 1px solid #f0d4b5;
+  border-radius: var(--ha-radius-lg);
+  background: var(--ha-orange-soft);
+  box-shadow: none;
+}
+
+.hydra-root .nfc-inline-card > span {
+  color: #fff;
+  background: var(--ha-orange);
+}
+
+.hydra-root .animal-list { gap: 10px; }
+
+.hydra-root .animal-card {
+  min-height: 92px;
+  padding: 12px;
+  border: 1px solid var(--ha-border);
+  border-radius: var(--ha-radius-lg);
+  background: var(--ha-surface);
+  box-shadow: none;
+}
+
+.hydra-root .animal-avatar {
+  width: 62px;
+  height: 62px;
+  border-radius: 19px;
+  color: var(--ha-green-800);
+  background: var(--ha-green-100);
+}
+
+.hydra-root .animal-copy strong { font-size: 14px; }
+.hydra-root .animal-copy small { margin-top: 4px; font-size: 10px; }
+.hydra-root .animal-code { color: var(--ha-orange); font-size: 8px; }
+.hydra-root .tag-badge { color: #a64d00; background: var(--ha-orange-soft); }
+
+.hydra-root .animal-detail-hero {
+  min-height: 210px;
+  margin: 0 0 16px;
+  padding: 22px;
+  border-radius: var(--ha-radius-xl);
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  background: var(--ha-green-800);
+}
+
+.hydra-root .animal-detail-hero > img,
+.hydra-root .animal-detail-hero > span {
+  width: 104px;
+  height: 104px;
+  border: 4px solid rgba(255, 255, 255, .3);
+  border-radius: 28px;
+  color: #fff;
+  background: rgba(255, 255, 255, .12);
+}
+
+.hydra-root .animal-detail-hero small { color: #ffd0a0; }
+.hydra-root .animal-detail-hero strong { color: #fff; font-size: 21px; }
+.hydra-root .animal-detail-hero em { color: rgba(255, 255, 255, .72); }
+
+.hydra-root .detail-grid {
+  gap: 8px;
+}
+
+.hydra-root .detail-grid > div,
+.hydra-root .property-info-item {
+  min-height: 72px;
+  padding: 12px;
+  border-radius: var(--ha-radius-md);
+  color: var(--ha-ink);
+  background: var(--ha-surface-soft);
+}
+
+.hydra-root .property-cover {
+  position: relative;
+  isolation: isolate;
+  min-height: 230px;
+  padding: 24px;
+  border-radius: var(--ha-radius-xl);
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: center;
+  background-color: var(--ha-green-800);
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+.hydra-root .property-cover::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: rgba(5, 45, 32, .66);
+}
+
+.hydra-root .property-cover:not(.has-image)::before { background: transparent; }
+
+.hydra-root .property-cover-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 23px;
+  color: #fff;
+  background: rgba(255, 255, 255, .14);
+}
+
+.hydra-root .property-cover h2 { font-size: 25px; }
+.hydra-root .property-cover p { justify-content: center; color: rgba(255, 255, 255, .76); font-size: 11px; }
+.hydra-root .property-section-card { margin-top: 14px; padding: 18px; }
+
+/* Monitoring follows the strong-card + clean-record-list pattern */
+.hydra-root .monitor-overview {
+  margin-bottom: 14px;
+  padding: 20px;
+  border-radius: var(--ha-radius-xl);
+  color: #fff;
+  background: var(--ha-green-800);
+}
+
+.hydra-root .monitor-overview-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hydra-root .monitor-overview-heading > span {
+  width: 50px;
+  height: 50px;
+  border-radius: 17px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: rgba(255, 255, 255, .13);
+}
+
+.hydra-root .monitor-overview-heading > div { display: flex; flex-direction: column; }
+.hydra-root .monitor-overview-heading small { color: rgba(255, 255, 255, .64); font-size: 8px; font-weight: 800; letter-spacing: .12em; }
+.hydra-root .monitor-overview-heading strong { margin-top: 3px; color: #fff; font-size: 17px; }
+
+.hydra-root .monitor-overview-metrics {
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, .16);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.hydra-root .monitor-overview-metrics > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.hydra-root .monitor-overview-metrics strong { color: #fff; font-size: 20px; }
+.hydra-root .monitor-overview-metrics small { color: rgba(255, 255, 255, .65); font-size: 9px; }
+
+.hydra-root .monitor-overview > button {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 17px;
+  border: 0;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--ha-green-900);
+  background: #fff;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.hydra-root .segmented-control {
+  margin: 0 0 14px;
+  padding: 4px;
+  border-radius: 16px;
+  background: var(--ha-surface-soft);
+}
+
+.hydra-root .segmented-control button { min-height: 42px; border-radius: 13px; }
+.hydra-root .segmented-control button.active { background: var(--ha-surface); box-shadow: none; }
+.hydra-root .monitor-section { padding: 18px; }
+
+.hydra-root .sector-board,
+.hydra-root .monitoring-list { gap: 9px; }
+
+.hydra-root .sector-board-row,
+.hydra-root .monitoring-card {
+  min-height: 82px;
+  padding: 12px;
+  border: 1px solid var(--ha-border);
+  border-radius: var(--ha-radius-md);
+  background: var(--ha-surface);
+  box-shadow: none;
+}
+
+.hydra-root .monitoring-date {
+  width: 48px;
+  height: 48px;
+  border-radius: 15px;
+  background: var(--ha-green-800);
+}
+
+/* Bottom navigation */
+.hydra-root .bottom-nav {
+  position: fixed;
+  z-index: 40;
+  bottom: 0;
+  left: 50%;
+  width: min(100%, 560px);
+  min-height: calc(76px + env(safe-area-inset-bottom));
+  padding: 8px max(10px, env(safe-area-inset-right)) env(safe-area-inset-bottom) max(10px, env(safe-area-inset-left));
+  border-top: 1px solid var(--ha-border);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  background: var(--ha-surface);
+  box-shadow: 0 -10px 30px rgba(17, 50, 36, .06);
+  transform: translateX(-50%);
+}
+
+.hydra-root .bottom-nav-indicator { display: none; }
+
+.hydra-root .bottom-nav > button {
+  min-width: 0;
+  min-height: 58px;
+  padding: 4px 2px;
+  border: 0;
+  border-radius: 14px;
+  color: #7a8780;
+  background: transparent;
+}
+
+.hydra-root .bottom-nav > button > span {
+  width: 34px;
+  height: 30px;
+  border-radius: 12px;
+  color: inherit;
+  background: transparent;
+}
+
+.hydra-root .bottom-nav > button small {
+  margin-top: 1px;
+  color: inherit;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.hydra-root .bottom-nav > button.active { color: var(--ha-green-800); }
+.hydra-root .bottom-nav > button.active > span { background: var(--ha-green-100); }
+
+.hydra-root .bottom-nav > button.nav-create {
+  overflow: visible;
+  color: #fff;
+}
+
+.hydra-root .bottom-nav > button.nav-create > span {
+  width: 54px;
+  height: 54px;
+  margin-top: -22px;
+  border: 5px solid var(--ha-surface);
+  border-radius: 50%;
+  color: #fff;
+  background: var(--ha-orange);
+  box-shadow: 0 7px 18px rgba(255, 138, 18, .25);
+}
+
+.hydra-root .bottom-nav > button.nav-create small {
+  margin-top: -1px;
+  color: var(--ha-orange);
+}
+
+/* Sheets, states and feedback */
+.hydra-root .modal-layer,
+.hydra-root .quick-layer {
+  background: rgba(3, 31, 21, .62);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.hydra-root .modal-sheet,
+.hydra-root .quick-sheet {
+  border-radius: 30px 30px 0 0;
+  background: var(--ha-surface);
+  box-shadow: 0 -18px 50px rgba(0, 0, 0, .18);
+}
+
+.hydra-root .modal-head {
+  border-color: var(--ha-border);
+  background: var(--ha-surface);
+}
+
+.hydra-root .modal-head h2,
+.hydra-root .quick-sheet h2 {
+  color: var(--ha-ink);
+  font-size: clamp(24px, 7vw, 31px);
+}
+
+.hydra-root .modal-body { color: var(--ha-ink); }
+.hydra-root .modal-body p { color: var(--ha-muted); }
+
+.hydra-root .empty-state {
+  min-height: 220px;
+  border: 1px dashed #cfd8d1;
+  border-radius: var(--ha-radius-lg);
+  background: var(--ha-surface);
+}
+
+.hydra-root .empty-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 19px;
+  color: var(--ha-green-800);
+  background: var(--ha-green-100);
+}
+
+.hydra-root .empty-state h3 { color: var(--ha-ink); font-size: 16px; }
+.hydra-root .empty-state p { color: var(--ha-muted); font-size: 11px; }
+
+.hydra-root .route-loading span {
+  border-color: var(--ha-green-100);
+  border-top-color: var(--ha-orange);
+}
+
+.hydra-root .form-error {
+  padding: 11px 12px;
+  border-radius: 13px;
+  color: var(--ha-danger);
+  background: #fff0ee;
+}
+
+.hydra-root .form-notice,
+.hydra-root .sync-banner {
+  border-radius: 13px;
+}
+
+.hydra-root .app-toast {
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 18px;
+  background: var(--ha-green-950);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, .2);
+}
+
+/* Entry, authentication and splash use the same restrained identity. */
+.hydra-root .splash-screen {
+  color: #fff;
+  background: var(--ha-green-800);
+}
+
+.hydra-root .splash-glow,
+.hydra-root .auth-ambient,
+.hydra-root .auth-vine { display: none; }
+
+.hydra-root .auth-shell {
+  min-height: 100dvh;
+  padding: max(22px, calc(env(safe-area-inset-top) + 16px)) 18px max(22px, calc(env(safe-area-inset-bottom) + 16px));
+  background: var(--ha-green-800);
+}
+
+.hydra-root .auth-card {
+  width: min(100%, 430px);
+  border: 0;
+  border-radius: 30px;
+  padding: clamp(22px, 6vw, 30px);
+  color: var(--ha-ink);
+  background: var(--ha-surface);
+  box-shadow: 0 20px 55px rgba(3, 38, 25, .2);
+}
+
+.hydra-root .auth-content h1,
+.hydra-root .signup-panel h1 { color: var(--ha-ink); }
+.hydra-root .auth-subtitle { color: var(--ha-muted); }
+.hydra-root .auth-icon { color: var(--ha-green-800); background: var(--ha-green-100); }
+.hydra-root .google-auth-button,
+.hydra-root .staff-entry-button,
+.hydra-root .auth-landing-secondary {
+  border-color: var(--ha-border);
+  border-radius: 16px;
+  color: var(--ha-ink);
+  background: var(--ha-surface-soft);
+}
+
+/* NFC keeps orange as the single high-priority hardware accent. */
+.hydra-root .nfc-screen .screen-header { margin-bottom: 18px; }
+.hydra-root .nfc-device-card,
+.hydra-root .nfc-manual-card,
+.hydra-root .nfc-result-card,
+.hydra-root .nfc-desktop-notice {
+  border: 1px solid var(--ha-border);
+  border-radius: var(--ha-radius-lg);
+  background: var(--ha-surface);
+  box-shadow: none;
+}
+
+.hydra-root .nfc-device-card {
+  color: #fff;
+  background: var(--ha-green-800);
+}
+
+.hydra-root .nfc-waves,
+.hydra-root .nfc-result-card > span {
+  color: #fff;
+  background: var(--ha-orange);
+}
+
+.hydra-root .nfc-native-read-button {
+  border: 0;
+  border-radius: 15px;
+  color: var(--ha-green-900);
+  background: #fff;
+}
+
+/* Community and mission surfaces remain content-first. */
+.hydra-root .community-tabs {
+  padding: 4px;
+  border-radius: 16px;
+  background: var(--ha-surface-soft);
+}
+
+.hydra-root .community-tabs button { border-radius: 13px; }
+.hydra-root .community-tabs button.active { color: #fff; background: var(--ha-green-800); }
+
+.hydra-root .community-composer,
+.hydra-root .post-card,
+.hydra-root .challenge-card,
+.hydra-root .property-ranking-section {
+  border: 1px solid var(--ha-border);
+  border-radius: var(--ha-radius-lg);
+  background: var(--ha-surface);
+  box-shadow: none;
+}
+
+.hydra-root .post-image { border-radius: 18px; }
+.hydra-root .comment-form { border-radius: 15px; background: var(--ha-surface-soft); }
+
+.hydra-root .xp-hero {
+  border-radius: var(--ha-radius-xl);
+  color: #fff;
+  background: var(--ha-green-800);
+  box-shadow: none;
+}
+
+.hydra-root .challenge-icon,
+.hydra-root .property-ranking-head > span {
+  color: var(--ha-green-800);
+  background: var(--ha-green-100);
+}
+
+.hydra-root .challenge-card.completed .challenge-icon {
+  color: #fff;
+  background: var(--ha-green-800);
+}
+
+.hydra-root .challenge-progress { background: var(--ha-green-100); }
+.hydra-root .challenge-progress i { background: var(--ha-orange); }
+
+/* Profile cover is photo-led when available, solid green otherwise. */
+.hydra-root .profile-hero {
+  min-height: 270px;
+  border-radius: 0 0 32px 32px;
+  background-color: var(--ha-green-800);
+  box-shadow: none;
+}
+
+.hydra-root .profile-rings { display: none; }
+.hydra-root .profile-avatar { border: 4px solid rgba(255, 255, 255, .75); }
+.hydra-root .profile-settings-trigger,
+.hydra-root .profile-top-edit {
+  border: 1px solid rgba(255, 255, 255, .25);
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(5, 45, 32, .58);
+  backdrop-filter: none;
+}
+
+.hydra-root .profile-social-tabs {
+  margin: 14px var(--ha-space) 0;
+  padding: 4px;
+  border-radius: 16px;
+  background: var(--ha-surface-soft);
+}
+
+.hydra-root .profile-social-tabs button { border-radius: 13px; }
+.hydra-root .plan-card { border-radius: var(--ha-radius-lg); box-shadow: none; }
+.hydra-root .plan-card.is-plus { border-color: #efd2b0; background: var(--ha-orange-soft); }
+
+/* A single treatment for secondary feature cards. */
+.hydra-root :is(.today-card, .history-card, .notification-card, .operation-card, .assistant-card, .family-card, .water-chart, .water-trend, .feature-link-grid button) {
+  border: 1px solid var(--ha-border);
+  border-radius: var(--ha-radius-lg);
+  background: var(--ha-surface);
+  box-shadow: none;
+}
+
+.hydra-root :is(.today-hero, .water-overview, .operations-hero, .assistant-hero, .plus-price-hero) {
+  border-radius: var(--ha-radius-xl);
+  color: #fff;
+  background: var(--ha-green-800);
+  box-shadow: none;
+}
+
+.hydra-root :is(.today-hero, .water-overview, .operations-hero, .assistant-hero, .plus-price-hero)::before,
+.hydra-root :is(.today-hero, .water-overview, .operations-hero, .assistant-hero, .plus-price-hero)::after {
+  display: none;
+}
+
+/* Profile, community and secondary routes inherit the same cards */
+.hydra-root .profile-group,
+.hydra-root .home-announcements,
+.hydra-root .community-feed { gap: 10px; }
+
+.hydra-root .profile-menu-row,
+.hydra-root .preference-options > div,
+.hydra-root .compact-row,
+.hydra-root .history-home-row {
+  min-height: 72px;
+  border-color: var(--ha-border);
+  background: var(--ha-surface);
+}
+
+.hydra-root .profile-menu-icon,
+.hydra-root .row-icon,
+.hydra-root .preference-option-icon {
+  border-radius: 15px;
+  color: var(--ha-green-800);
+  background: var(--ha-green-100);
+}
+
+.hydra-root .quick-grid > button {
+  min-height: 72px;
+  border-color: var(--ha-border);
+  border-radius: 18px;
+  background: var(--ha-surface);
+}
+
+.hydra-root .quick-grid > button > span {
+  color: var(--ha-orange);
+  background: var(--ha-orange-soft);
+}
+
+/* Responsive web presentation keeps the app mobile-first. */
+@media (min-width: 760px) {
+  .hydra-root .phone-app {
+    margin-block: 24px;
+    min-height: calc(100dvh - 48px);
+    border-radius: 34px;
+    overflow: clip;
+  }
+
+  .hydra-root .app-content { min-height: calc(100dvh - 48px); }
+  .hydra-root .bottom-nav { bottom: 24px; border-radius: 0 0 34px 34px; }
+}
+
+@media (max-width: 380px) {
+  .hydra-root { --ha-space: 15px; }
+  .hydra-root .screen-heading h1 { font-size: 24px; }
+  .hydra-root .home-screen .climate-chip { min-height: 98px; padding: 16px; }
+  .hydra-root .home-screen .climate-chip strong { font-size: 30px; }
+  .hydra-root .property-info-grid,
+  .hydra-root .detail-grid { grid-template-columns: 1fr; }
+  .hydra-root .bottom-nav > button small { font-size: 7px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hydra-root *,
+  .hydra-root *::before,
+  .hydra-root *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

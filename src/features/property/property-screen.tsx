@@ -20,7 +20,7 @@ export function PropertyScreen({ account, updateAccount, onBack }: Props) {
   const [draft, setDraft] = useState<Property>({ ...account.property });
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
-  const coverStyle = account.property.coverUrl ? { backgroundImage: `linear-gradient(145deg, rgba(13,78,54,.84), rgba(7,52,36,.94)), url("${account.property.coverUrl}")` } as CSSProperties : undefined;
+  const coverStyle = account.property.coverUrl ? { backgroundImage: `url("${account.property.coverUrl}")` } as CSSProperties : undefined;
   const identifiedAnimals = account.animals.filter((animal) => animal.electronicId).length;
 
   async function save(event: FormEvent) {
