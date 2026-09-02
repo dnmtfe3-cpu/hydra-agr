@@ -1,4 +1,5 @@
 import "../../community-polish.css";
+import "./community-reference-final.css";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { Camera, Heart, ImagePlus, LoaderCircle, MessageCircle, RefreshCw, Send, Trash2, UsersRound } from "lucide-react";
 import { ConfirmDialog, EmptyState, Field, LoadingButton, Modal, ScreenHeader } from "../../components/ui";
@@ -69,7 +70,12 @@ export function CommunityScreen({ account, onBack, publishPost, likePost, commen
   async function refresh() { setBusy("refresh"); const result = await refreshCommunity(); setBusy(""); setMessage(result.message); }
 
   return <div className="screen page-enter extra-screen community-screen">
-    <ScreenHeader title="Comunidade" subtitle="Experiências reais de quem vive o campo." onBack={onBack} action={<div className="header-action-pair"><button className="icon-button" onClick={() => void refresh()} aria-label="Atualizar comunidade" disabled={busy === "refresh"}>{busy === "refresh" ? <LoaderCircle size={19} className="spin" /> : <RefreshCw size={19} />}</button><button className="icon-button accent" onClick={() => setComposerOpen(true)} aria-label="Nova publicação"><Camera size={20} /></button></div>} />
+    <ScreenHeader title="Comunidade" subtitle="Experiências reais de quem vive o campo." onBack={onBack} />
+
+    <div className="community-tools header-action-pair" aria-label="Ações da comunidade">
+      <button className="icon-button" onClick={() => void refresh()} aria-label="Atualizar comunidade" disabled={busy === "refresh"}>{busy === "refresh" ? <LoaderCircle size={19} className="spin" /> : <RefreshCw size={19} />}</button>
+      <button className="icon-button accent" onClick={() => setComposerOpen(true)} aria-label="Nova publicação"><Camera size={20} /></button>
+    </div>
 
     <div className="community-tabs"><button className={filter === "all" ? "active" : ""} onClick={() => setFilter("all")}>Todos</button><button className={filter === "region" ? "active" : ""} onClick={() => setFilter("region")}>Minha cidade</button><button className={filter === "mine" ? "active" : ""} onClick={() => setFilter("mine")}>Meus posts</button></div>
 
