@@ -1,6 +1,6 @@
 /* Hydra Agro — sincronização final da cor de marca.
- * Qualquer superfície/estado VERDE da interface usa exatamente o verde da splash: #174C36.
- * Tons claros continuam apenas como fundos neutros; Hydra Tag/NFC preserva o laranja próprio.
+ * Existe um único verde saturado na interface: o mesmo da splash (#174C36).
+ * Os antigos verdes claros viram neutros; Hydra Tag/NFC preserva o laranja próprio.
  */
 html body #root .hydra-root {
   --hydra-green: #174c36 !important;
@@ -24,6 +24,15 @@ html body #root .hydra-root {
   --brand-green: #174c36 !important;
   --accent-green: #174c36 !important;
   --sage: #174c36 !important;
+
+  /* Não criar um segundo "verde" em fundos suaves. */
+  --hydra-green-soft: #f0f2ef !important;
+  --ref-green-soft: #f0f2ef !important;
+  --ref-green-pale: #f5f6f4 !important;
+  --ha-green-100: #f0f2ef !important;
+  --ha-green-050: #f5f6f4 !important;
+  --forest-100: #f0f2ef !important;
+  --sage-soft: #f0f2ef !important;
 }
 
 html.hydra-splash-active body #root .hydra-root .splash-screen,
@@ -33,7 +42,6 @@ html body #root .hydra-root .splash-screen {
   background-image: none !important;
 }
 
-/* Home usa literalmente a mesma tinta da splash no bloco superior. */
 html body #root .hydra-root:not(.theme-dark) .home-screen {
   background:
     linear-gradient(to bottom,
@@ -76,6 +84,7 @@ html body #root .hydra-root:not(.theme-dark) :is(
 ) {
   border-color: #174c36 !important;
   background-color: #174c36 !important;
+  background-image: none !important;
 }
 
 /* Texto/ícones ativos usam exatamente o mesmo verde. */
@@ -108,21 +117,24 @@ html body #root .hydra-root:not(.theme-dark) .home-profile-avatar {
   background: #174c36 !important;
 }
 
-/* Fallbacks de imagem/ícone que ainda carregavam o verde antigo. */
+/* Fallbacks sem foto não introduzem outro tom verde. */
 html body #root .hydra-root:not(.theme-dark) :is(
   .animal-avatar:not(.image),
   .home-feature-media:not(:has(img)),
-  .profile-avatar:not(.image)
+  .profile-avatar:not(.image),
+  .plan-mark,
+  .profile-social-tabs button.active
 ) {
   color: #174c36 !important;
+  background-color: #f0f2ef !important;
 }
 
-/* Perfil: só a cor base por baixo da capa; a foto cadastrada continua visível. */
+/* Perfil: apenas cor base abaixo da foto de capa. */
 html body #root .hydra-root:not(.theme-dark) .profile-screen > .profile-hero {
   background-color: #174c36 !important;
 }
 
-/* Bordas/foco deixam de usar o verde-lima legado. */
+/* Foco sem verde-lima legado. */
 html body #root .hydra-root:not(.theme-dark) :is(button,a,input,textarea,select):focus-visible {
   outline-color: rgba(23, 76, 54, .25) !important;
 }
@@ -146,7 +158,6 @@ html body #root .hydra-root:not(.theme-dark) .herd-care-launch > span {
   color: #fff !important;
 }
 
-/* Active pills/tabs que tenham vindo de folhas antigas. */
 html body #root .hydra-root:not(.theme-dark) :is(
   .tab-button.active,
   .segmented-control button.active,
@@ -156,13 +167,4 @@ html body #root .hydra-root:not(.theme-dark) :is(
   border-color: #174c36 !important;
 }
 
-/* Hydra Tag/NFC: NÃO recolorir o laranja de identidade. */
-html body #root .hydra-root:not(.theme-dark) :is(
-  .nfc-banner-icon,
-  .nfc-hero-icon,
-  .eyebrow.orange,
-  .orange,
-  .hydra-tag-accent
-) {
-  --hydra-green: #174c36;
-}
+/* Hydra Tag/NFC segue com o laranja da identidade e fica fora desta troca. */
