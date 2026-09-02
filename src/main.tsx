@@ -51,6 +51,7 @@ import "./bottom-nav-blur-final.css";
 import "./splash-single-run-final.css";
 import "./hydra-design-system-final.css";
 import "./app-reveal-after-splash.css";
+import "./bottom-nav-viewport-final.css";
 
 type ThemeMode = "light" | "dark";
 const THEME_KEY = "hydra-agro.theme";
@@ -72,7 +73,7 @@ function openDailyBriefingPanelFromNotification() {
 
 function openNotificationsScreen() {
   window.focus();
-  const button = Array.from(document.querySelectorAll<HTMLButtonElement>("button")).find((item) => item.getAttribute("aria-label") === "Notificações");
+  const button = Array.from(document.querySelectorAll<HTMLButtonElement>>("button")).find((item) => item.getAttribute("aria-label") === "Notificações");
   button?.click();
 }
 
@@ -118,7 +119,7 @@ function HydraThemeRoot() {
 
   useEffect(() => {
     function findProfileMenu() {
-      const groups = Array.from(document.querySelectorAll<HTMLElement>(".profile-screen .profile-group"));
+      const groups = Array.from(document.querySelectorAll<HTMLElement>>(".profile-screen .profile-group"));
       const accountGroup = groups.find((group) => group.querySelector(".group-label")?.textContent?.trim() === "MINHA CONTA");
       const nextTarget = accountGroup?.querySelector<HTMLElement>(".profile-menu-card") ?? null;
       setProfileMenuTarget((current) => current === nextTarget ? current : nextTarget);
