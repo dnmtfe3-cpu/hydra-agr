@@ -1,0 +1,9 @@
+/* Perfil: opções removidas a pedido do produto. */
+html body #root .hydra-root .profile-screen .regional-ranking-menu-row {
+  display: none !important;
+}
+
+/* Aparência é a primeira opção do menu de configurações atual. */
+html body #root .hydra-root .profile-screen .profile-settings-sheet > .profile-menu-card:first-child > .profile-menu-row:first-child {
+  display: none !important;
+}
