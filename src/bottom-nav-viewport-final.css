@@ -1,61 +1,91 @@
-/* ÚLTIMA CAMADA: a navegação pertence à viewport, nunca ao fluxo da tela. */
-html body #root .hydra-root .bottom-nav.bottom-nav {
+/* Visual antigo restaurado + comportamento persistente na viewport. */
+html body #root .hydra-root .bottom-nav.bottom-nav,
+html body #root .hydra-root .bottom-nav.bottom-nav.is-hidden,
+html body #root .hydra-root .bottom-nav.bottom-nav:not(.is-hidden) {
   position: fixed !important;
   left: 50% !important;
   right: auto !important;
-  bottom: 0 !important;
+  bottom: max(10px, env(safe-area-inset-bottom)) !important;
   top: auto !important;
-  width: min(calc(100vw - 20px), 410px) !important;
-  height: calc(74px + env(safe-area-inset-bottom)) !important;
-  min-height: calc(74px + env(safe-area-inset-bottom)) !important;
+  width: min(calc(100vw - 28px), 398px) !important;
+  height: 72px !important;
+  min-height: 72px !important;
   margin: 0 !important;
-  padding: 0 12px env(safe-area-inset-bottom) !important;
-  border-radius: 27px 27px 0 0 !important;
-  background: #fff !important;
+  padding: 0 10px !important;
+  border: 1px solid rgba(7,61,42,.055) !important;
+  border-radius: 28px !important;
+  background: rgba(255,255,255,.985) !important;
+  box-shadow: 0 10px 30px rgba(7,61,42,.10) !important;
+  transform: translate3d(-50%,0,0) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
   overflow: visible !important;
-  transform: translate3d(-50%,0,0) !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
   z-index: 2147483000 !important;
-  isolation: isolate !important;
-  contain: none !important;
-  will-change: auto !important;
 }
 
-html body #root .hydra-root .bottom-nav.bottom-nav.is-hidden,
-html body #root .hydra-root .bottom-nav.bottom-nav:not(.is-hidden) {
-  transform: translate3d(-50%,0,0) !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
+html body #root .hydra-root .bottom-nav.bottom-nav::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: -25px !important;
+  width: 86px !important;
+  height: 52px !important;
+  border-radius: 0 0 44px 44px !important;
+  background: #faf8f1 !important;
+  transform: translateX(-50%) !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
 }
 
-html body #root .hydra-root .bottom-nav.bottom-nav::before,
 html body #root .hydra-root .bottom-nav.bottom-nav::after {
-  background: #fff !important;
+  content: none !important;
 }
 
 html body #root .hydra-root .bottom-nav.bottom-nav > button {
-  pointer-events: auto !important;
   position: relative !important;
+  height: 72px !important;
+  min-height: 72px !important;
+  pointer-events: auto !important;
   z-index: 3 !important;
 }
 
 html body #root .hydra-root .bottom-nav.bottom-nav > button:nth-of-type(3) {
-  z-index: 5 !important;
+  height: 108px !important;
+  min-height: 108px !important;
+  margin-top: -36px !important;
+  z-index: 8 !important;
 }
 
-/* O conteúdo termina antes da barra; nada importante fica escondido atrás dela. */
+html body #root .hydra-root .bottom-nav.bottom-nav > button:nth-of-type(3) > span:first-of-type,
+html body #root .hydra-root .bottom-nav.bottom-nav > button.nav-create > span:first-of-type,
+html body #root .hydra-root .bottom-nav.bottom-nav > button.nav-nfc > span:first-of-type {
+  width: 66px !important;
+  height: 66px !important;
+  border: 7px solid #faf8f1 !important;
+  border-radius: 50% !important;
+  background: #0b5136 !important;
+  box-shadow: 0 7px 18px rgba(11,81,54,.16) !important;
+}
+
 html body #root .hydra-root .app-content {
-  padding-bottom: calc(108px + env(safe-area-inset-bottom)) !important;
+  padding-bottom: calc(106px + env(safe-area-inset-bottom)) !important;
 }
 
-@media (max-width: 360px) {
-  html body #root .hydra-root .bottom-nav.bottom-nav {
-    width: calc(100vw - 14px) !important;
-    height: calc(70px + env(safe-area-inset-bottom)) !important;
-    min-height: calc(70px + env(safe-area-inset-bottom)) !important;
-    border-radius: 25px 25px 0 0 !important;
+html body #root .hydra-root.theme-dark .bottom-nav.bottom-nav {
+  background: rgba(19,35,27,.985) !important;
+  border-color: rgba(255,255,255,.06) !important;
+}
+html body #root .hydra-root.theme-dark .bottom-nav.bottom-nav::before { background:#0d1d15 !important; }
+html body #root .hydra-root.theme-dark .bottom-nav.bottom-nav > button:nth-of-type(3) > span:first-of-type { border-color:#0d1d15 !important; }
+
+@media (max-width:360px) {
+  html body #root .hydra-root .bottom-nav.bottom-nav,
+  html body #root .hydra-root .bottom-nav.bottom-nav.is-hidden {
+    bottom:max(7px, env(safe-area-inset-bottom)) !important;
+    width:calc(100vw - 18px) !important;
+    height:68px !important;
+    min-height:68px !important;
+    border-radius:25px !important;
   }
 }
