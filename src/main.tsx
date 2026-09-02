@@ -35,6 +35,7 @@ import "./dribbble-agriculture-reference.css";
 import "./dribbble-agriculture-fidelity.css";
 import "./hydra-identity-final.css";
 import "./hydra-reference-all-screens.css";
+import "./hydra-final-functional-polish.css";
 
 type ThemeMode = "light" | "dark";
 const THEME_KEY = "hydra-agro.theme";
