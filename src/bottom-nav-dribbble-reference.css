@@ -29,7 +29,6 @@ html body #root .hydra-root .phone-app .bottom-nav.bottom-nav {
   z-index: 220 !important;
 }
 
-/* A superfície é desenhada aqui. O círculo transparente vira o recorte em U real. */
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::before {
   content: "" !important;
   display: block !important;
@@ -106,7 +105,6 @@ html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:fi
   pointer-events: none !important;
 }
 
-/* Rótulos continuam acessíveis, sem poluir a barra. */
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > small {
   position: absolute !important;
   width: 1px !important;
@@ -120,7 +118,6 @@ html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > small {
   border: 0 !important;
 }
 
-/* Item lateral ativo: ícone verde + ponto abaixo, como na referência. */
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3)),
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3)) {
   color: #174c36 !important;
@@ -129,7 +126,7 @@ html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-curr
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3)) > span:first-of-type,
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3)) > span:first-of-type {
   color: #174c36 !important;
-  transform: translateY(-6px) !important;
+  transform: translateY(-5px) !important;
 }
 
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3))::after,
@@ -138,17 +135,20 @@ html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-curr
   display: block !important;
   position: absolute !important;
   left: 50% !important;
-  bottom: 9px !important;
+  right: auto !important;
+  top: 55px !important;
+  bottom: auto !important;
   width: 6px !important;
   height: 6px !important;
+  margin: 0 !important;
+  padding: 0 !important;
   border: 0 !important;
-  border-radius: 50% !important;
+  border-radius: 999px !important;
   background: #174c36 !important;
-  transform: translateX(-50%) !important;
+  transform: translate3d(-50%,0,0) !important;
   pointer-events: none !important;
 }
 
-/* O terceiro item é a ação elevada. O hit-box sobe com o círculo para o toque funcionar inteiro. */
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) {
   align-self: start !important;
   height: 104px !important;
@@ -248,5 +248,9 @@ html body #root .hydra-root.theme-dark .phone-app .bottom-nav.bottom-nav > butto
     height: 62px !important;
     min-width: 62px !important;
     min-height: 62px !important;
+  }
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3))::after,
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3))::after {
+    top: 52px !important;
   }
 }
