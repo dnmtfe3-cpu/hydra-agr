@@ -41,6 +41,7 @@ import "./home-quick-neutral-icons.css";
 import "./features/profile/profile-final-polish.css";
 import "./bottom-nav-dribbble-reference.css";
 import "./hydra-green-sync-final.css";
+import "./hydra-motion-nav-final.css";
 
 type ThemeMode = "light" | "dark";
 const THEME_KEY = "hydra-agro.theme";
