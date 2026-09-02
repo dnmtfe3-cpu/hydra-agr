@@ -1,0 +1,673 @@
+/*
+ * Hydra Agro — sistema visual final baseado na referencia mobile agricola.
+ * Apenas apresentacao. Mantem dados, rotas, Supabase, auth, NFC e regras existentes.
+ */
+
+html body #root .hydra-root {
+  --hydra-green: #174c36;
+  --hydra-green-deep: #123f2e;
+  --hydra-green-soft: #e8f0eb;
+  --hydra-yellow: #f3a436;
+  --hydra-yellow-soft: #fff2dc;
+  --hydra-bg: #f3f4f1;
+  --hydra-card: #ffffff;
+  --hydra-card-soft: #f8f8f5;
+  --hydra-text: #17201b;
+  --hydra-muted: #747b77;
+  --hydra-line: #e5e8e4;
+  --hydra-radius-xl: 28px;
+  --hydra-radius-lg: 22px;
+  --hydra-radius-md: 16px;
+  --hydra-shadow: 0 10px 28px rgba(23, 76, 54, .055);
+}
+
+/* ---------- PALETA ---------- */
+html body #root .hydra-root:not(.theme-dark),
+html body #root .hydra-root:not(.theme-dark) .app-shell,
+html body #root .hydra-root:not(.theme-dark) .phone-app,
+html body #root .hydra-root:not(.theme-dark) .app-content,
+html body #root .hydra-root:not(.theme-dark) .route-loading,
+html body #root .hydra-root:not(.theme-dark) .screen {
+  background-color: var(--hydra-bg) !important;
+  color: var(--hydra-text) !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) {
+  --ha-green-950: var(--hydra-green-deep) !important;
+  --ha-green-900: var(--hydra-green-deep) !important;
+  --ha-green-800: var(--hydra-green) !important;
+  --ha-green-700: var(--hydra-green) !important;
+  --ha-green-100: var(--hydra-green-soft) !important;
+  --ha-green-050: #f2f6f3 !important;
+  --ha-orange: var(--hydra-yellow) !important;
+  --ha-orange-soft: var(--hydra-yellow-soft) !important;
+  --ha-canvas: var(--hydra-bg) !important;
+  --ha-surface: var(--hydra-card) !important;
+  --ha-surface-soft: var(--hydra-card-soft) !important;
+  --ha-ink: var(--hydra-text) !important;
+  --ha-muted: var(--hydra-muted) !important;
+  --ha-border: var(--hydra-line) !important;
+}
+
+/* ---------- TIPOGRAFIA FINA ---------- */
+html body #root .hydra-root,
+html body #root .hydra-root * {
+  font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+html body #root .hydra-root * { font-weight: 400 !important; }
+html body #root .hydra-root :is(h1,h2,h3,h4,h5,h6) {
+  font-weight: 500 !important;
+  letter-spacing: -.035em !important;
+}
+html body #root .hydra-root :is(strong,b) { font-weight: 600 !important; }
+html body #root .hydra-root :is(button,.chip,.pill,.badge,.status-chip,.tab-button) { font-weight: 500 !important; }
+
+/* ---------- ESTRUTURA DE TODAS AS TELAS ---------- */
+html body #root .hydra-root:not(.theme-dark) .screen:not(.home-screen) {
+  min-height: 100dvh !important;
+  padding: max(22px, calc(env(safe-area-inset-top) + 16px)) 16px calc(104px + env(safe-area-inset-bottom)) !important;
+  background: var(--hydra-bg) !important;
+  overflow-x: clip !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .screen-header {
+  position: relative !important;
+  margin: 0 0 22px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .screen-header-row {
+  min-height: 50px !important;
+  display: grid !important;
+  grid-template-columns: 46px minmax(0,1fr) 46px !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .screen-heading {
+  grid-column: 2 !important;
+  text-align: center !important;
+  min-width: 0 !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .screen-heading h1 {
+  margin: 0 !important;
+  color: var(--hydra-text) !important;
+  font-size: clamp(22px, 6.4vw, 28px) !important;
+  line-height: 1.08 !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .screen-heading p {
+  margin: 5px auto 0 !important;
+  max-width: 310px !important;
+  color: var(--hydra-muted) !important;
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .screen-heading .eyebrow,
+html body #root .hydra-root:not(.theme-dark) .eyebrow,
+html body #root .hydra-root:not(.theme-dark) .group-label,
+html body #root .hydra-root:not(.theme-dark) .property-kicker {
+  color: var(--hydra-green) !important;
+  font-size: 9px !important;
+  letter-spacing: .09em !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .screen-header .icon-button {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  border: 1px solid var(--hydra-line) !important;
+  border-radius: 50% !important;
+  color: var(--hydra-text) !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .screen-header .icon-button.accent {
+  color: #fff !important;
+  border-color: var(--hydra-green) !important;
+  background: var(--hydra-green) !important;
+}
+
+/* ---------- SUPERFICIES / CARDS ---------- */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .content-section,
+  .property-section-card,
+  .task-card,
+  .compact-list,
+  .setting-card,
+  .profile-menu-card,
+  .preference-options,
+  .animal-card,
+  .sector-card,
+  .monitoring-card,
+  .activity-card,
+  .challenge-card,
+  .post-card,
+  .community-composer,
+  .notification-list > div,
+  .history-home-row,
+  .first-action-card,
+  .nfc-inline-card,
+  .nfc-manual-card,
+  .plan-card,
+  .admin-metric-grid article,
+  .moderation-list article,
+  .today-card,
+  .today-section,
+  .water-card,
+  .staff-card,
+  .profile-group,
+  .legal-sections section,
+  .herd-care-launch,
+  .herd-plus-lock,
+  .herd-tools-expanded > section,
+  .herd-tools-expanded > article
+) {
+  border: 1px solid var(--hydra-line) !important;
+  border-radius: var(--hydra-radius-lg) !important;
+  background: var(--hydra-card) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) :is(
+  .content-section,
+  .property-section-card,
+  .task-card,
+  .compact-list,
+  .setting-card,
+  .profile-menu-card,
+  .preference-options,
+  .community-composer,
+  .post-card,
+  .challenge-card,
+  .plan-card,
+  .herd-plus-lock
+) {
+  padding: 16px !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .section-heading {
+  margin: 24px 0 12px !important;
+  min-height: 28px !important;
+}
+html body #root .hydra-root:not(.theme-dark) .section-heading h2,
+html body #root .hydra-root:not(.theme-dark) .home-section-title h2 {
+  color: var(--hydra-text) !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
+}
+html body #root .hydra-root:not(.theme-dark) .section-heading small,
+html body #root .hydra-root:not(.theme-dark) .home-section-title small {
+  color: var(--hydra-muted) !important;
+  font-size: 9px !important;
+}
+
+/* ---------- HOME ---------- */
+html body #root .hydra-root:not(.theme-dark) .home-screen {
+  background: linear-gradient(to bottom,
+    var(--hydra-green) 0,
+    var(--hydra-green) max(365px, calc(342px + env(safe-area-inset-top))),
+    var(--hydra-bg) max(365px, calc(342px + env(safe-area-inset-top))),
+    var(--hydra-bg) 100%) !important;
+}
+
+/* Atalhos exatamente brancos: sem blocos azul/roxo/rosa/verde/amarelo. */
+html body #root .hydra-root:not(.theme-dark) .shortcut-row,
+html body #root .hydra-root:not(.theme-dark) .home-shortcuts-five {
+  gap: 8px !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .shortcut-row > button,
+html body #root .hydra-root:not(.theme-dark) .home-shortcuts-five > button,
+html body #root .hydra-root:not(.theme-dark) .quick-grid > button,
+html body #root .hydra-root:not(.theme-dark) .feature-link-grid > button {
+  min-width: 0 !important;
+  border: 1px solid var(--hydra-line) !important;
+  border-radius: 18px !important;
+  color: var(--hydra-text) !important;
+  background: #fff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .shortcut-row > button > span,
+html body #root .hydra-root:not(.theme-dark) .home-shortcuts-five > button > span,
+html body #root .hydra-root:not(.theme-dark) .quick-grid > button > span,
+html body #root .hydra-root:not(.theme-dark) .feature-link-grid > button > span {
+  color: var(--hydra-green) !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .shortcut-row > button small,
+html body #root .hydra-root:not(.theme-dark) .home-shortcuts-five > button small {
+  color: var(--hydra-text) !important;
+  font-size: 9px !important;
+}
+
+/* Fotos da Home no formato baixo e editorial da referencia. */
+html body #root .hydra-root:not(.theme-dark) .home-feature-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+  gap: 10px !important;
+}
+html body #root .hydra-root:not(.theme-dark) .home-feature-card {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  border: 1px solid var(--hydra-line) !important;
+  border-radius: 22px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) .home-feature-media {
+  height: 112px !important;
+  border-radius: 0 !important;
+  color: var(--hydra-green) !important;
+  background: var(--hydra-green-soft) !important;
+}
+html body #root .hydra-root:not(.theme-dark) .home-feature-media img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+html body #root .hydra-root:not(.theme-dark) .home-feature-copy { padding: 11px 12px 13px !important; }
+html body #root .hydra-root:not(.theme-dark) .home-feature-copy small { color: var(--hydra-muted) !important; }
+html body #root .hydra-root:not(.theme-dark) .home-feature-copy strong { color: var(--hydra-text) !important; font-size: 13px !important; }
+html body #root .hydra-root:not(.theme-dark) .home-feature-copy em { color: var(--hydra-muted) !important; font-size: 10px !important; }
+
+/* ---------- REBANHO / FICHA ANIMAL ---------- */
+html body #root .hydra-root:not(.theme-dark) .search-row {
+  gap: 8px !important;
+  margin-bottom: 12px !important;
+}
+html body #root .hydra-root:not(.theme-dark) .search-box {
+  min-height: 48px !important;
+  border: 1px solid var(--hydra-line) !important;
+  border-radius: 17px !important;
+  color: var(--hydra-muted) !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) .filter-button {
+  width: 48px !important;
+  min-width: 48px !important;
+  height: 48px !important;
+  border: 1px solid var(--hydra-line) !important;
+  border-radius: 17px !important;
+  color: var(--hydra-green) !important;
+  background: #fff !important;
+}
+html body #root .hydra-root:not(.theme-dark) .filter-button.active,
+html body #root .hydra-root:not(.theme-dark) .filter-chips button.active {
+  color: #fff !important;
+  border-color: var(--hydra-green) !important;
+  background: var(--hydra-green) !important;
+}
+html body #root .hydra-root:not(.theme-dark) .filter-chips button {
+  color: var(--hydra-text) !important;
+  border: 1px solid var(--hydra-line) !important;
+  background: #fff !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .animal-list {
+  display: grid !important;
+  gap: 10px !important;
+}
+html body #root .hydra-root:not(.theme-dark) .animal-card {
+  min-height: 92px !important;
+  padding: 9px !important;
+  display: grid !important;
+  grid-template-columns: 74px minmax(0,1fr) auto !important;
+  gap: 12px !important;
+  align-items: center !important;
+  text-align: left !important;
+}
+html body #root .hydra-root:not(.theme-dark) .animal-avatar,
+html body #root .hydra-root:not(.theme-dark) .animal-avatar.image {
+  width: 74px !important;
+  height: 74px !important;
+  border-radius: 18px !important;
+  color: var(--hydra-green) !important;
+  background: var(--hydra-green-soft) !important;
+  object-fit: cover !important;
+}
+html body #root .hydra-root:not(.theme-dark) .animal-code { color: var(--hydra-green) !important; }
+html body #root .hydra-root:not(.theme-dark) .animal-copy strong { color: var(--hydra-text) !important; font-size: 14px !important; }
+html body #root .hydra-root:not(.theme-dark) .animal-copy small { color: var(--hydra-muted) !important; font-size: 10px !important; }
+
+/* Tags ficam amarelas apenas por serem Hydra Tag; nenhum outro atalho recebe amarelo. */
+html body #root .hydra-root:not(.theme-dark) :is(.tag-badge,.nfc-badge,.hydra-tag-badge) {
+  color: #7b520d !important;
+  border-color: #f0d7ae !important;
+  background: var(--hydra-yellow-soft) !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(.nfc-inline-card,.nfc-manual-card) > span:first-child {
+  color: var(--hydra-green) !important;
+  background: var(--hydra-green-soft) !important;
+}
+
+/* Ficha/modal no estilo da segunda tela da referencia. */
+html body #root .hydra-root:not(.theme-dark) .modal-backdrop,
+html body #root .hydra-root:not(.theme-dark) .dialog-backdrop {
+  background: rgba(15, 29, 22, .28) !important;
+  backdrop-filter: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(.modal-card,.dialog-card,.sheet-card) {
+  border: 0 !important;
+  border-radius: 28px 28px 0 0 !important;
+  background: #fff !important;
+  box-shadow: 0 -12px 40px rgba(23,76,54,.09) !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(.animal-detail-photo,.animal-detail-image,.animal-photo-preview) img,
+html body #root .hydra-root:not(.theme-dark) :is(.animal-detail-photo,.animal-detail-image,.animal-photo-preview) {
+  max-height: 230px !important;
+  border-radius: 24px !important;
+  object-fit: cover !important;
+}
+
+/* ---------- PROPRIEDADE ---------- */
+html body #root .hydra-root:not(.theme-dark) .property-screen :is(.property-hero,.property-cover,.property-photo-card) {
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 26px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) .property-screen :is(.property-cover img,.property-hero img,.property-photo-card img) {
+  width: 100% !important;
+  max-height: 230px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+html body #root .hydra-root:not(.theme-dark) .property-screen .property-metrics > * {
+  border: 1px solid var(--hydra-line) !important;
+  border-radius: 18px !important;
+  color: var(--hydra-text) !important;
+  background: #fff !important;
+}
+
+/* ---------- MONITORAMENTO / HOJE / AGUA ---------- */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .monitor-overview,
+  .monitor-hero,
+  .monitor-weather-card,
+  .today-overview,
+  .today-hero,
+  .water-overview
+) {
+  border: 0 !important;
+  border-radius: 27px !important;
+  color: #fff !important;
+  background: var(--hydra-green) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(
+  .monitor-overview,
+  .monitor-hero,
+  .monitor-weather-card,
+  .today-overview,
+  .today-hero,
+  .water-overview
+) :is(h1,h2,h3,strong,span,p,small,svg) {
+  color: inherit !important;
+}
+html body #root .hydra-root:not(.theme-dark) .monitoring-list,
+html body #root .hydra-root:not(.theme-dark) .sector-list,
+html body #root .hydra-root:not(.theme-dark) .activity-list {
+  display: grid !important;
+  gap: 10px !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(.monitoring-card,.sector-card,.activity-card) {
+  padding: 13px !important;
+  color: var(--hydra-text) !important;
+}
+
+/* ---------- COMUNIDADE ---------- */
+html body #root .hydra-root:not(.theme-dark) .community-screen {
+  background: var(--hydra-bg) !important;
+}
+html body #root .hydra-root:not(.theme-dark) .community-composer {
+  margin-bottom: 12px !important;
+}
+html body #root .hydra-root:not(.theme-dark) .post-card {
+  margin-bottom: 10px !important;
+  overflow: hidden !important;
+}
+html body #root .hydra-root:not(.theme-dark) .post-card :is(.post-author,.community-author) {
+  color: var(--hydra-text) !important;
+}
+html body #root .hydra-root:not(.theme-dark) .post-card :is(.post-action,.post-action button) {
+  color: var(--hydra-muted) !important;
+  background: transparent !important;
+}
+html body #root .hydra-root:not(.theme-dark) .post-card img {
+  max-height: 300px !important;
+  object-fit: cover !important;
+}
+
+/* ---------- DESAFIOS / PREMIUM ---------- */
+html body #root .hydra-root:not(.theme-dark) :is(.challenge-hero,.ranking-hero,.plus-price-hero) {
+  border: 0 !important;
+  border-radius: 27px !important;
+  color: #fff !important;
+  background: var(--hydra-green) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(.challenge-hero,.ranking-hero,.plus-price-hero) * { color: inherit !important; }
+html body #root .hydra-root:not(.theme-dark) :is(.xp-progress,.challenge-progress,.progress-track) {
+  background: var(--hydra-green-soft) !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(.xp-progress,.challenge-progress,.progress-track) > * {
+  background: var(--hydra-green) !important;
+}
+
+/* ---------- PERFIL ---------- */
+html body #root .hydra-root:not(.theme-dark) .profile-screen :is(.profile-hero,.profile-cover) {
+  border: 0 !important;
+  border-radius: 27px !important;
+  color: var(--hydra-text) !important;
+  background: #fff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) .profile-avatar-wrap,
+html body #root .hydra-root:not(.theme-dark) .profile-avatar {
+  border-color: #fff !important;
+  background: var(--hydra-green-soft) !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) .profile-menu-row {
+  min-height: 62px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--hydra-line) !important;
+  border-radius: 0 !important;
+  color: var(--hydra-text) !important;
+  background: #fff !important;
+}
+html body #root .hydra-root:not(.theme-dark) .profile-menu-row:last-child { border-bottom: 0 !important; }
+html body #root .hydra-root:not(.theme-dark) .profile-menu-icon {
+  color: var(--hydra-green) !important;
+  background: transparent !important;
+}
+
+/* ---------- NFC ---------- */
+html body #root .hydra-root:not(.theme-dark) :is(.nfc-hero,.nfc-banner) {
+  border: 0 !important;
+  border-radius: 26px !important;
+  color: var(--hydra-text) !important;
+  background: #fff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(.nfc-hero,.nfc-banner) .nfc-banner-icon,
+html body #root .hydra-root:not(.theme-dark) .nfc-hero-icon {
+  color: #7b520d !important;
+  background: var(--hydra-yellow-soft) !important;
+}
+html body #root .hydra-root:not(.theme-dark) .nfc-primary-action {
+  color: #fff !important;
+  background: var(--hydra-green) !important;
+}
+
+/* ---------- ADMIN / STAFF / OPERACOES ---------- */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .admin-screen,
+  .staff-profile-screen,
+  .operations-screen,
+  .family-farming-screen,
+  .activities-screen,
+  .notifications-screen,
+  .today-screen
+) :is(.metric-card,.operation-card,.family-card,.notification-card,.staff-card) {
+  border: 1px solid var(--hydra-line) !important;
+  border-radius: 22px !important;
+  color: var(--hydra-text) !important;
+  background: #fff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* ---------- FORMULARIOS ---------- */
+html body #root .hydra-root:not(.theme-dark) .field > span,
+html body #root .hydra-root:not(.theme-dark) .field > label {
+  color: var(--hydra-muted) !important;
+  font-size: 10px !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(input,textarea,select) {
+  color: var(--hydra-text) !important;
+  border: 1px solid var(--hydra-line) !important;
+  border-radius: 15px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(input,textarea,select):focus {
+  border-color: rgba(23,76,54,.45) !important;
+  box-shadow: 0 0 0 3px rgba(23,76,54,.08) !important;
+  outline: none !important;
+}
+
+/* ---------- BOTOES ---------- */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .primary-button,
+  .small-button,
+  .action-primary,
+  .nfc-primary-action
+) {
+  min-height: 50px !important;
+  border: 0 !important;
+  border-radius: 16px !important;
+  color: #fff !important;
+  background: var(--hydra-green) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(
+  .secondary-button,
+  .preview-button,
+  .wide-outline-button
+) {
+  min-height: 50px !important;
+  border: 1px solid var(--hydra-line) !important;
+  border-radius: 16px !important;
+  color: var(--hydra-green) !important;
+  background: #fff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Destrutivo sem vermelho visual; mantem o significado pelo texto/icone. */
+html body #root .hydra-root:not(.theme-dark) :is(.danger-button,.danger-zone button,.delete-button) {
+  color: var(--hydra-text) !important;
+  border: 1px solid var(--hydra-line) !important;
+  background: #fff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* ---------- REMOVE CORES LEGADAS DECORATIVAS ---------- */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .blue,
+  .purple,
+  .violet,
+  .pink,
+  .red,
+  .cyan,
+  .teal,
+  .indigo,
+  .accent-blue,
+  .accent-purple,
+  .accent-red,
+  .accent-pink
+) {
+  color: var(--hydra-green) !important;
+  background: var(--hydra-green-soft) !important;
+  border-color: var(--hydra-line) !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) :is(
+  .status-success,
+  .status-info,
+  .status-warning,
+  .status-danger,
+  .success,
+  .attention,
+  .critical
+) {
+  color: var(--hydra-text) !important;
+  border-color: var(--hydra-line) !important;
+  background: #fff !important;
+  background-image: none !important;
+}
+
+/* ---------- BOTTOM NAV ---------- */
+html body #root .hydra-root:not(.theme-dark) .bottom-nav {
+  border: 0 !important;
+  border-top: 1px solid var(--hydra-line) !important;
+  color: var(--hydra-muted) !important;
+  background: rgba(255,255,255,.98) !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) .bottom-nav button {
+  color: var(--hydra-muted) !important;
+  background: transparent !important;
+}
+html body #root .hydra-root:not(.theme-dark) .bottom-nav button.active,
+html body #root .hydra-root:not(.theme-dark) .bottom-nav button[aria-current="page"] {
+  color: var(--hydra-green) !important;
+}
+html body #root .hydra-root:not(.theme-dark) .bottom-nav :is(.center-action,.nav-add) {
+  color: #fff !important;
+  background: var(--hydra-green) !important;
+  box-shadow: none !important;
+}
+
+/* ---------- DESKTOP: MESMA IDENTIDADE MOBILE ---------- */
+@media (min-width: 760px) {
+  html body #root .hydra-root:not(.theme-dark) .app-shell {
+    padding: 24px 0 !important;
+    background: var(--hydra-green) !important;
+  }
+  html body #root .hydra-root:not(.theme-dark) .phone-app {
+    width: min(430px, calc(100vw - 48px)) !important;
+    min-height: calc(100dvh - 48px) !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+    border-radius: 34px !important;
+    background: var(--hydra-bg) !important;
+    box-shadow: 0 24px 70px rgba(7,34,24,.22) !important;
+  }
+}
