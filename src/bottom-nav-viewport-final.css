@@ -1,11 +1,11 @@
-/* Visual antigo restaurado + comportamento persistente na viewport. */
+/* Bottom bar flutuante restaurada: pill completa, separada da base e persistente. */
 html body #root .hydra-root .bottom-nav.bottom-nav,
 html body #root .hydra-root .bottom-nav.bottom-nav.is-hidden,
 html body #root .hydra-root .bottom-nav.bottom-nav:not(.is-hidden) {
   position: fixed !important;
   left: 50% !important;
   right: auto !important;
-  bottom: max(10px, env(safe-area-inset-bottom)) !important;
+  bottom: max(14px, env(safe-area-inset-bottom)) !important;
   top: auto !important;
   width: min(calc(100vw - 28px), 398px) !important;
   height: 72px !important;
@@ -14,8 +14,8 @@ html body #root .hydra-root .bottom-nav.bottom-nav:not(.is-hidden) {
   padding: 0 10px !important;
   border: 1px solid rgba(7,61,42,.055) !important;
   border-radius: 28px !important;
-  background: rgba(255,255,255,.985) !important;
-  box-shadow: 0 10px 30px rgba(7,61,42,.10) !important;
+  background: #fff !important;
+  box-shadow: 0 12px 30px rgba(7,61,42,.10) !important;
   transform: translate3d(-50%,0,0) !important;
   opacity: 1 !important;
   visibility: visible !important;
@@ -38,9 +38,7 @@ html body #root .hydra-root .bottom-nav.bottom-nav::before {
   z-index: 1 !important;
 }
 
-html body #root .hydra-root .bottom-nav.bottom-nav::after {
-  content: none !important;
-}
+html body #root .hydra-root .bottom-nav.bottom-nav::after { content:none !important; }
 
 html body #root .hydra-root .bottom-nav.bottom-nav > button {
   position: relative !important;
@@ -60,29 +58,22 @@ html body #root .hydra-root .bottom-nav.bottom-nav > button:nth-of-type(3) {
 html body #root .hydra-root .bottom-nav.bottom-nav > button:nth-of-type(3) > span:first-of-type,
 html body #root .hydra-root .bottom-nav.bottom-nav > button.nav-create > span:first-of-type,
 html body #root .hydra-root .bottom-nav.bottom-nav > button.nav-nfc > span:first-of-type {
-  width: 66px !important;
-  height: 66px !important;
-  border: 7px solid #faf8f1 !important;
-  border-radius: 50% !important;
-  background: #0b5136 !important;
-  box-shadow: 0 7px 18px rgba(11,81,54,.16) !important;
+  width:66px !important;
+  height:66px !important;
+  border:7px solid #faf8f1 !important;
+  border-radius:50% !important;
+  background:#0b5136 !important;
+  box-shadow:0 7px 18px rgba(11,81,54,.16) !important;
 }
 
 html body #root .hydra-root .app-content {
-  padding-bottom: calc(106px + env(safe-area-inset-bottom)) !important;
+  padding-bottom:calc(116px + env(safe-area-inset-bottom)) !important;
 }
-
-html body #root .hydra-root.theme-dark .bottom-nav.bottom-nav {
-  background: rgba(19,35,27,.985) !important;
-  border-color: rgba(255,255,255,.06) !important;
-}
-html body #root .hydra-root.theme-dark .bottom-nav.bottom-nav::before { background:#0d1d15 !important; }
-html body #root .hydra-root.theme-dark .bottom-nav.bottom-nav > button:nth-of-type(3) > span:first-of-type { border-color:#0d1d15 !important; }
 
 @media (max-width:360px) {
   html body #root .hydra-root .bottom-nav.bottom-nav,
   html body #root .hydra-root .bottom-nav.bottom-nav.is-hidden {
-    bottom:max(7px, env(safe-area-inset-bottom)) !important;
+    bottom:max(10px, env(safe-area-inset-bottom)) !important;
     width:calc(100vw - 18px) !important;
     height:68px !important;
     min-height:68px !important;
