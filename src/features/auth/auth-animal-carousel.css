@@ -1,0 +1,21 @@
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell){background:#073d2a!important;isolation:isolate!important}
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell)::before,html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell)::after{display:none!important}
+.auth-animal-carousel{position:absolute;z-index:1;inset:0 0 auto;height:34dvh;min-height:250px;max-height:330px;overflow:hidden;background:radial-gradient(circle at 50% 20%,rgba(255,138,18,.15),transparent 38%),linear-gradient(180deg,#0b5136,#073d2a);perspective:700px}
+.auth-animal-track{position:absolute;inset:20px 0 28px;display:grid;place-items:center;transform-style:preserve-3d}
+.auth-animal-card{position:absolute;width:min(46vw,190px);height:210px;margin:0;border-radius:28px;overflow:hidden;background:#164f37;border:1px solid rgba(255,255,255,.13);box-shadow:0 20px 40px rgba(0,0,0,.18);transition:transform .8s cubic-bezier(.22,.8,.22,1),opacity .65s ease,filter .65s ease;transform-origin:center;opacity:0;filter:saturate(.85)}
+.auth-animal-card[data-position="active"]{transform:translate3d(0,0,80px) rotate(0);opacity:1;filter:none;z-index:5}
+.auth-animal-card[data-position="prev"]{transform:translate3d(-47vw,18px,-30px) rotate(-7deg) scale(.9);opacity:.7;z-index:3}
+.auth-animal-card[data-position="next"]{transform:translate3d(47vw,18px,-30px) rotate(7deg) scale(.9);opacity:.7;z-index:3}
+.auth-animal-card[data-position="far"]{transform:translate3d(0,30px,-120px) scale(.75);opacity:0;z-index:1}
+.auth-animal-scene{position:absolute;inset:0;display:grid;place-items:end center;padding-bottom:22px;background:linear-gradient(180deg,#77a789 0 42%,#477b50 43% 100%)}
+.auth-animal-scene::before{content:"";position:absolute;left:-18%;right:-18%;bottom:34%;height:42%;border-radius:50% 50% 0 0;background:#56875d;transform:rotate(-5deg)}
+.auth-animal-scene::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,184,92,.18),transparent 45%,rgba(4,42,27,.2))}
+.auth-animal-emoji{position:relative;z-index:2;font-size:88px;line-height:1;filter:drop-shadow(0 9px 8px rgba(0,0,0,.16));transform:translateY(-8px)}
+.auth-animal-card figcaption{position:absolute;z-index:4;left:16px;bottom:12px;color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.auth-animal-dots{position:absolute;z-index:8;left:50%;bottom:12px;display:flex;gap:7px;transform:translateX(-50%)}
+.auth-animal-dots span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.28);transition:.35s}.auth-animal-dots span.active{width:18px;border-radius:999px;background:#ff8a12}
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-card,html body #root .hydra-root .auth-shell-signup:not(.auth-code-shell) .auth-reference-card{z-index:3!important;margin-top:31dvh!important;border-radius:34px 34px 0 0!important}
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-brand span{display:none!important}
+@media(max-height:700px){.auth-animal-carousel{height:31dvh;min-height:205px}.auth-animal-card{height:170px;width:150px}.auth-animal-emoji{font-size:68px}html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-card{margin-top:28dvh!important}}
+@media(min-width:700px){.auth-animal-carousel{display:none}html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-card{margin:0 auto!important}}
+@media(prefers-reduced-motion:reduce){.auth-animal-card{transition:none!important}}
