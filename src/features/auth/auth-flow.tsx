@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import { ArrowLeft, ArrowRight, Eye, EyeOff, KeyRound, LockKeyhole, MailCheck, MapPin, UserRound, UsersRound } from "lucide-react";
+import { ArrowLeft, ArrowRight, Eye, EyeOff, KeyRound, LockKeyhole, MailCheck, MapPin, UsersRound } from "lucide-react";
 import { HydraMark } from "../../components/brand";
 import { PropertyLocationFields } from "../../components/property-location-fields";
 import { Field } from "../../components/ui";
@@ -36,7 +36,6 @@ function formatStaffCode(value: string) {
 }
 
 export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup }: Props) {
-  const [view, setView] = useState<"landing" | "auth">("landing");
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [loginStep, setLoginStep] = useState<LoginStep>("email");
   const [email, setEmail] = useState("");
@@ -55,6 +54,8 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup }: Pro
   const [property, setProperty] = useState<Property>({ ...emptyProperty });
 
   const firstName = useMemo(() => signup.name.trim().split(/\s+/)[0] || "Produtor", [signup.name]);
+  const isCodeScreen = mode === "login" && (loginStep === "code" || loginStep === "recoveryCode");
+  const showModeTabs = !isCodeScreen && !(mode === "login" && ["recovery", "staff"].includes(loginStep));
 
   useEffect(() => {
     if (codeCooldown <= 0) return;
@@ -65,6 +66,18 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup }: Pro
   function changeSignup(field: keyof typeof signup, value: string) {
     setSignup((current) => ({ ...current, [field]: value }));
     setError("");
+  }
+
+  function switchMode(next: "login" | "signup") {
+    setMode(next);
+    setLoginStep("email");
+    setSignupStep(0);
+    setLoginCode("");
+    setRecoveryCode("");
+    setSignupCode("");
+    setCodeCooldown(0);
+    setError("");
+    setNotice("");
   }
 
   function validLoginEmail() {
@@ -230,40 +243,89 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup }: Pro
     finally { setSubmitting(false); }
   }
 
-  function switchMode(next: "login" | "signup") {
-    setMode(next); setLoginStep("email"); setLoginCode(""); setRecoveryCode(""); setSignupCode(""); setCodeCooldown(0); setError(""); setNotice("");
-  }
-
-  function openAuth(next: "login" | "signup", step: "email" | "staff" = "email") {
-    switchMode(next); setLoginStep(step); setView("auth");
-  }
-
-  if (view === "landing") {
-    return <main className="auth-landing"><div className="auth-landing-mosaic" aria-hidden="true"><span /><span /><span /><span /><span /><span /></div><div className="auth-landing-shade" aria-hidden="true" /><section className="auth-landing-content"><span className="auth-landing-mark-wrap"><HydraMark className="auth-landing-mark" /></span><p className="auth-landing-kicker">Gestão rural em um só lugar</p><h1>Água, rebanho e rotina.<br /><strong>Juntos.</strong></h1><p className="auth-landing-copy">Use o Hydra Agro no Android, iPhone, iPad ou computador.</p><div className="auth-landing-actions"><button className="auth-landing-primary" type="button" onClick={() => openAuth("login")}>Entrar</button><button className="auth-landing-secondary" type="button" onClick={() => openAuth("signup")}>Criar conta</button></div><button className="auth-landing-staff" type="button" onClick={() => openAuth("login", "staff")}><UsersRound size={17} /> Acesso de funcionário</button></section></main>;
-  }
-
   return (
-    <main className={`auth-shell auth-shell-motion ${mode === "signup" ? "auth-shell-signup" : ""} ${loginStep === "staff" ? "auth-shell-staff" : ""}`}>
-      <div className="signup-motion-bg" aria-hidden="true"><span /><span /><span /><span /><span /><span /></div>
-      <section className={`auth-card ${mode === "signup" ? "auth-card-wide" : ""}`}>
-        {mode === "login" && loginStep === "email" && <button className="auth-home-back" type="button" onClick={() => { setView("landing"); setError(""); setNotice(""); }}><ArrowLeft size={17} /> Voltar</button>}
-        <span className="auth-form-mark" aria-hidden="true"><HydraMark /></span>
+    <main className={`auth-shell auth-reference-shell ${mode === "signup" ? "auth-shell-signup" : ""} ${isCodeScreen ? "auth-code-shell" : ""}`}>
+      <section className={`auth-card auth-reference-card ${mode === "signup" ? "auth-card-wide" : ""}`}>
+        <div className="auth-reference-brand"><HydraMark /><span>Hydra Agro</span></div>
 
-        {mode === "login" ? <div className="auth-content auth-enter" key={loginStep}>
-          {loginStep === "email" ? <form onSubmit={goToPassword}><div className="auth-icon"><UserRound size={22} /></div><h1>Bem-vindo de volta</h1><p className="auth-subtitle">Entre para acessar sua propriedade.</p><button className="google-auth-button" type="button" onClick={() => void submitGoogleLogin()} disabled={submitting}><span className="google-g" aria-hidden="true">G</span>{submitting ? "Abrindo Google…" : "Continuar com Google"}</button><div className="auth-divider"><span>ou entre com seu e-mail</span></div><Field label="E-mail"><input type="email" value={email} onChange={(event) => { setEmail(event.target.value); setError(""); }} placeholder="voce@email.com" autoComplete="email" autoFocus /></Field>{notice && <p className="form-notice" role="status">{notice}</p>}{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit" disabled={submitting}>Avançar <ArrowRight size={18} /></button><button className="staff-entry-button" type="button" onClick={() => { setLoginStep("staff"); setError(""); setNotice(""); }}><UsersRound size={18} /><span><strong>Entrar como funcionário</strong><small>Use o código fornecido pelo dono</small></span><ArrowRight size={17} /></button><p className="auth-switch">Ainda não tem conta? <button type="button" onClick={() => switchMode("signup")}>Criar conta</button></p></form>
-          : loginStep === "staff" ? <form onSubmit={submitStaffLogin}><button className="auth-back" type="button" onClick={() => { setView("landing"); setLoginStep("email"); setError(""); }}><ArrowLeft size={17} /> Voltar</button><div className="auth-icon"><KeyRound size={22} /></div><h1>Acesso de funcionário</h1><p className="auth-subtitle">Digite o código que o dono da propriedade gerou para você.</p><Field label="Código de acesso" hint="Exemplo: HA-7K3M-9Q2P-4RX8"><input className="staff-code-input" type="text" value={staffCode} onChange={(event) => { setStaffCode(formatStaffCode(event.target.value)); setError(""); }} placeholder="HA-XXXX-XXXX-XXXX" autoComplete="off" autoCapitalize="characters" spellCheck={false} maxLength={17} autoFocus /></Field><div className="staff-code-note"><UsersRound size={17} /><p><strong>Não precisa de Gmail nem senha.</strong><small>O código identifica seu acesso e a propriedade em que você trabalha.</small></p></div>{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Entrando…" : "Entrar na propriedade"}</button></form>
-          : loginStep === "password" ? <form onSubmit={submitLogin}><button className="auth-back" type="button" onClick={() => { setLoginStep("email"); setError(""); }}><ArrowLeft size={17} /> Voltar</button><div className="auth-icon"><LockKeyhole size={22} /></div><h1>Digite sua senha</h1><button className="identity-chip" type="button" onClick={() => setLoginStep("email")}><span>{email.charAt(0).toUpperCase()}</span>{email}</button><Field label="Senha"><div className="input-with-action"><input type={showPassword ? "text" : "password"} value={password} onChange={(event) => { setPassword(event.target.value); setError(""); }} placeholder="••••••••" autoComplete="current-password" autoFocus /><button type="button" onClick={() => setShowPassword((current) => !current)} aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}>{showPassword ? <EyeOff size={19} /> : <Eye size={19} />}</button></div></Field><button className="text-button align-left" type="button" onClick={() => { setLoginStep("recovery"); setError(""); setNotice(""); }}>Esqueci minha senha</button>{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Entrando…" : "Entrar"}</button><div className="auth-divider"><span>ou</span></div><button className="secondary-button full" type="button" onClick={() => void sendLoginCode()} disabled={submitting}><MailCheck size={18} /> {submitting ? "Enviando código…" : "Entrar com código"}</button></form>
-          : loginStep === "code" ? <form onSubmit={submitLoginCode}><button className="auth-back" type="button" onClick={() => { setLoginStep("password"); setLoginCode(""); setError(""); setNotice(""); }}><ArrowLeft size={17} /> Voltar</button><div className="auth-icon"><MailCheck size={22} /></div><h1>Código de acesso</h1><p className="auth-subtitle">Digite o código que enviamos para seu e-mail.</p><button className="identity-chip" type="button" onClick={() => setLoginStep("email")}><span>{email.charAt(0).toUpperCase()}</span>{email}</button><Field label="Código" hint="O código é de uso único e expira automaticamente."><input className="login-code-input" type="text" inputMode="numeric" pattern="[0-9]*" value={loginCode} onChange={(event) => { setLoginCode(event.target.value.replace(/\D/g, "").slice(0, 10)); setError(""); }} placeholder="000000" autoComplete="one-time-code" maxLength={10} autoFocus /></Field>{notice && <p className="form-notice" role="status">{notice}</p>}{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Validando…" : "Confirmar código"}</button><button className="text-button" type="button" onClick={() => void resendLoginCode()} disabled={submitting || codeCooldown > 0}>{codeCooldown > 0 ? `Reenviar código em ${codeCooldown}s` : "Reenviar código"}</button></form>
-          : loginStep === "recovery" ? <form onSubmit={submitPasswordReset}><button className="auth-back" type="button" onClick={() => { setLoginStep("password"); setError(""); setNotice(""); }}><ArrowLeft size={17} /> Voltar</button><div className="auth-icon"><LockKeyhole size={22} /></div><h1>Recuperar acesso</h1><p className="auth-subtitle">Antes de trocar a senha, vamos confirmar seu e-mail com um código de 6 dígitos.</p><Field label="E-mail cadastrado"><input type="email" value={email} onChange={(event) => { setEmail(event.target.value); setError(""); }} placeholder="voce@email.com" autoComplete="email" autoFocus /></Field>{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Enviando código…" : "Enviar código"}</button></form>
-          : <form onSubmit={submitPasswordResetCode}><button className="auth-back" type="button" onClick={() => { setLoginStep("recovery"); setRecoveryCode(""); setError(""); setNotice(""); }}><ArrowLeft size={17} /> Voltar</button><div className="auth-icon"><MailCheck size={22} /></div><h1>Confirme o código</h1><p className="auth-subtitle">Digite o código enviado para liberar a criação de uma nova senha.</p><Field label="Código"><input className="login-code-input" type="text" inputMode="numeric" pattern="[0-9]*" value={recoveryCode} onChange={(event) => { setRecoveryCode(event.target.value.replace(/\D/g, "").slice(0, 6)); setError(""); }} placeholder="000000" autoComplete="one-time-code" maxLength={6} autoFocus /></Field>{notice && <p className="form-notice" role="status">{notice}</p>}{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Validando…" : "Confirmar e trocar senha"}</button><button className="text-button" type="button" onClick={() => void resendRecoveryCode()} disabled={submitting || codeCooldown > 0}>{codeCooldown > 0 ? `Reenviar código em ${codeCooldown}s` : "Reenviar código"}</button></form>}
-        </div> : <div className="signup-flow auth-enter">
-          <div className="signup-topline"><button className="auth-back" type="button" onClick={() => { setView("landing"); switchMode("login"); }}><ArrowLeft size={17} /> Voltar</button><div className="step-dots" aria-label={`Etapa ${signupStep + 1} de 5`}>{[0,1,2,3,4].map((step) => <span key={step} className={`${step === signupStep ? "active" : ""} ${step < signupStep ? "done" : ""}`} />)}</div></div>
-          {signupStep === 0 && <form onSubmit={nextSignup} className="signup-panel"><span className="eyebrow">DADOS PESSOAIS</span><h1>Vamos criar sua conta</h1><p className="auth-subtitle">Comece com as informações básicas.</p><button className="google-auth-button" type="button" onClick={() => void submitGoogleLogin()} disabled={submitting}><span className="google-g" aria-hidden="true">G</span>{submitting ? "Abrindo Google…" : "Criar conta com Google"}</button><div className="auth-divider"><span>ou preencha seus dados</span></div><div className="form-grid"><Field label="Nome completo"><input value={signup.name} onChange={(e) => changeSignup("name", e.target.value)} placeholder="Seu nome" autoComplete="name" /></Field><Field label="E-mail"><input type="email" value={signup.email} onChange={(e) => changeSignup("email", e.target.value)} placeholder="voce@email.com" autoComplete="email" /></Field></div>{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit">Continuar <ArrowRight size={18} /></button></form>}
-          {signupStep === 1 && <form onSubmit={nextSignup} className="signup-panel"><span className="eyebrow">SEGURANÇA</span><h1>Proteja seu acesso</h1><p className="auth-subtitle">Crie uma senha segura para sua propriedade.</p><div className="form-grid"><Field label="Senha" hint="Use pelo menos 8 caracteres."><input type="password" value={signup.password} onChange={(e) => changeSignup("password", e.target.value)} placeholder="Mínimo 8 caracteres" autoComplete="new-password" /></Field><Field label="Confirmar senha"><input type="password" value={signup.confirmPassword} onChange={(e) => changeSignup("confirmPassword", e.target.value)} placeholder="Repita a senha" autoComplete="new-password" /></Field></div>{error && <p className="form-error" role="alert">{error}</p>}<div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(0)}>Voltar</button><button className="primary-button" type="submit">Continuar <ArrowRight size={18} /></button></div></form>}
-          {signupStep === 2 && <form onSubmit={nextSignup} className="signup-panel"><span className="eyebrow">SUA PROPRIEDADE</span><h1>Onde fica sua propriedade?</h1><p className="auth-subtitle">Informe apenas UF, CEP e nome. O município será identificado automaticamente.</p><PropertyLocationFields property={property} onChange={(next) => { setProperty(next); setError(""); }} onError={setError} />{error && <p className="form-error" role="alert">{error}</p>}<div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(1)}>Voltar</button><button className="primary-button" type="submit">Revisar <ArrowRight size={18} /></button></div></form>}
-          {signupStep === 3 && <div className="signup-panel review-panel"><span className="eyebrow">TUDO CERTO</span><h1>Sua base está pronta, {firstName}</h1><p className="auth-subtitle">Antes de criar a conta, vamos confirmar que o e-mail informado pertence a você.</p><div className="review-card"><div className="review-icon"><MapPin size={23} /></div><div><strong>{property.name}</strong><span>{property.municipality}, {property.state}</span><small>CEP {property.postalCode}</small></div></div>{error && <p className="form-error" role="alert">{error}</p>}<div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(2)}>Voltar</button><button className="primary-button" type="button" onClick={() => void startSignupVerification()} disabled={submitting}>{submitting ? "Enviando código…" : "Confirmar e-mail"}</button></div></div>}
-          {signupStep === 4 && <form onSubmit={submitSignupCode} className="signup-panel"><span className="eyebrow">VERIFICAÇÃO</span><h1>Confirme seu e-mail</h1><p className="auth-subtitle">Digite o código de 6 dígitos enviado para {signup.email}.</p><Field label="Código de verificação" hint="O código expira em 10 minutos."><input className="login-code-input" type="text" inputMode="numeric" pattern="[0-9]*" value={signupCode} onChange={(event) => { setSignupCode(event.target.value.replace(/\D/g, "").slice(0, 6)); setError(""); }} placeholder="000000" autoComplete="one-time-code" maxLength={6} autoFocus /></Field>{notice && <p className="form-notice" role="status">{notice}</p>}{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Confirmando…" : "Confirmar e criar conta"}</button><button className="text-button" type="button" onClick={() => void resendSignupCode()} disabled={submitting || codeCooldown > 0}>{codeCooldown > 0 ? `Reenviar código em ${codeCooldown}s` : "Reenviar código"}</button><button className="text-button" type="button" onClick={() => { setSignupStep(3); setSignupCode(""); setError(""); setNotice(""); }}>Alterar dados</button></form>}
-        </div>}
+        {showModeTabs && (
+          <div className="auth-mode-tabs" role="tablist" aria-label="Acesso">
+            <button type="button" role="tab" aria-selected={mode === "login"} className={mode === "login" ? "active" : ""} onClick={() => switchMode("login")}>Login</button>
+            <button type="button" role="tab" aria-selected={mode === "signup"} className={mode === "signup" ? "active" : ""} onClick={() => switchMode("signup")}>Criar conta</button>
+          </div>
+        )}
+
+        {mode === "login" ? (
+          <div className="auth-content auth-enter" key={loginStep}>
+            {loginStep === "email" ? (
+              <form onSubmit={goToPassword}>
+                <div className="auth-reference-heading"><h1>Bem-vindo de volta</h1><p>Entre para acessar sua propriedade.</p></div>
+                <Field label="E-mail"><input type="email" value={email} onChange={(event) => { setEmail(event.target.value); setError(""); }} placeholder="voce@email.com" autoComplete="email" autoFocus /></Field>
+                {notice && <p className="form-notice" role="status">{notice}</p>}
+                {error && <p className="form-error" role="alert">{error}</p>}
+                <button className="primary-button full" type="submit" disabled={submitting}>Avançar <ArrowRight size={18} /></button>
+                <div className="auth-divider"><span>ou continue com</span></div>
+                <button className="google-auth-button" type="button" onClick={() => void submitGoogleLogin()} disabled={submitting}><span className="google-g" aria-hidden="true">G</span>{submitting ? "Abrindo Google…" : "Google"}</button>
+                <button className="staff-entry-button" type="button" onClick={() => { setLoginStep("staff"); setError(""); setNotice(""); }}><UsersRound size={18} /><span><strong>Acesso de funcionário</strong><small>Entre com o código da propriedade</small></span><ArrowRight size={17} /></button>
+              </form>
+            ) : loginStep === "password" ? (
+              <form onSubmit={submitLogin}>
+                <button className="auth-back" type="button" onClick={() => { setLoginStep("email"); setError(""); }}><ArrowLeft size={17} /> Voltar</button>
+                <div className="auth-reference-heading"><h1>Digite sua senha</h1><p>{email}</p></div>
+                <Field label="Senha"><div className="input-with-action"><input type={showPassword ? "text" : "password"} value={password} onChange={(event) => { setPassword(event.target.value); setError(""); }} placeholder="••••••••" autoComplete="current-password" autoFocus /><button type="button" onClick={() => setShowPassword((current) => !current)} aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}>{showPassword ? <EyeOff size={19} /> : <Eye size={19} />}</button></div></Field>
+                <button className="text-button align-left" type="button" onClick={() => { setLoginStep("recovery"); setError(""); setNotice(""); }}>Esqueci minha senha</button>
+                {error && <p className="form-error" role="alert">{error}</p>}
+                <button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Entrando…" : "Entrar"}</button>
+                <button className="secondary-button full auth-code-entry" type="button" onClick={() => void sendLoginCode()} disabled={submitting}><MailCheck size={18} /> {submitting ? "Enviando código…" : "Entrar com código"}</button>
+              </form>
+            ) : loginStep === "code" ? (
+              <form className="auth-verification-panel" onSubmit={submitLoginCode}>
+                <button className="auth-back auth-code-back" type="button" onClick={() => { setLoginStep("password"); setLoginCode(""); setError(""); setNotice(""); }}><ArrowLeft size={17} /></button>
+                <div className="auth-verification-visual"><MailCheck size={38} /></div>
+                <h1>Digite o código</h1><p className="auth-subtitle">Enviamos um código para {email}.</p>
+                <Field label="Código"><input className="login-code-input" type="text" inputMode="numeric" pattern="[0-9]*" value={loginCode} onChange={(event) => { setLoginCode(event.target.value.replace(/\D/g, "").slice(0, 6)); setError(""); }} placeholder="000000" autoComplete="one-time-code" maxLength={6} autoFocus /></Field>
+                {notice && <p className="form-notice" role="status">{notice}</p>}{error && <p className="form-error" role="alert">{error}</p>}
+                <button className="text-button auth-resend" type="button" onClick={() => void resendLoginCode()} disabled={submitting || codeCooldown > 0}>{codeCooldown > 0 ? `Reenviar em ${codeCooldown}s` : "Reenviar código"}</button>
+                <button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Validando…" : "Confirmar"}</button>
+              </form>
+            ) : loginStep === "recovery" ? (
+              <form onSubmit={submitPasswordReset}>
+                <button className="auth-back" type="button" onClick={() => { setLoginStep("password"); setError(""); setNotice(""); }}><ArrowLeft size={17} /> Voltar</button>
+                <div className="auth-reference-heading"><h1>Recuperar acesso</h1><p>Vamos confirmar seu e-mail antes de trocar a senha.</p></div>
+                <Field label="E-mail"><input type="email" value={email} onChange={(event) => { setEmail(event.target.value); setError(""); }} placeholder="voce@email.com" autoComplete="email" autoFocus /></Field>
+                {error && <p className="form-error" role="alert">{error}</p>}
+                <button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Enviando…" : "Enviar código"}</button>
+              </form>
+            ) : loginStep === "recoveryCode" ? (
+              <form className="auth-verification-panel" onSubmit={submitPasswordResetCode}>
+                <button className="auth-back auth-code-back" type="button" onClick={() => { setLoginStep("recovery"); setRecoveryCode(""); setError(""); setNotice(""); }}><ArrowLeft size={17} /></button>
+                <div className="auth-verification-visual"><LockKeyhole size={38} /></div>
+                <h1>Confirme o código</h1><p className="auth-subtitle">Digite o código enviado para seu e-mail.</p>
+                <Field label="Código"><input className="login-code-input" type="text" inputMode="numeric" pattern="[0-9]*" value={recoveryCode} onChange={(event) => { setRecoveryCode(event.target.value.replace(/\D/g, "").slice(0, 6)); setError(""); }} placeholder="000000" autoComplete="one-time-code" maxLength={6} autoFocus /></Field>
+                {notice && <p className="form-notice" role="status">{notice}</p>}{error && <p className="form-error" role="alert">{error}</p>}
+                <button className="text-button auth-resend" type="button" onClick={() => void resendRecoveryCode()} disabled={submitting || codeCooldown > 0}>{codeCooldown > 0 ? `Reenviar em ${codeCooldown}s` : "Reenviar código"}</button>
+                <button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Validando…" : "Confirmar e trocar senha"}</button>
+              </form>
+            ) : (
+              <form onSubmit={submitStaffLogin}>
+                <button className="auth-back" type="button" onClick={() => { setLoginStep("email"); setError(""); }}><ArrowLeft size={17} /> Voltar</button>
+                <div className="auth-reference-heading"><span className="auth-staff-icon"><KeyRound size={22} /></span><h1>Acesso de funcionário</h1><p>Use o código fornecido pelo dono da propriedade.</p></div>
+                <Field label="Código de acesso" hint="Exemplo: HA-7K3M-9Q2P-4RX8"><input className="staff-code-input" type="text" value={staffCode} onChange={(event) => { setStaffCode(formatStaffCode(event.target.value)); setError(""); }} placeholder="HA-XXXX-XXXX-XXXX" autoComplete="off" autoCapitalize="characters" spellCheck={false} maxLength={17} autoFocus /></Field>
+                {error && <p className="form-error" role="alert">{error}</p>}
+                <button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Entrando…" : "Entrar na propriedade"}</button>
+              </form>
+            )}
+          </div>
+        ) : (
+          <div className="signup-flow auth-enter">
+            <div className="signup-topline"><div className="step-dots" aria-label={`Etapa ${signupStep + 1} de 5`}>{[0,1,2,3,4].map((step) => <span key={step} className={`${step === signupStep ? "active" : ""} ${step < signupStep ? "done" : ""}`} />)}</div></div>
+            {signupStep === 0 && <form onSubmit={nextSignup} className="signup-panel"><div className="auth-reference-heading"><h1>Crie sua conta</h1><p>Comece com seus dados principais.</p></div><div className="form-grid"><Field label="Nome completo"><input value={signup.name} onChange={(e) => changeSignup("name", e.target.value)} placeholder="Seu nome" autoComplete="name" /></Field><Field label="E-mail"><input type="email" value={signup.email} onChange={(e) => changeSignup("email", e.target.value)} placeholder="voce@email.com" autoComplete="email" /></Field></div>{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit">Continuar <ArrowRight size={18} /></button><div className="auth-divider"><span>ou continue com</span></div><button className="google-auth-button" type="button" onClick={() => void submitGoogleLogin()} disabled={submitting}><span className="google-g" aria-hidden="true">G</span>{submitting ? "Abrindo Google…" : "Google"}</button></form>}
+            {signupStep === 1 && <form onSubmit={nextSignup} className="signup-panel"><button className="auth-back" type="button" onClick={() => setSignupStep(0)}><ArrowLeft size={17} /> Voltar</button><div className="auth-reference-heading"><h1>Crie uma senha</h1><p>Use pelo menos 8 caracteres.</p></div><div className="form-grid"><Field label="Senha"><input type="password" value={signup.password} onChange={(e) => changeSignup("password", e.target.value)} placeholder="Mínimo 8 caracteres" autoComplete="new-password" /></Field><Field label="Confirmar senha"><input type="password" value={signup.confirmPassword} onChange={(e) => changeSignup("confirmPassword", e.target.value)} placeholder="Repita a senha" autoComplete="new-password" /></Field></div>{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit">Continuar <ArrowRight size={18} /></button></form>}
+            {signupStep === 2 && <form onSubmit={nextSignup} className="signup-panel"><button className="auth-back" type="button" onClick={() => setSignupStep(1)}><ArrowLeft size={17} /> Voltar</button><div className="auth-reference-heading"><h1>Sua propriedade</h1><p>Informe UF, CEP e nome da propriedade.</p></div><PropertyLocationFields property={property} onChange={(next) => { setProperty(next); setError(""); }} onError={setError} />{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit">Revisar <ArrowRight size={18} /></button></form>}
+            {signupStep === 3 && <div className="signup-panel review-panel"><button className="auth-back" type="button" onClick={() => setSignupStep(2)}><ArrowLeft size={17} /> Voltar</button><div className="auth-reference-heading"><h1>Quase pronto, {firstName}</h1><p>Confira a propriedade antes de confirmar seu e-mail.</p></div><div className="review-card"><div className="review-icon"><MapPin size={23} /></div><div><strong>{property.name}</strong><span>{property.municipality}, {property.state}</span><small>CEP {property.postalCode}</small></div></div>{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="button" onClick={() => void startSignupVerification()} disabled={submitting}>{submitting ? "Enviando código…" : "Confirmar e-mail"}</button></div>}
+            {signupStep === 4 && <form onSubmit={submitSignupCode} className="signup-panel auth-verification-panel"><button className="auth-back auth-code-back" type="button" onClick={() => { setSignupStep(3); setSignupCode(""); setError(""); setNotice(""); }}><ArrowLeft size={17} /></button><div className="auth-verification-visual"><MailCheck size={38} /></div><h1>Confirme seu e-mail</h1><p className="auth-subtitle">Digite o código enviado para {signup.email}.</p><Field label="Código"><input className="login-code-input" type="text" inputMode="numeric" pattern="[0-9]*" value={signupCode} onChange={(event) => { setSignupCode(event.target.value.replace(/\D/g, "").slice(0, 6)); setError(""); }} placeholder="000000" autoComplete="one-time-code" maxLength={6} autoFocus /></Field>{notice && <p className="form-notice" role="status">{notice}</p>}{error && <p className="form-error" role="alert">{error}</p>}<button className="text-button auth-resend" type="button" onClick={() => void resendSignupCode()} disabled={submitting || codeCooldown > 0}>{codeCooldown > 0 ? `Reenviar em ${codeCooldown}s` : "Reenviar código"}</button><button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Confirmando…" : "Confirmar e criar conta"}</button></form>}
+          </div>
+        )}
       </section>
     </main>
   );
