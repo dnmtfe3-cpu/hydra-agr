@@ -1,30 +1,39 @@
-/* Verde principal único do Hydra Agro: exatamente o mesmo da splash. */
+/* Hydra Agro — sincronização final da cor de marca.
+ * Qualquer superfície/estado VERDE da interface usa exatamente o verde da splash: #174C36.
+ * Tons claros continuam apenas como fundos neutros; Hydra Tag/NFC preserva o laranja próprio.
+ */
 html body #root .hydra-root {
-  --hydra-green: #174c36;
-  --ref-green: #174c36;
-  --ref-green-deep: #174c36;
-  --ref-green-dark: #174c36;
-  --ha-green-950: #174c36;
-  --ha-green-900: #174c36;
-  --ha-green-800: #174c36;
-  --ha-green-700: #174c36;
-  --ha-green-600: #174c36;
-  --forest-950: #174c36;
-  --forest-900: #174c36;
-  --forest-800: #174c36;
-  --forest-700: #174c36;
-  --forest-600: #174c36;
-  --hf-green: #174c36;
-  --hf-green-deep: #174c36;
+  --hydra-green: #174c36 !important;
+  --hydra-green-deep: #174c36 !important;
+  --hydra-green-dark: #174c36 !important;
+  --ref-green: #174c36 !important;
+  --ref-green-deep: #174c36 !important;
+  --ref-green-dark: #174c36 !important;
+  --ha-green-950: #174c36 !important;
+  --ha-green-900: #174c36 !important;
+  --ha-green-800: #174c36 !important;
+  --ha-green-700: #174c36 !important;
+  --ha-green-600: #174c36 !important;
+  --forest-950: #174c36 !important;
+  --forest-900: #174c36 !important;
+  --forest-800: #174c36 !important;
+  --forest-700: #174c36 !important;
+  --forest-600: #174c36 !important;
+  --hf-green: #174c36 !important;
+  --hf-green-deep: #174c36 !important;
+  --brand-green: #174c36 !important;
+  --accent-green: #174c36 !important;
+  --sage: #174c36 !important;
 }
 
-/* Splash e topo da Home compartilham literalmente a mesma cor. */
 html.hydra-splash-active body #root .hydra-root .splash-screen,
 html body #root .hydra-root .splash-screen {
   background: #174c36 !important;
   background-color: #174c36 !important;
+  background-image: none !important;
 }
 
+/* Home usa literalmente a mesma tinta da splash no bloco superior. */
 html body #root .hydra-root:not(.theme-dark) .home-screen {
   background:
     linear-gradient(to bottom,
@@ -34,51 +43,126 @@ html body #root .hydra-root:not(.theme-dark) .home-screen {
       #f3f4f1 100%) !important;
 }
 
+/* Superfícies fortes verdes das telas funcionais. */
 html body #root .hydra-root:not(.theme-dark) :is(
   .primary-button,
   .small-button,
   .action-primary,
   .fab,
   .home-green-hero,
+  .weather-hero,
+  .weather-card-hero,
+  .monitor-overview,
+  .monitor-hero,
+  .monitor-weather-card,
+  .today-overview,
+  .today-hero,
+  .water-overview,
+  .challenge-hero,
+  .ranking-hero,
+  .plus-price-hero,
   .community-tabs button.active,
   .comment-form button,
   .theme-option.active,
-  .profile-screen .plan-card > button
+  .profile-screen .plan-card > button,
+  .filter-button.active,
+  .filter-chips button.active,
+  .state-readonly > span,
+  .herd-care-launch > span,
+  .progress-fill,
+  .xp-progress > *,
+  .challenge-progress > *,
+  .progress-track > *
 ) {
   border-color: #174c36 !important;
   background-color: #174c36 !important;
 }
 
+/* Texto/ícones ativos usam exatamente o mesmo verde. */
 html body #root .hydra-root:not(.theme-dark) :is(
   .bottom-nav button.active,
   .bottom-nav button[aria-current="page"],
   .text-link,
+  .text-button,
   .section-heading a,
+  .screen-heading .eyebrow:not(.orange),
+  .group-label,
+  .property-kicker,
   .profile-menu-icon,
-  .home-profile-avatar
+  .setting-icon,
+  .home-profile-avatar,
+  .home-farm-xp strong,
+  .animal-code,
+  .filter-button,
+  .municipality-pin,
+  .municipality-chevron,
+  .status-ok,
+  .green-soft,
+  .soft-green
 ) {
   color: #174c36 !important;
 }
 
 html body #root .hydra-root:not(.theme-dark) .home-profile-avatar {
-  background: #174c36 !important;
   color: #fff !important;
+  background: #174c36 !important;
 }
 
-/* O perfil usa a foto de capa quando existir; este fallback só controla a cor por baixo. */
-html body #root .hydra-root:not(.theme-dark) .profile-screen > .profile-hero {
-  background-color: #174c36 !important;
-}
-
-/* Estados suaves mantêm contraste, mas não introduzem outro verde saturado. */
+/* Fallbacks de imagem/ícone que ainda carregavam o verde antigo. */
 html body #root .hydra-root:not(.theme-dark) :is(
-  .green-soft,
-  .soft-green,
-  .status-ok,
-  .profile-screen .profile-social-tabs button.active,
-  .profile-screen .plan-mark
+  .animal-avatar:not(.image),
+  .home-feature-media:not(:has(img)),
+  .profile-avatar:not(.image)
 ) {
   color: #174c36 !important;
 }
 
-/* NFC/Hydra Tag mantém o laranja próprio e não é recolorido por esta camada. */
+/* Perfil: só a cor base por baixo da capa; a foto cadastrada continua visível. */
+html body #root .hydra-root:not(.theme-dark) .profile-screen > .profile-hero {
+  background-color: #174c36 !important;
+}
+
+/* Bordas/foco deixam de usar o verde-lima legado. */
+html body #root .hydra-root:not(.theme-dark) :is(button,a,input,textarea,select):focus-visible {
+  outline-color: rgba(23, 76, 54, .25) !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(input,textarea,select):focus {
+  border-color: rgba(23, 76, 54, .46) !important;
+  box-shadow: 0 0 0 3px rgba(23, 76, 54, .08) !important;
+}
+
+/* Componentes legados conhecidos que tinham #0B5136 / #1F6145 hardcoded. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .home-farm-xp strong,
+  .home-spreadsheet-card > span:first-child,
+  .herd-care-launch > span,
+  .municipality-options > button.selected,
+  .municipality-options > button > svg
+) {
+  color: #174c36 !important;
+}
+html body #root .hydra-root:not(.theme-dark) .herd-care-launch > span {
+  background: #174c36 !important;
+  color: #fff !important;
+}
+
+/* Active pills/tabs que tenham vindo de folhas antigas. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .tab-button.active,
+  .segmented-control button.active,
+  .tabs button.active,
+  .filter-chips button.active
+) {
+  border-color: #174c36 !important;
+}
+
+/* Hydra Tag/NFC: NÃO recolorir o laranja de identidade. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .nfc-banner-icon,
+  .nfc-hero-icon,
+  .eyebrow.orange,
+  .orange,
+  .hydra-tag-accent
+) {
+  --hydra-green: #174c36;
+}
