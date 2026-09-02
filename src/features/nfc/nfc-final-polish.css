@@ -1,0 +1,193 @@
+/* NFC/RFID — acabamento final alinhado ao Hydra Agro. Mantém toda a lógica existente. */
+html body #root .hydra-root:not(.theme-dark) .nfc-screen {
+  background:#f3f4f1!important;
+  padding-bottom:126px!important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .nfc-screen > .screen-header {
+  margin-bottom:18px!important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .nfc-screen > .nfc-desktop-notice {
+  display:none!important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .nfc-screen > .nfc-hero {
+  position:relative!important;
+  min-height:0!important;
+  margin:0 0 14px!important;
+  padding:28px 22px 24px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border:1px solid #e5e8e3!important;
+  border-radius:28px!important;
+  color:#17221c!important;
+  background:#fff!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .nfc-waves {
+  width:84px!important;
+  height:84px!important;
+  margin:0 auto 20px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:26px!important;
+  color:#f47b12!important;
+  background:#fff2e4!important;
+}
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .nfc-waves > span {
+  display:none!important;
+}
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .nfc-waves svg {
+  width:36px!important;
+  height:36px!important;
+  stroke-width:2!important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .nfc-hero h2 {
+  margin:0 0 8px!important;
+  max-width:300px!important;
+  font-family:"Manrope",system-ui,sans-serif!important;
+  font-size:24px!important;
+  line-height:1.12!important;
+  font-weight:500!important;
+  letter-spacing:-.035em!important;
+  text-align:center!important;
+  color:#17221c!important;
+}
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .nfc-hero p {
+  max-width:300px!important;
+  margin:0 0 20px!important;
+  font-size:13px!important;
+  line-height:1.45!important;
+  text-align:center!important;
+  color:#89928d!important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .nfc-native-read-button {
+  width:100%!important;
+  min-height:52px!important;
+  padding:0 18px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:9px!important;
+  border:0!important;
+  border-radius:17px!important;
+  color:#fff!important;
+  background:#174c36!important;
+  font-size:14px!important;
+  font-weight:500!important;
+  box-shadow:none!important;
+}
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .nfc-hero > small {
+  margin-top:14px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  font-size:11px!important;
+  line-height:1.35!important;
+  color:#9aa39e!important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .nfc-screen > .nfc-segment {
+  margin:0 0 14px!important;
+  padding:5px!important;
+  min-height:54px!important;
+  border:1px solid #e2e6e1!important;
+  border-radius:18px!important;
+  background:#e9ece8!important;
+  box-shadow:none!important;
+}
+html body #root .hydra-root:not(.theme-dark) .nfc-screen > .nfc-segment button {
+  min-height:44px!important;
+  border:0!important;
+  border-radius:14px!important;
+  background:transparent!important;
+  color:#7b847f!important;
+  font-size:13px!important;
+  font-weight:500!important;
+}
+html body #root .hydra-root:not(.theme-dark) .nfc-screen > .nfc-segment button.active {
+  color:#174c36!important;
+  background:#fff!important;
+  box-shadow:0 1px 4px rgba(20,46,33,.06)!important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .nfc-screen > .nfc-manual-card {
+  margin:0!important;
+  padding:20px!important;
+  border:1px solid #e2e6e1!important;
+  border-radius:24px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .manual-heading {
+  margin-bottom:18px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+}
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .manual-heading > svg {
+  width:38px!important;
+  height:38px!important;
+  padding:9px!important;
+  border-radius:12px!important;
+  color:#174c36!important;
+  background:#eef3f0!important;
+}
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .manual-heading strong {
+  display:block!important;
+  font-size:16px!important;
+  line-height:1.2!important;
+  font-weight:500!important;
+  color:#17221c!important;
+}
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .manual-heading small {
+  display:block!important;
+  margin-top:3px!important;
+  font-size:11px!important;
+  color:#939b97!important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .field label {
+  font-size:12px!important;
+  color:#69736e!important;
+}
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .field :is(input,select) {
+  min-height:52px!important;
+  border:1px solid #dfe4df!important;
+  border-radius:16px!important;
+  background:#fafbf9!important;
+  color:#17221c!important;
+  font-size:14px!important;
+  box-shadow:none!important;
+}
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .nfc-manual-card .primary-button {
+  min-height:52px!important;
+  margin-top:4px!important;
+  border-radius:17px!important;
+  background:#174c36!important;
+  font-size:14px!important;
+  font-weight:500!important;
+  box-shadow:none!important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .nfc-screen .nfc-result-card {
+  margin-top:14px!important;
+  border:1px solid #e2e6e1!important;
+  border-radius:22px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+
+@media (max-width:360px) {
+  html body #root .hydra-root:not(.theme-dark) .nfc-screen > .nfc-hero { padding:24px 18px 21px!important; border-radius:25px!important; }
+  html body #root .hydra-root:not(.theme-dark) .nfc-screen .nfc-hero h2 { font-size:22px!important; }
+  html body #root .hydra-root:not(.theme-dark) .nfc-screen > .nfc-manual-card { padding:17px!important; }
+}
