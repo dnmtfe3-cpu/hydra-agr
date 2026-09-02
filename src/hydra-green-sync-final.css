@@ -1,0 +1,84 @@
+/* Verde principal único do Hydra Agro: exatamente o mesmo da splash. */
+html body #root .hydra-root {
+  --hydra-green: #174c36;
+  --ref-green: #174c36;
+  --ref-green-deep: #174c36;
+  --ref-green-dark: #174c36;
+  --ha-green-950: #174c36;
+  --ha-green-900: #174c36;
+  --ha-green-800: #174c36;
+  --ha-green-700: #174c36;
+  --ha-green-600: #174c36;
+  --forest-950: #174c36;
+  --forest-900: #174c36;
+  --forest-800: #174c36;
+  --forest-700: #174c36;
+  --forest-600: #174c36;
+  --hf-green: #174c36;
+  --hf-green-deep: #174c36;
+}
+
+/* Splash e topo da Home compartilham literalmente a mesma cor. */
+html.hydra-splash-active body #root .hydra-root .splash-screen,
+html body #root .hydra-root .splash-screen {
+  background: #174c36 !important;
+  background-color: #174c36 !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .home-screen {
+  background:
+    linear-gradient(to bottom,
+      #174c36 0,
+      #174c36 max(365px, calc(342px + env(safe-area-inset-top))),
+      #f3f4f1 max(365px, calc(342px + env(safe-area-inset-top))),
+      #f3f4f1 100%) !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) :is(
+  .primary-button,
+  .small-button,
+  .action-primary,
+  .fab,
+  .home-green-hero,
+  .community-tabs button.active,
+  .comment-form button,
+  .theme-option.active,
+  .profile-screen .plan-card > button
+) {
+  border-color: #174c36 !important;
+  background-color: #174c36 !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) :is(
+  .bottom-nav button.active,
+  .bottom-nav button[aria-current="page"],
+  .text-link,
+  .section-heading a,
+  .profile-menu-icon,
+  .home-profile-avatar
+) {
+  color: #174c36 !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .home-profile-avatar {
+  background: #174c36 !important;
+  color: #fff !important;
+}
+
+/* O perfil usa a foto de capa quando existir; este fallback só controla a cor por baixo. */
+html body #root .hydra-root:not(.theme-dark) .profile-screen > .profile-hero {
+  background-color: #174c36 !important;
+}
+
+/* Estados suaves mantêm contraste, mas não introduzem outro verde saturado. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .green-soft,
+  .soft-green,
+  .status-ok,
+  .profile-screen .profile-social-tabs button.active,
+  .profile-screen .plan-mark
+) {
+  color: #174c36 !important;
+}
+
+/* NFC/Hydra Tag mantém o laranja próprio e não é recolorido por esta camada. */
