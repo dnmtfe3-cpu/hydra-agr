@@ -2,82 +2,65 @@
 @import "./features/profile/profile-app-polish-v3.css";
 @import "./hydra-reference-detail-polish.css";
 
-/* Hydra Agro — navegação e motion finais. */
+/* Hydra Agro — motion final. A geometria da bottom bar pertence somente a bottom-nav-dribbble-reference.css. */
 @keyframes hydraRouteForwardFinal { from { opacity:0; transform:translate3d(18px,0,0) scale(.995) } to { opacity:1; transform:translate3d(0,0,0) scale(1) } }
 @keyframes hydraRouteBackFinal { from { opacity:0; transform:translate3d(-14px,0,0) scale(.995) } to { opacity:1; transform:translate3d(0,0,0) scale(1) } }
-@keyframes hydraNavPopFinal { 0%{transform:scale(.9)} 70%{transform:scale(1.04)} 100%{transform:scale(1)} }
 
 html body #root .hydra-root .phone-app .app-content.route-motion-forward > .screen,
 html body #root .hydra-root .phone-app .app-content.route-motion-forward > .profile-screen,
-html body #root .hydra-root .phone-app .app-content.route-motion-forward > .community-screen { animation:hydraRouteForwardFinal 260ms cubic-bezier(.22,1,.36,1) both!important; will-change:transform,opacity!important }
+html body #root .hydra-root .phone-app .app-content.route-motion-forward > .community-screen {
+  animation:hydraRouteForwardFinal 260ms cubic-bezier(.22,1,.36,1) both!important;
+  will-change:transform,opacity!important;
+}
 html body #root .hydra-root .phone-app .app-content.route-motion-back > .screen,
 html body #root .hydra-root .phone-app .app-content.route-motion-back > .profile-screen,
-html body #root .hydra-root .phone-app .app-content.route-motion-back > .community-screen { animation:hydraRouteBackFinal 260ms cubic-bezier(.22,1,.36,1) both!important; will-change:transform,opacity!important }
-
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav {
-  left:50%!important; right:auto!important; bottom:max(14px,env(safe-area-inset-bottom))!important;
-  width:min(calc(100% - 32px),398px)!important; height:70px!important; min-height:70px!important;
-  padding:0 9px!important; display:grid!important; grid-template-columns:repeat(5,minmax(0,1fr))!important;
-  align-items:center!important; overflow:visible!important; border:1px solid rgba(23,76,54,.06)!important;
-  border-radius:24px!important; background:rgba(255,255,255,.97)!important; background-image:none!important;
-  box-shadow:0 10px 28px rgba(24,48,37,.10)!important; transform:translateX(-50%)!important;
-  isolation:isolate!important; z-index:500!important;
-}
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::before,
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::after,
-html body #root .hydra-root .phone-app .bottom-nav .bottom-nav-indicator { content:none!important; display:none!important }
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button {
-  position:relative!important; width:100%!important; height:70px!important; min-height:70px!important; margin:0!important; padding:0!important;
-  display:grid!important; place-items:center!important; overflow:visible!important; border:0!important; border-radius:18px!important;
-  color:#c7cbc8!important; background:transparent!important; box-shadow:none!important; transform:none!important;
-  transition:color 180ms ease!important; z-index:2!important;
-}
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:first-of-type {
-  width:42px!important; height:42px!important; display:grid!important; place-items:center!important; border-radius:50%!important;
-  color:inherit!important; background:transparent!important; transform:none!important;
-  transition:transform 180ms cubic-bezier(.22,1,.36,1),background-color 180ms ease,color 180ms ease!important;
-}
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3)),
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3)) { color:#174c36!important }
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3)) > span:first-of-type,
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3)) > span:first-of-type {
-  color:#174c36!important; background:#f0f2ef!important; animation:hydraNavPopFinal 220ms cubic-bezier(.22,1,.36,1) both!important;
-}
-/* Indicador fica exatamente no eixo do ícone e logo abaixo dele. */
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.active:not(:nth-of-type(3))::after,
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button[aria-current="page"]:not(:nth-of-type(3))::after {
-  content:""!important; position:absolute!important; left:50%!important; top:59px!important; bottom:auto!important;
-  width:5px!important; height:5px!important; margin:0!important; border-radius:50%!important; background:#174c36!important;
-  transform:translate(-50%,-50%)!important; pointer-events:none!important;
+html body #root .hydra-root .phone-app .app-content.route-motion-back > .community-screen {
+  animation:hydraRouteBackFinal 260ms cubic-bezier(.22,1,.36,1) both!important;
+  will-change:transform,opacity!important;
 }
 
-/* Centro ancorado no próprio terceiro slot: não deriva para os lados quando o quick sheet abre. */
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) {
-  position:relative!important; align-self:start!important; justify-self:stretch!important; left:auto!important; right:auto!important;
-  width:100%!important; height:94px!important; min-height:94px!important; margin:-24px 0 0!important; padding:0!important;
-  transform:none!important; color:#fff!important; z-index:8!important;
+/* Escala tipográfica consistente nas telas internas. Evita títulos gigantes herdados de CSS antigo. */
+html body #root .hydra-root .phone-app .app-content > .screen:not(.home-screen):not(.profile-screen) .screen-heading h1,
+html body #root .hydra-root .phone-app .community-screen .screen-heading h1 {
+  font-size:clamp(22px,6.2vw,27px)!important;
+  line-height:1.08!important;
+  font-weight:500!important;
+  letter-spacing:-.035em!important;
 }
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3) > span:first-of-type,
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-create > span:first-of-type,
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button.nav-nfc > span:first-of-type {
-  position:absolute!important; left:50%!important; right:auto!important; top:0!important;
-  width:60px!important; height:60px!important; min-width:60px!important; min-height:60px!important;
-  margin:0!important; border:5px solid #f3f4f1!important; border-radius:50%!important; color:#fff!important;
-  background:#174c36!important; box-shadow:0 8px 18px rgba(23,76,54,.18)!important;
-  transform:translateX(-50%)!important; transform-origin:center!important;
-  transition:transform 160ms cubic-bezier(.22,1,.36,1),box-shadow 180ms ease!important;
+html body #root .hydra-root .phone-app .app-content > .screen:not(.home-screen):not(.profile-screen) .screen-heading p,
+html body #root .hydra-root .phone-app .community-screen .screen-heading p {
+  font-size:12px!important;
+  line-height:1.45!important;
+  font-weight:400!important;
 }
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3):active > span:first-of-type,
-html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button:nth-of-type(3).is-tapped > span:first-of-type {
-  transform:translateX(-50%) scale(.92)!important; box-shadow:0 4px 10px rgba(23,76,54,.14)!important;
+html body #root .hydra-root .phone-app :is(.section-heading,.section-title) h2,
+html body #root .hydra-root .phone-app h2.section-title {
+  font-size:17px!important;
+  line-height:1.2!important;
+  font-weight:500!important;
+  letter-spacing:-.025em!important;
 }
 
-html body #root .hydra-root:not(.theme-dark) .community-screen .screen-header { grid-template-columns:56px minmax(0,1fr)!important; width:100%!important }
-html body #root .hydra-root:not(.theme-dark) .community-screen .screen-heading { width:100%!important; min-width:0!important; max-width:none!important }
-html body #root .hydra-root:not(.theme-dark) .community-screen .screen-heading p { width:100%!important; max-width:260px!important; white-space:normal!important }
+html body #root .hydra-root:not(.theme-dark) .community-screen .screen-header {
+  grid-template-columns:56px minmax(0,1fr)!important;
+  width:100%!important;
+}
+html body #root .hydra-root:not(.theme-dark) .community-screen .screen-heading {
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+}
+html body #root .hydra-root:not(.theme-dark) .community-screen .screen-heading p {
+  width:100%!important;
+  max-width:260px!important;
+  white-space:normal!important;
+}
 
 @media (prefers-reduced-motion:reduce) {
   html body #root .hydra-root .phone-app .app-content > *,
   html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button,
-  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:first-of-type { animation:none!important; transition-duration:.001ms!important }
+  html body #root .hydra-root .phone-app .bottom-nav.bottom-nav > button > span:first-of-type {
+    animation:none!important;
+    transition-duration:.001ms!important;
+  }
 }
