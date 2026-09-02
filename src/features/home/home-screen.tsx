@@ -72,7 +72,7 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
 
     <section className="greeting-block">
       <div className="home-greeting-copy">
-        <h1><span className="greeting-time">Olá, </span><strong className="greeting-name">{welcome}</strong></h1>
+        <h1><span className="greeting-time">{welcome}, </span><strong className="greeting-name">{firstName}</strong></h1>
         <p className="capitalize">{today}</p>
         <button className="home-property-line" onClick={() => navigate("property")}>
           <MapPin size={15} />
