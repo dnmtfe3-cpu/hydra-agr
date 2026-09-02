@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { loadWeatherMock } = vi.hoisted(() => ({ loadWeatherMock: vi.fn() }));
@@ -42,10 +42,11 @@ describe("componente de clima", () => {
     const button = await screen.findByRole("button", { name: /clima em brejões, ba: 25 graus/i });
     fireEvent.click(button);
 
-    expect(screen.getByRole("dialog", { name: "Brejões, BA" })).toBeInTheDocument();
-    expect(screen.getByText("71%")).toBeInTheDocument();
-    expect(screen.getByText("31%")).toBeInTheDocument();
-    expect(screen.getByText(/dados Open-Meteo/i)).toBeInTheDocument();
+    const dialog = screen.getByRole("dialog", { name: "Brejões, BA" });
+    expect(dialog).toBeInTheDocument();
+    expect(within(dialog).getByText("71%")).toBeInTheDocument();
+    expect(within(dialog).getByText("31%")).toBeInTheDocument();
+    expect(within(dialog).getByText(/dados Open-Meteo/i)).toBeInTheDocument();
     expect(loadWeatherMock).toHaveBeenCalledWith("Brejões", "BA");
   });
 });
