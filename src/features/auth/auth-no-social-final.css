@@ -1,0 +1,17 @@
+/* Solicitação de produto: autenticação social não aparece no fluxo do Hydra Agro. */
+html body #root .hydra-root .google-auth-button,
+html body #root .hydra-root button.apple-auth-button,
+html body #root .hydra-root .apple-auth-button {
+  display: none !important;
+}
+
+html body #root .hydra-root .google-auth-button + .auth-divider,
+html body #root .hydra-root .apple-auth-button + .auth-divider {
+  display: none !important;
+}
+
+/* Sem os provedores sociais, o primeiro campo começa com respiro semelhante à referência. */
+html body #root .hydra-root .auth-content form > .auth-subtitle + .google-auth-button + .auth-divider + .field,
+html body #root .hydra-root .signup-panel > .auth-subtitle + .google-auth-button + .auth-divider + .form-grid {
+  margin-top: 22px !important;
+}
