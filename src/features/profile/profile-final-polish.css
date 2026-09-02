@@ -1,3 +1,5 @@
+@import "../../bottom-nav-dribbble-reference.css";
+
 /* Perfil — acabamento final sem alterar a estrutura funcional. */
 html body #root .hydra-root:not(.theme-dark) .profile-screen {
   padding-top: 0 !important;
