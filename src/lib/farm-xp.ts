@@ -29,6 +29,28 @@ export function farmMissions(account: HydraAccount): FarmMission[] {
   ];
 }
 
-export function farmExperience(_account: HydraAccount) {
-  return { xp: 0, level: 1, progress: 0, lifetimeVip: false };
+export function farmExperience(account: HydraAccount) {
+  const missionXp = farmMissions(account)
+    .filter((mission) => mission.completed)
+    .reduce((total, mission) => total + mission.reward, 0);
+  const completedActivities = account.activities.filter((activity) => activity.done).length;
+  const identifiedAnimals = account.animals.filter((animal) => Boolean(animal.electronicId)).length;
+  const waterDays = new Set(account.waterRecords.map((record) => record.date)).size;
+
+  const usageXp =
+    completedActivities * 20 +
+    account.monitoring.length * 30 +
+    identifiedAnimals * 25 +
+    waterDays * 15;
+
+  const xp = Math.min(MAX_FARM_XP, missionXp + usageXp);
+  const level = xp >= MAX_FARM_XP
+    ? MAX_FARM_LEVEL
+    : Math.min(MAX_FARM_LEVEL, Math.floor(xp / XP_PER_LEVEL) + 1);
+  const levelBaseXp = (level - 1) * XP_PER_LEVEL;
+  const progress = level >= MAX_FARM_LEVEL
+    ? 100
+    : Math.min(100, Math.max(0, ((xp - levelBaseXp) / XP_PER_LEVEL) * 100));
+
+  return { xp, level, progress, lifetimeVip: level >= MAX_FARM_LEVEL };
 }
