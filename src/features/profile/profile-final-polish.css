@@ -72,20 +72,35 @@ html body #root .hydra-root:not(.theme-dark) .profile-screen .profile-avatar-wra
   min-width: 96px !important;
   min-height: 96px !important;
   margin: 0 auto 13px !important;
+  padding: 0 !important;
   inset: auto !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  box-shadow: none !important;
   transform: none !important;
 }
 
 html body #root .hydra-root:not(.theme-dark) .profile-screen :is(.profile-avatar,.profile-avatar.image) {
+  display: grid !important;
+  place-items: center !important;
   width: 96px !important;
   height: 96px !important;
   min-width: 96px !important;
   min-height: 96px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
   border: 3px solid rgba(255,255,255,.92) !important;
   border-radius: 50% !important;
   object-fit: cover !important;
   background: #174c36 !important;
   box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) .profile-screen img.profile-avatar.image {
+  display: block !important;
+  aspect-ratio: 1 / 1 !important;
 }
 
 html body #root .hydra-root:not(.theme-dark) .profile-screen .avatar-edit-button {
