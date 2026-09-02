@@ -42,6 +42,7 @@ import "./bottom-nav-dribbble-reference.css";
 import "./hydra-green-sync-final.css";
 import "./hydra-motion-nav-final.css";
 import "./features/nfc/nfc-final-polish.css";
+import "./features/auth/auth-reference-final.css";
 
 type ThemeMode = "light" | "dark";
 const THEME_KEY = "hydra-agro.theme";
