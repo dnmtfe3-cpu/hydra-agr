@@ -6,17 +6,17 @@
  */
 
 .hydra-root {
-  --ha-green-950: #052d20;
+  --ha-green-950: #073d2a;
   --ha-green-900: #073d2a;
   --ha-green-800: #0b5136;
-  --ha-green-700: #176548;
-  --ha-green-100: #e8f1eb;
-  --ha-green-050: #f3f7f2;
+  --ha-green-700: #0b5136;
+  --ha-green-100: #e7f0ea;
+  --ha-green-050: #f2f6f2;
   --ha-orange: #ff8a12;
   --ha-orange-soft: #fff1df;
   --ha-canvas: #faf8f1;
   --ha-surface: #ffffff;
-  --ha-surface-soft: #f4f4ee;
+  --ha-surface-soft: #f5f4ed;
   --ha-ink: #12271e;
   --ha-muted: #68766f;
   --ha-border: #e5e5dc;
@@ -59,6 +59,11 @@
   background: var(--ha-green-900);
 }
 
+.hydra-root {
+  color: var(--ha-ink);
+  background: var(--ha-canvas);
+}
+
 .hydra-root .phone-app {
   width: min(100%, 560px);
   min-height: 100dvh;
@@ -73,6 +78,7 @@
 }
 
 .hydra-root .screen {
+  position: relative;
   width: 100%;
   min-height: 100dvh;
   padding: max(24px, calc(env(safe-area-inset-top) + 18px)) var(--ha-space) var(--ha-nav-space);
@@ -351,6 +357,12 @@
   color: var(--ha-muted);
   font-size: 12px;
 }
+
+.hydra-root .weather-current {
+  background: var(--ha-green-800);
+}
+
+.hydra-root .weather-current::after { display: none; }
 
 .hydra-root .shortcut-row {
   margin: 18px 0 22px;
@@ -693,6 +705,34 @@
   box-shadow: 0 7px 18px rgba(255, 138, 18, .25);
 }
 
+/* Older interaction polish used !important and turned the central action green. */
+.hydra-root .phone-app .bottom-nav > button.nav-create > span:first-of-type,
+.hydra-root.theme-dark .phone-app .bottom-nav > button.nav-create > span:first-of-type {
+  width: 54px !important;
+  height: 54px !important;
+  border: 5px solid var(--ha-surface) !important;
+  border-radius: 50% !important;
+  color: #fff !important;
+  background: var(--ha-orange) !important;
+  box-shadow: 0 7px 18px rgba(255, 138, 18, .25) !important;
+}
+
+.hydra-root .phone-app .bottom-nav > button.nav-create,
+.hydra-root .phone-app .bottom-nav > button.nav-create > small,
+.hydra-root.theme-dark .phone-app .bottom-nav > button.nav-create,
+.hydra-root.theme-dark .phone-app .bottom-nav > button.nav-create > small {
+  color: var(--ha-orange) !important;
+}
+
+/* Feature modules that predate the official palette inherit the same brand green. */
+.hydra-root :is(.staff-access-hero, .hydra-sheet-intro > span, .hydra-sheet-actions button.share) {
+  background: var(--ha-green-800);
+}
+
+.hydra-root :is(.staff-role-pill, .staff-summary-grid > button > svg:first-child, .staff-section-heading > svg, .hydra-sheet-icon, .hydra-sheet-actions button) {
+  color: var(--ha-green-800);
+}
+
 .hydra-root .bottom-nav > button.nav-create small {
   margin-top: -1px;
   color: var(--ha-orange);
@@ -966,17 +1006,152 @@
   background: var(--ha-orange-soft);
 }
 
-/* Responsive web presentation keeps the app mobile-first. */
-@media (min-width: 760px) {
-  .hydra-root .phone-app {
-    margin-block: 24px;
-    min-height: calc(100dvh - 48px);
-    border-radius: 34px;
-    overflow: clip;
+/* Desktop web: a real responsive workspace, while the mobile app stays intact. */
+@media (min-width: 900px) {
+  .hydra-root {
+    --ha-space: 32px;
+    --ha-nav-space: 128px;
+    min-height: 100dvh;
+    background: var(--ha-canvas);
   }
 
-  .hydra-root .app-content { min-height: calc(100dvh - 48px); }
-  .hydra-root .bottom-nav { bottom: 24px; border-radius: 0 0 34px 34px; }
+  .hydra-root .app-shell,
+  .hydra-root .phone-app,
+  .hydra-root .app-content,
+  .hydra-root .route-loading {
+    min-height: 100dvh;
+    background: var(--ha-canvas);
+  }
+
+  .hydra-root .phone-app {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border-radius: 0;
+    overflow: visible;
+    box-shadow: none;
+  }
+
+  .hydra-root .screen {
+    width: min(100%, 1180px);
+    min-height: 100dvh;
+    margin: 0 auto;
+    padding: 38px 40px var(--ha-nav-space);
+  }
+
+  .hydra-root .screen-heading h1 { font-size: 34px; }
+  .hydra-root .screen-heading p { font-size: 13px; }
+  .hydra-root .screen-header { margin-bottom: 28px; }
+
+  .hydra-root .home-screen { padding-top: 0; }
+
+  .hydra-root .home-screen::before {
+    height: 306px;
+    border-radius: 0 0 34px 34px;
+  }
+
+  .hydra-root .home-brandbar {
+    min-height: 82px;
+    margin: 0;
+    padding: 24px 0 10px;
+  }
+
+  .hydra-root .greeting-block {
+    grid-template-columns: minmax(280px, .9fr) minmax(390px, 1.1fr);
+    align-items: end;
+    gap: 48px;
+    margin: 10px 0 24px;
+  }
+
+  .hydra-root .greeting-block h1 { font-size: 36px; }
+  .hydra-root .home-screen .climate-chip { min-height: 112px; }
+
+  .hydra-root .shortcut-row {
+    width: min(100%, 560px);
+    margin: 20px auto 26px;
+  }
+
+  .hydra-root .home-dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(340px, .92fr);
+    align-items: start;
+    gap: 24px;
+  }
+
+  .hydra-root .home-dashboard-primary {
+    display: grid;
+    gap: 18px;
+  }
+
+  .hydra-root .property-hero { margin-top: 0; }
+  .hydra-root .home-summary-section { margin-top: 0; }
+
+  .hydra-root .animal-list,
+  .hydra-root .challenge-list,
+  .hydra-root .activity-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hydra-root .property-info-grid,
+  .hydra-root .detail-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hydra-root .monitor-screen,
+  .hydra-root .community-screen,
+  .hydra-root .notifications-screen,
+  .hydra-root .property-screen {
+    width: min(100%, 980px);
+  }
+
+  .hydra-root .profile-screen {
+    width: min(100%, 1080px);
+    padding-inline: 40px;
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    align-content: start;
+    column-gap: 24px;
+  }
+
+  .hydra-root .profile-screen > .profile-hero {
+    grid-column: 1;
+    grid-row: 1 / span 10;
+    position: sticky;
+    top: 28px;
+    width: 100%;
+    min-height: 520px;
+    border-radius: 28px;
+  }
+
+  .hydra-root .profile-screen > :not(.profile-hero) { grid-column: 2; }
+  .hydra-root .profile-social-tabs { margin: 0 0 14px; }
+  .hydra-root .profile-screen > .plan-card { margin-top: 0; }
+
+  .hydra-root .bottom-nav {
+    bottom: 22px;
+    width: min(calc(100% - 48px), 700px);
+    min-height: 76px;
+    padding: 8px 14px;
+    border: 1px solid var(--ha-border);
+    border-radius: 24px;
+    box-shadow: 0 14px 38px rgba(7, 61, 42, .14);
+  }
+
+  .hydra-root .bottom-nav > button { min-height: 56px; }
+
+  .hydra-root .modal-sheet,
+  .hydra-root .quick-sheet {
+    max-width: 720px;
+    max-height: min(86dvh, 820px);
+    margin-inline: auto;
+    border-radius: 28px;
+  }
+
+  .hydra-root .modal-layer,
+  .hydra-root .quick-layer {
+    padding: 32px;
+    align-items: center;
+  }
 }
 
 @media (max-width: 380px) {
