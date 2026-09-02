@@ -28,6 +28,7 @@ import "./features/profile/profile-cover-runtime";
 import "./features/community/community-comment-runtime";
 import "./features/onboarding/first-run-onboarding";
 import "./splash-single-run-runtime";
+import "./features/auth/auth-animal-carousel";
 import HydraApp from "./hydra-app";
 import type { HydraAccount } from "./lib/hydra-types";
 import { loadAccount } from "./services/hydra-repository";
@@ -52,6 +53,7 @@ import "./splash-single-run-final.css";
 import "./hydra-design-system-final.css";
 import "./app-reveal-after-splash.css";
 import "./bottom-nav-viewport-final.css";
+import "./features/auth/auth-animal-carousel.css";
 
 type ThemeMode = "light" | "dark";
 const THEME_KEY = "hydra-agro.theme";
@@ -60,8 +62,8 @@ function savedTheme(): ThemeMode { try { return window.localStorage.getItem(THEM
 function openDailyBriefingPanelFromNotification() {
   let observer: MutationObserver | null = null;
   const tryOpen = () => {
-    const notificationButton = Array.from(document.querySelectorAll<HTMLButtonElement>("button")).find((button) => button.getAttribute("aria-label") === "Notificações");
-    const briefingButton = Array.from(document.querySelectorAll<HTMLButtonElement>("button")).find((button) => button.textContent?.includes("O que fazer hoje"));
+    const notificationButton = Array.from(document.querySelectorAll<HTMLButtonElement>>("button")).find((button) => button.getAttribute("aria-label") === "Notificações");
+    const briefingButton = Array.from(document.querySelectorAll<HTMLButtonElement>>("button")).find((button) => button.textContent?.includes("O que fazer hoje"));
     if (!briefingButton && notificationButton) { notificationButton.click(); return false; }
     if (!briefingButton) return false;
     briefingButton.click(); observer?.disconnect(); observer = null; return true;
