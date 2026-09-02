@@ -1,18 +1,4 @@
-/* Ajustes finais de navegação/perfil solicitados: sem linha preta, sem animações de troca fora do Perfil e modal de saída compacto. */
-
-@media (max-width: 899px) {
-  .hydra-root .phone-app .bottom-nav.bottom-nav {
-    border-top: 0 !important;
-    outline: 0 !important;
-    box-shadow: 0 -8px 24px -24px rgba(11,54,35,.32) !important;
-  }
-
-  .hydra-root .phone-app .bottom-nav.bottom-nav::before,
-  .hydra-root .phone-app .bottom-nav.bottom-nav::after {
-    border: 0 !important;
-    box-shadow: none !important;
-  }
-}
+/* Ajustes de transição e Perfil. Não altera a bottom navigation final. */
 
 /* A troca de abas fica instantânea e estável. O Perfil mantém suas animações próprias. */
 .hydra-root .app-content.route-motion-forward > .screen.page-enter:not(.profile-screen),
@@ -30,18 +16,6 @@
   .herd-health-tools,.property-hero,.assistant-v2-hero,.assistant-v2-conversation,.home-summary-section
 ) {
   animation-name: none !important;
-}
-
-/* Remove os dois efeitos vistos na troca pela bottom bar: pop/jump do ativo e confirmação de toque. */
-.hydra-root .bottom-nav > button.active > span:first-of-type,
-.hydra-root .bottom-nav > button.is-tapped > span:first-of-type,
-.hydra-root .bottom-nav > button.is-pressed > span:first-of-type,
-.hydra-root .bottom-nav > button:nth-of-type(3).active > span:first-of-type {
-  animation: none !important;
-}
-
-.hydra-root .bottom-nav > button:not(.nav-nfc) > span:first-of-type {
-  transform: none !important;
 }
 
 /* Finalizar sessão: elimina o vazio grande abaixo dos botões. */
