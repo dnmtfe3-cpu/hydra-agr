@@ -1,0 +1,189 @@
+/* Camada final da entrada: mobile consistente, cadastro no lugar certo e desktop com composição real. */
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell){
+  position:relative!important;
+  min-height:100dvh!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  background:#073D2A!important;
+}
+
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-card,
+html body #root .hydra-root .auth-shell-signup:not(.auth-code-shell) .auth-reference-card{
+  position:relative!important;
+  z-index:4!important;
+  width:min(100%,430px)!important;
+  max-width:430px!important;
+  min-height:calc(100dvh - clamp(250px,33dvh,320px))!important;
+  margin:clamp(250px,33dvh,320px) auto 0!important;
+  padding:24px 22px max(34px,calc(env(safe-area-inset-bottom) + 22px))!important;
+  border:0!important;
+  border-radius:32px 32px 0 0!important;
+  background:#FAF8F1!important;
+  box-shadow:0 -12px 34px rgba(2,31,20,.16)!important;
+  box-sizing:border-box!important;
+}
+
+/* Cadastro começa na mesma altura do login; não afunda mais abaixo do carrossel. */
+html body #root .hydra-root .auth-shell-signup:not(.auth-code-shell) .auth-reference-card.auth-card-wide{
+  margin-top:clamp(250px,33dvh,320px)!important;
+  min-height:calc(100dvh - clamp(250px,33dvh,320px))!important;
+}
+
+.auth-animal-carousel{
+  position:absolute!important;
+  z-index:1!important;
+  inset:0 0 auto!important;
+  height:clamp(250px,34dvh,330px)!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow:hidden!important;
+  background:#073D2A!important;
+  perspective:900px!important;
+}
+.auth-animal-carousel::after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0;
+  height:38%;
+  z-index:7;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(7,61,42,0),rgba(7,61,42,.72));
+}
+.auth-animal-track{position:absolute!important;inset:18px 0 26px!important;display:grid!important;place-items:center!important;transform-style:preserve-3d!important}
+.auth-animal-card{
+  position:absolute!important;
+  width:min(46vw,190px)!important;
+  height:218px!important;
+  margin:0!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  border-radius:28px!important;
+  overflow:hidden!important;
+  background:#0B5136!important;
+  box-shadow:0 20px 42px rgba(0,0,0,.22)!important;
+  transition:transform .78s cubic-bezier(.22,.8,.22,1),opacity .62s ease,filter .62s ease!important;
+  transform-origin:center!important;
+  opacity:0!important;
+}
+.auth-animal-card img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;display:block!important;object-fit:cover!important;object-position:center!important;transform:scale(1.03)!important}
+.auth-animal-shade{position:absolute!important;inset:0!important;background:linear-gradient(180deg,rgba(5,38,26,.02) 35%,rgba(5,38,26,.68) 100%)!important;pointer-events:none!important}
+.auth-animal-card[data-position="active"]{transform:translate3d(0,0,80px) rotate(0) scale(1)!important;opacity:1!important;filter:none!important;z-index:5!important}
+.auth-animal-card[data-position="prev"]{transform:translate3d(-47vw,14px,-35px) rotate(-6deg) scale(.91)!important;opacity:.72!important;filter:saturate(.9)!important;z-index:3!important}
+.auth-animal-card[data-position="next"]{transform:translate3d(47vw,14px,-35px) rotate(6deg) scale(.91)!important;opacity:.72!important;filter:saturate(.9)!important;z-index:3!important}
+.auth-animal-card[data-position="far"]{transform:translate3d(0,30px,-130px) scale(.76)!important;opacity:0!important;z-index:1!important}
+.auth-animal-card figcaption{position:absolute!important;z-index:4!important;left:16px!important;bottom:13px!important;color:#fff!important;font-size:10px!important;font-weight:800!important;letter-spacing:.1em!important;text-transform:uppercase!important;text-shadow:0 2px 8px rgba(0,0,0,.28)!important}
+.auth-animal-dots{position:absolute!important;z-index:9!important;left:50%!important;bottom:13px!important;display:flex!important;gap:6px!important;transform:translateX(-50%)!important}
+.auth-animal-dots span{width:6px!important;height:6px!important;border-radius:99px!important;background:rgba(255,255,255,.32)!important;transition:width .32s ease,background-color .32s ease!important}
+.auth-animal-dots span.active{width:20px!important;background:#FF8A12!important}
+
+/* Só a marca da folha branca. */
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-brand{margin:0 auto 18px!important;color:#0B5136!important}
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-brand span{display:none!important}
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-brand>svg,
+html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-brand>*:first-child{width:36px!important;height:36px!important;flex:0 0 36px!important}
+
+html body #root .hydra-root .auth-mode-tabs{min-height:52px!important;margin:0 0 26px!important;padding:4px!important;border:1px solid rgba(7,61,42,.09)!important;border-radius:20px!important;background:#EEF1ED!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.7)!important}
+html body #root .hydra-root .auth-mode-tabs button{min-height:42px!important;border-radius:16px!important;color:#78817C!important;font-size:12px!important;font-weight:700!important;transition:transform .16s ease,background-color .16s ease,color .16s ease,box-shadow .16s ease!important}
+html body #root .hydra-root .auth-mode-tabs button.active{color:#fff!important;background:#0B5136!important;box-shadow:0 5px 13px rgba(11,81,54,.16)!important}
+html body #root .hydra-root .auth-mode-tabs button:active{transform:scale(.975)!important}
+
+html body #root .hydra-root .auth-reference-heading h1{color:#16231C!important;font-size:25px!important;font-weight:650!important;letter-spacing:-.04em!important}
+html body #root .hydra-root .auth-reference-heading p{color:#7F8983!important;font-size:11.5px!important}
+html body #root .hydra-root .auth-reference-shell .field :is(input,select,textarea){min-height:52px!important;border:1px solid #DDE3DD!important;border-radius:16px!important;background:#fff!important;box-shadow:0 1px 0 rgba(11,81,54,.025)!important}
+html body #root .hydra-root .auth-reference-shell .field :is(input,select,textarea):focus{border-color:#0B5136!important;box-shadow:0 0 0 4px rgba(11,81,54,.08)!important}
+
+html body #root .hydra-root .auth-reference-shell :is(.primary-button,.secondary-button){min-height:53px!important;border-radius:17px!important;font-weight:750!important;transition:transform .14s ease,box-shadow .14s ease,filter .14s ease!important}
+html body #root .hydra-root .auth-reference-shell .primary-button{border:1px solid #0B5136!important;background:#0B5136!important;color:#fff!important;box-shadow:0 8px 20px rgba(11,81,54,.16)!important}
+html body #root .hydra-root .auth-reference-shell .secondary-button{border:1px solid #DDE3DD!important;background:#fff!important;color:#173C2D!important}
+html body #root .hydra-root .auth-reference-shell :is(.primary-button,.secondary-button):not(:disabled):active{transform:translateY(1px) scale(.985)!important;box-shadow:none!important}
+html body #root .hydra-root .auth-reference-shell :is(.primary-button,.secondary-button):disabled{opacity:.58!important}
+
+/* Google e Apple ficam claros, verdes e alinhados; ambos continuam apenas como "Em breve". */
+html body #root .hydra-root .auth-reference-shell .auth-divider:has(+ .google-auth-button){display:flex!important;margin:18px 0 12px!important}
+html body #root .hydra-root .auth-shell .google-auth-button,
+html body #root .hydra-root .auth-shell button.apple-auth-button{
+  width:calc(50% - 5px)!important;
+  min-height:56px!important;
+  margin:0!important;
+  padding:9px 10px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:9px!important;
+  border:1px solid rgba(11,81,54,.10)!important;
+  border-radius:17px!important;
+  color:#0B5136!important;
+  background:#fff!important;
+  box-shadow:0 5px 14px rgba(7,61,42,.04)!important;
+  opacity:1!important;
+  -webkit-text-fill-color:initial!important;
+  pointer-events:none!important;
+}
+html body #root .hydra-root .auth-shell .google-auth-button{margin-right:10px!important}
+html body #root .hydra-root .auth-shell .auth-provider-mark{width:32px!important;height:32px!important;flex:0 0 32px!important;display:grid!important;place-items:center!important;border-radius:10px!important;color:#0B5136!important;background:#EDF4F0!important}
+html body #root .hydra-root .auth-shell .auth-provider-mark svg{width:19px!important;height:19px!important;display:block!important}
+html body #root .hydra-root .auth-shell .auth-provider-copy{display:grid!important;gap:2px!important;text-align:left!important}
+html body #root .hydra-root .auth-shell .auth-provider-copy strong{color:#143D2C!important;font-size:11px!important;font-weight:800!important}
+html body #root .hydra-root .auth-shell .auth-provider-copy small{color:#8B958F!important;font-size:8.5px!important;font-weight:650!important}
+
+html body #root .hydra-root .staff-entry-button{width:100%!important;min-height:62px!important;margin:14px 0 0!important;padding:10px 12px!important;display:grid!important;grid-template-columns:38px minmax(0,1fr) 18px!important;gap:10px!important;align-items:center!important;border:1px solid rgba(11,81,54,.09)!important;border-radius:18px!important;color:#253B31!important;background:#F0F4F1!important;box-shadow:none!important;text-align:left!important;transition:transform .14s ease,background-color .14s ease!important}
+html body #root .hydra-root .staff-entry-button>svg:first-child{width:38px!important;height:38px!important;padding:9px!important;border-radius:12px!important;color:#0B5136!important;background:#E1ECE6!important}
+html body #root .hydra-root .staff-entry-button strong{font-size:11.5px!important;font-weight:800!important}
+html body #root .hydra-root .staff-entry-button small{margin-top:2px!important;color:#7E8A84!important;font-size:9px!important}
+html body #root .hydra-root .staff-entry-button:not(:disabled):active{transform:scale(.985)!important;background:#E9F0EC!important}
+
+@media(max-height:700px) and (max-width:799px){
+  .auth-animal-carousel{height:clamp(205px,30dvh,240px)!important}
+  .auth-animal-card{width:148px!important;height:174px!important;border-radius:23px!important}
+  html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-card,
+  html body #root .hydra-root .auth-shell-signup:not(.auth-code-shell) .auth-reference-card{margin-top:clamp(205px,30dvh,240px)!important;min-height:calc(100dvh - clamp(205px,30dvh,240px))!important}
+}
+
+@media(max-width:350px){
+  html body #root .hydra-root .auth-shell .google-auth-button,
+  html body #root .hydra-root .auth-shell button.apple-auth-button{width:100%!important;margin-right:0!important}
+  html body #root .hydra-root .auth-shell .google-auth-button{margin-bottom:8px!important}
+}
+
+/* Desktop: painel visual à esquerda e autenticação limpa à direita. */
+@media(min-width:800px){
+  html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell){
+    min-height:100dvh!important;
+    padding:32px 4vw 32px 52vw!important;
+    align-items:center!important;
+    justify-content:center!important;
+    background:#F3F1E9!important;
+    box-sizing:border-box!important;
+  }
+  .auth-animal-carousel{
+    position:fixed!important;
+    inset:0 auto 0 0!important;
+    width:48vw!important;
+    height:100dvh!important;
+    border-radius:0 42px 42px 0!important;
+    box-shadow:14px 0 46px rgba(7,61,42,.12)!important;
+  }
+  .auth-animal-track{inset:7vh 0 8vh!important}
+  .auth-animal-card{width:min(29vw,390px)!important;height:min(58vh,540px)!important;border-radius:36px!important}
+  .auth-animal-card[data-position="prev"]{transform:translate3d(-23vw,30px,-60px) rotate(-7deg) scale(.86)!important;opacity:.5!important}
+  .auth-animal-card[data-position="next"]{transform:translate3d(23vw,30px,-60px) rotate(7deg) scale(.86)!important;opacity:.5!important}
+  .auth-animal-card figcaption{left:24px!important;bottom:22px!important;font-size:12px!important}
+  .auth-animal-dots{bottom:34px!important}
+  html body #root .hydra-root .auth-reference-shell:not(.auth-code-shell) .auth-reference-card,
+  html body #root .hydra-root .auth-shell-signup:not(.auth-code-shell) .auth-reference-card{
+    width:min(430px,100%)!important;
+    max-width:430px!important;
+    min-height:auto!important;
+    margin:0!important;
+    padding:30px 30px 32px!important;
+    border:1px solid rgba(11,81,54,.07)!important;
+    border-radius:30px!important;
+    background:#fff!important;
+    box-shadow:0 24px 70px rgba(20,46,33,.10)!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){.auth-animal-card{transition:none!important}}
