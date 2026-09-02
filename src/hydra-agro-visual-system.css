@@ -414,6 +414,58 @@
 .hydra-root .property-link { background: rgba(0, 0, 0, .08); }
 .hydra-root .home-section { margin-top: 22px; }
 
+/* Mobile identity — green remains the dominant brand surface while content
+ * cards stay white. Desktop has its own composition below. */
+@media (max-width: 899px) {
+  .hydra-root .home-screen::before {
+    height: max(440px, calc(410px + env(safe-area-inset-top)));
+  }
+
+  .hydra-root .screen:not(.home-screen)::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset: 0 0 auto;
+    height: max(142px, calc(118px + env(safe-area-inset-top)));
+    background: var(--ha-green-800);
+    pointer-events: none;
+  }
+
+  .hydra-root .screen:not(.home-screen) > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hydra-root .screen:not(.home-screen) > .screen-header {
+    min-height: 94px;
+    margin: 0 calc(var(--ha-space) * -1) 22px;
+    padding: 0 var(--ha-space) 18px;
+  }
+
+  .hydra-root .screen:not(.home-screen) > .screen-header .screen-heading h1,
+  .hydra-root .screen:not(.home-screen) > .screen-header .screen-heading p {
+    color: #fff;
+  }
+
+  .hydra-root .screen:not(.home-screen) > .screen-header .screen-heading p {
+    color: rgba(255, 255, 255, .72);
+  }
+
+  .hydra-root .screen:not(.home-screen) > .screen-header .eyebrow {
+    color: #ffb45f;
+  }
+
+  .hydra-root .screen:not(.home-screen) > .screen-header .icon-button:not(.accent) {
+    border-color: rgba(255, 255, 255, .2);
+    color: #fff;
+    background: rgba(255, 255, 255, .12);
+  }
+
+  .hydra-root .home-screen .shortcut-row button > span {
+    border: 1px solid rgba(7, 61, 42, .08);
+  }
+}
+
 /* Animal, property and sector composition */
 .hydra-root .search-row { margin-bottom: 12px; }
 
