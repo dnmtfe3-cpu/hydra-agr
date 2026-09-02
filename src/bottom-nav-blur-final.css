@@ -1,4 +1,15 @@
-/* Navegação principal: dock persistente de app real, sempre visível na base. */
+/*
+ * Bottom navigation final.
+ * Importante: transform/filter em um ancestral muda position:fixed no iOS para o
+ * scroll container. Removemos esse containing block depois da animação inicial.
+ */
+html:not(.hydra-splash-active) body #root .hydra-root .app-shell,
+html:not(.hydra-splash-active) body #root .hydra-root .phone-app {
+  transform: none !important;
+  filter: none !important;
+  perspective: none !important;
+}
+
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav,
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav:not(.is-hidden),
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav.is-hidden {
@@ -17,10 +28,9 @@ html body #root .hydra-root .phone-app .bottom-nav.bottom-nav.is-hidden {
   opacity: 1 !important;
   visibility: visible !important;
   pointer-events: auto !important;
-  z-index: 220 !important;
+  z-index: 2147483000 !important;
 }
 
-/* Superfície opaca: o feed rola por baixo, mas nunca fica visível através da barra. */
 html body #root .hydra-root .phone-app .bottom-nav.bottom-nav::after {
   content: "" !important;
   display: block !important;
