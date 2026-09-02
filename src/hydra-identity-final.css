@@ -1,0 +1,140 @@
+/* Hydra Agro — identidade final unificada.
+   Camada carregada por ultimo para neutralizar estilos antigos sem tocar na logica. */
+
+html body #root .hydra-root:not(.theme-dark) {
+  --ref-green: #174c36;
+  --ref-green-deep: #123f2e;
+  --ref-green-dark: #0e3426;
+  --ref-green-soft: #e8f0eb;
+  --ref-green-pale: #f2f6f3;
+
+  --ha-green-950: var(--ref-green-dark);
+  --ha-green-900: var(--ref-green-deep);
+  --ha-green-800: var(--ref-green);
+  --ha-green-700: var(--ref-green);
+  --forest-950: var(--ref-green-dark);
+  --forest-900: var(--ref-green-deep);
+  --forest-800: var(--ref-green);
+  --forest-700: var(--ref-green);
+}
+
+html body #root .hydra-root.theme-dark {
+  --ha-green-800: #174c36;
+  --ha-green-700: #174c36;
+  --forest-800: #174c36;
+  --forest-700: #174c36;
+}
+
+/* Tipografia: uma familia so, mais fina e humana em todas as funcoes. */
+html body #root .hydra-root,
+html body #root .hydra-root button,
+html body #root .hydra-root input,
+html body #root .hydra-root textarea,
+html body #root .hydra-root select,
+html body #root .hydra-root option {
+  font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+html body #root .hydra-root :is(p,span,small,label,li,dd,dt,input,textarea,select) {
+  font-weight: 400;
+}
+
+html body #root .hydra-root :is(h1,h2,h3,h4,h5,h6) {
+  font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-weight: 500 !important;
+  letter-spacing: -.03em;
+}
+
+html body #root .hydra-root strong,
+html body #root .hydra-root b {
+  font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-weight: 600 !important;
+}
+
+html body #root .hydra-root button,
+html body #root .hydra-root .primary-button,
+html body #root .hydra-root .secondary-button,
+html body #root .hydra-root .small-button,
+html body #root .hydra-root .wide-outline-button,
+html body #root .hydra-root .preview-button,
+html body #root .hydra-root .bottom-nav span,
+html body #root .hydra-root .tab-button,
+html body #root .hydra-root .chip,
+html body #root .hydra-root .pill {
+  font-weight: 500 !important;
+}
+
+html body #root .hydra-root .eyebrow,
+html body #root .hydra-root .group-label,
+html body #root .hydra-root .section-kicker,
+html body #root .hydra-root .status-chip,
+html body #root .hydra-root .badge {
+  font-weight: 600 !important;
+}
+
+/* Home: o verde antigo volta a comandar o topo exatamente como identidade principal. */
+html body #root .hydra-root:not(.theme-dark) .home-screen {
+  background:
+    linear-gradient(to bottom,
+      #174c36 0,
+      #174c36 max(365px, calc(342px + env(safe-area-inset-top))),
+      var(--ref-canvas) max(365px, calc(342px + env(safe-area-inset-top))),
+      var(--ref-canvas) 100%) !important;
+}
+
+/* Componentes que ainda herdavam caracteristicas antigas. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .primary-button,
+  .small-button,
+  .home-summary-card,
+  .weather-hero,
+  .weather-card-hero,
+  .monitor-weather-card,
+  .property-hero-card,
+  .nfc-primary-action,
+  .action-primary,
+  .bottom-nav .center-action,
+  .bottom-nav .nav-add,
+  .fab
+) {
+  background-color: #174c36 !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) :is(
+  .screen-heading .eyebrow,
+  .section-heading a,
+  .text-link,
+  .profile-menu-icon,
+  .setting-icon,
+  .bottom-nav .active,
+  .bottom-nav [aria-current="page"]
+) {
+  color: #174c36 !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) :is(
+  .secondary-button,
+  .preview-button,
+  .soft-green,
+  .green-soft,
+  .status-ok
+) {
+  color: #174c36 !important;
+  background-color: #e8f0eb !important;
+}
+
+/* Evita pesos antigos muito grossos reaparecerem em telas especificas. */
+html body #root .hydra-root :is(
+  .home-brand-copy strong,
+  .greeting-name,
+  .weather-temperature,
+  .metric-value,
+  .animal-card strong,
+  .profile-name,
+  .property-title,
+  .monitor-title,
+  .community-author,
+  .challenge-title
+) {
+  font-weight: 600 !important;
+}
