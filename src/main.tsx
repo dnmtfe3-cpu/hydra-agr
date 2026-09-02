@@ -25,6 +25,7 @@ import "./features/profile/profile-mobile-fix.css";
 import "./hydra-agro-visual-system.css";
 import "./features/profile/profile-ranking-runtime";
 import "./features/profile/level10-vip-runtime";
+import "./features/profile/profile-cover-runtime";
 import "./features/community/community-comment-runtime";
 import HydraApp from "./hydra-app";
 import type { HydraAccount } from "./lib/hydra-types";
@@ -37,6 +38,7 @@ import "./hydra-identity-final.css";
 import "./hydra-reference-all-screens.css";
 import "./hydra-final-functional-polish.css";
 import "./home-quick-neutral-icons.css";
+import "./features/profile/profile-final-polish.css";
 
 type ThemeMode = "light" | "dark";
 const THEME_KEY = "hydra-agro.theme";
