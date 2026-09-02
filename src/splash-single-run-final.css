@@ -1,0 +1,35 @@
+/* Android/iOS usam a splash nativa; não repetir a animação React por cima dela. */
+html.hydra-native-platform body .splash-screen {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+html.hydra-native-platform.hydra-splash-active body .app-shell,
+html.hydra-native-platform.hydra-splash-active body .bottom-nav {
+  display: initial !important;
+  pointer-events: auto !important;
+}
+
+html.hydra-native-platform.hydra-splash-active body .app-shell {
+  display: block !important;
+}
+
+/* Depois da primeira splash web, qualquer reativação causada por troca de sessão fica invisível. */
+html.hydra-web-splash-finished body .splash-screen {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+html.hydra-web-splash-finished.hydra-splash-active body .app-shell {
+  display: block !important;
+  pointer-events: auto !important;
+}
+
+html.hydra-web-splash-finished.hydra-splash-active body .bottom-nav {
+  display: grid !important;
+  pointer-events: auto !important;
+}
