@@ -54,6 +54,7 @@ import "./hydra-design-system-final.css";
 import "./app-reveal-after-splash.css";
 import "./bottom-nav-viewport-final.css";
 import "./features/auth/auth-animal-carousel.css";
+import "./features/auth/auth-experience-final.css";
 
 type ThemeMode = "light" | "dark";
 const THEME_KEY = "hydra-agro.theme";
@@ -62,8 +63,8 @@ function savedTheme(): ThemeMode { try { return window.localStorage.getItem(THEM
 function openDailyBriefingPanelFromNotification() {
   let observer: MutationObserver | null = null;
   const tryOpen = () => {
-    const notificationButton = Array.from(document.querySelectorAll<HTMLButtonElement>("button")).find((button) => button.getAttribute("aria-label") === "Notificações");
-    const briefingButton = Array.from(document.querySelectorAll<HTMLButtonElement>("button")).find((button) => button.textContent?.includes("O que fazer hoje"));
+    const notificationButton = Array.from(document.querySelectorAll<HTMLButtonElement>>("button")).find((button) => button.getAttribute("aria-label") === "Notificações");
+    const briefingButton = Array.from(document.querySelectorAll<HTMLButtonElement>>("button")).find((button) => button.textContent?.includes("O que fazer hoje"));
     if (!briefingButton && notificationButton) { notificationButton.click(); return false; }
     if (!briefingButton) return false;
     briefingButton.click(); observer?.disconnect(); observer = null; return true;
@@ -75,7 +76,7 @@ function openDailyBriefingPanelFromNotification() {
 
 function openNotificationsScreen() {
   window.focus();
-  const button = Array.from(document.querySelectorAll<HTMLButtonElement>("button")).find((item) => item.getAttribute("aria-label") === "Notificações");
+  const button = Array.from(document.querySelectorAll<HTMLButtonElement>>("button")).find((item) => item.getAttribute("aria-label") === "Notificações");
   button?.click();
 }
 
@@ -121,7 +122,7 @@ function HydraThemeRoot() {
 
   useEffect(() => {
     function findProfileMenu() {
-      const groups = Array.from(document.querySelectorAll<HTMLElement>(".profile-screen .profile-group"));
+      const groups = Array.from(document.querySelectorAll<HTMLElement>>(".profile-screen .profile-group"));
       const accountGroup = groups.find((group) => group.querySelector(".group-label")?.textContent?.trim() === "MINHA CONTA");
       const nextTarget = accountGroup?.querySelector<HTMLElement>(".profile-menu-card") ?? null;
       setProfileMenuTarget((current) => current === nextTarget ? current : nextTarget);
