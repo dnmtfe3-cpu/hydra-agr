@@ -24,8 +24,6 @@ html body #root .hydra-root {
   --brand-green: #174c36 !important;
   --accent-green: #174c36 !important;
   --sage: #174c36 !important;
-
-  /* Não criar um segundo "verde" em fundos suaves. */
   --hydra-green-soft: #f0f2ef !important;
   --ref-green-soft: #f0f2ef !important;
   --ref-green-pale: #f5f6f4 !important;
@@ -43,71 +41,32 @@ html body #root .hydra-root .splash-screen {
 }
 
 html body #root .hydra-root:not(.theme-dark) .home-screen {
-  background:
-    linear-gradient(to bottom,
-      #174c36 0,
-      #174c36 max(365px, calc(342px + env(safe-area-inset-top))),
-      #f3f4f1 max(365px, calc(342px + env(safe-area-inset-top))),
-      #f3f4f1 100%) !important;
+  background: linear-gradient(to bottom,
+    #174c36 0,
+    #174c36 max(365px, calc(342px + env(safe-area-inset-top))),
+    #f3f4f1 max(365px, calc(342px + env(safe-area-inset-top))),
+    #f3f4f1 100%) !important;
 }
 
-/* Superfícies fortes verdes das telas funcionais. */
 html body #root .hydra-root:not(.theme-dark) :is(
-  .primary-button,
-  .small-button,
-  .action-primary,
-  .fab,
-  .home-green-hero,
-  .weather-hero,
-  .weather-card-hero,
-  .monitor-overview,
-  .monitor-hero,
-  .monitor-weather-card,
-  .today-overview,
-  .today-hero,
-  .water-overview,
-  .challenge-hero,
-  .ranking-hero,
-  .plus-price-hero,
-  .community-tabs button.active,
-  .comment-form button,
-  .theme-option.active,
-  .profile-screen .plan-card > button,
-  .filter-button.active,
-  .filter-chips button.active,
-  .state-readonly > span,
-  .herd-care-launch > span,
-  .progress-fill,
-  .xp-progress > *,
-  .challenge-progress > *,
-  .progress-track > *
+  .primary-button,.small-button,.action-primary,.fab,.home-green-hero,
+  .weather-hero,.weather-card-hero,.monitor-overview,.monitor-hero,.monitor-weather-card,
+  .today-overview,.today-hero,.water-overview,.challenge-hero,.ranking-hero,.plus-price-hero,
+  .community-tabs button.active,.comment-form button,.theme-option.active,
+  .profile-screen .plan-card > button,.filter-button.active,.filter-chips button.active,
+  .state-readonly > span,.herd-care-launch > span,.progress-fill,
+  .xp-progress > *,.challenge-progress > *,.progress-track > *
 ) {
   border-color: #174c36 !important;
   background-color: #174c36 !important;
   background-image: none !important;
 }
 
-/* Texto/ícones ativos usam exatamente o mesmo verde. */
 html body #root .hydra-root:not(.theme-dark) :is(
-  .bottom-nav button.active,
-  .bottom-nav button[aria-current="page"],
-  .text-link,
-  .text-button,
-  .section-heading a,
-  .screen-heading .eyebrow:not(.orange),
-  .group-label,
-  .property-kicker,
-  .profile-menu-icon,
-  .setting-icon,
-  .home-profile-avatar,
-  .home-farm-xp strong,
-  .animal-code,
-  .filter-button,
-  .municipality-pin,
-  .municipality-chevron,
-  .status-ok,
-  .green-soft,
-  .soft-green
+  .bottom-nav button.active,.bottom-nav button[aria-current="page"],.text-link,.text-button,
+  .section-heading a,.screen-heading .eyebrow:not(.orange),.group-label,.property-kicker,
+  .profile-menu-icon,.setting-icon,.home-profile-avatar,.home-farm-xp strong,.animal-code,
+  .filter-button,.municipality-pin,.municipality-chevron,.status-ok,.green-soft,.soft-green
 ) {
   color: #174c36 !important;
 }
@@ -117,39 +76,29 @@ html body #root .hydra-root:not(.theme-dark) .home-profile-avatar {
   background: #174c36 !important;
 }
 
-/* Fallbacks sem foto não introduzem outro tom verde. */
 html body #root .hydra-root:not(.theme-dark) :is(
-  .animal-avatar:not(.image),
-  .home-feature-media:not(:has(img)),
-  .profile-avatar:not(.image),
-  .plan-mark,
-  .profile-social-tabs button.active
+  .animal-avatar:not(.image),.home-feature-media:not(:has(img)),.profile-avatar:not(.image),
+  .plan-mark,.profile-social-tabs button.active
 ) {
   color: #174c36 !important;
   background-color: #f0f2ef !important;
 }
 
-/* Perfil: apenas cor base abaixo da foto de capa. */
 html body #root .hydra-root:not(.theme-dark) .profile-screen > .profile-hero {
   background-color: #174c36 !important;
 }
 
-/* Foco sem verde-lima legado. */
 html body #root .hydra-root:not(.theme-dark) :is(button,a,input,textarea,select):focus-visible {
   outline-color: rgba(23, 76, 54, .25) !important;
 }
 html body #root .hydra-root:not(.theme-dark) :is(input,textarea,select):focus {
   border-color: rgba(23, 76, 54, .46) !important;
-  box-shadow: 0 0 0 3px rgba(23, 76, 54, .08) !important;
+  box-shadow: 0 0 0 3px rgba(23,76,54,.08) !important;
 }
 
-/* Componentes legados conhecidos que tinham #0B5136 / #1F6145 hardcoded. */
 html body #root .hydra-root:not(.theme-dark) :is(
-  .home-farm-xp strong,
-  .home-spreadsheet-card > span:first-child,
-  .herd-care-launch > span,
-  .municipality-options > button.selected,
-  .municipality-options > button > svg
+  .home-farm-xp strong,.home-spreadsheet-card > span:first-child,.herd-care-launch > span,
+  .municipality-options > button.selected,.municipality-options > button > svg
 ) {
   color: #174c36 !important;
 }
@@ -159,12 +108,30 @@ html body #root .hydra-root:not(.theme-dark) .herd-care-launch > span {
 }
 
 html body #root .hydra-root:not(.theme-dark) :is(
-  .tab-button.active,
-  .segmented-control button.active,
-  .tabs button.active,
-  .filter-chips button.active
+  .tab-button.active,.segmented-control button.active,.tabs button.active,.filter-chips button.active
 ) {
   border-color: #174c36 !important;
+}
+
+/* Clima: remove azul/verde alternativo. Chuva mantém o amarelo/laranja da identidade. */
+html body #root .hydra-root:not(.theme-dark) .climate-card-metrics > div strong {
+  color: #174c36 !important;
+}
+html body #root .hydra-root:not(.theme-dark) .climate-card-metrics > div:nth-child(2) strong {
+  color: #c97818 !important;
+}
+html body #root .hydra-root:not(.theme-dark) .weather-metric > span,
+html body #root .hydra-root:not(.theme-dark) .weather-metric strong,
+html body #root .hydra-root:not(.theme-dark) .weather-source svg {
+  color: #174c36 !important;
+}
+
+/* Fundos de ícones/estados suaves são neutros, não um segundo verde. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .profile-menu-icon,.setting-icon,.home-spreadsheet-card > span:first-child,
+  .animal-avatar:not(.image),.plan-mark
+) {
+  background-color: #f0f2ef !important;
 }
 
 /* Hydra Tag/NFC segue com o laranja da identidade e fica fora desta troca. */
