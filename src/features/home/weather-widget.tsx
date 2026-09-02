@@ -12,6 +12,8 @@ import {
   RefreshCw,
   Snowflake,
   Sun,
+  Sunrise,
+  Sunset,
   ThermometerSun,
   Wind,
 } from "lucide-react";
@@ -74,11 +76,36 @@ export function WeatherWidget({ municipality, state, onCompleteProperty }: { mun
 
   const condition = weather ? describeWeather(weather.weatherCode, weather.isDay) : null;
   const observed = weather ? new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" }).format(new Date(weather.fetchedAt)) : "";
+  const climateLabel = weather ? `${Math.round(weather.temperature)} graus, ${condition?.label}` : "Consultar clima da região";
 
   return <>
-    <button className={`climate-chip ${status}`} onClick={() => setOpen(true)} aria-label={weather ? `Clima em ${locationLabel}: ${Math.round(weather.temperature)} graus, ${condition?.label}` : "Consultar clima da região"}>
-      {status === "loading" ? <LoaderCircle size={25} className="spin" /> : condition ? <WeatherIcon name={condition.icon} isDay={weather?.isDay ?? true} /> : <CloudSun size={25} />}
-      <span><strong>{weather ? `${Math.round(weather.temperature)}°` : status === "loading" ? "…" : "—"}</strong>{weather ? condition?.label : hasLocation ? status === "error" ? "Toque para tentar" : "Consultando clima" : "Cadastre a localização"}</span>
+    <button className={`climate-chip climate-card ${status}`} onClick={() => setOpen(true)} aria-label={`Clima em ${locationLabel}: ${climateLabel}`}>
+      <div className="climate-card-head">
+        <span className="climate-location"><MapPin size={14} /> {locationLabel}</span>
+        <span className="climate-condition-icon">
+          {status === "loading" && !weather ? <LoaderCircle size={28} className="spin" /> : condition ? <WeatherIcon name={condition.icon} isDay={weather?.isDay ?? true} size={31} /> : <CloudSun size={31} />}
+        </span>
+      </div>
+
+      <div className="climate-card-main">
+        <strong className="climate-temperature">{weather ? `${Math.round(weather.temperature)}°C` : status === "loading" ? "…" : "—"}</strong>
+        <div className="climate-condition-copy">
+          <b>{weather ? condition?.label : hasLocation ? status === "error" ? "Clima indisponível" : "Consultando clima" : "Cadastre a localização"}</b>
+          <span>{weather ? `Máx. ${Math.round(weather.maximumTemperature)}° · Mín. ${Math.round(weather.minimumTemperature)}°` : hasLocation ? "Toque para ver os detalhes" : "Informe município e UF da propriedade"}</span>
+        </div>
+      </div>
+
+      {weather ? <>
+        <div className="climate-card-metrics">
+          <div><small>Umidade</small><strong>{Math.round(weather.humidity)}%</strong></div>
+          <div><small>Chuva</small><strong>{Math.round(weather.rainChance)}%</strong></div>
+          <div><small>Vento</small><strong>{Math.round(weather.windSpeed)} km/h</strong></div>
+        </div>
+        <div className="climate-card-daylight">
+          <span><Sunrise size={15} /> Nascer {timeLabel(weather.sunrise)}</span>
+          <span><Sunset size={15} /> Pôr {timeLabel(weather.sunset)}</span>
+        </div>
+      </> : <div className="climate-card-placeholder"><span>{status === "error" ? error || "Não foi possível atualizar agora." : hasLocation ? "Buscando as condições mais recentes…" : "Complete a propriedade para ativar o clima."}</span></div>}
     </button>
 
     <Modal open={open} onClose={() => setOpen(false)} eyebrow="CLIMA DA REGIÃO" title={locationLabel}>
