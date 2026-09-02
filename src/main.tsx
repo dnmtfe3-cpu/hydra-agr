@@ -32,6 +32,7 @@ import { loadAccount } from "./services/hydra-repository";
 import { requireSupabase } from "./services/supabase";
 import { HydraSpreadsheetPanel } from "./features/spreadsheets/hydra-spreadsheet-panel";
 import "./dribbble-agriculture-reference.css";
+import "./dribbble-agriculture-fidelity.css";
 
 type ThemeMode = "light" | "dark";
 const THEME_KEY = "hydra-agro.theme";
