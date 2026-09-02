@@ -45,6 +45,7 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
   const identifiedAnimals = account.animals.filter((animal) => animal.electronicId).length;
   const farmXp = farmExperience(account);
   const profileInitials = account.profile.name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("") || "P";
+  const featuredAnimal = account.animals.find((animal) => animal.photoUrl) ?? account.animals[0];
 
   useEffect(() => {
     let active = true; const client = requireSupabase();
@@ -62,7 +63,7 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
     <div className="home-brandbar profile-brandbar">
       <div className="home-brand-copy">
         <strong>Hydra Agro</strong>
-        <span>{farmXp.xp.toLocaleString("pt-BR")} XP · nível {farmXp.level}</span>
+        <span>{account.property.name || "Gestão da propriedade"}</span>
       </div>
       <div className="home-brand-actions">
         <button className="icon-button bare" onClick={() => navigate("notifications")} aria-label="Notificações"><Bell size={21} />{hasUnreadNotifications && <span className="notification-dot" />}</button>
@@ -85,7 +86,7 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
 
     {announcements.length > 0 && <section className="home-announcements" aria-label="Avisos do Hydra Agro">{announcements.slice(0, 3).map((announcement) => <article key={announcement.id} className={announcement.level}><span>{announcement.level === "critical" ? "IMPORTANTE" : announcement.level === "attention" ? "ATENÇÃO" : "AVISO"}</span><strong>{announcement.title}</strong><p>{announcement.body}</p></article>)}</section>}
 
-    <div className="home-section-title"><div><small>ACESSO RÁPIDO</small><h2>Gestão da fazenda</h2></div></div>
+    <div className="home-section-title"><div><small>ATALHOS</small><h2>Gestão rápida</h2></div></div>
     <div className="shortcut-row home-shortcuts-five" aria-label="Atalhos">
       <button onClick={() => setNutriCicloOpen(true)} aria-label="Hydra NutriCiclo" title="Hydra NutriCiclo"><span><Recycle size={22} /></span><small>NutriCiclo</small></button>
       <button onClick={() => navigate("monitor")} aria-label="Monitorar" title="Monitorar"><span><RadioTower size={22} /></span><small>Monitorar</small></button>
@@ -94,11 +95,23 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
       <button className="production-shortcut" onClick={() => navigate("production")} aria-label="Caderno da Produção" title="Agricultura familiar"><span><NotebookTabs size={22} /></span><small>Produção</small></button>
     </div>
 
+    <div className="home-section-title home-feature-title"><div><small>DESTAQUES</small><h2>Sua propriedade hoje</h2></div></div>
+    <div className="home-feature-grid">
+      <button className={`home-feature-card ${account.property.coverUrl ? "has-photo" : ""}`} onClick={() => navigate("property")}>
+        <span className="home-feature-media">{account.property.coverUrl ? <img src={account.property.coverUrl} alt="" /> : <Sprout size={34} />}</span>
+        <span className="home-feature-copy"><small>PROPRIEDADE</small><strong>{account.property.name || "Complete sua propriedade"}</strong><em>{propertyReady ? `${account.property.municipality}, ${account.property.state}` : "Adicionar localização"}</em></span>
+      </button>
+      <button className={`home-feature-card ${featuredAnimal?.photoUrl ? "has-photo" : ""}`} onClick={() => navigate("herd")}>
+        <span className="home-feature-media">{featuredAnimal?.photoUrl ? <img src={featuredAnimal.photoUrl} alt="" /> : <Cow size={34} />}</span>
+        <span className="home-feature-copy"><small>REBANHO</small><strong>{featuredAnimal ? (featuredAnimal.name || featuredAnimal.identification) : "Cadastrar animais"}</strong><em>{countLabel(account.animals.length, "animal", "animais")} na propriedade</em></span>
+      </button>
+    </div>
+
     <div className="home-dashboard-grid">
       <div className="home-dashboard-primary">
         <button className="nfc-banner" onClick={() => navigate("nfc")}><span className="nfc-banner-icon"><ScanLine size={26} /></span><span className="nfc-banner-copy"><small>HYDRA TAG · NFC / RFID</small><strong>Ler identificação do animal</strong><em>{countLabel(identifiedAnimals, "identificado", "identificados")} · {countLabel(account.nfcReadCount, "leitura", "leituras")}</em></span><ChevronRight size={20} /></button>
 
-        <section className="property-hero"><div className="property-hero-top"><div><span className="property-kicker">PROPRIEDADE</span><h2>{account.property.name || "Propriedade não cadastrada"}</h2><p>{propertyReady ? `${account.property.mainActivity ? `${account.property.mainActivity} · ` : ""}${account.property.municipality}, ${account.property.state}` : "Complete a localização da propriedade"}</p></div><button onClick={() => navigate("property")} aria-label="Editar propriedade"><Sprout size={20} /></button></div><div className="property-metrics"><div><UsersRound size={19} /><span><strong>Equipe</strong><small>gestão e operações</small></span></div><div><Cow size={19} /><span><strong>{account.animals.length}</strong><small>{account.animals.length === 1 ? "animal" : "animais"}</small></span></div><div><ClipboardCheck size={19} /><span><strong>{pendingActivities.length}</strong><small>{pendingActivities.length === 1 ? "tarefa pendente" : "tarefas pendentes"}</small></span></div></div><button className="property-link" onClick={() => navigate("property")}>Ver detalhes <ChevronRight size={17} /></button></section>
+        <section className="property-hero"><div className="property-hero-top"><div><span className="property-kicker">RESUMO</span><h2>{account.property.name || "Propriedade não cadastrada"}</h2><p>{propertyReady ? `${account.property.mainActivity ? `${account.property.mainActivity} · ` : ""}${account.property.municipality}, ${account.property.state}` : "Complete a localização da propriedade"}</p></div><button onClick={() => navigate("property")} aria-label="Editar propriedade"><Sprout size={20} /></button></div><div className="property-metrics"><div><UsersRound size={19} /><span><strong>Equipe</strong><small>gestão e operações</small></span></div><div><Cow size={19} /><span><strong>{account.animals.length}</strong><small>{account.animals.length === 1 ? "animal" : "animais"}</small></span></div><div><ClipboardCheck size={19} /><span><strong>{pendingActivities.length}</strong><small>{pendingActivities.length === 1 ? "tarefa pendente" : "tarefas pendentes"}</small></span></div></div><button className="property-link" onClick={() => navigate("property")}>Ver detalhes <ChevronRight size={17} /></button></section>
       </div>
 
       <section className="home-section home-summary-section"><button className="history-home-row" onClick={() => navigate("history")}><span><History size={19} /></span><div><strong>Histórico da propriedade</strong><small>Tarefas, rebanho, produção e monitoramentos</small></div><ChevronRight size={18} /></button>
