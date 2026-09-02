@@ -1,27 +1,18 @@
-/* Ajustes finais mobile: barra inferior limpa, transições discretas e logout compacto. */
+/* Ajustes mobile que não interferem na bottom navigation atual. */
 
 @media (max-width: 899px) {
-  /* Remove a linha/barra escura acima da bottom bar. */
-  .hydra-root .phone-app .bottom-nav.bottom-nav {
-    border-top: 0 !important;
+  .hydra-root .phone-app .app-content {
+    border-bottom: 0 !important;
     box-shadow: none !important;
   }
 
-  .hydra-root .phone-app .bottom-nav.bottom-nav::before,
-  .hydra-root .phone-app .bottom-nav.bottom-nav::after,
   .hydra-root .phone-app .app-content::before,
   .hydra-root .phone-app .app-content::after {
     content: none !important;
     display: none !important;
   }
 
-  .hydra-root .phone-app .app-content {
-    border-bottom: 0 !important;
-    box-shadow: none !important;
-  }
-
-  /* Remove as duas animações vistas na gravação: slide da tela e pop da bottom bar.
-     O Perfil mantém as animações próprias definidas em profile-entry-motion/final-ui-polish. */
+  /* Troca de telas estável. O Perfil mantém seu motion próprio. */
   .hydra-root .phone-app .app-content.route-motion-forward > .screen.page-enter:not(.profile-screen),
   .hydra-root .phone-app .app-content.route-motion-back > .screen.page-enter:not(.profile-screen) {
     animation: none !important;
@@ -30,22 +21,7 @@
     will-change: auto !important;
   }
 
-  .hydra-root .phone-app .bottom-nav > button.active > span:first-of-type,
-  .hydra-root .phone-app .bottom-nav > button.is-tapped > span:first-of-type,
-  .hydra-root .phone-app .bottom-nav > button.active.nav-nfc > span:first-of-type,
-  .hydra-root .phone-app .bottom-nav > button.is-tapped.nav-nfc > span:first-of-type {
-    animation: none !important;
-  }
-
-  .hydra-root .phone-app .bottom-nav > button:not(.nav-nfc) > span:first-of-type {
-    transform: none !important;
-  }
-
-  .hydra-root .phone-app .bottom-nav > button.nav-nfc > span:first-of-type {
-    transform: translateY(-9px) !important;
-  }
-
-  /* Confirmação de logout mais curta, sem o bloco vazio embaixo. */
+  /* Confirmação de logout compacta. */
   .hydra-root .modal-layer:has(.modal-sheet.modal-centered .confirm-action) {
     align-items: center !important;
     justify-content: center !important;
