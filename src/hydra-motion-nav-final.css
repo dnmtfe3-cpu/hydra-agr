@@ -1,6 +1,7 @@
 @import "./features/profile/profile-dribbble-reference-v2.css";
 @import "./features/profile/profile-app-polish-v3.css";
 @import "./hydra-reference-detail-polish.css";
+@import "./features/profile/profile-menu-cleanup.css";
 
 /* Hydra Agro — motion final. A geometria da bottom bar pertence somente a bottom-nav-dribbble-reference.css. */
 @keyframes hydraRouteForwardFinal { from { opacity:0; transform:translate3d(18px,0,0) scale(.995) } to { opacity:1; transform:translate3d(0,0,0) scale(1) } }
@@ -53,11 +54,6 @@ html body #root .hydra-root:not(.theme-dark) .community-screen .screen-heading p
   width:100%!important;
   max-width:260px!important;
   white-space:normal!important;
-}
-
-/* Aparência foi removida do Perfil; o tema salvo continua sendo respeitado. */
-html body #root .hydra-root .profile-settings-sheet > .profile-menu-card:first-child > .profile-menu-row:first-child {
-  display:none!important;
 }
 
 @media (prefers-reduced-motion:reduce) {
