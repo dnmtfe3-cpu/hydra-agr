@@ -67,7 +67,7 @@ describe("autenticação", () => {
     await waitFor(() => expect(authEmailMocks.requestLoginCode).toHaveBeenCalledWith("produtor@example.com"));
     const code = await screen.findByPlaceholderText("000000");
     fireEvent.change(code, { target: { value: "123456" } });
-    fireEvent.click(screen.getByRole("button", { name: /confirmar código/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^confirmar$/i }));
     await waitFor(() => expect(authEmailMocks.verifyLoginCode).toHaveBeenCalledWith("produtor@example.com", "123456"));
   });
 
