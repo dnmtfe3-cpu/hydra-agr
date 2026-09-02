@@ -1,29 +1,29 @@
-/* Hydra Agro — sincronização final da cor de marca.
- * Existe um único verde saturado na interface: o mesmo da splash (#174C36).
- * Os antigos verdes claros viram neutros; Hydra Tag/NFC preserva o laranja próprio.
+/* Compatibilidade final com CSS legado.
+ * Os componentes antigos continuam usando os nomes de variáveis existentes,
+ * mas todos apontam para os tokens oficiais definidos em hydra-design-system-final.css.
  */
 html body #root .hydra-root {
-  --hydra-green: #174c36 !important;
-  --hydra-green-deep: #174c36 !important;
-  --hydra-green-dark: #174c36 !important;
-  --ref-green: #174c36 !important;
-  --ref-green-deep: #174c36 !important;
-  --ref-green-dark: #174c36 !important;
-  --ha-green-950: #174c36 !important;
-  --ha-green-900: #174c36 !important;
-  --ha-green-800: #174c36 !important;
-  --ha-green-700: #174c36 !important;
-  --ha-green-600: #174c36 !important;
-  --forest-950: #174c36 !important;
-  --forest-900: #174c36 !important;
-  --forest-800: #174c36 !important;
-  --forest-700: #174c36 !important;
-  --forest-600: #174c36 !important;
-  --hf-green: #174c36 !important;
-  --hf-green-deep: #174c36 !important;
-  --brand-green: #174c36 !important;
-  --accent-green: #174c36 !important;
-  --sage: #174c36 !important;
+  --hydra-green: #0B5136 !important;
+  --hydra-green-deep: #073D2A !important;
+  --hydra-green-dark: #073D2A !important;
+  --ref-green: #0B5136 !important;
+  --ref-green-deep: #073D2A !important;
+  --ref-green-dark: #073D2A !important;
+  --ha-green-950: #073D2A !important;
+  --ha-green-900: #073D2A !important;
+  --ha-green-800: #0B5136 !important;
+  --ha-green-700: #0B5136 !important;
+  --ha-green-600: #0B5136 !important;
+  --forest-950: #073D2A !important;
+  --forest-900: #073D2A !important;
+  --forest-800: #0B5136 !important;
+  --forest-700: #0B5136 !important;
+  --forest-600: #0B5136 !important;
+  --hf-green: #0B5136 !important;
+  --hf-green-deep: #073D2A !important;
+  --brand-green: #0B5136 !important;
+  --accent-green: #0B5136 !important;
+  --sage: #0B5136 !important;
   --hydra-green-soft: #f0f2ef !important;
   --ref-green-soft: #f0f2ef !important;
   --ref-green-pale: #f5f6f4 !important;
@@ -35,17 +35,17 @@ html body #root .hydra-root {
 
 html.hydra-splash-active body #root .hydra-root .splash-screen,
 html body #root .hydra-root .splash-screen {
-  background: #174c36 !important;
-  background-color: #174c36 !important;
+  background: #0B5136 !important;
+  background-color: #0B5136 !important;
   background-image: none !important;
 }
 
 html body #root .hydra-root:not(.theme-dark) .home-screen {
   background: linear-gradient(to bottom,
-    #174c36 0,
-    #174c36 max(365px, calc(342px + env(safe-area-inset-top))),
-    #f3f4f1 max(365px, calc(342px + env(safe-area-inset-top))),
-    #f3f4f1 100%) !important;
+    #0B5136 0,
+    #0B5136 max(365px, calc(342px + env(safe-area-inset-top))),
+    #FAF8F1 max(365px, calc(342px + env(safe-area-inset-top))),
+    #FAF8F1 100%) !important;
 }
 
 html body #root .hydra-root:not(.theme-dark) :is(
@@ -57,8 +57,8 @@ html body #root .hydra-root:not(.theme-dark) :is(
   .state-readonly > span,.herd-care-launch > span,.progress-fill,
   .xp-progress > *,.challenge-progress > *,.progress-track > *
 ) {
-  border-color: #174c36 !important;
-  background-color: #174c36 !important;
+  border-color: #0B5136 !important;
+  background-color: #0B5136 !important;
   background-image: none !important;
 }
 
@@ -67,71 +67,44 @@ html body #root .hydra-root:not(.theme-dark) :is(
   .section-heading a,.screen-heading .eyebrow:not(.orange),.group-label,.property-kicker,
   .profile-menu-icon,.setting-icon,.home-profile-avatar,.home-farm-xp strong,.animal-code,
   .filter-button,.municipality-pin,.municipality-chevron,.status-ok,.green-soft,.soft-green
-) {
-  color: #174c36 !important;
-}
+) { color: #0B5136 !important; }
 
 html body #root .hydra-root:not(.theme-dark) .home-profile-avatar {
   color: #fff !important;
-  background: #174c36 !important;
+  background: #0B5136 !important;
 }
 
 html body #root .hydra-root:not(.theme-dark) :is(
   .animal-avatar:not(.image),.home-feature-media:not(:has(img)),.profile-avatar:not(.image),
   .plan-mark,.profile-social-tabs button.active
 ) {
-  color: #174c36 !important;
+  color: #0B5136 !important;
   background-color: #f0f2ef !important;
 }
 
-html body #root .hydra-root:not(.theme-dark) .profile-screen > .profile-hero {
-  background-color: #174c36 !important;
-}
-
-html body #root .hydra-root:not(.theme-dark) :is(button,a,input,textarea,select):focus-visible {
-  outline-color: rgba(23, 76, 54, .25) !important;
-}
+html body #root .hydra-root:not(.theme-dark) .profile-screen > .profile-hero { background-color: #0B5136 !important; }
+html body #root .hydra-root:not(.theme-dark) :is(button,a,input,textarea,select):focus-visible { outline-color: rgba(11,81,54,.25) !important; }
 html body #root .hydra-root:not(.theme-dark) :is(input,textarea,select):focus {
-  border-color: rgba(23, 76, 54, .46) !important;
-  box-shadow: 0 0 0 3px rgba(23,76,54,.08) !important;
+  border-color: rgba(11,81,54,.46) !important;
+  box-shadow: 0 0 0 3px rgba(11,81,54,.08) !important;
 }
 
 html body #root .hydra-root:not(.theme-dark) :is(
   .home-farm-xp strong,.home-spreadsheet-card > span:first-child,.herd-care-launch > span,
   .municipality-options > button.selected,.municipality-options > button > svg
-) {
-  color: #174c36 !important;
-}
-html body #root .hydra-root:not(.theme-dark) .herd-care-launch > span {
-  background: #174c36 !important;
-  color: #fff !important;
-}
+) { color: #0B5136 !important; }
+html body #root .hydra-root:not(.theme-dark) .herd-care-launch > span { background: #0B5136 !important; color: #fff !important; }
+html body #root .hydra-root:not(.theme-dark) :is(.tab-button.active,.segmented-control button.active,.tabs button.active,.filter-chips button.active) { border-color: #0B5136 !important; }
 
-html body #root .hydra-root:not(.theme-dark) :is(
-  .tab-button.active,.segmented-control button.active,.tabs button.active,.filter-chips button.active
-) {
-  border-color: #174c36 !important;
-}
-
-/* Clima: remove azul/verde alternativo. Chuva mantém o amarelo/laranja da identidade. */
-html body #root .hydra-root:not(.theme-dark) .climate-card-metrics > div strong {
-  color: #174c36 !important;
-}
-html body #root .hydra-root:not(.theme-dark) .climate-card-metrics > div:nth-child(2) strong {
-  color: #c97818 !important;
-}
+html body #root .hydra-root:not(.theme-dark) .climate-card-metrics > div strong { color: #0B5136 !important; }
+html body #root .hydra-root:not(.theme-dark) .climate-card-metrics > div:nth-child(2) strong { color: #FF8A12 !important; }
 html body #root .hydra-root:not(.theme-dark) .weather-metric > span,
 html body #root .hydra-root:not(.theme-dark) .weather-metric strong,
-html body #root .hydra-root:not(.theme-dark) .weather-source svg {
-  color: #174c36 !important;
-}
+html body #root .hydra-root:not(.theme-dark) .weather-source svg { color: #0B5136 !important; }
 
-/* Fundos de ícones/estados suaves são neutros, não um segundo verde. */
 html body #root .hydra-root:not(.theme-dark) :is(
   .profile-menu-icon,.setting-icon,.home-spreadsheet-card > span:first-child,
   .animal-avatar:not(.image),.plan-mark
-) {
-  background-color: #f0f2ef !important;
-}
+) { background-color: #f0f2ef !important; }
 
-/* Hydra Tag/NFC segue com o laranja da identidade e fica fora desta troca. */
+/* Hydra Tag/NFC mantém #FF8A12 como acento funcional. */
