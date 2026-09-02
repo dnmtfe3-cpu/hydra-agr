@@ -1,0 +1,335 @@
+/* Hydra Agro — acabamento estrutural inspirado na referência agrícola enviada.
+   Só apresentação: bordas, raios, superfícies, espaçamento, botões e hierarquia visual. */
+
+html body #root .hydra-root:not(.theme-dark) {
+  --hydra-ref-bg: #f3f4f1;
+  --hydra-ref-card: #ffffff;
+  --hydra-ref-soft: #f7f8f5;
+  --hydra-ref-line: #e4e7e3;
+  --hydra-ref-line-strong: #d9ddd8;
+  --hydra-ref-text: #171c19;
+  --hydra-ref-muted: #7d847f;
+  --hydra-ref-green: #174c36;
+  --hydra-ref-radius-xl: 26px;
+  --hydra-ref-radius-lg: 22px;
+  --hydra-ref-radius-md: 16px;
+  --hydra-ref-radius-sm: 13px;
+}
+
+/* Canvas claro e consistente. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .phone-app,
+  .app-content,
+  .screen:not(.home-screen)
+) {
+  background-color: var(--hydra-ref-bg) !important;
+}
+
+/* Cards: mesma borda fina e mesmo raio da referência. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .content-section,
+  .property-section-card,
+  .task-card,
+  .setting-card,
+  .animal-card,
+  .sector-card,
+  .monitoring-card,
+  .activity-card,
+  .challenge-card,
+  .post-card,
+  .community-composer,
+  .history-home-row,
+  .first-action-card,
+  .nfc-inline-card,
+  .nfc-manual-card,
+  .plan-card,
+  .today-card,
+  .today-section,
+  .water-card,
+  .staff-card,
+  .herd-care-launch,
+  .herd-plus-lock,
+  .home-feature-card,
+  .home-spreadsheet-card,
+  .admin-metric-grid article,
+  .moderation-list article,
+  .notification-list > div,
+  .profile-menu-card,
+  .preference-options,
+  .legal-sections section,
+  .compact-list
+) {
+  border: 1px solid var(--hydra-ref-line) !important;
+  border-radius: var(--hydra-ref-radius-lg) !important;
+  background-color: var(--hydra-ref-card) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Cards grandes com mídia ou conteúdo principal ganham raio maior. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .post-card,
+  .home-feature-card,
+  .property-hero,
+  .profile-hero,
+  .weather-current,
+  .monitor-overview,
+  .today-hero,
+  .operations-hero,
+  .water-overview,
+  .challenge-hero,
+  .ranking-hero
+) {
+  border-radius: var(--hydra-ref-radius-xl) !important;
+  overflow: hidden !important;
+}
+
+/* Blocos verdes principais: uma cor só, sem gradiente competindo com a splash. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .weather-current,
+  .monitor-overview,
+  .today-hero,
+  .operations-hero,
+  .water-overview,
+  .challenge-hero,
+  .ranking-hero,
+  .home-green-hero
+) {
+  border: 1px solid rgba(23,76,54,.12) !important;
+  border-radius: var(--hydra-ref-radius-xl) !important;
+  background: var(--hydra-ref-green) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Headers limpos e botões circulares como a referência. */
+html body #root .hydra-root:not(.theme-dark) .screen-header {
+  margin-bottom: 18px !important;
+}
+html body #root .hydra-root:not(.theme-dark) .screen-header-row {
+  min-height: 48px !important;
+  align-items: center !important;
+}
+html body #root .hydra-root:not(.theme-dark) .screen-header .icon-button,
+html body #root .hydra-root:not(.theme-dark) .community-tools > button {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  padding: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1px solid var(--hydra-ref-line) !important;
+  border-radius: 50% !important;
+  color: var(--hydra-ref-text) !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) .screen-header .icon-button.accent,
+html body #root .hydra-root:not(.theme-dark) .community-tools > button.accent {
+  color: #fff !important;
+  border-color: var(--hydra-ref-green) !important;
+  background: var(--hydra-ref-green) !important;
+}
+
+/* Títulos/labels com o mesmo ritmo visual. */
+html body #root .hydra-root:not(.theme-dark) .section-heading {
+  margin: 22px 2px 10px !important;
+}
+html body #root .hydra-root:not(.theme-dark) .section-heading h2,
+html body #root .hydra-root:not(.theme-dark) .home-section-title h2 {
+  color: var(--hydra-ref-text) !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  letter-spacing: -.025em !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(.group-label,.property-kicker,.eyebrow) {
+  font-size: 8px !important;
+  font-weight: 500 !important;
+  letter-spacing: .09em !important;
+}
+
+/* Botões principais em pill, como Add New Note / Add To Cart da referência. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .primary-button,
+  .action-primary,
+  .small-button,
+  .wide-outline-button,
+  .upload-button,
+  .logout-button,
+  .modal-action-row > button,
+  .plan-card > button,
+  .empty-action > button
+) {
+  min-height: 44px !important;
+  padding-left: 17px !important;
+  padding-right: 17px !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(.primary-button,.action-primary,.small-button) {
+  border-color: var(--hydra-ref-green) !important;
+  color: #fff !important;
+  background: var(--hydra-ref-green) !important;
+  background-image: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(.secondary-button,.wide-outline-button,.upload-button,.logout-button) {
+  border: 1px solid var(--hydra-ref-line) !important;
+  color: var(--hydra-ref-text) !important;
+  background: #fff !important;
+  background-image: none !important;
+}
+
+/* Inputs e busca: branco, borda fina e raio consistente. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select,
+  .search-box
+) {
+  min-height: 46px !important;
+  border: 1px solid var(--hydra-ref-line) !important;
+  border-radius: var(--hydra-ref-radius-md) !important;
+  color: var(--hydra-ref-text) !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) textarea {
+  min-height: 108px !important;
+  padding: 13px 14px !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(input,textarea,select)::placeholder {
+  color: #9aa09c !important;
+}
+
+/* Controles segmentados/chips na mesma linguagem da referência. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .segmented-control,
+  .community-tabs,
+  .herd-view-tabs,
+  .profile-social-tabs
+) {
+  border: 1px solid var(--hydra-ref-line) !important;
+  border-radius: 18px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(
+  .segmented-control button,
+  .community-tabs button,
+  .herd-view-tabs button,
+  .filter-chips button
+) {
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+/* Linhas/listas lembram a tela de notas: thumb + texto + ação. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .compact-row,
+  .profile-menu-row,
+  .setting-row,
+  .notification-row,
+  .today-note-row,
+  .history-row
+) {
+  min-height: 58px !important;
+  border-bottom: 1px solid #edf0ec !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(
+  .compact-row:last-child,
+  .profile-menu-row:last-child,
+  .setting-row:last-child,
+  .notification-row:last-child,
+  .today-note-row:last-child,
+  .history-row:last-child
+) {
+  border-bottom: 0 !important;
+}
+
+/* Miniaturas/fotos encaixadas como na referência. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .animal-avatar,
+  .sector-photo,
+  .monitoring-photo,
+  .activity-photo,
+  .history-thumb,
+  .note-thumb,
+  .post-card > header > img,
+  .community-composer > img
+) {
+  object-fit: cover !important;
+  border-radius: 15px !important;
+  overflow: hidden !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(
+  .post-card > header > img,
+  .community-composer > img
+) {
+  border-radius: 50% !important;
+}
+
+/* Fotos grandes não encostam duras na borda do conteúdo. */
+html body #root .hydra-root:not(.theme-dark) :is(
+  .post-image,
+  .detail-photo,
+  .property-photo,
+  .animal-detail-photo,
+  .monitor-photo
+) {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  object-fit: cover !important;
+}
+
+/* Weather/hoje: separação interna clara como a terceira tela da referência. */
+html body #root .hydra-root:not(.theme-dark) .weather-current {
+  min-height: 148px !important;
+  padding: 18px !important;
+}
+html body #root .hydra-root:not(.theme-dark) .weather-current-icon {
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.10) !important;
+}
+html body #root .hydra-root:not(.theme-dark) :is(.weather-metric,.climate-chip) {
+  border-radius: 14px !important;
+}
+
+/* Modais e sheets com o mesmo acabamento de card. */
+html body #root .hydra-root:not(.theme-dark) :is(.modal-sheet,.quick-sheet,.theme-dialog) {
+  border: 1px solid var(--hydra-ref-line) !important;
+  border-radius: 26px !important;
+  background: #fff !important;
+  box-shadow: 0 14px 34px rgba(26,45,35,.10) !important;
+}
+html body #root .hydra-root:not(.theme-dark) .modal-head {
+  border-bottom: 1px solid #eef0ed !important;
+}
+
+/* Home: cards destacados com borda e raio iguais ao resto. */
+html body #root .hydra-root:not(.theme-dark) .home-feature-grid {
+  gap: 10px !important;
+}
+html body #root .hydra-root:not(.theme-dark) .home-feature-card {
+  border: 1px solid var(--hydra-ref-line) !important;
+  border-radius: 22px !important;
+  background: #fff !important;
+}
+html body #root .hydra-root:not(.theme-dark) .home-feature-media {
+  overflow: hidden !important;
+}
+
+/* Bottom bar recebe a mesma linha fina das superfícies da referência. */
+html body #root .hydra-root:not(.theme-dark) .bottom-nav.bottom-nav {
+  border: 1px solid rgba(23,76,54,.08) !important;
+  box-shadow: 0 10px 28px rgba(24,48,37,.09) !important;
+}
+
+@media (max-width: 360px) {
+  html body #root .hydra-root:not(.theme-dark) {
+    --hydra-ref-radius-xl: 24px;
+    --hydra-ref-radius-lg: 20px;
+  }
+}
