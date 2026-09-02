@@ -1,4 +1,4 @@
-/* Splash final: centralizada no viewport real e sem moldura verde na transição. */
+/* Splash final: centralizada no viewport real e com a identidade verde original do Hydra Agro. */
 html.hydra-splash-active,
 html.hydra-splash-active body,
 html.hydra-splash-active body #root {
@@ -7,8 +7,8 @@ html.hydra-splash-active body #root {
   height: 100% !important;
   min-height: 100dvh !important;
   margin: 0 !important;
-  background: #09271b !important;
-  background-color: #09271b !important;
+  background: #174c36 !important;
+  background-color: #174c36 !important;
   background-image: none !important;
   overflow: hidden !important;
   overscroll-behavior: none !important;
@@ -41,8 +41,8 @@ html.hydra-splash-active body .splash-screen {
   align-items: center !important;
   justify-content: center !important;
   overflow: hidden !important;
-  background: #09271b !important;
-  background-color: #09271b !important;
+  background: #174c36 !important;
+  background-color: #174c36 !important;
   background-image: none !important;
   pointer-events: all !important;
   touch-action: none !important;
@@ -56,7 +56,7 @@ html.hydra-splash-active body .splash-screen > * {
   transform-origin: center center !important;
 }
 
-/* Fora da splash, as safe areas acompanham o tema do app e não ficam verdes. */
+/* Fora da splash, as safe areas acompanham o tema do app. */
 html:not(.hydra-splash-active):has(.hydra-root.theme-light),
 html:not(.hydra-splash-active):has(.hydra-root.theme-light) body,
 html:not(.hydra-splash-active):has(.hydra-root.theme-light) body #root {
