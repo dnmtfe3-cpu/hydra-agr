@@ -1,0 +1,26 @@
+/* Gestão rápida: atalhos brancos com ícones neutros. NFC não é afetado. */
+html body #root .hydra-root:not(.theme-dark) .home-screen .home-shortcuts-five > button,
+html body #root .hydra-root:not(.theme-dark) .home-screen .shortcut-row > button {
+  color: #343a36 !important;
+  background: #fff !important;
+  background-image: none !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .home-screen .home-shortcuts-five > button > span,
+html body #root .hydra-root:not(.theme-dark) .home-screen .shortcut-row > button > span:not(.touch-ripple),
+html body #root .hydra-root:not(.theme-dark) .home-screen .home-shortcuts-five > button > span > svg,
+html body #root .hydra-root:not(.theme-dark) .home-screen .shortcut-row > button > span:not(.touch-ripple) > svg {
+  color: #3d433f !important;
+  stroke: #3d433f !important;
+  fill: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+html body #root .hydra-root:not(.theme-dark) .home-screen .home-shortcuts-five > button small,
+html body #root .hydra-root:not(.theme-dark) .home-screen .shortcut-row > button small {
+  color: #343a36 !important;
+}
