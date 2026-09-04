@@ -27,6 +27,7 @@ import "./mobile-typography-compact.css";
 import "./bottom-nav-final-runtime";
 import "./admin-panel-runtime";
 import "./interaction-motion-runtime";
+import "./admin-user-data-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
