@@ -1,20 +1,20 @@
 /* Splash: uma única sequência de animação para evitar cortes e conflitos de estilos antigos. */
 html body #root .hydra-root .splash-screen {
-  animation: hydra-splash-screen-stable 3.15s cubic-bezier(.4, 0, .2, 1) both !important;
+  animation: hydra-splash-screen-stable 2.8s cubic-bezier(.4, 0, .2, 1) both !important;
 }
 
 html body #root .hydra-root .splash-expansion {
   opacity: 0;
   transform: scale(.78);
   will-change: transform, opacity;
-  animation: hydra-splash-expansion-stable 3.15s cubic-bezier(.65, 0, .22, 1) both !important;
+  animation: hydra-splash-expansion-stable 2.8s cubic-bezier(.65, 0, .22, 1) both !important;
 }
 
 html body #root .hydra-root .splash-mark-wrap {
   opacity: 0;
   transform: scale(.82);
   will-change: transform, opacity;
-  animation: hydra-splash-mark-stable 3.15s cubic-bezier(.65, 0, .22, 1) both !important;
+  animation: hydra-splash-mark-stable 2.8s cubic-bezier(.65, 0, .22, 1) both !important;
 }
 
 html body #root .hydra-root .splash-mark {
