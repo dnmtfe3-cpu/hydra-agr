@@ -1,0 +1,438 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+.hydra-root .figma-auth {
+  --figma-green: #2e7d32;
+  --figma-soft: #f1f4ff;
+  position: relative;
+  width: min(100%, 428px);
+  min-height: 100dvh;
+  margin: 0 auto;
+  overflow: hidden;
+  color: #0a0a0a;
+  background: #fff;
+  font-family: 'Poppins', Manrope, system-ui, sans-serif;
+}
+
+.hydra-root .figma-auth button,
+.hydra-root .figma-auth input {
+  font: inherit;
+}
+
+.hydra-root .figma-shape,
+.hydra-root .figma-square {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hydra-root .figma-shape {
+  border-radius: 50%;
+  background: #f7f8ff;
+}
+
+.hydra-root .figma-shape-top-a {
+  width: 496px;
+  height: 496px;
+  left: 57px;
+  top: -142px;
+  border: 2px solid #f1f4ff;
+  background: rgba(247, 248, 255, .74);
+}
+
+.hydra-root .figma-shape-top-b {
+  width: 635px;
+  height: 635px;
+  left: 148px;
+  top: -327px;
+  border: 2px solid #f1f4ff;
+  background: rgba(247, 248, 255, .5);
+}
+
+.hydra-root .figma-square {
+  width: 372px;
+  height: 372px;
+  border: 2px solid #f1f4ff;
+  background: transparent;
+}
+
+.hydra-root .figma-square-a {
+  left: -265px;
+  top: 684px;
+}
+
+.hydra-root .figma-square-b {
+  left: -154px;
+  top: 625px;
+  transform: rotate(27.09deg);
+}
+
+.hydra-root .figma-welcome-art,
+.hydra-root .figma-welcome-copy,
+.hydra-root .figma-welcome-actions,
+.hydra-root .figma-form-header,
+.hydra-root .figma-form,
+.hydra-root .figma-extra-card,
+.hydra-root .figma-back {
+  position: relative;
+  z-index: 2;
+}
+
+.hydra-root .figma-auth-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hydra-root .figma-welcome-art {
+  width: min(90%, 385px);
+  height: 422px;
+  margin-top: max(30px, calc(env(safe-area-inset-top) + 24px));
+  display: grid;
+  place-items: center;
+}
+
+.hydra-root .figma-welcome-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hydra-root .figma-welcome-copy {
+  width: min(80%, 343px);
+  margin-top: 24px;
+  text-align: center;
+}
+
+.hydra-root .figma-welcome-copy h1 {
+  margin: 0;
+  color: var(--figma-green);
+  font-size: 35px;
+  line-height: 1.52;
+  letter-spacing: -.035em;
+  font-weight: 600;
+}
+
+.hydra-root .figma-welcome-copy p {
+  width: min(100%, 323px);
+  margin: 12px auto 0;
+  color: #000;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.hydra-root .figma-welcome-actions {
+  width: min(calc(100% - 78px), 350px);
+  margin-top: auto;
+  margin-bottom: max(88px, calc(env(safe-area-inset-bottom) + 36px));
+  display: flex;
+  gap: 30px;
+}
+
+.hydra-root .figma-primary,
+.hydra-root .figma-plain {
+  border: 0;
+  border-radius: 10px;
+  min-height: 60px;
+  padding: 15px 20px;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.hydra-root .figma-primary {
+  color: #fff;
+  background: var(--figma-green);
+  box-shadow: 0 10px 10px #cbd6ff;
+}
+
+.hydra-root .figma-primary:disabled {
+  opacity: .65;
+  cursor: default;
+}
+
+.hydra-root .figma-plain {
+  color: #0a0a0a;
+  background: #fff;
+}
+
+.hydra-root .figma-half {
+  width: 160px;
+}
+
+.hydra-root .figma-full {
+  width: 100%;
+}
+
+.hydra-root .figma-auth-form {
+  padding: max(20px, env(safe-area-inset-top)) 31px max(28px, env(safe-area-inset-bottom));
+}
+
+.hydra-root .figma-back {
+  position: absolute;
+  left: 22px;
+  top: max(22px, calc(env(safe-area-inset-top) + 10px));
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--figma-green);
+  background: rgba(255,255,255,.84);
+}
+
+.hydra-root .figma-form-header {
+  margin-top: 70px;
+  text-align: center;
+}
+
+.hydra-root .figma-form-header h1 {
+  margin: 0;
+  color: var(--figma-green);
+  font-size: 30px;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: -.025em;
+}
+
+.hydra-root .figma-form-header p {
+  margin: 18px 0 0;
+  color: #000;
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.hydra-root .figma-register-header {
+  margin-top: 54px;
+}
+
+.hydra-root .figma-register-header h1 {
+  max-width: 419px;
+  margin-inline: auto;
+}
+
+.hydra-root .figma-form {
+  width: 100%;
+  margin-top: 104px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.hydra-root .figma-register-form {
+  margin-top: 44px;
+  gap: 26px;
+}
+
+.hydra-root .figma-input {
+  width: 100%;
+  min-height: 64px;
+  border: 0;
+  border-radius: 10px;
+  padding: 20px;
+  outline: none;
+  color: #252525;
+  background: var(--figma-soft);
+  font-size: 16px;
+  font-weight: 500;
+  box-sizing: border-box;
+}
+
+.hydra-root .figma-input::placeholder {
+  color: #626262;
+  opacity: 1;
+}
+
+.hydra-root .figma-input.is-active,
+.hydra-root .figma-input:focus {
+  border: 2px solid var(--figma-green);
+  padding: 18px;
+}
+
+.hydra-root .figma-password-wrap {
+  position: relative;
+  margin-top: 29px;
+}
+
+.hydra-root .figma-password-wrap .figma-input {
+  padding-right: 48px;
+}
+
+.hydra-root .figma-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  color: #626262;
+  background: transparent;
+}
+
+.hydra-root .figma-forgot {
+  align-self: flex-end;
+  margin-top: 29px;
+  border: 0;
+  padding: 0;
+  color: var(--figma-green);
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.hydra-root .figma-form > .figma-primary {
+  margin-top: 31px;
+}
+
+.hydra-root .figma-register-form > .figma-primary {
+  margin-top: 27px;
+}
+
+.hydra-root .figma-account-switch,
+.hydra-root .figma-staff-link {
+  border: 0;
+  padding: 0;
+  color: #494949;
+  background: transparent;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.hydra-root .figma-account-switch {
+  margin-top: 30px;
+}
+
+.hydra-root .figma-register-form .figma-account-switch {
+  margin-top: 0;
+}
+
+.hydra-root .figma-staff-link {
+  margin-top: 20px;
+  color: #777;
+  font-size: 11px;
+}
+
+.hydra-root .figma-error,
+.hydra-root .figma-notice {
+  margin: 12px 0 -12px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.hydra-root .figma-error { color: #b7473e; }
+.hydra-root .figma-notice { color: var(--figma-green); }
+
+.hydra-root .figma-auth-extra {
+  display: grid;
+  place-items: center;
+}
+
+.hydra-root .figma-extra-card {
+  width: min(100%, 357px);
+  padding-top: 42px;
+  text-align: center;
+}
+
+.hydra-root .figma-extra-wide {
+  padding-top: 80px;
+}
+
+.hydra-root .figma-extra-icon {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 16px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: var(--figma-green);
+  background: var(--figma-soft);
+}
+
+.hydra-root .figma-extra-card h1 {
+  margin: 0;
+  color: var(--figma-green);
+  font-size: 30px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.hydra-root .figma-extra-card > p {
+  margin: 12px auto 26px;
+  color: #494949;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.hydra-root .figma-extra-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: left;
+}
+
+.hydra-root .figma-extra-card .field input,
+.hydra-root .figma-extra-card .field select {
+  min-height: 58px;
+  border-radius: 10px;
+  background: var(--figma-soft);
+}
+
+.hydra-root .figma-code {
+  text-align: center;
+  letter-spacing: .28em;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.hydra-root .figma-staff-code {
+  text-align: center;
+  letter-spacing: .04em;
+}
+
+@media (max-height: 820px) {
+  .hydra-root .figma-welcome-art { height: 355px; margin-top: 22px; }
+  .hydra-root .figma-welcome-copy { margin-top: 8px; }
+  .hydra-root .figma-welcome-copy h1 { font-size: 31px; line-height: 1.35; }
+  .hydra-root .figma-welcome-actions { margin-bottom: 34px; }
+  .hydra-root .figma-form-header { margin-top: 56px; }
+  .hydra-root .figma-form { margin-top: 70px; }
+  .hydra-root .figma-register-form { margin-top: 34px; }
+}
+
+@media (min-width: 520px) {
+  .hydra-root .figma-auth {
+    min-height: min(926px, 100dvh);
+    margin-top: max(0px, calc((100dvh - 926px) / 2));
+    border-radius: 50px;
+    box-shadow: 0 26px 70px rgba(23, 56, 41, .12);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hydra-root .figma-welcome-art,
+  .hydra-root .figma-form-header,
+  .hydra-root .figma-form,
+  .hydra-root .figma-extra-card {
+    animation: figma-auth-in .32s ease both;
+  }
+
+  .hydra-root .figma-primary:active,
+  .hydra-root .figma-plain:active {
+    transform: scale(.985);
+  }
+}
+
+@keyframes figma-auth-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
