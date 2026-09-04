@@ -246,10 +246,10 @@ const css = String.raw`
 
 @media (max-width: 420px) {
   .admin-user-detail .admin-user-summary-grid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
   }
   .admin-user-detail .admin-user-usage {
-    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    grid-template-columns: repeat(4,minmax(0,1fr)) !important;
   }
 }
 `;
@@ -260,3 +260,5 @@ const style = document.createElement("style");
 style.id = styleId;
 style.textContent = css;
 document.head.appendChild(style);
+
+export {};
