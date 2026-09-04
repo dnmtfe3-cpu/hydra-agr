@@ -1,0 +1,13 @@
+/* Ajustes visuais solicitados para a tela de acesso e ranking. */
+.hydra-root .auth-landing-mosaic {
+  display: none !important;
+}
+
+.hydra-root .auth-landing-shade {
+  background: linear-gradient(180deg, rgba(8, 39, 27, .08) 0%, rgba(8, 39, 27, .42) 46%, var(--forest-950) 78%);
+}
+
+.hydra-root .regional-ranking-current,
+.hydra-root .regional-ranking-list {
+  display: none !important;
+}
