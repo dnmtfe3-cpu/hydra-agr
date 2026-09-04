@@ -29,7 +29,6 @@ import "./bottom-nav-final-runtime";
 import "./admin-panel-runtime";
 import "./admin-user-management-polish-runtime";
 import "./interaction-motion-runtime";
-import "./admin-user-data-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
