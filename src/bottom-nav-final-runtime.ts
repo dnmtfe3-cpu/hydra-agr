@@ -43,8 +43,8 @@ const css = String.raw`
     border-radius: 22px 22px 0 0 !important;
     background: #fff !important;
     box-shadow: 0 -5px 18px rgba(28, 50, 39, .07) !important;
-    -webkit-mask: radial-gradient(circle 40px at 50% 0, transparent 39px, #000 40px) !important;
-    mask: radial-gradient(circle 40px at 50% 0, transparent 39px, #000 40px) !important;
+    -webkit-mask: radial-gradient(circle 38px at 50% -14px, transparent 37px, #000 38px) !important;
+    mask: radial-gradient(circle 38px at 50% -14px, transparent 37px, #000 38px) !important;
     pointer-events: none !important;
   }
 
