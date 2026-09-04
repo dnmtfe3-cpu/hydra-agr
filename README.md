@@ -37,9 +37,9 @@ em alguns momentos, versões do apk podem ser liberadas para testes antes de uma
 
 ## tecnologias
 
-por trás do projeto estão tecnologias como react, typescript, supabase e capacitor, além de apis externas e ferramentas do github.
+por trás do projeto estão react e typescript no frontend, python no backend, supabase para autenticação e dados, capacitor no aplicativo android e funções serverless hospedadas na vercel.
 
-a base é web, mas o hydra agro também está sendo preparado para funcionar como aplicativo android.
+essa divisão mantém as telas em react, onde typescript faz mais sentido, e usa python nas rotas de servidor que precisam validar sessão, aplicar limites de uso e conversar com serviços externos.
 
 ## onde acompanhar
 

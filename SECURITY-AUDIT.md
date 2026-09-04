@@ -25,7 +25,7 @@ O Advisor final do Supabase não aponta mais RPC privada `SECURITY DEFINER` disp
 
 ### ALTO — abuso do Hydra Assistente
 
-**CORRIGIDO.** `/api/hydra-assistant` exige sessão Supabase válida e limita 20 chamadas/minuto e 300/dia por usuário em armazenamento compartilhado no Postgres. Também possui limite de payload, métodos HTTP restritos, `no-store` e mensagens de erro seguras.
+**CORRIGIDO.** `/api/hydra-assistant` exige sessão Supabase válida e limita 20 chamadas/minuto e 300/dia por usuário em armazenamento compartilhado no Postgres. Também possui limite de payload, métodos HTTP restritos, `no-store` e mensagens de erro seguras. O endpoint foi migrado para Python e mantém o mesmo contrato HTTP usado pelo frontend.
 
 ### ALTO — RPCs internas expostas
 
@@ -122,10 +122,12 @@ Proteções atuais:
 ## Dependências / CI
 
 `.github/workflows/security-audit.yml` executa em push/PR e semanalmente:
-- `npm ci`;
+- `npm install`;
 - typecheck/lint;
 - testes;
 - build;
+- compilação do backend Python;
+- testes unitários Python;
 - `npm audit --audit-level=high`.
 
 O resultado do GitHub Actions é a fonte de verdade para vulnerabilidades de dependências, pois o ambiente local desta auditoria não possui acesso ao registry npm.
@@ -157,7 +159,8 @@ O resultado do GitHub Actions é a fonte de verdade para vulnerabilidades de dep
 ## Principais arquivos alterados
 
 - `vercel.json`
-- `api/hydra-assistant.js`
+- `api/hydra-assistant.py`
+- `api/python-health.py`
 - `src/services/supabase.ts`
 - `src/services/auth-email-service.ts`
 - `supabase/functions/auth-email/index.ts`
@@ -179,4 +182,4 @@ O resultado do GitHub Actions é a fonte de verdade para vulnerabilidades de dep
 
 ## Conclusão
 
-O Hydra Agro ficou significativamente mais resistente a brute force, replay de cadastro, abuso de API/custo, spam, IDOR, bypass de admin, vazamento por RLS, upload perigoso e uso indevido de funções privilegiadas. O projeto não deve ser descrito como “impossível de invadir”; segurança continua sendo um processo contínuo e precisa de monitoramento e atualização.
+O Hydra Agro ficou significativamente mais resistente a brute force, replay de cadastro, abuso de API/custo, spam, IDOR, bypass de admin, vazamento por RLS, upload perigoso e uso indevido de funções privilegiadas. O Hydra Assistente agora executa em backend Python na Vercel sem expor segredos no cliente. O projeto não deve ser descrito como “impossível de invadir”; segurança continua sendo um processo contínuo e precisa de monitoramento e atualização.
