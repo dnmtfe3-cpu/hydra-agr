@@ -34,6 +34,7 @@ function canStart(target: EventTarget | null) {
 
 function resetIndicator() {
   tracking = false;
+  refreshing = false;
   rawDistance = 0;
   indicator.classList.remove("is-visible", "is-refreshing");
   indicator.style.transform = "translate(-50%, -64px) scale(.96)";
@@ -59,9 +60,18 @@ function refreshPage() {
   indicator.style.transform = "translate(-50%, 0) scale(1)";
   label.textContent = "Atualizando";
 
+  const current = document.querySelector<HTMLElement>(".app-content");
+  const refreshButton = current?.querySelector<HTMLButtonElement>(
+    'button[aria-label*="Atualizar"], button[title*="Atualizar"], button[data-refresh="true"]',
+  );
+
+  window.dispatchEvent(new CustomEvent("hydra:refresh", { detail: { preservePage: true } }));
+  refreshButton?.click();
+
   window.setTimeout(() => {
-    window.location.reload();
-  }, 420);
+    label.textContent = "Atualizado";
+    window.setTimeout(resetIndicator, 260);
+  }, 520);
 }
 
 document.addEventListener("touchstart", (event) => {
