@@ -33,9 +33,12 @@ let users: AdminRuntimeUser[] | null = null;
 let selectedEmail = "";
 let loading: Promise<AdminRuntimeUser[]> | null = null;
 
+const TAB_KEY = "hydra.admin.tab";
+const SEARCH_KEY = "hydra.admin.search";
+
 const style = document.createElement("style");
 style.textContent = `
-.admin-screen{--admin-deep:#0f3727;--admin-green:#174c36;--admin-bright:#83ba5b;--admin-warm:#ff8712}.admin-screen .screen-header h1{letter-spacing:-.045em!important}.admin-owner-strip{position:relative!important;overflow:hidden!important;border:0!important;background:linear-gradient(135deg,#0f3727 0%,#174c36 72%,#286849 100%)!important;box-shadow:0 14px 32px rgba(15,55,39,.16)!important}.admin-owner-strip:after{content:"";position:absolute;width:120px;height:120px;right:-46px;top:-64px;border-radius:50%;background:rgba(255,255,255,.07);pointer-events:none}.admin-owner-strip>svg,.admin-owner-strip strong{color:#fff!important}.admin-owner-strip small{color:rgba(255,255,255,.68)!important}.admin-tabs button{border-color:rgba(23,76,54,.09)!important;background:rgba(255,255,255,.9)!important;box-shadow:0 5px 14px rgba(17,43,32,.045)!important;transition:transform .18s ease,box-shadow .18s ease!important}.admin-tabs button:active{transform:scale(.96)!important}.admin-tabs button.active{background:linear-gradient(135deg,#123e2c,#1d5b41)!important;box-shadow:0 8px 18px rgba(23,76,54,.19)!important}.admin-metric-grid article{border-color:rgba(23,76,54,.09)!important;background:linear-gradient(145deg,#fff,#fbfdfb)!important;box-shadow:0 9px 26px rgba(17,43,32,.055)!important}.admin-user-list>button{border-color:rgba(23,76,54,.09)!important;background:linear-gradient(145deg,#fff,#fafcfb)!important;box-shadow:0 8px 22px rgba(17,43,32,.05)!important;transition:transform .18s ease,box-shadow .18s ease!important}.admin-user-list>button:active{transform:scale(.985)!important}.admin-user-detail{gap:16px!important}.admin-user-identity{padding:17px!important;border:0!important;border-radius:22px!important;background:linear-gradient(135deg,#102f23,#174c36)!important;box-shadow:0 12px 30px rgba(15,55,39,.17)!important}.admin-user-identity strong{color:#fff!important}.admin-user-identity small{color:rgba(255,255,255,.64)!important}.admin-user-identity>span{background:rgba(255,255,255,.12)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)!important}.admin-runtime-details{display:grid;gap:14px}.admin-user-statusline{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-radius:16px;background:linear-gradient(135deg,#edf6f0,#f7faf8);border:1px solid #d8e9dc}.admin-user-statusline span{font-size:10px;color:#718078}.admin-user-statusline strong{font-size:11px;color:#174c36}.admin-user-statusline.is-blocked{background:#fff0ee;border-color:#f2d5d1}.admin-user-statusline.is-blocked strong{color:#b7473e}.admin-user-summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.admin-user-summary-grid article{min-width:0;padding:12px;border-radius:15px;background:linear-gradient(145deg,#fff,#fbfcfb);border:1px solid #e7ece8;box-shadow:0 6px 18px rgba(20,61,43,.04)}.admin-user-summary-grid small{display:block;margin-bottom:5px;font-size:8px;text-transform:uppercase;letter-spacing:.06em;color:#87928c}.admin-user-summary-grid strong{display:block;font-size:10px;line-height:1.35;color:#163d2d;overflow-wrap:anywhere}.admin-user-usage{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:13px;border-radius:18px;background:linear-gradient(135deg,#123e2d,#1b573d);color:#fff;box-shadow:0 10px 24px rgba(18,62,45,.15)}.admin-user-usage>div{text-align:center}.admin-user-usage strong{display:block;font-size:18px}.admin-user-usage small{font-size:8px;opacity:.72}.admin-danger-zone{padding:15px;border:1px solid #f0d0cc;border-radius:19px;background:linear-gradient(145deg,#fff9f8,#fff1ef)}.admin-danger-zone h4{margin:0 0 4px;color:#9f3f37;font-size:12px}.admin-danger-zone p{margin:0 0 12px;color:#8b6a66;font-size:9px;line-height:1.45}.admin-delete-account{width:100%;height:43px;border:1px solid rgba(183,71,62,.16);border-radius:13px;background:#fff;color:#a83e37;font-weight:850;font-size:10px;box-shadow:0 6px 16px rgba(183,71,62,.08)}.admin-delete-account:active{transform:scale(.98)}.admin-delete-overlay{position:fixed;inset:0;z-index:10000;display:grid;place-items:end center;padding:18px;background:rgba(4,20,14,.52);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:adminOverlayIn .18s ease both}.admin-delete-sheet{width:min(100%,520px);padding:20px;border-radius:26px;background:#fffefb;box-shadow:0 28px 80px rgba(0,0,0,.26);animation:adminSheetIn .24s cubic-bezier(.2,.85,.25,1) both}.admin-delete-sheet .icon{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:#fff0ee;color:#b7473e;font-size:24px}.admin-delete-sheet .danger-pill{display:inline-flex;margin-top:13px;padding:5px 8px;border-radius:999px;background:#fde8e5;color:#a33d36;font-size:8px;font-weight:900;letter-spacing:.07em}.admin-delete-sheet h3{margin:10px 0 6px;font-size:19px;color:#173b2d;letter-spacing:-.025em}.admin-delete-sheet p{margin:0;color:#728078;font-size:10px;line-height:1.5}.admin-delete-sheet strong{color:#173b2d}.admin-delete-target{margin:13px 0;padding:11px;border-radius:14px;background:#f4f7f5}.admin-delete-target strong,.admin-delete-target small{display:block}.admin-delete-target strong{font-size:11px}.admin-delete-target small{margin-top:3px;font-size:9px;color:#7d8882;overflow-wrap:anywhere}.admin-delete-label{display:grid;gap:6px;color:#69766f;font-size:9px;font-weight:750}.admin-delete-label input{width:100%;min-height:44px;padding:0 12px;border:1px solid rgba(183,71,62,.2);border-radius:12px;background:#fff;color:#173b2d;outline:none;font-size:12px;font-weight:850;text-transform:uppercase}.admin-delete-label input:focus{border-color:#b7473e;box-shadow:0 0 0 3px rgba(183,71,62,.09)}.admin-delete-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.admin-delete-actions button{height:44px;border:0;border-radius:13px;font-weight:850;font-size:10px}.admin-delete-cancel{background:#eef3ef;color:#315344}.admin-delete-confirm{background:linear-gradient(135deg,#a43e37,#c45047);color:#fff;box-shadow:0 8px 18px rgba(183,71,62,.2)}.admin-delete-confirm:disabled{opacity:.38;box-shadow:none}.admin-delete-error{margin-top:10px!important;color:#b7473e!important;font-size:9px!important}.admin-delete-loading{opacity:.65;pointer-events:none}@keyframes adminOverlayIn{from{opacity:0}to{opacity:1}}@keyframes adminSheetIn{from{opacity:0;transform:translateY(22px) scale(.98)}to{opacity:1;transform:none}}@media(min-width:720px){.admin-delete-overlay{place-items:center}.admin-delete-sheet{margin:auto}}@media(max-width:420px){.admin-user-summary-grid{grid-template-columns:1fr}.admin-user-usage{grid-template-columns:repeat(2,1fr)}}`;
+.admin-runtime-details{display:grid;gap:14px}.admin-danger-zone{padding:15px;border:1px solid #f0d0cc;border-radius:19px;background:linear-gradient(145deg,#fff9f8,#fff1ef)}.admin-danger-zone h4{margin:0 0 4px;color:#9f3f37;font-size:12px}.admin-danger-zone p{margin:0 0 12px;color:#8b6a66;font-size:9px;line-height:1.45}.admin-delete-account{width:100%;height:43px;border:1px solid rgba(183,71,62,.16);border-radius:13px;background:#fff;color:#a83e37;font-weight:850;font-size:10px;box-shadow:0 6px 16px rgba(183,71,62,.08)}.admin-delete-account:active{transform:scale(.98)}.admin-delete-overlay{position:fixed;inset:0;z-index:10000;display:grid;place-items:end center;padding:18px;background:rgba(4,20,14,.52);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:adminOverlayIn .18s ease both}.admin-delete-sheet{width:min(100%,520px);padding:20px;border-radius:26px;background:#fffefb;box-shadow:0 28px 80px rgba(0,0,0,.26);animation:adminSheetIn .24s cubic-bezier(.2,.85,.25,1) both}.admin-delete-sheet .icon{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:#fff0ee;color:#b7473e;font-size:24px}.admin-delete-sheet .danger-pill{display:inline-flex;margin-top:13px;padding:5px 8px;border-radius:999px;background:#fde8e5;color:#a33d36;font-size:8px;font-weight:900;letter-spacing:.07em}.admin-delete-sheet h3{margin:10px 0 6px;font-size:19px;color:#173b2d;letter-spacing:-.025em}.admin-delete-sheet p{margin:0;color:#728078;font-size:10px;line-height:1.5}.admin-delete-sheet strong{color:#173b2d}.admin-delete-target{margin:13px 0;padding:11px;border-radius:14px;background:#f4f7f5}.admin-delete-target strong,.admin-delete-target small{display:block}.admin-delete-target strong{font-size:11px}.admin-delete-target small{margin-top:3px;font-size:9px;color:#7d8882;overflow-wrap:anywhere}.admin-delete-label{display:grid;gap:6px;color:#69766f;font-size:9px;font-weight:750}.admin-delete-label input{width:100%;min-height:44px;padding:0 12px;border:1px solid rgba(183,71,62,.2);border-radius:12px;background:#fff;color:#173b2d;outline:none;font-size:12px;font-weight:850;text-transform:uppercase}.admin-delete-label input:focus{border-color:#b7473e;box-shadow:0 0 0 3px rgba(183,71,62,.09)}.admin-delete-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.admin-delete-actions button{height:44px;border:0;border-radius:13px;font-weight:850;font-size:10px}.admin-delete-cancel{background:#eef3ef;color:#315344}.admin-delete-confirm{background:linear-gradient(135deg,#a43e37,#c45047);color:#fff;box-shadow:0 8px 18px rgba(183,71,62,.2)}.admin-delete-confirm:disabled{opacity:.38;box-shadow:none}.admin-delete-error{margin-top:10px!important;color:#b7473e!important;font-size:9px!important}.admin-delete-loading{opacity:.65;pointer-events:none}@keyframes adminOverlayIn{from{opacity:0}to{opacity:1}}@keyframes adminSheetIn{from{opacity:0;transform:translateY(22px) scale(.98)}to{opacity:1;transform:none}}@media(min-width:720px){.admin-delete-overlay{place-items:center}.admin-delete-sheet{margin:auto}}`;
 document.head.appendChild(style);
 
 function formatDate(value?: string, withTime = false) {
@@ -50,7 +53,8 @@ function safe(value: unknown, fallback = "Não informado") {
   return text || fallback;
 }
 
-async function getUsers() {
+async function getUsers(force = false) {
+  if (force) users = null;
   if (users) return users;
   if (!loading) {
     loading = loadAdminData().then((data) => {
@@ -79,6 +83,27 @@ function usageItem(value: number | undefined, label: string) {
   small.textContent = label;
   item.append(strong, small);
   return item;
+}
+
+function closeUserModal() {
+  const detail = document.querySelector<HTMLElement>(".admin-user-detail");
+  if (!detail) return;
+  const backdrop = detail.closest<HTMLElement>(".modal-backdrop");
+  const close = backdrop?.querySelector<HTMLButtonElement>('button[aria-label*="Fechar"], button[aria-label*="fechar"]');
+  if (close) close.click();
+  else document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+}
+
+function removeDeletedUserFromList(email: string) {
+  document.querySelectorAll<HTMLElement>(".admin-user-list > button").forEach((row) => {
+    if (row.querySelector("small")?.textContent?.trim().toLowerCase() === email.toLowerCase()) row.remove();
+  });
+}
+
+function refreshAdminInPlace() {
+  users = null;
+  const button = document.querySelector<HTMLButtonElement>('button[aria-label="Atualizar painel"]');
+  button?.click();
 }
 
 function openDeleteConfirm(user: AdminRuntimeUser) {
@@ -148,8 +173,10 @@ function openDeleteConfirm(user: AdminRuntimeUser) {
       const { error } = await requireSupabase().rpc("admin_delete_user", { target_user_id: user.id });
       if (error) throw new Error(error.message);
       users = users?.filter((item) => item.id !== user.id) ?? null;
-      confirm.textContent = "Conta excluída";
-      window.setTimeout(() => window.location.reload(), 450);
+      removeDeletedUserFromList(user.email);
+      overlay.remove();
+      closeUserModal();
+      window.setTimeout(refreshAdminInPlace, 80);
     } catch (caught) {
       sheet.classList.remove("admin-delete-loading");
       confirm.textContent = "Excluir conta";
@@ -229,13 +256,51 @@ async function enhanceUserModal() {
   }
 }
 
-function readClickedUser(event: Event) {
-  const target = event.target instanceof Element ? event.target.closest(".admin-user-list > button") : null;
-  if (!(target instanceof HTMLElement)) return;
-  selectedEmail = target.querySelector("small")?.textContent?.trim() || "";
-  window.setTimeout(() => void enhanceUserModal(), 0);
+function setReactInputValue(input: HTMLInputElement, value: string) {
+  const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
+  setter?.call(input, value);
+  input.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
-document.addEventListener("click", readClickedUser, true);
-const observer = new MutationObserver(() => { if (document.querySelector(".admin-user-detail")) void enhanceUserModal(); });
+function restoreAdminContext() {
+  const tabs = document.querySelector<HTMLElement>(".admin-tabs");
+  if (tabs && !tabs.dataset.contextRestored) {
+    tabs.dataset.contextRestored = "true";
+    const savedTab = sessionStorage.getItem(TAB_KEY);
+    if (savedTab) {
+      const target = [...tabs.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.trim() === savedTab);
+      if (target && !target.classList.contains("active")) window.setTimeout(() => target.click(), 0);
+    }
+  }
+
+  const search = document.querySelector<HTMLInputElement>(".admin-search input");
+  if (search && !search.dataset.contextRestored) {
+    search.dataset.contextRestored = "true";
+    const savedSearch = sessionStorage.getItem(SEARCH_KEY) || "";
+    if (savedSearch && search.value !== savedSearch) setReactInputValue(search, savedSearch);
+  }
+}
+
+function handleAdminContext(event: Event) {
+  const target = event.target instanceof Element ? event.target : null;
+  const tab = target?.closest<HTMLButtonElement>(".admin-tabs button");
+  if (tab) sessionStorage.setItem(TAB_KEY, tab.textContent?.trim() || "Visão geral");
+  if (target instanceof HTMLInputElement && target.closest(".admin-search")) sessionStorage.setItem(SEARCH_KEY, target.value);
+
+  const userButton = target?.closest(".admin-user-list > button");
+  if (userButton instanceof HTMLElement) {
+    selectedEmail = userButton.querySelector("small")?.textContent?.trim() || "";
+    window.setTimeout(() => void enhanceUserModal(), 0);
+  }
+}
+
+document.addEventListener("click", handleAdminContext, true);
+document.addEventListener("input", handleAdminContext, true);
+window.addEventListener("hydra:refresh", () => { if (document.querySelector(".admin-screen")) refreshAdminInPlace(); });
+
+const observer = new MutationObserver(() => {
+  restoreAdminContext();
+  if (document.querySelector(".admin-user-detail")) void enhanceUserModal();
+});
 observer.observe(document.documentElement, { childList: true, subtree: true });
+restoreAdminContext();
