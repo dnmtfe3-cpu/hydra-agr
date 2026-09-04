@@ -1,0 +1,47 @@
+@media (max-width: 899px) {
+  html body #root .hydra-root .phone-app {
+    font-size: 14px;
+  }
+
+  html body #root .hydra-root .phone-app h1 {
+    font-size: clamp(23px, 6.2vw, 27px) !important;
+    line-height: 1.08 !important;
+  }
+
+  html body #root .hydra-root .phone-app h2 {
+    font-size: clamp(18px, 5vw, 21px) !important;
+    line-height: 1.14 !important;
+  }
+
+  html body #root .hydra-root .phone-app h3 {
+    font-size: clamp(15px, 4.2vw, 17px) !important;
+    line-height: 1.18 !important;
+  }
+
+  html body #root .hydra-root .phone-app p {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  html body #root .hydra-root .phone-app button,
+  html body #root .hydra-root .phone-app input,
+  html body #root .hydra-root .phone-app select,
+  html body #root .hydra-root .phone-app textarea {
+    font-size: 13px;
+  }
+
+  html body #root .hydra-root .phone-app small {
+    font-size: 10.5px;
+  }
+
+  html body #root .hydra-root .phone-app .eyebrow,
+  html body #root .hydra-root .phone-app .subtle-label,
+  html body #root .hydra-root .phone-app .field > span {
+    font-size: 10px;
+  }
+
+  html body #root .hydra-root .phone-app .wordmark-copy span,
+  html body #root .hydra-root .phone-app .wordmark-copy strong {
+    font-size: 18px !important;
+  }
+}
