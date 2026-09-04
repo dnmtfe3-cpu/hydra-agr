@@ -55,7 +55,7 @@ begin
         'animalsCount', (select count(*) from public.animals a where a.owner_user_id = u.id),
         'waterRecordsCount', (select count(*) from public.water_records w where w.owner_user_id = u.id),
         'activitiesCount', (select count(*) from public.activities ac where ac.owner_user_id = u.id),
-        'postsCount', (select count(*) from public.posts po where po.author_id = u.id and po.moderation_status <> 'removed')
+        'postsCount', (select count(*) from public.posts po where po.author_user_id = u.id and po.moderation_status <> 'removed')
       ) order by u.created_at desc)
       from auth.users u
       left join public.profiles p on p.id = u.id
