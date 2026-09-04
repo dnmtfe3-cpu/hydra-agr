@@ -1,6 +1,6 @@
-const styleId = "hydra-interaction-motion-runtime";
+const interactionMotionStyleId = "hydra-interaction-motion-runtime";
 
-const css = String.raw`
+const interactionMotionCss = String.raw`
 @media (prefers-reduced-motion: no-preference) {
   html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button {
     transition: color .2s ease, transform .18s ease !important;
@@ -95,9 +95,11 @@ const css = String.raw`
 }
 `;
 
-const previous = document.getElementById(styleId);
-if (previous) previous.remove();
-const style = document.createElement("style");
-style.id = styleId;
-style.textContent = css;
-document.head.appendChild(style);
+const previousInteractionMotionStyle = document.getElementById(interactionMotionStyleId);
+if (previousInteractionMotionStyle) previousInteractionMotionStyle.remove();
+const interactionMotionStyle = document.createElement("style");
+interactionMotionStyle.id = interactionMotionStyleId;
+interactionMotionStyle.textContent = interactionMotionCss;
+document.head.appendChild(interactionMotionStyle);
+
+export {};
