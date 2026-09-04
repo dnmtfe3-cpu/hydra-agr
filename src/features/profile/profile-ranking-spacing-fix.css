@@ -1,0 +1,19 @@
+.profile-screen > .regional-ranking-feature-card {
+  position: relative !important;
+  z-index: 1 !important;
+  width: calc(100% - 32px) !important;
+  margin: 14px 16px 22px !important;
+}
+
+.profile-screen > .regional-ranking-feature-card + .plan-card {
+  margin-top: 0 !important;
+  position: relative !important;
+  z-index: 0 !important;
+}
+
+@media (max-width: 390px) {
+  .profile-screen > .regional-ranking-feature-card {
+    width: calc(100% - 24px) !important;
+    margin: 12px 12px 20px !important;
+  }
+}
