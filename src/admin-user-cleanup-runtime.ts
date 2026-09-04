@@ -41,7 +41,10 @@ function cleanUserDetail() {
   document.querySelectorAll(".admin-runtime-user-summary").forEach((node) => node.remove());
   grid.querySelectorAll<HTMLElement>("article").forEach((card) => {
     const label = card.querySelector("small")?.textContent?.trim().toUpperCase() || "";
-    if (hiddenLabels.has(label)) { card.remove(); return; }
+    if (hiddenLabels.has(label)) {
+      card.remove();
+      return;
+    }
     if (label === "PERMISSÃO") {
       const value = card.querySelector<HTMLElement>("strong");
       if (value) value.textContent = normalizeRole(value.textContent || "");
@@ -50,29 +53,16 @@ function cleanUserDetail() {
   detail.dataset.cleaned = "1";
 }
 
+function cleanSoon() {
+  [60, 180, 420].forEach((delay) => window.setTimeout(cleanUserDetail, delay));
+}
+
 if (typeof document !== "undefined") {
   installStyle();
-  let scheduled = false;
-  const scheduleClean = () => {
-    if (scheduled) return;
-    scheduled = true;
-    requestAnimationFrame(() => {
-      scheduled = false;
-      cleanUserDetail();
-    });
-  };
-
   document.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
-    if (target?.closest(".admin-user-list > button")) setTimeout(scheduleClean, 0);
+    if (target?.closest(".admin-user-list > button")) cleanSoon();
   }, true);
 
-  const observer = new MutationObserver((mutations) => {
-    const relevant = mutations.some((mutation) => Array.from(mutation.addedNodes).some((node) => {
-      if (!(node instanceof Element)) return false;
-      return node.matches?.(".admin-user-detail, .admin-runtime-details, .admin-user-summary-grid, .modal-backdrop") || Boolean(node.querySelector?.(".admin-user-detail, .admin-runtime-details, .admin-user-summary-grid"));
-    }));
-    if (relevant) scheduleClean();
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
+  window.addEventListener("hydra:refresh", cleanSoon);
 }
