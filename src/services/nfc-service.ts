@@ -148,6 +148,7 @@ export async function readNfcTag(timeoutMs = 30_000): Promise<string> {
         invalidateAfterFirstRead: true,
         alertMessage: "Aproxime o brinco eletrônico ou tag do aparelho.",
         iosSessionType: "tag",
+        iosPollingOptions: ["iso14443", "iso15693"],
       });
     } catch (error) {
       finished = true;
@@ -231,6 +232,7 @@ async function writeNativeNfcUrl(url: string, timeoutMs: number) {
         invalidateAfterFirstRead: false,
         alertMessage: "Aproxime a etiqueta para gravar o Hydra ID.",
         iosSessionType: "tag",
+        iosPollingOptions: ["iso14443", "iso15693"],
       });
     } catch (error) {
       await fail(error);
