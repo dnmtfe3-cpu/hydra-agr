@@ -27,8 +27,8 @@ jobs:
           node-version: '22'
           cache: npm
 
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
+      - name: Install dependencies and iOS support
+        run: npm install --no-audit --no-fund @capacitor/ios@8.5.0
 
       - name: Prepare iOS with NFC
         run: npm run ios:setup
