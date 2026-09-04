@@ -1,6 +1,5 @@
 import "./student-hub-inject";
 import { App as CapacitorApp } from "@capacitor/app";
-import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import { handleAuthCallbackUrl } from "./services/supabase";
 
@@ -13,6 +12,7 @@ async function receiveNativeAuthUrl(url?: string) {
 
   try {
     const recovery = await handleAuthCallbackUrl(url);
+    const { Browser } = await import("@capacitor/browser");
     await Browser.close().catch(() => undefined);
     window.dispatchEvent(new CustomEvent("hydra-native-auth-complete", { detail: { recovery } }));
   } catch (error) {
