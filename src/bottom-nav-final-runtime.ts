@@ -21,7 +21,7 @@ const css = String.raw`
     gap: 0 !important;
     overflow: visible !important;
     border: 0 !important;
-    border-radius: 0 !important;
+    border-radius: 22px 22px 0 0 !important;
     background: transparent !important;
     background-image: none !important;
     box-shadow: none !important;
@@ -40,7 +40,7 @@ const css = String.raw`
     inset: 0 !important;
     z-index: -1 !important;
     border: 0 !important;
-    border-radius: 0 !important;
+    border-radius: 22px 22px 0 0 !important;
     background: #fff !important;
     box-shadow: 0 -5px 18px rgba(28, 50, 39, .07) !important;
     -webkit-mask: radial-gradient(circle 43px at 50% 0, transparent 42px, #000 43px) !important;
