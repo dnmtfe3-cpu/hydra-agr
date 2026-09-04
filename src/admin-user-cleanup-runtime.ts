@@ -33,10 +33,11 @@ function normalizeRole(value: string) {
 }
 
 function cleanUserDetail() {
-  document.querySelectorAll(".admin-runtime-user-summary").forEach((node) => node.remove());
   const detail = document.querySelector<HTMLElement>(".admin-user-detail");
-  if (!detail) return;
+  if (!detail || detail.dataset.cleaned === "1") return;
+  detail.dataset.cleaned = "1";
 
+  document.querySelectorAll(".admin-runtime-user-summary").forEach((node) => node.remove());
   detail.querySelectorAll<HTMLElement>(".admin-user-summary-grid article").forEach((card) => {
     const label = card.querySelector("small")?.textContent?.trim().toUpperCase() || "";
     if (hiddenLabels.has(label)) { card.remove(); return; }
@@ -49,7 +50,24 @@ function cleanUserDetail() {
 
 if (typeof document !== "undefined") {
   installStyle();
-  cleanUserDetail();
-  const observer = new MutationObserver(cleanUserDetail);
+  let scheduled = false;
+  const scheduleClean = () => {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      cleanUserDetail();
+    });
+  };
+
+  document.addEventListener("click", (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (target?.closest(".admin-user-list > button")) setTimeout(scheduleClean, 0);
+  }, true);
+
+  const observer = new MutationObserver((mutations) => {
+    if (!mutations.some((mutation) => Array.from(mutation.addedNodes).some((node) => node instanceof Element && (node.matches?.(".admin-user-detail, .modal-backdrop") || node.querySelector?.(".admin-user-detail"))))) return;
+    scheduleClean();
+  });
   observer.observe(document.body, { childList: true, subtree: true });
 }
