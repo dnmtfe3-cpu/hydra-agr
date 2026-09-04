@@ -1,4 +1,5 @@
 import "./splash-stability.css";
+import "./splash-animation-fix.css";
 
 export function HydraMark({ className = "" }: { className?: string }) {
   return (
