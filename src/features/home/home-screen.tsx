@@ -24,6 +24,7 @@ import {
 import type { Announcement, AppRoute, HydraAccount } from "../../lib/hydra-types";
 import { farmExperience } from "../../lib/farm-xp";
 import { refreshDailyBriefingCopy } from "../../services/daily-briefing";
+import { syncMissionProgress, type MissionProgress } from "../../services/mission-progress";
 import { requireSupabase } from "../../services/supabase";
 import { NutriCicloPanel } from "../family-farming/nutriciclo-panel";
 import { WeatherWidget } from "./weather-widget";
@@ -36,13 +37,21 @@ function countLabel(count: number, singular: string, plural: string) { return `$
 export function HomeScreen({ account, navigate, announcements }: Props) {
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [nutriCicloOpen, setNutriCicloOpen] = useState(false);
+  const [missionProgress, setMissionProgress] = useState<MissionProgress | null>(null);
   const firstName = account.profile.name.split(/\s+/)[0] || "Produtor";
   const welcome = welcomeMessage();
   const today = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "2-digit", month: "long" }).format(new Date());
   const pendingActivities = account.activities.filter((activity) => !activity.done);
+  const completedActivities = account.activities.length - pendingActivities.length;
   const propertyReady = Boolean(account.property.name && account.property.municipality && account.property.state);
   const identifiedAnimals = account.animals.filter((animal) => animal.electronicId).length;
-  const farmXp = farmExperience(account);
+  const localFarmXp = farmExperience(account);
+  const farmXp = missionProgress ? {
+    xp: missionProgress.xp,
+    level: missionProgress.level,
+    progress: missionProgress.levelProgress,
+    lifetimeVip: missionProgress.complete && missionProgress.level >= 10,
+  } : localFarmXp;
   const profileInitials = account.profile.name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("") || "P";
 
   useEffect(() => {
@@ -55,12 +64,18 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
 
   useEffect(() => { void refreshDailyBriefingCopy(account).catch(() => undefined); }, [account.id]);
 
+  useEffect(() => {
+    let active = true;
+    void syncMissionProgress().then((progress) => { if (active) setMissionProgress(progress); }).catch(() => undefined);
+    return () => { active = false; };
+  }, [account.id, account.animals.length, identifiedAnimals, completedActivities, account.monitoring.length, account.waterRecords.length, account.nfcReadCount, account.property.name, account.property.municipality, account.property.mainActivity]);
+
   const pendingSetup = [account.animals.length === 0 && { label: "Cadastrar o primeiro animal", icon: <Cow size={21} />, route: "herd" as AppRoute }, account.sectors.length === 0 && { label: "Criar o primeiro setor", icon: <Map size={21} />, route: "monitor" as AppRoute }].filter(Boolean) as { label: string; icon: ReactNode; route: AppRoute }[];
 
   return <div className="screen home-screen page-enter">
     <div className="home-brandbar profile-brandbar">
       <button className="home-profile-progress" onClick={() => navigate("profile")} aria-label={`Abrir perfil. Nível ${farmXp.level}, ${farmXp.xp} XP da fazenda`} title="Abrir perfil" style={{ "--profile-progress": `${farmXp.progress}%` } as CSSProperties}><span className="home-profile-avatar">{account.profile.avatarUrl ? <img src={account.profile.avatarUrl} alt="" /> : profileInitials}</span><span className="home-profile-level" aria-hidden="true">{farmXp.level}</span></button>
-      <button className="home-farm-xp" onClick={() => navigate("challenges")} aria-label={`Abrir missões. ${farmXp.xp} XP, nível ${farmXp.level}`} title="Abrir missões"><strong>{farmXp.xp.toLocaleString("pt-BR")} XP</strong><span>{farmXp.lifetimeVip ? "Nível 10 · VIP vitalício" : `Missões · nível ${farmXp.level}`}</span></button>
+      <button className="home-farm-xp" onClick={() => navigate("challenges")} aria-label={`Abrir missão atual. ${farmXp.xp} XP, nível ${farmXp.level}`} title="Abrir missão atual"><strong>{farmXp.xp.toLocaleString("pt-BR")} XP</strong><span>{farmXp.lifetimeVip ? "Nível 10 · trilha concluída" : missionProgress ? `Missão ${Math.min(missionProgress.ordinal, 50)}/50 · nível ${farmXp.level}` : `Missões · nível ${farmXp.level}`}</span></button>
       <button className="icon-button bare" onClick={() => navigate("notifications")} aria-label="Notificações"><Bell size={23} />{hasUnreadNotifications && <span className="notification-dot" />}</button>
     </div>
 
