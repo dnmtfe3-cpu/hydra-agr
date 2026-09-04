@@ -1,70 +1,60 @@
 # Hydra Agro
 
-O Hydra Agro é um projeto que estou desenvolvendo com foco em tecnologia aplicada ao meio rural.
+O Hydra Agro nasceu de uma ideia simples: usar tecnologia para deixar a rotina no campo mais organizada e prática.
 
-A ideia surgiu pensando em facilitar algumas tarefas do dia a dia de produtores, reunindo em um só lugar ferramentas para controle da propriedade, acompanhamento do rebanho, consumo de água e outras informações importantes.
+Em vez de espalhar informações em anotações, planilhas e aplicativos diferentes, a proposta é reunir em um só lugar o que realmente importa no dia a dia da propriedade — rebanho, animais, consumo de água, clima, metas, notificações e outras ferramentas de apoio à gestão rural.
 
-O projeto ainda está em desenvolvimento e várias funções vão continuar sendo melhoradas nas próximas versões.
+O projeto ainda está crescendo. Algumas partes já funcionam, outras continuam sendo testadas e muita coisa ainda vai mudar conforme o Hydra Agro evolui.
 
-## O que já tem no projeto
+## O que já dá para fazer
 
-* Cadastro e login de usuários
-* Perfil do usuário
-* Cadastro e gerenciamento de propriedades
-* Controle e acompanhamento do rebanho
-* Registro de informações dos animais
-* Metas da propriedade
-* Controle relacionado ao consumo de água
-* Informações climáticas
-* Sistema de notificações
-* Área Premium
-* Painel administrativo
-* Configurações de segurança e conta
-* Termos de uso e política de privacidade
+Hoje o projeto conta com recursos como:
+
+- cadastro e login de usuários;
+- perfil e configurações da conta;
+- cadastro e gerenciamento de propriedades;
+- controle e acompanhamento do rebanho;
+- registro de informações dos animais;
+- metas da propriedade;
+- acompanhamento do consumo de água;
+- informações climáticas;
+- notificações;
+- recursos Premium;
+- painel administrativo;
+- opções de segurança e privacidade.
 
 ## Identificação dos animais
 
-Uma das propostas do Hydra Agro é facilitar a identificação e organização dos animais da propriedade.
+Uma das ideias centrais do Hydra Agro é tornar a identificação dos animais mais simples.
 
-O projeto trabalha com a ideia de utilização de tecnologias como NFC e RFID para tornar esse processo mais rápido e organizado.
+O projeto explora tecnologias como NFC e RFID para permitir que cada animal tenha uma identificação ligada às suas informações. A intenção é reduzir trabalho manual e facilitar o acesso aos dados quando eles forem necessários.
 
-## Versão atual
+## Ainda está em desenvolvimento
 
-O Hydra Agro ainda está em fase de testes.
+O Hydra Agro ainda está em fase de testes. Isso significa que algumas funções podem mudar, receber melhorias ou apresentar problemas enquanto novas versões são desenvolvidas.
 
-Algumas funções podem apresentar erros ou passar por mudanças enquanto o projeto continua sendo desenvolvido.
-
-O APK pode ser disponibilizado para algumas pessoas testarem antes das próximas versões.
-
-Se encontrar algum problema durante os testes, pode me avisar.
-
-## Acesso
-
-O acesso ao aplicativo e as novidades do projeto ficam no Instagram oficial:
-
-**@hydraagroo**
+Em alguns momentos, versões do APK podem ser liberadas para testes antes de uma atualização definitiva. O feedback de quem usa ajuda a descobrir problemas e entender o que realmente faz diferença no uso diário.
 
 ## Tecnologias
 
-O projeto utiliza tecnologias web modernas e está sendo preparado para funcionar também como aplicativo Android.
+Por trás do projeto estão tecnologias como React, TypeScript, Supabase e Capacitor, além de APIs externas e ferramentas do GitHub.
 
-Entre as tecnologias utilizadas estão:
+A base é web, mas o Hydra Agro também está sendo preparado para funcionar como aplicativo Android.
 
-* React
-* TypeScript
-* Supabase
-* Capacitor
-* GitHub
-* APIs externas
+## Onde acompanhar
 
-## Objetivo
+As novidades e informações sobre o projeto são publicadas no Instagram oficial:
 
-Quero continuar evoluindo o Hydra Agro e testar novas formas de usar tecnologia para ajudar no gerenciamento rural.
+**@hydraagroo**
 
-Ainda tem bastante coisa que quero adicionar e melhorar, então esse repositório também serve para acompanhar a evolução do projeto.
+## Para onde o projeto vai
+
+O objetivo não é simplesmente colocar várias funções dentro de um aplicativo. A ideia é construir uma ferramenta que seja útil de verdade para quem precisa organizar e acompanhar uma propriedade.
+
+Por isso, o Hydra Agro continua sendo desenvolvido aos poucos: testando ideias, corrigindo o que não funciona bem e adicionando recursos quando eles realmente fizerem sentido.
+
+Este repositório registra parte dessa evolução.
 
 ---
 
-**Hydra Agro**
-
-Projeto em desenvolvimento.
+**Hydra Agro** — tecnologia para ajudar a organizar o campo.
