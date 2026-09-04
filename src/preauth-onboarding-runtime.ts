@@ -1,19 +1,82 @@
 export {};
-const STORAGE_KEY="hydra.preauth.onboarding.v3",ROOT_CLASS="hydra-preauth-onboarding";
-const slides=[
-{title:"Sua fazenda em um só lugar",copy:"Propriedade, água e rotina organizadas para você enxergar o campo com clareza.",art:"farm",label:"GESTÃO RURAL"},
-{title:"Cada animal, sempre identificado",copy:"Cadastre o rebanho e use NFC/RFID para acessar as informações certas durante o manejo.",art:"herd",label:"REBANHO + NFC"},
-{title:"Acompanhe o que acontece no campo",copy:"Registre informações importantes e mantenha o histórico da propriedade sempre por perto.",art:"water",label:"CONTROLE NO CAMPO"},
-{title:"Cuide da fazenda. Evolua no Hydra.",copy:"As missões avançam automaticamente. Complete a atual, ganhe XP e suba no ranking.",art:"progress",label:"MISSÕES + XP"}
+
+const STORAGE_KEY = "hydra.preauth.onboarding.v4";
+const ROOT_CLASS = "hydra-preauth-onboarding";
+
+const hydraMark = `<svg class="onb-brand-mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#174c36"/><path d="M17 35c0-10 7-18 15-24 0 14 8 18 8 29 0 8-5 14-12 14-6 0-11-4-11-10 0-5 3-9 8-13-1 7 1 12 6 15" fill="#f49a31"/><path d="M39 14c8 2 12 8 10 17-7-1-12-5-13-12 4 4 7 6 11 7" fill="#83ba5b"/><path d="M23 46c4 4 11 4 16-1" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".9"/></svg>`;
+
+const scenes = {
+  dashboard: `<div class="onb-phone onb-dashboard">
+    <div class="onb-phone-head">${hydraMark}<div><strong>Hydra Agro</strong><small>Minha propriedade</small></div><span class="onb-head-dot"></span></div>
+    <div class="onb-hero-card"><small>VISÃO DA FAZENDA</small><strong>Tudo organizado em um só lugar</strong><p>Rebanho, água e rotina juntos.</p></div>
+    <div class="onb-mini-grid"><article><span class="onb-symbol">🐄</span><small>REBANHO</small><strong>Animais e identificação</strong></article><article><span class="onb-symbol">💧</span><small>ÁGUA</small><strong>Registros e histórico</strong></article></div>
+    <div class="onb-row-card"><span class="onb-check">✓</span><div><small>ROTINA</small><strong>Atividades da propriedade</strong></div><b>›</b></div>
+  </div>`,
+  herd: `<div class="onb-phone onb-herd">
+    <div class="onb-phone-head">${hydraMark}<div><strong>Rebanho</strong><small>Gestão individual</small></div></div>
+    <div class="onb-animal-card"><div class="onb-animal-avatar">🐄</div><div><small>ANIMAL CADASTRADO</small><strong>Ficha completa no campo</strong><p>Dados e histórico em um só lugar.</p></div></div>
+    <div class="onb-nfc-card"><span class="onb-nfc">NFC</span><div><small>IDENTIFICAÇÃO</small><strong>NFC / RFID vinculado</strong></div><span class="onb-ok">✓</span></div>
+    <div class="onb-timeline"><i></i><div><small>HISTÓRICO</small><strong>Manejo e registros</strong></div><span></span><div><small>ACESSO RÁPIDO</small><strong>Informações na hora</strong></div></div>
+  </div>`,
+  water: `<div class="onb-phone onb-water">
+    <div class="onb-phone-head">${hydraMark}<div><strong>Controle de água</strong><small>Acompanhamento diário</small></div></div>
+    <div class="onb-water-ring"><span>💧</span><strong>Água</strong><small>Registros por dia</small></div>
+    <div class="onb-water-list"><article><i></i><div><small>NOVO REGISTRO</small><strong>Adicione o consumo do dia</strong></div></article><article><i></i><div><small>HISTÓRICO</small><strong>Acompanhe os registros anteriores</strong></div></article></div>
+  </div>`,
+  missions: `<div class="onb-phone onb-missions">
+    <div class="onb-phone-head">${hydraMark}<div><strong>Missões e XP</strong><small>Progresso automático</small></div></div>
+    <div class="onb-xp-card"><small>MISSÃO ATUAL</small><strong>Complete uma etapa por vez</strong><div class="onb-progress"><i></i></div><p>Concluiu → ganha XP → próxima missão.</p></div>
+    <div class="onb-mission-flow"><span>1</span><i></i><span>2</span><i></i><span>3</span></div>
+    <div class="onb-ranking-card"><span>🏆</span><div><small>RANKING</small><strong>Compare sua evolução</strong></div><b>XP</b></div>
+  </div>`,
+} as const;
+
+const slides = [
+  { eyebrow: "HYDRA AGRO", title: "Sua fazenda em um só lugar.", copy: "Organize propriedade, rebanho, água e rotina sem espalhar informação por vários lugares.", scene: scenes.dashboard },
+  { eyebrow: "REBANHO + NFC", title: "Informação certa na hora do manejo.", copy: "Cadastre os animais, vincule NFC/RFID e consulte a ficha e o histórico direto no campo.", scene: scenes.herd },
+  { eyebrow: "CONTROLE DE ÁGUA", title: "Registre hoje. Acompanhe depois.", copy: "Faça registros de água e mantenha um histórico simples para acompanhar a rotina da propriedade.", scene: scenes.water },
+  { eyebrow: "MISSÕES + XP", title: "Cuide da fazenda e evolua no Hydra.", copy: "As missões avançam sozinhas: conclua a atual, ganhe XP e acompanhe sua posição no ranking.", scene: scenes.missions },
 ];
-const art:Record<string,string>={
-farm:`<svg viewBox="0 0 300 230"><path class="fill-soft" d="M15 189c48-48 84-35 123-12 47 28 91-12 147-4v57H15z"/><circle class="accent" cx="235" cy="46" r="23"/><path d="M72 182V105l78-55 78 55v77M111 182v-52h78v52M59 182h182M87 95h126"/><path d="M38 194c24-22 47-22 71 0M198 195c20-25 40-25 60 0"/></svg>`,
-herd:`<svg viewBox="0 0 300 230"><path class="fill-soft" d="M0 190c64-40 111-34 151-9 46 28 92-8 149-3v52H0z"/><circle class="accent" cx="240" cy="45" r="22"/><path d="M91 91c-25-22-42-16-48-3 16 4 25 13 32 27m134-24c25-22 42-16 48-3-16 4-25 13-32 27"/><path d="M84 84c10-35 35-52 66-52s56 17 66 52v61c0 41-27 67-66 67s-66-26-66-67V84Z"/><circle cx="124" cy="125" r="4"/><circle cx="176" cy="125" r="4"/><path d="M126 166c16 11 32 11 48 0M150 143v17"/></svg>`,
-water:`<svg viewBox="0 0 300 230"><path class="fill-soft" d="M4 194c55-35 105-31 145-7 44 27 91-8 147-2v45H4z"/><circle class="accent" cx="235" cy="46" r="22"/><path d="M151 31c-9 27-56 70-56 112 0 34 25 59 56 59s56-25 56-59c0-42-47-85-56-112Z"/><path d="M119 151c7 20 20 29 39 30"/></svg>`,
-progress:`<svg viewBox="0 0 300 230"><path class="fill-soft" d="M0 194c62-41 108-34 150-8 45 28 91-9 150-3v47H0z"/><circle class="accent" cx="237" cy="44" r="22"/><path d="m150 31 25 51 57 8-41 40 10 57-51-27-51 27 10-57-41-40 57-8 25-51Z"/><path d="m124 116 18 18 37-42"/></svg>`};
-function seen(){try{return localStorage.getItem(STORAGE_KEY)==="1"}catch{return false}}function done(){try{localStorage.setItem(STORAGE_KEY,"1")}catch{}}
-function action(k:"login"|"signup"){const l=document.querySelector<HTMLElement>(".auth-landing");return l?.querySelector<HTMLButtonElement>(k==="login"?".auth-landing-primary":".auth-landing-secondary")}
-function mount(){if(seen()||document.querySelector(`.${ROOT_CLASS}`)||!document.querySelector(".auth-landing"))return;let i=0;const o=document.createElement("section");o.className=ROOT_CLASS;
-const render=()=>{const s=slides[i],last=i===slides.length-1;o.innerHTML=`<header class="preauth-topbar"><button class="preauth-back" ${i===0?'disabled':''} aria-label="Voltar">‹</button><span class="preauth-counter">${i+1} / ${slides.length}</span></header><main class="preauth-stage"><div class="preauth-art"><span class="preauth-label">${s.label}</span>${art[s.art]}</div><div class="preauth-copy"><h1>${s.title}</h1><p>${s.copy}</p></div></main><footer class="preauth-footer"><div class="preauth-dots">${slides.map((_,d)=>`<span class="${d===i?'active':''}"></span>`).join('')}</div>${last?`<button class="preauth-create">Criar conta</button><button class="preauth-login">Já tenho uma conta</button>`:`<button class="preauth-next">Continuar</button><button class="preauth-skip">Pular</button>`}</footer>`;
-o.querySelector<HTMLButtonElement>(".preauth-next")?.addEventListener("click",()=>{i++;render()});o.querySelector<HTMLButtonElement>(".preauth-back")?.addEventListener("click",()=>{if(i){i--;render()}});o.querySelector<HTMLButtonElement>(".preauth-skip")?.addEventListener("click",()=>{done();o.remove()});o.querySelector<HTMLButtonElement>(".preauth-create")?.addEventListener("click",()=>{done();o.remove();action("signup")?.click()});o.querySelector<HTMLButtonElement>(".preauth-login")?.addEventListener("click",()=>{done();o.remove();action("login")?.click()})};render();document.querySelector(".auth-landing")?.insertAdjacentElement("afterend",o)}
-if(typeof document!=="undefined"){mount();new MutationObserver(()=>{if(!seen()&&document.querySelector(".auth-landing"))mount()}).observe(document.documentElement,{childList:true,subtree:true})}
+
+function wasSeen() { try { return localStorage.getItem(STORAGE_KEY) === "1"; } catch { return false; } }
+function markSeen() { try { localStorage.setItem(STORAGE_KEY, "1"); } catch {} }
+function authAction(kind: "login" | "signup") {
+  const landing = document.querySelector<HTMLElement>(".auth-landing");
+  return landing?.querySelector<HTMLButtonElement>(kind === "login" ? ".auth-landing-primary" : ".auth-landing-secondary");
+}
+
+function mountOnboarding() {
+  if (wasSeen() || document.querySelector(`.${ROOT_CLASS}`) || !document.querySelector(".auth-landing")) return;
+  let index = 0;
+  let touchStart = 0;
+  const overlay = document.createElement("section");
+  overlay.className = ROOT_CLASS;
+  overlay.setAttribute("aria-label", "Conheça o Hydra Agro");
+
+  const render = () => {
+    const slide = slides[index];
+    const last = index === slides.length - 1;
+    overlay.innerHTML = `<header class="preauth-topbar"><button class="preauth-back" ${index === 0 ? "disabled" : ""} aria-label="Voltar">‹</button><span class="preauth-counter">${String(index + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}</span></header><main class="preauth-stage"><div class="preauth-visual">${slide.scene}</div><div class="preauth-copy"><span class="preauth-eyebrow">${slide.eyebrow}</span><h1>${slide.title}</h1><p>${slide.copy}</p></div></main><footer class="preauth-footer"><div class="preauth-dots">${slides.map((_, dot) => `<span class="${dot === index ? "active" : ""}"></span>`).join("")}</div>${last ? `<button class="preauth-create">Criar conta</button><button class="preauth-login">Já tenho uma conta</button>` : `<button class="preauth-next">Continuar <b>→</b></button><button class="preauth-skip">Pular</button>`}</footer>`;
+    overlay.querySelector<HTMLButtonElement>(".preauth-next")?.addEventListener("click", () => { index += 1; render(); });
+    overlay.querySelector<HTMLButtonElement>(".preauth-back")?.addEventListener("click", () => { if (index > 0) { index -= 1; render(); } });
+    overlay.querySelector<HTMLButtonElement>(".preauth-skip")?.addEventListener("click", () => { markSeen(); overlay.remove(); });
+    overlay.querySelector<HTMLButtonElement>(".preauth-create")?.addEventListener("click", () => { markSeen(); overlay.remove(); authAction("signup")?.click(); });
+    overlay.querySelector<HTMLButtonElement>(".preauth-login")?.addEventListener("click", () => { markSeen(); overlay.remove(); authAction("login")?.click(); });
+  };
+
+  overlay.addEventListener("touchstart", (event) => { touchStart = event.touches[0]?.clientX ?? 0; }, { passive: true });
+  overlay.addEventListener("touchend", (event) => {
+    const end = event.changedTouches[0]?.clientX ?? touchStart;
+    const delta = end - touchStart;
+    if (delta < -55 && index < slides.length - 1) { index += 1; render(); }
+    if (delta > 55 && index > 0) { index -= 1; render(); }
+  }, { passive: true });
+
+  render();
+  document.querySelector(".auth-landing")?.insertAdjacentElement("afterend", overlay);
+}
+
+if (typeof document !== "undefined") {
+  mountOnboarding();
+  new MutationObserver(() => { if (!wasSeen() && document.querySelector(".auth-landing")) mountOnboarding(); }).observe(document.documentElement, { childList: true, subtree: true });
+}
