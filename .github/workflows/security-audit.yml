@@ -50,5 +50,8 @@ jobs:
       - name: Validate Python backend
         run: python -m compileall -q api python_backend
 
+      - name: Python tests
+        run: python -m unittest discover -s python_backend/tests -p "test_*.py"
+
       - name: Dependency audit
         run: npm audit --audit-level=high
