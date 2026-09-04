@@ -16,6 +16,7 @@ import "./herd-highlight.css";
 import "./herd-weight-history.css";
 import "./public-animal.css";
 import "./authentic-ui.css";
+import "./auth-landing-ranking-cleanup.css";
 import "./auth-email-code.css";
 import "./interaction-polish.css";
 import "./features/profile/profile-mobile-fix.css";
