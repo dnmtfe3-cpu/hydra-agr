@@ -20,6 +20,9 @@
     "android:sync": "npm run build:android && cap sync android",
     "android:apk": "npm run android:sync && cd android && ./gradlew assembleDebug",
     "android:aab": "npm run android:sync && cd android && ./gradlew bundleRelease",
+    "ios:setup": "node scripts/setup-ios-nfc.mjs",
+    "ios:sync": "node scripts/setup-ios-nfc.mjs",
+    "ios:open": "npx cap open ios",
     "verify": "npm run lint && npm test && npm run build"
   },
   "dependencies": {
