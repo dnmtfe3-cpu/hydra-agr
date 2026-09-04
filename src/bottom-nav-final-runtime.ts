@@ -10,9 +10,9 @@ const css = String.raw`
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100vw !important;
-    height: calc(72px + env(safe-area-inset-bottom)) !important;
-    min-height: calc(72px + env(safe-area-inset-bottom)) !important;
-    max-height: calc(72px + env(safe-area-inset-bottom)) !important;
+    height: calc(62px + env(safe-area-inset-bottom)) !important;
+    min-height: calc(62px + env(safe-area-inset-bottom)) !important;
+    max-height: calc(62px + env(safe-area-inset-bottom)) !important;
     margin: 0 !important;
     padding: 0 8px env(safe-area-inset-bottom) !important;
     display: grid !important;
@@ -59,8 +59,8 @@ const css = String.raw`
     width: 100% !important;
     min-width: 0 !important;
     max-width: none !important;
-    height: 64px !important;
-    min-height: 64px !important;
+    height: 54px !important;
+    min-height: 54px !important;
     margin: 0 !important;
     padding: 0 !important;
     display: grid !important;
@@ -117,7 +117,7 @@ const css = String.raw`
     display: block !important;
     position: absolute !important;
     left: 50% !important;
-    bottom: 5px !important;
+    bottom: 3px !important;
     width: 7px !important;
     height: 7px !important;
     border-radius: 50% !important;
@@ -130,8 +130,8 @@ const css = String.raw`
   html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active {
     position: relative !important;
     z-index: 4 !important;
-    height: 72px !important;
-    min-height: 72px !important;
+    height: 62px !important;
+    min-height: 62px !important;
     color: #fff !important;
     background: transparent !important;
     box-shadow: none !important;
@@ -175,7 +175,7 @@ const css = String.raw`
   }
 
   html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .app-content {
-    padding-bottom: calc(78px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
   }
 
   html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav.is-hidden {
