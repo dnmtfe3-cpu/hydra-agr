@@ -1,3 +1,3 @@
 // Fluxo de acesso baseado no layout oficial do aplicativo.
-// Alteração de publicação para sincronizar o deploy de produção.
+// Sincroniza a publicação das telas de acesso em produção.
 export { FigmaAuthFlow as AuthFlow } from "./figma-auth-flow";
