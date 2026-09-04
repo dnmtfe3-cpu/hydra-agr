@@ -2,7 +2,7 @@
 html body #root .hydra-root .splash-screen {
   background: var(--forest-950, #09271b) !important;
   will-change: opacity;
-  animation: hydra-splash-screen-stable 2.8s cubic-bezier(.4, 0, .2, 1) both !important;
+  animation: hydra-splash-screen-stable 3s cubic-bezier(.4, 0, .2, 1) both !important;
 }
 
 html body #root .hydra-root .splash-expansion {
@@ -16,7 +16,7 @@ html body #root .hydra-root .splash-mark-wrap {
   opacity: 0;
   transform: scale(.82);
   will-change: transform, opacity;
-  animation: hydra-splash-mark-stable 2.8s cubic-bezier(.65, 0, .22, 1) both !important;
+  animation: hydra-splash-mark-stable 3s cubic-bezier(.65, 0, .22, 1) both !important;
 }
 
 html body #root .hydra-root .splash-mark {
