@@ -44,3 +44,6 @@
 
 /* Motion global sem alterar layout. */
 @import "./motion-polish-v2.css?v=motion-polish-v2";
+
+/* Navegação inferior final, baseada na referência visual escolhida. */
+@import "./bottom-nav-reference.css?v=bottom-nav-reference-1";
