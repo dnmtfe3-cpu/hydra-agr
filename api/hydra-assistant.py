@@ -88,14 +88,26 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(payload)
 
+    def _method_not_allowed(self):
+        self._send(405, {"error": "Método não permitido."}, {"Allow": "POST, OPTIONS"})
+
     def do_OPTIONS(self):
         self.send_response(204)
         self.send_header("Allow", "POST, OPTIONS")
+        self.send_header("Cache-Control", "no-store, private")
         self.end_headers()
 
     def do_GET(self):
-        self.send_header("Allow", "POST, OPTIONS")
-        self._send(405, {"error": "Método não permitido."})
+        self._method_not_allowed()
+
+    def do_PUT(self):
+        self._method_not_allowed()
+
+    def do_PATCH(self):
+        self._method_not_allowed()
+
+    def do_DELETE(self):
+        self._method_not_allowed()
 
     def do_POST(self):
         content_length_header = self.headers.get("Content-Length", "0")
