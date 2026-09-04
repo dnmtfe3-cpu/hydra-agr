@@ -26,9 +26,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies and iOS support
-        run: |
-          npm install --no-audit --no-fund
-          npm install --no-save --package-lock=false @capacitor/ios@8.5.0
+        run: npm install --no-audit --no-fund @capacitor/ios@8.5.0
 
       - name: Prepare test iOS project
         run: |
