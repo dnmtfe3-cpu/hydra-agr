@@ -1,4 +1,4 @@
-/* Splash: mantém a animação visual original e faz apenas a tela inteira sumir em fade no final. */
+/* Splash: mantém a marca no fundo escuro e faz a tela inteira sumir em fade no final. */
 html body #root .hydra-root .splash-screen {
   background: var(--forest-950, #09271b) !important;
   will-change: opacity;
@@ -6,11 +6,10 @@ html body #root .hydra-root .splash-screen {
 }
 
 html body #root .hydra-root .splash-expansion {
-  opacity: 0;
-  transform: scale(.78);
-  background: var(--cream, #f4f2ec) !important;
-  will-change: transform, opacity;
-  animation: hydra-splash-expansion-stable 2.8s cubic-bezier(.65, 0, .22, 1) both !important;
+  display: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+  background: transparent !important;
 }
 
 html body #root .hydra-root .splash-mark-wrap {
@@ -29,27 +28,18 @@ html body #root .hydra-root .splash-mark {
   0% { opacity: 0; transform: scale(.82); }
   14% { opacity: 1; transform: scale(1.03); }
   24% { opacity: 1; transform: scale(1); }
-  58% { opacity: 1; transform: scale(1); }
-  76% { opacity: 1; transform: scale(1.14); }
-  90% { opacity: 0; transform: scale(5.4); }
-  100% { opacity: 0; transform: scale(5.4); }
-}
-
-@keyframes hydra-splash-expansion-stable {
-  0%, 50% { opacity: 0; transform: scale(.78); }
-  60% { opacity: 1; transform: scale(1); }
-  90% { opacity: 1; transform: scale(34); }
-  100% { opacity: 1; transform: scale(34); }
+  64% { opacity: 1; transform: scale(1); }
+  80% { opacity: .92; transform: scale(1.08); }
+  100% { opacity: 0; transform: scale(1.12); }
 }
 
 @keyframes hydra-splash-screen-stable {
-  0%, 82% { opacity: 1; visibility: visible; }
+  0%, 78% { opacity: 1; visibility: visible; }
   100% { opacity: 0; visibility: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html body #root .hydra-root .splash-screen,
-  html body #root .hydra-root .splash-expansion,
   html body #root .hydra-root .splash-mark-wrap {
     animation: none !important;
   }
