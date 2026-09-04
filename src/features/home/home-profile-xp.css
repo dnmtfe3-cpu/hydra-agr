@@ -91,7 +91,13 @@
   gap: 1px;
   text-align: left;
   margin: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(11,81,54,.08);
+  border-radius: 14px;
+  background: rgba(255,255,255,.42);
   z-index: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .home-farm-xp strong {
@@ -119,12 +125,14 @@
 @media (max-width: 370px) {
   .home-brandbar.profile-brandbar { min-height: 70px; gap: 10px !important; }
   .home-profile-progress { width: 58px; height: 58px; }
-  .home-farm-xp { max-width: 132px; }
+  .home-farm-xp { max-width: 132px; padding: 7px 8px; }
   .home-farm-xp strong { font-size: 13px; }
   .home-farm-xp span { max-width: 120px; font-size: 9px; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .home-profile-progress { transition: transform 160ms ease, filter 160ms ease; }
-  .home-profile-progress:active { transform: scale(0.95); }
+  .home-profile-progress,
+  .home-farm-xp { transition: transform 160ms ease, filter 160ms ease; }
+  .home-profile-progress:active,
+  .home-farm-xp:active { transform: scale(0.96); }
 }
