@@ -1,0 +1,78 @@
+name: iOS Test IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ios-test-ipa.yml'
+      - 'src/**'
+      - 'capacitor.config.ts'
+      - 'package.json'
+
+jobs:
+  build-test-ipa:
+    runs-on: macos-15
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies and iOS support
+        run: |
+          npm install --no-audit --no-fund
+          npm install --no-save --package-lock=false @capacitor/ios@8.5.0
+
+      - name: Prepare test iOS project
+        run: |
+          npm run build
+          rm -rf ios
+          npx cap add ios --packagemanager SPM
+          npx cap sync ios
+          sed -i '' 's/br.com.hydraagro.app/br.com.hydraagro.test/g' ios/App/App.xcodeproj/project.pbxproj
+          /usr/libexec/PlistBuddy -c "Delete :NFCReaderUsageDescription" ios/App/App/Info.plist || true
+          rm -f ios/App/App/App.entitlements
+          sed -i '' '/CODE_SIGN_ENTITLEMENTS = App\/App.entitlements;/d' ios/App/App.xcodeproj/project.pbxproj
+
+      - name: Build iPhone app without signing
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/ios-test-derived \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY='' \
+            build
+
+      - name: Package test IPA
+        run: |
+          rm -rf build/Payload
+          mkdir -p build/Payload
+          APP_PATH="build/ios-test-derived/Build/Products/Release-iphoneos/App.app"
+          test -d "$APP_PATH"
+          cp -R "$APP_PATH" build/Payload/HydraAgroTest.app
+          cd build
+          zip -qry HydraAgro-test-unsigned.ipa Payload
+          shasum -a 256 HydraAgro-test-unsigned.ipa > HydraAgro-test-unsigned.ipa.sha256
+
+      - name: Upload test IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: HydraAgro-iOS-test-unsigned
+          path: |
+            build/HydraAgro-test-unsigned.ipa
+            build/HydraAgro-test-unsigned.ipa.sha256
+          if-no-files-found: error
+          retention-days: 14
