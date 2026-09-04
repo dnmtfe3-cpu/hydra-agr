@@ -60,7 +60,7 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
   return <div className="screen home-screen page-enter">
     <div className="home-brandbar profile-brandbar">
       <button className="home-profile-progress" onClick={() => navigate("profile")} aria-label={`Abrir perfil. Nível ${farmXp.level}, ${farmXp.xp} XP da fazenda`} title="Abrir perfil" style={{ "--profile-progress": `${farmXp.progress}%` } as CSSProperties}><span className="home-profile-avatar">{account.profile.avatarUrl ? <img src={account.profile.avatarUrl} alt="" /> : profileInitials}</span><span className="home-profile-level" aria-hidden="true">{farmXp.level}</span></button>
-      <div className="home-farm-xp" aria-label={`${farmXp.xp} XP da fazenda`}><strong>{farmXp.xp.toLocaleString("pt-BR")} XP</strong><span>{farmXp.lifetimeVip ? "Nível 10 · VIP vitalício" : `XP da fazenda · nível ${farmXp.level}`}</span></div>
+      <button className="home-farm-xp" onClick={() => navigate("challenges")} aria-label={`Abrir missões. ${farmXp.xp} XP, nível ${farmXp.level}`} title="Abrir missões"><strong>{farmXp.xp.toLocaleString("pt-BR")} XP</strong><span>{farmXp.lifetimeVip ? "Nível 10 · VIP vitalício" : `Missões · nível ${farmXp.level}`}</span></button>
       <button className="icon-button bare" onClick={() => navigate("notifications")} aria-label="Notificações"><Bell size={23} />{hasUnreadNotifications && <span className="notification-dot" />}</button>
     </div>
 
