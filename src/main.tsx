@@ -19,6 +19,7 @@ import "./authentic-ui.css";
 import "./auth-email-code.css";
 import "./interaction-polish.css";
 import "./preauth-onboarding.css";
+import "./preauth-onboarding-icons.css";
 import "./preauth-onboarding-runtime";
 import "./features/profile/profile-mobile-fix.css";
 import "./features/profile/profile-ranking-runtime";
