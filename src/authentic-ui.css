@@ -1,11 +1,1847 @@
 /* Hydra Agro — acabamento visual autoral.
    Mantém os componentes e fluxos existentes, mas elimina o aspecto de template. */
 
-@import url('./authentic-ui-base.css');
+.hydra-root {
+  --forest-950: #08271b;
+  --forest-900: #0d3425;
+  --forest-800: #154732;
+  --forest-700: #1f6547;
+  --forest-100: #e7eee9;
+  --sage: #7da967;
+  --sage-soft: #edf2ea;
+  --orange: #e78228;
+  --orange-soft: #f9eadb;
+  --cream: #f4f2ec;
+  --paper: #ffffff;
+  --ink: #17241d;
+  --muted: #66726b;
+  --line: #dfe3de;
+  --shadow: 0 1px 2px rgba(9, 39, 27, .04);
+  --type-display: 31px;
+  --type-section: 19px;
+  --type-card: 14px;
+  --type-body: 14px;
+  --type-control: 13px;
+  --type-caption: 11px;
+  --type-eyebrow: 10px;
+  --type-nav: 11px;
+}
 
-/* Landing: remove as fotos de animais sem alterar o restante da tela. */
-.hydra-root .auth-landing-mosaic span:nth-child(1),
-.hydra-root .auth-landing-mosaic span:nth-child(3),
-.hydra-root .auth-landing-mosaic span:nth-child(6) {
+.hydra-root .app-shell,
+.hydra-root .phone-app,
+.hydra-root .screen,
+.hydra-root .route-loading {
+  background: var(--cream);
+}
+
+.hydra-root .app-shell {
+  background-image: none;
+}
+
+.hydra-root .phone-app {
+  box-shadow: none;
+}
+
+.hydra-root button {
+  overflow: visible;
+}
+
+.hydra-root :is(.primary-button, .secondary-button, .preview-button, .small-button, .danger-button, .wide-outline-button) {
+  min-height: 46px;
+  border-radius: 11px;
+  box-shadow: none;
+  font-weight: 700;
+}
+
+.hydra-root .primary-button {
+  background: var(--forest-800);
+}
+
+.hydra-root .primary-button:hover {
+  background: var(--forest-700);
+  transform: none;
+}
+
+.hydra-root .secondary-button {
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.hydra-root .icon-button,
+.hydra-root .small-button {
+  border-radius: 11px;
+}
+
+.hydra-root .icon-button.accent {
+  box-shadow: none;
+}
+
+.hydra-root .field > span {
+  color: #536259;
+  font-weight: 700;
+  letter-spacing: .03em !important;
+  text-transform: none;
+}
+
+.hydra-root .field input,
+.hydra-root .field select,
+.hydra-root .field textarea {
+  min-height: 48px;
+  border-radius: 10px;
+  background: #fbfcfa;
+  font-size: 14px !important;
+}
+
+.hydra-root .field input:focus,
+.hydra-root .field select:focus,
+.hydra-root .field textarea:focus {
+  transform: none;
+  border-color: var(--forest-700);
+  box-shadow: 0 0 0 3px rgba(31, 101, 71, .11);
+}
+
+.hydra-root .eyebrow,
+.hydra-root .group-label,
+.hydra-root .property-kicker {
+  letter-spacing: .06em !important;
+}
+
+.hydra-root .screen-header::after,
+.hydra-root .section-heading h2::after,
+.hydra-root .property-hero::before,
+.hydra-root .property-hero::after,
+.hydra-root .water-overview::after,
+.hydra-root .plus-price-hero::after,
+.hydra-root .profile-cover::before,
+.hydra-root .profile-cover::after,
+.hydra-root .nfc-banner-icon::after {
   display: none !important;
+}
+
+.hydra-root :is(
+  .property-hero,
+  .water-overview,
+  .nfc-hero,
+  .plus-price-hero,
+  .profile-cover,
+  .ranking-hero
+) {
+  box-shadow: none !important;
+}
+
+.hydra-root :is(
+  .animal-card,
+  .sector-card,
+  .monitoring-card,
+  .first-action-card,
+  .feature-link-grid button,
+  .community-composer,
+  .post-card,
+  .challenge-card,
+  .activity-card,
+  .property-section-card,
+  .setting-card,
+  .compact-row,
+  .profile-menu-row,
+  .plan-card,
+  .nfc-inline-card,
+  .nfc-manual-card,
+  .notification-list > div,
+  .task-card,
+  .history-home-row
+) {
+  border-radius: 13px !important;
+  box-shadow: none !important;
+}
+
+.hydra-root :is(
+  .animal-card,
+  .sector-card,
+  .first-action-card,
+  .feature-link-grid button,
+  .community-composer,
+  .profile-menu-row,
+  .nfc-inline-card,
+  .quick-grid > button
+):is(:hover, :active) {
+  transform: none !important;
+}
+
+.hydra-root :is(
+  .empty-icon,
+  .water-total-icon svg,
+  .plan-mark svg,
+  .ranking-hero > span svg,
+  .nfc-waves > svg,
+  .wordmark-mark
+) {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Entrada inspirada na transição da referência, usando somente a marca real. */
+.hydra-root .splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--forest-950);
+  animation: hydra-splash-exit 3s cubic-bezier(.4, 0, .2, 1) both;
+}
+
+.hydra-root .splash-brand {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  display: grid;
+  place-items: center;
+}
+
+.hydra-root .splash-expansion {
+  position: absolute;
+  width: 84px;
+  height: 84px;
+  border-radius: 24px;
+  background: var(--cream);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: hydra-splash-expand 3s cubic-bezier(.65, 0, .22, 1) both;
+}
+
+.hydra-root .splash-mark-wrap {
+  position: relative;
+  z-index: 2;
+  width: 88px;
+  height: 88px;
+  display: block;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, .2));
+  animation: hydra-mark-transition 3s cubic-bezier(.65, 0, .22, 1) both;
+}
+
+.hydra-root .splash-mark {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes hydra-mark-transition {
+  0% { opacity: 0; transform: scale(.78); }
+  18% { opacity: 1; transform: scale(1.02); }
+  30%, 54% { opacity: 1; transform: scale(1); }
+  72% { opacity: .96; transform: scale(1.18); }
+  100% { opacity: 0; transform: scale(7); }
+}
+
+@keyframes hydra-splash-expand {
+  0%, 50% { opacity: 0; transform: scale(.76); }
+  61% { opacity: 1; transform: scale(1); }
+  100% { opacity: 1; transform: scale(34); }
+}
+
+@keyframes hydra-splash-exit {
+  0%, 84% { visibility: visible; opacity: 1; }
+  100% { visibility: hidden; opacity: 0; }
+}
+
+/* Autenticação */
+.hydra-root .auth-shell {
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+  padding: max(24px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom));
+  display: grid;
+  place-items: center;
+  overflow-x: hidden;
+  background: var(--cream);
+}
+
+.hydra-root .auth-landing {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  color: white;
+  background: var(--forest-950);
+}
+
+.hydra-root .auth-landing-mosaic {
+  position: absolute;
+  inset: -5vh -6vw auto;
+  height: 68vh;
+}
+
+.hydra-root .auth-landing-mosaic span {
+  position: absolute;
+  overflow: hidden;
+  border-radius: clamp(18px, 4vw, 38px);
+  background-color: #365442;
+  background-position: center;
+  background-size: cover;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, .28);
+}
+
+.hydra-root .auth-landing-mosaic span:nth-child(1) { width: 45vw; height: 30vh; left: -5vw; top: 3vh; transform: rotate(-7deg); background-image: url("https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1000&q=82"); }
+.hydra-root .auth-landing-mosaic span:nth-child(2) { width: 40vw; height: 26vh; left: 31vw; top: -5vh; transform: rotate(4deg); background-image: url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=82"); }
+.hydra-root .auth-landing-mosaic span:nth-child(3) { width: 41vw; height: 29vh; right: -8vw; top: 6vh; transform: rotate(8deg); background-image: url("https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=1000&q=82"); }
+.hydra-root .auth-landing-mosaic span:nth-child(4) { width: 43vw; height: 27vh; left: -4vw; top: 32vh; transform: rotate(5deg); background-image: url("https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?auto=format&fit=crop&w=1000&q=82"); }
+.hydra-root .auth-landing-mosaic span:nth-child(5) { width: 39vw; height: 30vh; left: 34vw; top: 28vh; transform: rotate(-3deg); background-image: url("https://images.unsplash.com/photo-1500076656116-558758c991c1?auto=format&fit=crop&w=1000&q=82"); }
+.hydra-root .auth-landing-mosaic span:nth-child(6) { width: 38vw; height: 26vh; right: -6vw; top: 35vh; transform: rotate(5deg); background-image: url("https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=1000&q=82"); }
+
+.hydra-root .auth-landing-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 39, 27, .05) 20%, rgba(8, 39, 27, .66) 51%, var(--forest-950) 72%);
+}
+
+.hydra-root .auth-landing-brand {
+  position: relative;
+  z-index: 2;
+  padding: max(22px, calc(env(safe-area-inset-top) + 12px)) 22px;
+}
+
+.hydra-root .auth-landing-brand .wordmark-copy,
+.hydra-root .auth-landing-brand .wordmark-copy span { color: white !important; }
+
+.hydra-root .auth-landing-content {
+  position: absolute;
+  z-index: 3;
+  left: 20px;
+  right: 20px;
+  bottom: max(28px, calc(env(safe-area-inset-bottom) + 18px));
+  margin: auto;
+  max-width: 560px;
+  text-align: center;
+}
+
+.hydra-root .auth-landing-mark-wrap {
+  display: block;
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 14px;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, .24));
+  will-change: transform;
+  animation: auth-logo-float 4.8s ease-in-out infinite;
+}
+
+.hydra-root .auth-landing-mark {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hydra-root .auth-landing-kicker {
+  margin: 0 0 9px;
+  color: #b9cec1;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.hydra-root .auth-landing-content h1 {
+  margin: 0;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(31px, 9vw, 54px);
+  line-height: .98;
+  letter-spacing: -.055em;
+}
+
+.hydra-root .auth-landing-content h1 strong { color: #f3a45d; font-weight: 800; }
+
+.hydra-root .auth-landing-copy {
+  max-width: 420px;
+  margin: 15px auto 20px;
+  color: #c3d2ca;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.hydra-root .auth-landing-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.hydra-root :is(.auth-landing-primary, .auth-landing-secondary) {
+  min-height: 50px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.hydra-root .auth-landing-primary { color: var(--forest-950); background: white; }
+.hydra-root .auth-landing-secondary { color: white; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.08); backdrop-filter: blur(14px); }
+
+.hydra-root .auth-landing-staff {
+  width: 100%;
+  min-height: 52px;
+  margin: 11px auto 0;
+  padding: 0 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 999px;
+  color: #f4f8f5;
+  background: rgba(255, 255, 255, .08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.hydra-root .auth-landing-staff > svg {
+  width: 30px;
+  height: 30px;
+  padding: 6px;
+  border-radius: 10px;
+  color: #ffad62;
+  background: rgba(255, 255, 255, .1);
+}
+
+.hydra-root .staff-entry-button {
+  min-height: 70px;
+  margin-top: 14px;
+  padding: 10px 13px;
+  border: 1px solid rgba(31, 101, 71, .14);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(231, 238, 233, .9), rgba(249, 234, 219, .62));
+  box-shadow: none;
+}
+
+.hydra-root .staff-entry-button > svg:first-child {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 13px;
+  color: white;
+  background: var(--forest-800);
+}
+
+.hydra-root .staff-entry-button span strong { color: var(--forest-950); font-size: 13px; }
+.hydra-root .staff-entry-button span small { margin-top: 3px; color: var(--muted); font-size: 10px; }
+.hydra-root .staff-entry-button > svg:last-child { color: var(--forest-700); }
+
+.hydra-root.theme-dark .staff-entry-button {
+  border-color: rgba(255, 255, 255, .1);
+  background: linear-gradient(135deg, rgba(42, 58, 49, .9), rgba(66, 48, 33, .58));
+}
+
+.hydra-root .auth-card,
+.hydra-root .auth-card-wide {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 560px);
+  min-height: 0;
+  margin: 0;
+  padding: clamp(22px, 5vw, 38px);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--paper);
+  box-shadow: 0 20px 60px rgba(9, 39, 27, .09);
+  animation: none;
+}
+
+.hydra-root .auth-shell-signup {
+  background: var(--forest-950);
+}
+
+.hydra-root .auth-shell-motion {
+  background: var(--forest-950);
+}
+
+.hydra-root .auth-shell-motion::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(244, 242, 236, .16), transparent 32%),
+    linear-gradient(180deg, rgba(8, 39, 27, .22), rgba(8, 39, 27, .67));
+}
+
+.hydra-root .auth-shell-motion .auth-card {
+  border-color: rgba(255, 255, 255, .5);
+  background: rgba(250, 249, 245, .86);
+  box-shadow: 0 28px 80px rgba(3, 26, 17, .3);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  animation: auth-glass-card-in 620ms cubic-bezier(.16, .84, .28, 1) both;
+}
+
+.hydra-root .auth-form-mark {
+  width: 58px;
+  height: 58px;
+  margin: -8px auto 17px;
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 9px 18px rgba(8, 39, 27, .18));
+  animation: auth-form-mark-in 620ms cubic-bezier(.16, .84, .28, 1) 90ms both;
+}
+
+.hydra-root .auth-form-mark > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hydra-root .auth-shell-motion .auth-home-back {
+  position: absolute;
+  z-index: 3;
+  top: 18px;
+  left: 20px;
+  margin: 0;
+}
+
+.hydra-root .auth-shell-motion .auth-content h1,
+.hydra-root .auth-shell-motion .signup-panel h1 {
+  text-align: center;
+}
+
+.hydra-root .auth-shell-motion .auth-subtitle {
+  text-align: center;
+}
+
+.hydra-root .auth-shell-staff .auth-form-mark {
+  padding: 9px;
+  border-radius: 18px;
+  background: var(--orange-soft);
+}
+
+/* Acabamento premium dos fluxos de entrada, cadastro e equipe. */
+.hydra-root .auth-shell-motion {
+  padding-inline: clamp(14px, 4vw, 28px);
+}
+
+.hydra-root .auth-shell-motion .auth-card {
+  width: min(100%, 446px);
+  padding: 25px clamp(20px, 5vw, 34px) 28px;
+  border: 1px solid rgba(255, 255, 255, .68);
+  border-radius: 30px;
+  background: linear-gradient(155deg, rgba(255, 255, 255, .96), rgba(247, 247, 242, .88));
+  box-shadow: 0 30px 90px rgba(2, 24, 15, .38), inset 0 1px 0 rgba(255, 255, 255, .9);
+}
+
+.hydra-root .auth-shell-motion .auth-card-wide {
+  width: min(100%, 590px);
+}
+
+.hydra-root .auth-shell-motion .auth-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 76px;
+  height: 4px;
+  border-radius: 0 0 99px 99px;
+  background: var(--orange);
+  transform: translateX(-50%);
+}
+
+.hydra-root .auth-shell-motion .auth-form-mark {
+  width: 68px;
+  height: 68px;
+  margin: -4px auto 18px;
+  padding: 8px;
+  border: 1px solid rgba(31, 101, 71, .1);
+  border-radius: 22px;
+  background: linear-gradient(145deg, #fff, #edf2ea);
+  box-shadow: 0 12px 30px rgba(8, 39, 27, .11), inset 0 1px 0 #fff;
+}
+
+.hydra-root .auth-shell-motion .auth-content h1,
+.hydra-root .auth-shell-motion .signup-panel h1 {
+  max-width: 430px;
+  margin: 0 auto 8px;
+  color: var(--forest-950);
+  font-size: clamp(28px, 7vw, 36px);
+  line-height: 1.06;
+  letter-spacing: -.045em;
+}
+
+.hydra-root .auth-shell-motion .auth-subtitle {
+  max-width: 390px;
+  margin: 0 auto 24px;
+  color: #68766e;
+  line-height: 1.55;
+}
+
+.hydra-root .auth-shell-motion .field {
+  gap: 7px;
+}
+
+.hydra-root .auth-shell-motion .field > span {
+  padding-left: 3px;
+  color: #415249;
+  font-size: 11px;
+  letter-spacing: .01em !important;
+}
+
+.hydra-root .auth-shell-motion :is(.field input, .field select, .field textarea, .municipality-trigger, .state-readonly) {
+  min-height: 54px;
+  border: 1px solid rgba(19, 65, 45, .13);
+  border-radius: 15px;
+  color: var(--forest-950);
+  background: rgba(255, 255, 255, .78);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .92);
+  transition: border-color 190ms ease, background-color 190ms ease, box-shadow 210ms ease, transform 190ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.hydra-root .auth-shell-motion :is(.field input, .field select, .field textarea):focus {
+  border-color: rgba(31, 101, 71, .58);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(31, 101, 71, .1), 0 12px 26px rgba(8, 39, 27, .07);
+  transform: translateY(-1px);
+}
+
+.hydra-root .auth-shell-motion :is(.primary-button, .secondary-button) {
+  min-height: 54px;
+  border-radius: 16px;
+}
+
+.hydra-root .auth-shell-motion .primary-button {
+  background: linear-gradient(135deg, var(--forest-800), var(--forest-700));
+  box-shadow: 0 12px 24px rgba(21, 71, 50, .2);
+}
+
+.hydra-root .auth-shell-motion .secondary-button {
+  border-color: rgba(31, 101, 71, .14);
+  color: var(--forest-800);
+  background: rgba(231, 238, 233, .72);
+}
+
+.hydra-root .auth-shell-motion .auth-switch {
+  margin: 20px 0 0;
+  padding-top: 17px;
+  border-top: 1px solid rgba(31, 101, 71, .1);
+  color: #6e7973;
+}
+
+.hydra-root .auth-shell-motion .auth-switch button {
+  color: var(--forest-700);
+  font-weight: 850;
+}
+
+.hydra-root .auth-shell-motion .signup-topline {
+  align-items: center;
+  margin: -6px 0 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(31, 101, 71, .09);
+}
+
+.hydra-root .auth-shell-motion .step-dots {
+  gap: 6px;
+}
+
+.hydra-root .auth-shell-motion .step-dots span {
+  width: 20px;
+  height: 5px;
+  border-radius: 99px;
+  background: #dce3de;
+}
+
+.hydra-root .auth-shell-motion .step-dots span.active {
+  width: 38px;
+  background: var(--orange);
+  box-shadow: 0 4px 12px rgba(231, 130, 40, .22);
+}
+
+.hydra-root .auth-shell-motion .step-dots span.done {
+  background: var(--forest-700);
+}
+
+.hydra-root .auth-shell-motion .choice-chip {
+  min-height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .72);
+}
+
+.hydra-root .auth-shell-motion .choice-chip.active {
+  color: #fff;
+  border-color: var(--forest-700);
+  background: var(--forest-700);
+}
+
+.hydra-root .auth-shell-motion :is(.staff-code-note, .review-card, .preview-note) {
+  border-color: rgba(31, 101, 71, .11);
+  border-radius: 16px;
+  background: rgba(237, 242, 234, .74);
+}
+
+.hydra-root .auth-shell-staff .primary-button {
+  background: linear-gradient(135deg, #dc721b, var(--orange));
+  box-shadow: 0 12px 24px rgba(231, 130, 40, .22);
+}
+
+.hydra-root .auth-shell-motion .auth-icon {
+  display: none;
+}
+
+.hydra-root .google-auth-button {
+  width: 100%;
+  min-height: 54px;
+  margin-bottom: 17px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid rgba(18, 52, 37, .14);
+  border-radius: 16px;
+  color: #26352d;
+  background: rgba(255, 255, 255, .9);
+  box-shadow: 0 8px 24px rgba(8, 39, 27, .07), inset 0 1px 0 #fff;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.hydra-root .google-auth-button:hover {
+  border-color: rgba(18, 52, 37, .22);
+  background: #fff;
+}
+
+.hydra-root .google-g {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  font-family: Arial, sans-serif;
+  font-size: 21px;
+  font-weight: 900;
+  line-height: 1;
+  background: conic-gradient(from -38deg, #4285f4 0 25%, #34a853 25% 43%, #fbbc05 43% 68%, #ea4335 68% 84%, #4285f4 84% 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hydra-root .auth-divider {
+  margin: 0 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #8b958f;
+  font-size: 10px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.hydra-root .auth-divider::before,
+.hydra-root .auth-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: rgba(31, 101, 71, .11);
+}
+
+.hydra-root .auth-shell-motion .auth-content > form,
+.hydra-root .auth-shell-motion .signup-panel {
+  animation: auth-form-content-in 420ms cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.hydra-root .auth-shell-motion .form-actions {
+  position: sticky;
+  bottom: -1px;
+  z-index: 4;
+  margin-top: 20px;
+  padding-top: 12px;
+  background: linear-gradient(180deg, rgba(248, 248, 244, 0), rgba(248, 248, 244, .96) 28%);
+}
+
+@keyframes auth-form-content-in {
+  from { opacity: 0; transform: translate3d(18px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@media (max-width: 560px) {
+  .hydra-root .auth-shell-motion {
+    align-items: end;
+    padding: max(16px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
+  }
+
+  .hydra-root .auth-shell-motion .auth-card {
+    max-height: calc(100dvh - max(18px, env(safe-area-inset-top)));
+    padding: 24px 20px 23px;
+    border-radius: 30px 30px 24px 24px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .hydra-root .auth-shell-motion:not(.auth-shell-signup):not(.auth-shell-staff) .auth-card {
+    max-height: calc(100dvh - 15vh);
+  }
+
+  .hydra-root .auth-shell-staff .auth-card {
+    max-height: calc(100dvh - 10vh);
+  }
+
+  .hydra-root .auth-shell-motion .auth-form-mark {
+    width: 62px;
+    height: 62px;
+    margin-bottom: 15px;
+  }
+
+  .hydra-root .auth-shell-motion .auth-home-back {
+    top: 17px;
+    left: 17px;
+  }
+
+  .hydra-root .auth-shell-motion .auth-content h1,
+  .hydra-root .auth-shell-motion .signup-panel h1 {
+    font-size: clamp(27px, 8vw, 33px);
+  }
+
+  .hydra-root .auth-shell-motion .form-grid {
+    gap: 13px;
+  }
+
+  .hydra-root .auth-shell-motion .auth-subtitle {
+    margin-bottom: 20px;
+  }
+}
+
+.hydra-root .signup-motion-bg {
+  position: absolute;
+  z-index: 0;
+  inset: -12vh -12vw;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hydra-root .signup-motion-bg span {
+  --intro-delay: 0ms;
+  position: absolute;
+  width: clamp(170px, 43vw, 420px);
+  height: clamp(180px, 30vh, 360px);
+  border-radius: clamp(24px, 5vw, 46px);
+  background-color: #315240;
+  background-position: center;
+  background-size: cover;
+  box-shadow: 0 24px 65px rgba(0, 0, 0, .3);
+  will-change: transform;
+  animation:
+    signup-tile-reveal 760ms cubic-bezier(.16, .84, .28, 1) var(--intro-delay) both,
+    signup-photo-drift var(--drift-speed, 8s) ease-in-out calc(var(--intro-delay) + 760ms) infinite alternate;
+}
+
+.hydra-root .signup-motion-bg span:nth-child(1) { --tile-rotate: -8deg; --drift-x: 40px; --drift-y: 42px; --drift-speed: 7.3s; --intro-delay: 40ms; left: -7vw; top: 2vh; background-image: url("https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(2) { --tile-rotate: 7deg; --drift-x: -38px; --drift-y: 46px; --drift-speed: 8.6s; --intro-delay: 100ms; right: -8vw; top: -1vh; background-image: url("https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(3) { --tile-rotate: 5deg; --drift-x: 44px; --drift-y: -38px; --drift-speed: 7.8s; --intro-delay: 160ms; left: -13vw; top: 40vh; background-image: url("https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(4) { --tile-rotate: -6deg; --drift-x: -42px; --drift-y: -45px; --drift-speed: 9s; --intro-delay: 220ms; right: -12vw; top: 42vh; background-image: url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(5) { --tile-rotate: -4deg; --drift-x: 38px; --drift-y: -48px; --drift-speed: 8.2s; --intro-delay: 280ms; left: 4vw; bottom: -15vh; background-image: url("https://images.unsplash.com/photo-1500076656116-558758c991c1?auto=format&fit=crop&w=900&q=80"); }
+.hydra-root .signup-motion-bg span:nth-child(6) { --tile-rotate: 8deg; --drift-x: -40px; --drift-y: 42px; --drift-speed: 9.4s; --intro-delay: 340ms; right: 1vw; bottom: -16vh; background-image: url("https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=900&q=80"); }
+
+.hydra-root .auth-home-back {
+  min-height: 40px;
+  margin: -8px 0 18px -8px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.hydra-root .auth-brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.hydra-root .auth-content h1,
+.hydra-root .signup-panel h1 {
+  font-size: clamp(27px, 8vw, 34px);
+}
+
+.hydra-root .auth-subtitle {
+  font-size: 14px;
+}
+
+.hydra-root .auth-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+}
+
+.hydra-root .auth-enter,
+.hydra-root .auth-enter > *,
+.hydra-root .signup-panel,
+.hydra-root .signup-panel > * {
+  opacity: 1;
+  animation: none !important;
+}
+
+.hydra-root .staff-entry-button,
+.hydra-root .staff-code-note,
+.hydra-root .review-card,
+.hydra-root .preview-note,
+.hydra-root .municipality-trigger,
+.hydra-root .state-readonly,
+.hydra-root .municipality-panel {
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+/* Aplicativo móvel */
+.hydra-root .screen {
+  padding: max(21px, calc(env(safe-area-inset-top) + 13px)) 18px calc(92px + env(safe-area-inset-bottom));
+}
+
+.hydra-root .home-screen {
+  padding-top: max(12px, env(safe-area-inset-top));
+}
+
+.hydra-root .home-brandbar {
+  min-height: 58px;
+}
+
+.hydra-root .home-brandbar .wordmark-mark {
+  width: 43px;
+  height: 43px;
+}
+
+.hydra-root .home-brandbar .wordmark-copy {
+  font-size: 17px;
+}
+
+.hydra-root .greeting-block {
+  margin-top: 23px;
+}
+
+.hydra-root .greeting-block h1 {
+  margin-bottom: 7px;
+  color: var(--forest-800);
+}
+
+.hydra-root .greeting-time {
+  color: var(--forest-800);
+  font-weight: 700;
+}
+
+.hydra-root .greeting-name {
+  color: var(--orange);
+  font: inherit;
+  font-weight: 800;
+}
+
+.hydra-root .greeting-block p {
+  font-size: 12px !important;
+}
+
+.hydra-root .shortcut-row {
+  gap: 7px;
+  margin: 26px 0 22px;
+}
+
+.hydra-root .shortcut-row button {
+  gap: 7px;
+}
+
+.hydra-root .shortcut-row button > span {
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 12px;
+  color: var(--forest-800);
+  background: var(--forest-100);
+  box-shadow: none;
+}
+
+.hydra-root .shortcut-row button > span::after {
+  display: none;
+}
+
+.hydra-root .shortcut-row button small {
+  color: #435149;
+  font-size: 10px !important;
+  font-weight: 650;
+}
+
+.hydra-root .nfc-banner {
+  padding: 12px;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--orange);
+  border-radius: 14px;
+  box-shadow: none;
+}
+
+.hydra-root .nfc-banner-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 11px;
+}
+
+.hydra-root .nfc-banner-copy small {
+  color: #a95413;
+  font-size: 9px !important;
+  letter-spacing: .05em;
+}
+
+.hydra-root .nfc-banner-copy strong {
+  font-size: 14px !important;
+}
+
+.hydra-root .property-hero {
+  margin-top: 16px;
+  border-radius: 17px;
+  background: var(--forest-800);
+}
+
+.hydra-root .property-hero-top {
+  padding: 21px 20px 16px;
+}
+
+.hydra-root .property-hero h2 {
+  font-size: 22px !important;
+}
+
+.hydra-root .property-hero p,
+.hydra-root .property-hero small {
+  color: #c6d6cd;
+}
+
+.hydra-root .property-metrics {
+  border-color: rgba(255, 255, 255, .12);
+}
+
+.hydra-root .property-link {
+  background: rgba(0, 0, 0, .09);
+}
+
+.hydra-root .home-section {
+  margin-top: 24px;
+}
+
+.hydra-root .history-home-row,
+.hydra-root .task-card,
+.hydra-root .feature-link-grid button,
+.hydra-root .first-action-card {
+  border-color: var(--line);
+  background: var(--paper);
+}
+
+.hydra-root .feature-link-grid button {
+  min-height: 82px;
+}
+
+.hydra-root .home-fab-label {
+  min-height: 46px;
+  margin: 24px 0 0;
+  padding: 0 17px;
+  border-radius: 11px;
+  background: var(--orange);
+  box-shadow: none;
+}
+
+.hydra-root .bottom-nav {
+  left: 50%;
+  width: min(100%, 620px);
+  height: calc(76px + env(safe-area-inset-bottom));
+  padding: 6px 6px env(safe-area-inset-bottom);
+  border-color: var(--line);
+  background: rgba(255, 255, 255, .97);
+  box-shadow: 0 -1px 0 rgba(10, 40, 28, .03);
+  backdrop-filter: none;
+  transform: translateX(-50%);
+  animation: hydra-nav-enter 420ms cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.hydra-root .bottom-nav.is-hidden {
+  transform: translate(-50%, calc(100% + 20px));
+}
+
+.hydra-root .bottom-nav-indicator {
+  display: none;
+}
+
+.hydra-root .bottom-nav button {
+  gap: 3px;
+  color: #737d77;
+  transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.hydra-root .bottom-nav button span {
+  width: 38px;
+  height: 32px;
+  border-radius: 10px;
+  transition: color 180ms ease, background-color 180ms ease, transform 220ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.hydra-root .bottom-nav button.active span {
+  color: var(--forest-800);
+  background: var(--forest-100);
+  transform: translateY(-2px);
+  animation: hydra-nav-active 280ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.hydra-root .bottom-nav button small {
+  font-weight: 650;
+}
+
+.hydra-root .desktop-nav-brand {
+  display: none;
+}
+
+@keyframes hydra-nav-enter {
+  from { opacity: 0; transform: translate(-50%, 18px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes hydra-nav-active {
+  0% { transform: translateY(1px) scale(.9); }
+  65% { transform: translateY(-3px) scale(1.06); }
+  100% { transform: translateY(-2px) scale(1); }
+}
+
+.hydra-root .screen-header {
+  margin-bottom: 25px;
+}
+
+.hydra-root .screen-heading h1 {
+  color: var(--ink);
+}
+
+.hydra-root .screen-heading p {
+  margin-top: 7px;
+  font-size: 13px !important;
+}
+
+.hydra-root .water-overview,
+.hydra-root .nfc-hero,
+.hydra-root .plus-price-hero {
+  border-radius: 17px;
+  background-image: none;
+  background-color: var(--forest-800);
+}
+
+.hydra-root .nfc-waves span {
+  animation-duration: 2.8s;
+}
+
+.hydra-root .animal-list,
+.hydra-root .profile-group,
+.hydra-root .content-section {
+  gap: 10px;
+}
+
+.hydra-root .filter-chips button,
+.hydra-root .community-tabs button,
+.hydra-root .choice-chip,
+.hydra-root .segmented-control button {
+  border-radius: 9px;
+}
+
+.hydra-root .profile-cover {
+  border-radius: 0 0 18px 18px;
+  background-image: none;
+  background-color: var(--forest-800);
+}
+
+.hydra-root .modal-sheet,
+.hydra-root .quick-sheet,
+.hydra-root .theme-dialog,
+.hydra-root .demo-dialog {
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -8px 30px rgba(9, 39, 27, .12);
+}
+
+.hydra-root .page-enter,
+.hydra-root .route-motion-forward {
+  animation: hydra-page-forward 330ms cubic-bezier(.2, .8, .2, 1) both !important;
+  will-change: transform, opacity;
+}
+
+.hydra-root .route-motion-back {
+  animation: hydra-page-back 330ms cubic-bezier(.2, .8, .2, 1) both !important;
+  will-change: transform, opacity;
+}
+
+@keyframes hydra-page-in {
+  from { opacity: .5; }
+  to { opacity: 1; }
+}
+
+@keyframes hydra-page-forward {
+  from { opacity: 0; transform: translate3d(26px, 0, 0) scale(.985); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes hydra-page-back {
+  from { opacity: 0; transform: translate3d(-24px, 0, 0) scale(.985); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+/* Tema escuro sem brilhos ou gradientes decorativos. */
+.hydra-root.theme-dark {
+  --cream: #111713;
+  --paper: #18201b;
+  --ink: #edf2ee;
+  --muted: #a7b2aa;
+  --line: #2b3730;
+  --forest-100: #22332a;
+  --sage-soft: #23342b;
+  --orange-soft: #3b2c20;
+}
+
+.hydra-root.theme-dark :is(.app-shell, .phone-app, .screen, .route-loading, .auth-shell, .auth-card) {
+  background: var(--cream);
+}
+
+.hydra-root.theme-dark :is(.field input, .field select, .field textarea) {
+  color: var(--ink);
+  border-color: var(--line);
+  background: #151d18;
+}
+
+.hydra-root.theme-dark .bottom-nav {
+  border-color: var(--line);
+  background: rgba(24, 32, 27, .98);
+}
+
+.hydra-root.theme-dark .greeting-time { color: #83ba5b; }
+.hydra-root.theme-dark .greeting-name { color: #f2a057; }
+
+/* Formulários reais centralizados; a landing visual é uma tela separada. */
+@media (min-width: 900px) {
+  .hydra-root .auth-shell {
+    padding: 40px;
+  }
+
+  .hydra-root .auth-card,
+  .hydra-root .auth-card-wide {
+    max-height: calc(100dvh - 80px);
+    padding: 38px;
+    overflow-y: auto;
+  }
+
+  .hydra-root .auth-landing-mosaic { inset: -12vh -3vw auto; height: 82vh; }
+  .hydra-root .auth-landing-content { bottom: 6vh; }
+  .hydra-root .auth-landing-mosaic span:nth-child(1) { width: 30vw; }
+  .hydra-root .auth-landing-mosaic span:nth-child(2) { width: 34vw; left: 25vw; }
+  .hydra-root .auth-landing-mosaic span:nth-child(3) { width: 32vw; }
+  .hydra-root .auth-landing-mosaic span:nth-child(4) { width: 31vw; }
+  .hydra-root .auth-landing-mosaic span:nth-child(5) { width: 35vw; left: 28vw; }
+  .hydra-root .auth-landing-mosaic span:nth-child(6) { width: 31vw; }
+  .hydra-root .auth-landing-actions { width: 410px; margin: 0 auto; }
+  .hydra-root .auth-landing-shade {
+    background: linear-gradient(180deg, rgba(8, 39, 27, .02) 23%, rgba(8, 39, 27, .58) 58%, var(--forest-950) 79%);
+  }
+}
+
+@media (min-width: 700px) and (max-width: 1023px) {
+  .hydra-root .app-shell {
+    padding-top: 0;
+  }
+
+  .hydra-root .phone-app,
+  .hydra-root .screen {
+    width: 100%;
+    max-width: none;
+    border-radius: 0;
+  }
+
+  .hydra-root .bottom-nav {
+    width: min(calc(100% - 28px), 620px);
+    bottom: max(10px, env(safe-area-inset-bottom));
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    box-shadow: 0 14px 38px rgba(9, 39, 27, .12);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hydra-root .app-shell,
+  .hydra-root .phone-app {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: var(--cream) !important;
+    box-shadow: none !important;
+  }
+
+  .hydra-root .app-content {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .hydra-root .app-content > .screen,
+  .hydra-root .app-content .screen {
+    width: min(calc(100% - 72px), 1180px) !important;
+    max-width: 1180px !important;
+    min-height: 100dvh !important;
+    margin: 0 auto !important;
+    padding: 42px 0 148px !important;
+    border-radius: 0 !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav {
+    position: fixed !important;
+    z-index: 100 !important;
+    inset: auto auto 20px 50% !important;
+    width: min(760px, calc(100vw - 48px)) !important;
+    height: 84px !important;
+    min-height: 84px !important;
+    padding: 8px 14px !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 5px !important;
+    border: 1px solid rgba(15, 61, 42, .12) !important;
+    border-radius: 25px !important;
+    color: var(--ink) !important;
+    background: rgba(255, 255, 255, .94) !important;
+    box-shadow: 0 18px 48px rgba(9, 39, 27, .16) !important;
+    backdrop-filter: blur(18px) !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav.is-hidden {
+    transform: translate(-50%, calc(100% + 36px)) !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button,
+  .hydra-root .phone-app .bottom-nav > button:nth-of-type(3) {
+    width: 100% !important;
+    min-height: 66px !important;
+    height: 66px !important;
+    margin: 0 !important;
+    padding: 5px 8px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    border-radius: 16px !important;
+    color: #707b74 !important;
+    text-align: center !important;
+    transform: none !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button:hover {
+    color: var(--forest-800) !important;
+    background: var(--forest-100) !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button.active {
+    color: var(--forest-800) !important;
+    background: var(--forest-100) !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button > span,
+  .hydra-root .phone-app .bottom-nav > button.active > span {
+    width: 36px !important;
+    height: 30px !important;
+    color: inherit !important;
+    background: transparent !important;
+    transform: none;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button.active > span {
+    animation: hydra-nav-active 280ms cubic-bezier(.2, .8, .2, 1);
+  }
+
+  .hydra-root .phone-app .bottom-nav > button > small {
+    color: inherit !important;
+    font-size: 11px !important;
+    font-weight: 650 !important;
+  }
+
+  .hydra-root .home-brandbar {
+    display: none !important;
+  }
+
+  .hydra-root .home-screen {
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    column-gap: 24px !important;
+    row-gap: 22px !important;
+  }
+
+  .hydra-root .home-screen > .greeting-block,
+  .hydra-root .home-screen > .home-announcements,
+  .hydra-root .home-screen > .shortcut-row {
+    grid-column: 1 / -1 !important;
+  }
+
+  .hydra-root .home-screen > .shortcut-row {
+    width: min(100%, 660px) !important;
+    margin: 4px 0 2px !important;
+  }
+
+  .hydra-root .home-screen > .nfc-banner {
+    grid-column: 1 / span 5 !important;
+    margin: 0 !important;
+  }
+
+  .hydra-root .home-screen > .property-hero {
+    grid-column: 6 / -1 !important;
+    margin: 0 !important;
+  }
+
+  .hydra-root .home-screen > .home-summary-section {
+    grid-column: 1 / span 7 !important;
+  }
+
+  .hydra-root .home-screen > .home-section:not(.home-summary-section) {
+    grid-column: 8 / -1 !important;
+  }
+
+  .hydra-root .modal-sheet,
+  .hydra-root .quick-sheet {
+    left: 50%;
+    width: min(620px, calc(100vw - 40px));
+    border-radius: 18px 18px 0 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .hydra-root .screen {
+    padding-inline: 15px;
+  }
+
+  .hydra-root .shortcut-row {
+    gap: 3px;
+  }
+
+  .hydra-root .shortcut-row button > span {
+    width: 42px;
+    height: 42px;
+  }
+
+  .hydra-root .shortcut-row button small {
+    font-size: 9px !important;
+  }
+}
+
+/* Movimento do acesso e cadastro: fotos lentas, etapas e microinterações. */
+.hydra-root .auth-landing-mosaic span {
+  --tile-rotate: 0deg;
+  --drift-x: 32px;
+  --drift-y: 38px;
+  --drift-speed: 8s;
+  --intro-delay: 0ms;
+  will-change: transform;
+  animation:
+    auth-tile-reveal 880ms cubic-bezier(.16, .84, .28, 1) var(--intro-delay) both,
+    auth-photo-drift var(--drift-speed) ease-in-out calc(var(--intro-delay) + 880ms) infinite alternate;
+}
+
+.hydra-root .auth-landing-mosaic span:nth-child(1) { --tile-rotate: -7deg; --drift-x: 38px; --drift-speed: 7.2s; --intro-delay: 40ms; }
+.hydra-root .auth-landing-mosaic span:nth-child(2) { --tile-rotate: 4deg; --drift-x: -34px; --drift-y: 44px; --drift-speed: 8.6s; --intro-delay: 105ms; }
+.hydra-root .auth-landing-mosaic span:nth-child(3) { --tile-rotate: 8deg; --drift-x: -42px; --drift-speed: 7.8s; --intro-delay: 165ms; }
+.hydra-root .auth-landing-mosaic span:nth-child(4) { --tile-rotate: 5deg; --drift-y: -40px; --drift-speed: 9.1s; --intro-delay: 220ms; }
+.hydra-root .auth-landing-mosaic span:nth-child(5) { --tile-rotate: -3deg; --drift-x: 36px; --drift-y: -45px; --drift-speed: 8.2s; --intro-delay: 275ms; }
+.hydra-root .auth-landing-mosaic span:nth-child(6) { --tile-rotate: 5deg; --drift-x: -32px; --drift-y: -38px; --drift-speed: 9.5s; --intro-delay: 325ms; }
+
+.hydra-root .auth-landing-content {
+  animation: auth-content-reveal 720ms cubic-bezier(.2, .8, .2, 1) 180ms both;
+}
+
+.hydra-root:has(.splash-screen) .auth-landing-mosaic span,
+.hydra-root:has(.splash-screen) .auth-landing-content,
+.hydra-root:has(.splash-screen) .auth-landing-mark-wrap {
+  animation-play-state: paused !important;
+}
+
+.hydra-root .auth-shell-signup .signup-panel {
+  animation: signup-step-in 440ms cubic-bezier(.2, .8, .2, 1) both !important;
+}
+
+.hydra-root .auth-shell-signup .signup-panel > * {
+  opacity: 0;
+  animation: signup-item-in 460ms cubic-bezier(.2, .8, .2, 1) forwards !important;
+}
+
+.hydra-root .auth-shell-signup .signup-panel > :nth-child(1) { animation-delay: 40ms !important; }
+.hydra-root .auth-shell-signup .signup-panel > :nth-child(2) { animation-delay: 85ms !important; }
+.hydra-root .auth-shell-signup .signup-panel > :nth-child(3) { animation-delay: 125ms !important; }
+.hydra-root .auth-shell-signup .signup-panel > :nth-child(n+4) { animation-delay: 165ms !important; }
+
+.hydra-root .auth-shell-signup .field {
+  transform-origin: center;
+  transition: transform 200ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.hydra-root .auth-shell-signup .field:focus-within {
+  animation: signup-field-focus 300ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.hydra-root .auth-shell-signup .field:focus-within > span {
+  color: var(--forest-700);
+}
+
+.hydra-root .auth-shell-signup :is(input, select, textarea):focus {
+  background: rgba(255, 255, 255, .98);
+  box-shadow: 0 0 0 4px rgba(31, 101, 71, .12), 0 10px 25px rgba(9, 39, 27, .07);
+}
+
+.hydra-root .auth-shell-signup input:not(:placeholder-shown) {
+  border-color: rgba(31, 101, 71, .38);
+}
+
+.hydra-root .auth-shell-signup button {
+  overflow: hidden;
+  transition: transform 170ms cubic-bezier(.2, .8, .2, 1), background-color 180ms ease, border-color 180ms ease !important;
+}
+
+.hydra-root .auth-shell-signup button:not(:disabled):active {
+  transform: scale(.965) !important;
+}
+
+.hydra-root .auth-shell-signup .choice-chip.active {
+  animation: signup-choice-pop 280ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.hydra-root .auth-shell-signup .step-dots span {
+  transition: width 280ms cubic-bezier(.2, .8, .2, 1), background-color 220ms ease, transform 220ms ease;
+}
+
+.hydra-root .auth-shell-signup .step-dots span.active {
+  animation: signup-dot-pulse 420ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.hydra-root.theme-dark .auth-shell-signup .auth-card {
+  border-color: rgba(255, 255, 255, .1);
+  background: rgba(24, 32, 27, .9);
+}
+
+@keyframes auth-photo-drift {
+  from { transform: rotate(var(--tile-rotate)) translate3d(0, 0, 0) scale(1.02); }
+  to { transform: rotate(calc(var(--tile-rotate) + 2.2deg)) translate3d(var(--drift-x), var(--drift-y), 0) scale(1.1); }
+}
+
+@keyframes auth-tile-reveal {
+  from { opacity: 0; transform: rotate(var(--tile-rotate)) translate3d(0, -64px, 0) scale(.84); }
+  to { opacity: 1; transform: rotate(var(--tile-rotate)) translate3d(0, 0, 0) scale(1.02); }
+}
+
+@keyframes auth-content-reveal {
+  from { opacity: 0; transform: translate3d(0, 24px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes signup-photo-drift {
+  from { transform: rotate(var(--tile-rotate)) translate3d(0, 0, 0) scale(1.02); }
+  to { transform: rotate(calc(var(--tile-rotate) + 2.4deg)) translate3d(var(--drift-x), var(--drift-y), 0) scale(1.1); }
+}
+
+@keyframes signup-tile-reveal {
+  from { opacity: 0; transform: rotate(var(--tile-rotate)) translate3d(0, -56px, 0) scale(.86); }
+  to { opacity: 1; transform: rotate(var(--tile-rotate)) translate3d(0, 0, 0) scale(1.02); }
+}
+
+@keyframes auth-glass-card-in {
+  from { opacity: 0; transform: translate3d(0, 34px, 0) scale(.95); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes auth-form-mark-in {
+  from { opacity: 0; transform: scale(.72) rotate(-7deg); }
+  70% { opacity: 1; transform: scale(1.06) rotate(1deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes auth-logo-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-7px) scale(1.035); }
+}
+
+@keyframes signup-step-in {
+  from { opacity: 0; transform: translate3d(24px, 0, 0) scale(.985); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes signup-item-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes signup-field-focus {
+  0% { transform: scale(1); }
+  55% { transform: scale(1.012); }
+  100% { transform: scale(1); }
+}
+
+@keyframes signup-choice-pop {
+  0% { transform: scale(.9); }
+  70% { transform: scale(1.045); }
+  100% { transform: scale(1); }
+}
+
+@keyframes signup-dot-pulse {
+  0% { transform: scaleX(.75); opacity: .55; }
+  70% { transform: scaleX(1.08); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+
+/* Motion geral: respostas curtas durante o uso, sem animações decorativas contínuas. */
+.hydra-root .phone-app :is(
+  .animal-card,
+  .sector-card,
+  .monitoring-card,
+  .activity-card,
+  .post-card,
+  .challenge-card,
+  .first-action-card,
+  .history-home-row,
+  .profile-menu-row,
+  .compact-row,
+  .notification-item,
+  .nfc-banner,
+  .feature-link-grid button,
+  .task-card button,
+  .shortcut-row button
+) {
+  transition: transform 190ms cubic-bezier(.2, .8, .2, 1), border-color 190ms ease, background-color 190ms ease, box-shadow 220ms ease !important;
+}
+
+.hydra-root .phone-app :is(
+  .animal-card,
+  .sector-card,
+  .monitoring-card,
+  .activity-card,
+  .post-card,
+  .challenge-card,
+  .compact-row,
+  .notification-item
+) {
+  animation: hydra-card-settle 260ms cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.hydra-root .phone-app :is(
+  .animal-card,
+  .sector-card,
+  .monitoring-card,
+  .activity-card,
+  .first-action-card,
+  .history-home-row,
+  .profile-menu-row,
+  .compact-row,
+  .notification-item,
+  .nfc-banner,
+  .feature-link-grid button,
+  .task-card button,
+  .shortcut-row button
+):active {
+  transform: scale(.982) !important;
+}
+
+.hydra-root .phone-app :is(.filter-chips button, .community-tabs button, .choice-chip, .segmented-control button, .toggle) {
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 180ms cubic-bezier(.2, .8, .2, 1), box-shadow 180ms ease !important;
+}
+
+.hydra-root .phone-app :is(.filter-chips button, .community-tabs button, .choice-chip, .segmented-control button):active {
+  transform: scale(.96) !important;
+}
+
+.hydra-root .phone-app :is(.modal-layer, .quick-layer) {
+  animation-duration: 210ms !important;
+}
+
+.hydra-root .phone-app :is(.modal-sheet, .quick-sheet) {
+  animation-duration: 280ms !important;
+  animation-timing-function: cubic-bezier(.2, .8, .2, 1) !important;
+}
+
+.hydra-root .phone-app .route-loading span {
+  animation-duration: 760ms !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hydra-root .phone-app :is(
+    .animal-card,
+    .sector-card,
+    .monitoring-card,
+    .activity-card,
+    .first-action-card,
+    .history-home-row,
+    .profile-menu-row,
+    .compact-row,
+    .notification-item,
+    .nfc-banner,
+    .feature-link-grid button,
+    .task-card button
+  ):hover {
+    transform: translateY(-2px) !important;
+    border-color: rgba(31, 101, 71, .2) !important;
+    box-shadow: 0 10px 24px rgba(9, 39, 27, .07) !important;
+  }
+}
+
+@keyframes hydra-card-settle {
+  from { opacity: .78; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Resposta tátil da navegação: compressão, pulso do ícone e onda no toque. */
+.hydra-root .phone-app .bottom-nav {
+  border-color: rgba(255, 255, 255, .42) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .5), rgba(244, 248, 245, .36)) !important;
+  box-shadow: 0 -10px 34px rgba(8, 39, 27, .07), inset 0 1px 0 rgba(255, 255, 255, .58) !important;
+  -webkit-backdrop-filter: blur(38px) saturate(185%) !important;
+  backdrop-filter: blur(38px) saturate(185%) !important;
+  background-clip: padding-box !important;
+}
+
+.hydra-root.theme-dark .phone-app .bottom-nav {
+  border-color: rgba(255, 255, 255, .1) !important;
+  background: linear-gradient(180deg, rgba(24, 35, 29, .6), rgba(17, 26, 21, .46)) !important;
+  box-shadow: 0 -10px 34px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .07) !important;
+}
+
+.hydra-root .phone-app .bottom-nav > button {
+  overflow: hidden !important;
+  transform-origin: center !important;
+}
+
+.hydra-root .phone-app .bottom-nav > button:not(.active) > span:not(.touch-ripple) {
+  opacity: .62;
+  filter: saturate(.55);
+}
+
+.hydra-root .phone-app .bottom-nav > button.active > span:not(.touch-ripple) {
+  opacity: 1;
+  filter: none;
+}
+
+.hydra-root .phone-app .bottom-nav > button.nav-nfc > span:not(.touch-ripple),
+.hydra-root .phone-app .bottom-nav > button.nav-nfc.active > span:not(.touch-ripple) {
+  color: #fff !important;
+  background: var(--orange) !important;
+  box-shadow: 0 7px 16px rgba(231, 130, 40, .24) !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Resposta de clique consistente em todas as funções do aplicativo. */
+.hydra-root :is(button, [role="button"], a, .animal-card, .sector-card, .monitoring-card, .activity-card, .post-card, .challenge-card, .history-home-row, .profile-menu-row, .compact-row, .notification-item) {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transform-origin: center;
+}
+
+.hydra-root :is(button, [role="button"], a):not(:disabled) {
+  transition: transform 170ms cubic-bezier(.2, .8, .2, 1), filter 170ms ease, box-shadow 190ms ease, background-color 190ms ease !important;
+}
+
+.hydra-root :is(button, [role="button"], a):not(:disabled):active {
+  transform: scale(.965) !important;
+  filter: brightness(.97) saturate(1.04);
+}
+
+.hydra-root .phone-app :is(.animal-card, .sector-card, .monitoring-card, .activity-card, .post-card, .challenge-card, .history-home-row, .profile-menu-row, .compact-row, .notification-item):active {
+  transform: scale(.98) translateY(1px) !important;
+  filter: brightness(.985);
+}
+
+.hydra-root :is(.auth-landing-staff, .staff-entry-button):not(:disabled):active {
+  transform: scale(.975) !important;
+}
+
+.hydra-root button.is-pressed:not(.bottom-nav button) {
+  animation: hydra-button-press 440ms cubic-bezier(.2, .8, .2, 1) !important;
+}
+
+.hydra-root button.is-pressed:not(.bottom-nav button) > svg,
+.hydra-root button.is-pressed:not(.bottom-nav button) > span:first-child svg {
+  animation: hydra-button-icon 440ms cubic-bezier(.2, .8, .2, 1) !important;
+}
+
+.hydra-root :is(.primary-button, .auth-landing-primary, .home-fab-label).is-pressed {
+  animation: hydra-primary-press 440ms cubic-bezier(.2, .8, .2, 1) !important;
+}
+
+.hydra-root .phone-app .bottom-nav > button.is-tapped {
+  animation: hydra-nav-tap 420ms cubic-bezier(.2, .8, .2, 1) !important;
+}
+
+.hydra-root .phone-app .bottom-nav > button.is-tapped > span:not(.touch-ripple) {
+  animation: hydra-nav-icon-tap 420ms cubic-bezier(.2, .8, .2, 1) !important;
+}
+
+.hydra-root .phone-app .bottom-nav button > .touch-ripple,
+.hydra-root .phone-app .bottom-nav button .touch-ripple {
+  display: block !important;
+  visibility: visible !important;
+  position: absolute !important;
+  z-index: 1 !important;
+  left: var(--touch-x) !important;
+  top: var(--touch-y) !important;
+  width: var(--touch-size) !important;
+  height: var(--touch-size) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: rgba(31, 101, 71, .22) !important;
+  box-shadow: none !important;
+  opacity: 0;
+  pointer-events: none !important;
+  transform: scale(0);
+  animation: hydra-nav-ripple 580ms cubic-bezier(.2, .8, .2, 1) forwards !important;
+}
+
+@keyframes hydra-nav-tap {
+  0% { transform: scale(1); }
+  34% { transform: scale(.94); }
+  68% { transform: scale(1.025); }
+  100% { transform: scale(1); }
+}
+
+@keyframes hydra-nav-icon-tap {
+  0% { transform: translateY(0) scale(1); }
+  38% { transform: translateY(2px) scale(.9); }
+  72% { transform: translateY(-3px) scale(1.08); }
+  100% { transform: translateY(-2px) scale(1); }
+}
+
+@keyframes hydra-nav-ripple {
+  0% { opacity: .34; transform: scale(0); }
+  68% { opacity: .13; }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+@keyframes hydra-button-press {
+  0% { transform: scale(1); }
+  34% { transform: scale(.955) translateY(1px); }
+  70% { transform: scale(1.018) translateY(-1px); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+@keyframes hydra-button-icon {
+  0% { transform: scale(1) rotate(0); }
+  35% { transform: scale(.84) rotate(-6deg); }
+  72% { transform: scale(1.1) rotate(3deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+@keyframes hydra-primary-press {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(31, 101, 71, 0); }
+  35% { transform: scale(.955); box-shadow: 0 0 0 5px rgba(31, 101, 71, .1); }
+  72% { transform: scale(1.018); box-shadow: 0 8px 22px rgba(31, 101, 71, .14); }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(31, 101, 71, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hydra-root *,
+  .hydra-root *::before,
+  .hydra-root *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
 }
