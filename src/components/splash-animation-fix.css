@@ -1,0 +1,58 @@
+/* Splash: uma única sequência de animação para evitar cortes e conflitos de estilos antigos. */
+html body #root .hydra-root .splash-screen {
+  animation: hydra-splash-screen-stable 3.15s cubic-bezier(.4, 0, .2, 1) both !important;
+}
+
+html body #root .hydra-root .splash-expansion {
+  opacity: 0;
+  transform: scale(.78);
+  will-change: transform, opacity;
+  animation: hydra-splash-expansion-stable 3.15s cubic-bezier(.65, 0, .22, 1) both !important;
+}
+
+html body #root .hydra-root .splash-mark-wrap {
+  opacity: 0;
+  transform: scale(.82);
+  will-change: transform, opacity;
+  animation: hydra-splash-mark-stable 3.15s cubic-bezier(.65, 0, .22, 1) both !important;
+}
+
+html body #root .hydra-root .splash-mark {
+  animation: none !important;
+  transform: none !important;
+}
+
+@keyframes hydra-splash-mark-stable {
+  0% { opacity: 0; transform: scale(.82); }
+  14% { opacity: 1; transform: scale(1.03); }
+  24% { opacity: 1; transform: scale(1); }
+  58% { opacity: 1; transform: scale(1); }
+  76% { opacity: 1; transform: scale(1.14); }
+  90% { opacity: 0; transform: scale(5.4); }
+  100% { opacity: 0; transform: scale(5.4); }
+}
+
+@keyframes hydra-splash-expansion-stable {
+  0%, 50% { opacity: 0; transform: scale(.78); }
+  60% { opacity: 1; transform: scale(1); }
+  90% { opacity: 1; transform: scale(34); }
+  100% { opacity: 1; transform: scale(34); }
+}
+
+@keyframes hydra-splash-screen-stable {
+  0%, 91% { opacity: 1; visibility: visible; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body #root .hydra-root .splash-screen,
+  html body #root .hydra-root .splash-expansion,
+  html body #root .hydra-root .splash-mark-wrap {
+    animation: none !important;
+  }
+
+  html body #root .hydra-root .splash-mark-wrap {
+    opacity: 1;
+    transform: none;
+  }
+}
