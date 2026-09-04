@@ -35,10 +35,11 @@ function normalizeRole(value: string) {
 function cleanUserDetail() {
   const detail = document.querySelector<HTMLElement>(".admin-user-detail");
   if (!detail || detail.dataset.cleaned === "1") return;
-  detail.dataset.cleaned = "1";
+  const grid = detail.querySelector<HTMLElement>(".admin-user-summary-grid");
+  if (!grid) return;
 
   document.querySelectorAll(".admin-runtime-user-summary").forEach((node) => node.remove());
-  detail.querySelectorAll<HTMLElement>(".admin-user-summary-grid article").forEach((card) => {
+  grid.querySelectorAll<HTMLElement>("article").forEach((card) => {
     const label = card.querySelector("small")?.textContent?.trim().toUpperCase() || "";
     if (hiddenLabels.has(label)) { card.remove(); return; }
     if (label === "PERMISSÃO") {
@@ -46,6 +47,7 @@ function cleanUserDetail() {
       if (value) value.textContent = normalizeRole(value.textContent || "");
     }
   });
+  detail.dataset.cleaned = "1";
 }
 
 if (typeof document !== "undefined") {
@@ -66,8 +68,11 @@ if (typeof document !== "undefined") {
   }, true);
 
   const observer = new MutationObserver((mutations) => {
-    if (!mutations.some((mutation) => Array.from(mutation.addedNodes).some((node) => node instanceof Element && (node.matches?.(".admin-user-detail, .modal-backdrop") || node.querySelector?.(".admin-user-detail"))))) return;
-    scheduleClean();
+    const relevant = mutations.some((mutation) => Array.from(mutation.addedNodes).some((node) => {
+      if (!(node instanceof Element)) return false;
+      return node.matches?.(".admin-user-detail, .admin-runtime-details, .admin-user-summary-grid, .modal-backdrop") || Boolean(node.querySelector?.(".admin-user-detail, .admin-runtime-details, .admin-user-summary-grid"));
+    }));
+    if (relevant) scheduleClean();
   });
   observer.observe(document.body, { childList: true, subtree: true });
 }
