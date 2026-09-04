@@ -43,8 +43,8 @@ const css = String.raw`
     border-radius: 22px 22px 0 0 !important;
     background: #fff !important;
     box-shadow: 0 -5px 18px rgba(28, 50, 39, .07) !important;
-    -webkit-mask: radial-gradient(circle 43px at 50% 0, transparent 42px, #000 43px) !important;
-    mask: radial-gradient(circle 43px at 50% 0, transparent 42px, #000 43px) !important;
+    -webkit-mask: radial-gradient(circle 40px at 50% 0, transparent 39px, #000 40px) !important;
+    mask: radial-gradient(circle 40px at 50% 0, transparent 39px, #000 40px) !important;
     pointer-events: none !important;
   }
 
@@ -144,18 +144,18 @@ const css = String.raw`
   html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.is-tapped > span:first-of-type:not(.touch-ripple) {
     position: absolute !important;
     left: 50% !important;
-    top: -24px !important;
-    width: 66px !important;
-    min-width: 66px !important;
-    height: 66px !important;
-    min-height: 66px !important;
+    top: -20px !important;
+    width: 62px !important;
+    min-width: 62px !important;
+    height: 62px !important;
+    min-height: 62px !important;
     margin: 0 !important;
     padding: 0 !important;
     border: 0 !important;
     border-radius: 50% !important;
-    background: var(--forest-800, #174c36) !important;
+    background: #174c36 !important;
     color: #fff !important;
-    box-shadow: 0 7px 18px rgba(23, 76, 54, .22) !important;
+    box-shadow: 0 6px 14px rgba(23, 76, 54, .18) !important;
     opacity: 1 !important;
     filter: none !important;
     transform: translateX(-50%) !important;
@@ -164,10 +164,10 @@ const css = String.raw`
 
   html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple) svg,
   html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) svg {
-    width: 29px !important;
-    height: 29px !important;
+    width: 27px !important;
+    height: 27px !important;
     color: #fff !important;
-    stroke-width: 1.9 !important;
+    stroke-width: 2 !important;
   }
 
   html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav .bottom-nav-indicator {
