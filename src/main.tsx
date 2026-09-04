@@ -33,6 +33,7 @@ import "./admin-user-cleanup-runtime";
 import "./interaction-motion-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
 
+// Entrada principal do app.
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <HydraAppShell />
