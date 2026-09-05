@@ -73,6 +73,18 @@ export function HydraAppShell() {
     } catch {
       // armazenamento indisponível
     }
+
+    const color = theme === "dark" ? "#07130d" : "#f8f6ef";
+    document.documentElement.style.backgroundColor = color;
+    document.body.style.backgroundColor = color;
+
+    let themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    if (!themeColor) {
+      themeColor = document.createElement("meta");
+      themeColor.name = "theme-color";
+      document.head.appendChild(themeColor);
+    }
+    themeColor.content = color;
   }, [theme]);
 
   useEffect(() => {
