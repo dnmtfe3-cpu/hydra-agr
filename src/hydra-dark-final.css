@@ -1,0 +1,249 @@
+/* Camada final do modo escuro.
+   Carregada por último para impedir que módulos de tela restaurem cores claras. */
+
+.hydra-root.theme-dark {
+  --forest-950: #06110c;
+  --forest-900: #091a12;
+  --forest-800: #123524;
+  --forest-700: #236044;
+  --forest-100: #17271e;
+  --sage: #78b88b;
+  --sage-soft: #15281d;
+  --orange: #ff922e;
+  --orange-soft: #352417;
+  --cream: #07130d;
+  --paper: #0d1d14;
+  --ink: #f1f6f2;
+  --muted: #9aaba1;
+  --line: #294136;
+  --blue-soft: #10262b;
+  --blue: #75b7c8;
+  --danger: #ff968c;
+  --dark-bg: #07130d;
+  --dark-surface: #0d1d14;
+  --dark-surface-raised: #12271b;
+  --dark-surface-soft: #172e21;
+  --dark-border: #294136;
+  --dark-border-strong: #3a5849;
+  --dark-text: #f1f6f2;
+  --dark-muted: #9aaba1;
+  --dark-accent: #78b88b;
+  --dark-orange: #ff922e;
+  min-height: 100dvh;
+  color-scheme: dark;
+  color: var(--dark-text);
+  background: var(--dark-bg) !important;
+}
+
+.hydra-root.theme-dark :is(.app-shell, .phone-app, .app-content, .screen, .extra-screen, .page-shell, .admin-screen) {
+  color: var(--dark-text);
+  background-color: var(--dark-bg) !important;
+}
+
+/* Texto e ícones */
+.hydra-root.theme-dark :is(h1, h2, h3, h4, strong, dt, legend) {
+  color: var(--dark-text) !important;
+}
+.hydra-root.theme-dark :is(p, small, dd, .muted, .subtitle, .screen-subtitle, .section-copy, .empty-copy) {
+  color: var(--dark-muted) !important;
+}
+.hydra-root.theme-dark :is(.eyebrow, .group-label, .section-kicker, .property-kicker) {
+  color: #8bc59a !important;
+}
+.hydra-root.theme-dark svg {
+  color: inherit;
+}
+
+/* Superfícies */
+.hydra-root.theme-dark :is(
+  .home-card, .summary-card, .metric-card, .animal-card, .water-card,
+  .profile-menu-card, .profile-menu-row, .plan-card, .empty-state,
+  .task-card, .first-action-card, .calm-state, .detail-card,
+  .detail-grid > div, .detail-line, .detail-note, .community-card,
+  .post-card, .activity-card, .monitor-card, .monitoring-card,
+  .property-card, .notification-card, .notification-item,
+  .operations-panel, .operations-summary > div, .operations-list article,
+  .guide-card, .setting-card, .compact-list, .compact-row,
+  .inline-empty, .water-chart, .water-trend, .history-home-row,
+  .admin-panel-section, .admin-card, .admin-stat-card,
+  .premium-card, .plus-status-card, .challenge-card
+) {
+  border-color: var(--dark-border) !important;
+  color: var(--dark-text) !important;
+  background: var(--dark-surface) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .2) !important;
+}
+
+/* Elementos internos e linhas */
+.hydra-root.theme-dark :is(
+  .task-card > button, .feature-link-grid > button, .shortcut-row button > span,
+  .operations-actions button, .quick-grid > button, .ranking-row,
+  .community-tabs, .segmented-control, .choice-chip, .filter-chips button
+) {
+  border-color: var(--dark-border) !important;
+  color: var(--dark-text) !important;
+  background: var(--dark-surface-raised) !important;
+}
+.hydra-root.theme-dark :is(
+  .profile-menu-row, .detail-line, .ranking-row, .notification-item,
+  .operations-list article, .compact-row
+) {
+  border-bottom-color: var(--dark-border) !important;
+}
+.hydra-root.theme-dark :is(.feature-link-grid small, .shortcut-row small, .ranking-row small, .compact-row small) {
+  color: var(--dark-muted) !important;
+}
+
+/* Campos */
+.hydra-root.theme-dark :is(
+  input, select, textarea, .search-box, .filter-button,
+  .municipality-trigger, .municipality-panel, .municipality-search,
+  .state-readonly, .staff-code-input, .login-code-input
+) {
+  border-color: var(--dark-border) !important;
+  color: var(--dark-text) !important;
+  background: var(--dark-surface-raised) !important;
+  box-shadow: none !important;
+}
+.hydra-root.theme-dark :is(input, textarea)::placeholder {
+  color: #71857a !important;
+  opacity: 1;
+}
+.hydra-root.theme-dark :is(input, select, textarea):focus {
+  border-color: #5f9c76 !important;
+  background: #142c1f !important;
+  box-shadow: 0 0 0 4px rgba(120, 184, 139, .14) !important;
+}
+.hydra-root.theme-dark :is(.field > span, .field small, label) {
+  color: #a7b7ae !important;
+}
+.hydra-root.theme-dark option {
+  color: var(--dark-text);
+  background: var(--dark-surface-raised);
+}
+
+/* Botões */
+.hydra-root.theme-dark :is(.primary-button, .small-button, .home-fab-label) {
+  border-color: transparent !important;
+  color: #fff !important;
+  background: #2d704e !important;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, .24) !important;
+}
+.hydra-root.theme-dark :is(.primary-button, .small-button, .home-fab-label):hover {
+  background: #37845d !important;
+}
+.hydra-root.theme-dark :is(.secondary-button, .wide-outline-button, .icon-button, .text-button) {
+  border-color: var(--dark-border) !important;
+  color: #cae0d1 !important;
+  background: var(--dark-surface-raised) !important;
+}
+.hydra-root.theme-dark .icon-button.accent {
+  border-color: transparent !important;
+  color: #fff !important;
+  background: var(--dark-orange) !important;
+}
+.hydra-root.theme-dark button:disabled {
+  opacity: .5;
+}
+
+/* Navegação */
+.hydra-root.theme-dark .bottom-nav {
+  border-color: var(--dark-border) !important;
+  background: rgba(8, 20, 14, .96) !important;
+  box-shadow: 0 -10px 34px rgba(0, 0, 0, .42) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(140%) !important;
+  backdrop-filter: blur(30px) saturate(140%) !important;
+}
+.hydra-root.theme-dark .bottom-nav > button {
+  color: #82948a !important;
+}
+.hydra-root.theme-dark .bottom-nav > button.active {
+  color: #9bd0a9 !important;
+}
+.hydra-root.theme-dark .bottom-nav > button.nav-nfc > span {
+  color: #fff !important;
+  background: var(--dark-orange) !important;
+}
+.hydra-root.theme-dark :is(.top-bar, .screen-header, .admin-header) {
+  border-color: var(--dark-border) !important;
+  color: var(--dark-text) !important;
+  background: var(--dark-bg) !important;
+}
+
+/* Modais, folhas e menus */
+.hydra-root.theme-dark :is(.modal-layer, .quick-layer, .modal-backdrop, .theme-dialog-backdrop) {
+  background: rgba(0, 0, 0, .76) !important;
+}
+.hydra-root.theme-dark :is(
+  .modal-sheet, .quick-sheet, .modal-card, .dialog-card, .sheet,
+  .theme-dialog, .municipality-panel, .dropdown-menu, .popover
+) {
+  border-color: var(--dark-border) !important;
+  color: var(--dark-text) !important;
+  background: var(--dark-surface) !important;
+  box-shadow: 0 26px 80px rgba(0, 0, 0, .56) !important;
+}
+.hydra-root.theme-dark :is(.modal-head, .quick-sheet header, .modal-action-row) {
+  border-color: var(--dark-border) !important;
+  background: var(--dark-surface) !important;
+}
+.hydra-root.theme-dark .sheet-handle {
+  background: #587064 !important;
+}
+
+/* Destaques e estados sem cores estouradas */
+.hydra-root.theme-dark :is(.tag-badge, .form-notice, .success-note, .status-pill.active) {
+  color: #b8ddc2 !important;
+  background: #173725 !important;
+}
+.hydra-root.theme-dark :is(.warning-note, .status-pill.atenção) {
+  border-color: #604c28 !important;
+  color: #e7c77e !important;
+  background: #302716 !important;
+}
+.hydra-root.theme-dark :is(.form-error, .danger-text) {
+  color: #ff9b92 !important;
+}
+.hydra-root.theme-dark :is(.logout-button, .danger-button) {
+  border-color: #5a3531 !important;
+  color: #ffaaa2 !important;
+  background: #2b1918 !important;
+}
+
+/* Áreas especiais da marca */
+.hydra-root.theme-dark .property-hero {
+  border-color: #315b46 !important;
+  color: var(--dark-text) !important;
+  background: linear-gradient(145deg, #123d2b, #0b2b1e) !important;
+}
+.hydra-root.theme-dark .nfc-banner {
+  border-color: #365545 !important;
+  color: var(--dark-text) !important;
+  background: #10251a !important;
+}
+.hydra-root.theme-dark :is(.nfc-banner-icon, .profile-menu-icon, .animal-avatar:not(.image), .metric-icon) {
+  color: #91c79f !important;
+  background: var(--dark-surface-soft) !important;
+}
+
+/* Tabelas e divisores */
+.hydra-root.theme-dark :is(table, thead, tbody, tr, th, td) {
+  border-color: var(--dark-border) !important;
+}
+.hydra-root.theme-dark th {
+  color: #b6c7bd !important;
+  background: var(--dark-surface-raised) !important;
+}
+.hydra-root.theme-dark td {
+  color: var(--dark-text) !important;
+  background: var(--dark-surface) !important;
+}
+.hydra-root.theme-dark :is(hr, .divider, .auth-divider::before, .auth-divider::after) {
+  border-color: var(--dark-border) !important;
+  background-color: var(--dark-border) !important;
+}
+
+/* Rolagem nativa coerente com o tema. */
+.hydra-root.theme-dark * {
+  scrollbar-color: #3b5949 var(--dark-bg);
+}
