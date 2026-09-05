@@ -61,7 +61,6 @@ jobs:
           test -f android/app/build/outputs/apk/debug/app-debug.apk
           mkdir -p mobile-output
           cp android/app/build/outputs/apk/debug/app-debug.apk mobile-output/HydraAgro-Android.apk
-          ls -lh mobile-output/HydraAgro-Android.apk
       - uses: actions/upload-artifact@v4
         with:
           name: HydraAgro-Android
@@ -97,6 +96,11 @@ jobs:
         run: npm run lint
       - name: Prepare iOS app with NFC
         run: npm run ios:setup
+      - name: Resolve iOS Swift packages
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project ios/App/App.xcodeproj \
+            -scheme App
       - name: Apply Hydra Agro native icon
         run: |
           set -euo pipefail
@@ -114,8 +118,6 @@ jobs:
               px=int(round(float(size.split('x')[0])*float(scale.rstrip('x'))))
               subprocess.run(['sips','-z',str(px),str(px),icon_src,'--out',os.path.join(iconset,filename)],check=True,stdout=subprocess.DEVNULL)
           PY
-          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName Hydra Agro" ios/App/App/Info.plist || true
-          /usr/libexec/PlistBuddy -c "Set :CFBundleName Hydra Agro" ios/App/App/Info.plist || true
       - name: Build iPhone app without signing
         run: |
           set -o pipefail
@@ -126,10 +128,12 @@ jobs:
             -sdk iphoneos \
             -destination 'generic/platform=iOS' \
             -derivedDataPath build/ios-derived \
+            -skipPackagePluginValidation \
+            -skipMacroValidation \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY='' \
-            build
+            build | tee build/ios-xcodebuild.log
       - name: Package IPA
         run: |
           set -euo pipefail
@@ -142,7 +146,6 @@ jobs:
           zip -qry ../mobile-output/HydraAgro-iOS-unsigned.ipa Payload
           cd ..
           shasum -a 256 mobile-output/HydraAgro-iOS-unsigned.ipa > mobile-output/HydraAgro-iOS-unsigned.ipa.sha256
-          ls -lh mobile-output/HydraAgro-iOS-unsigned.ipa
       - uses: actions/upload-artifact@v4
         with:
           name: HydraAgro-iOS
@@ -164,10 +167,8 @@ jobs:
           merge-multiple: true
       - name: Create combined ZIP
         run: |
-          ls -lh bundle
           cd bundle
           zip -9 HydraAgro-Android-iOS.zip HydraAgro-Android.apk HydraAgro-iOS-unsigned.ipa HydraAgro-iOS-unsigned.ipa.sha256
-          ls -lh HydraAgro-Android-iOS.zip
       - uses: actions/upload-artifact@v4
         with:
           name: HydraAgro-Android-iOS
