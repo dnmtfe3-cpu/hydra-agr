@@ -734,10 +734,17 @@ html body #root .hydra-root.hydra-root .admin-screen :is(
 
 
 /* Atalhos: mantém o desenho do ícone e remove somente o caixote de fundo. */
-html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button,
-html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button > span {
+html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button {
   border: 0 !important;
   background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button > span {
+  border: 1px solid #315442 !important;
+  border-radius: 50% !important;
+  background: #173827 !important;
   background-image: none !important;
   box-shadow: none !important;
 }
