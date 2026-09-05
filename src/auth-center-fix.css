@@ -78,3 +78,14 @@
     border-radius: 30px !important;
   }
 }
+
+
+/* Remove qualquer assinatura grande/duplicada da área de autenticação.
+   Permanece somente o símbolo compacto .auth-form-mark. */
+.hydra-root .auth-shell-motion .auth-web-brand,
+.hydra-root .auth-shell-motion .auth-brand-row,
+.hydra-root .auth-shell-motion .auth-card > .wordmark,
+.hydra-root .auth-shell-motion .auth-card-wide > .wordmark {
+  display: none !important;
+  content: none !important;
+}
