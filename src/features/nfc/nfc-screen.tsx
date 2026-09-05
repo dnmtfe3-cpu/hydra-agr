@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
+import { Capacitor } from "@capacitor/core";
 import { AlertCircle, Beef as Cow, CheckCircle2, ChevronRight, Keyboard, LoaderCircle, Nfc, Radio, ScanLine, Settings, Smartphone } from "lucide-react";
 import { EmptyState, Field, LoadingButton, Modal, ScreenHeader } from "../../components/ui";
 import { showAppToast } from "../../components/modal-system";
@@ -16,6 +17,7 @@ type Props = {
 
 export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnimalId, onRealRead }: Props) {
   const canLink = account.access.kind === "owner" || account.access.staffRole === "manager";
+  const isIos = Capacitor.getPlatform() === "ios";
   const [mode, setMode] = useState<"locate" | "link">(initialAnimalId && canLink ? "link" : "locate");
   const [code, setCode] = useState("");
   const [animalId, setAnimalId] = useState(initialAnimalId ?? "");
@@ -101,6 +103,12 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
   }
 
   async function startNativeRead() {
+    if (isIos) {
+      setAvailability("unsupported");
+      setNativeInfo(true);
+      return;
+    }
+
     const currentAvailability = await getNfcAvailability().catch(() => "unsupported" as NfcAvailability);
     setAvailability(currentAvailability);
 
@@ -139,7 +147,9 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
     setMessage("");
   }
 
-  const availabilityText = availability === "ready"
+  const availabilityText = isIos
+    ? "NFC disponível em breve no iOS"
+    : availability === "ready"
     ? "NFC pronto para leitura"
     : availability === "disabled"
       ? "NFC desativado no celular"
@@ -160,8 +170,8 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
         <span><Smartphone size={26} /></span>
         <div>
           <small>LEITURA POR APROXIMAÇÃO</small>
-          <strong>Use um celular Android com NFC</strong>
-          <p>Em dispositivos sem leitura NFC compatível, localize o animal pelo código da identificação.</p>
+          <strong>{isIos ? "NFC disponível em breve no iOS" : "Use um celular Android com NFC"}</strong>
+          <p>{isIos ? "Enquanto isso, localize ou vincule o animal digitando o código da identificação." : "Em dispositivos sem leitura NFC compatível, localize o animal pelo código da identificação."}</p>
         </div>
       </section>
 
@@ -219,8 +229,10 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
           <span><Smartphone size={31} /></span>
           <p>{availability === "disabled"
             ? "O NFC está desativado. Ative-o nas configurações do Android e tente novamente."
-            : availability === "web"
-              ? "A leitura por aproximação funciona no app Android. Neste dispositivo, use o código manual."
+            : isIos
+              ? "O NFC estará disponível em breve no iOS. Enquanto isso, use o código manual."
+              : availability === "web"
+                ? "A leitura por aproximação funciona no app Android. Neste dispositivo, use o código manual."
               : "Este aparelho não oferece leitura NFC compatível. Use o código manual ou outro celular Android com NFC."}</p>
           <div className="future-data-list"><div><Nfc size={17} /> Leitura por aproximação no Android</div><div><span className="tiny-shield" /> Código manual em qualquer dispositivo</div></div>
           {availability === "disabled" && <button className="secondary-button full" onClick={() => void openNfcSettings()}><Settings size={17} /> Abrir configurações</button>}
