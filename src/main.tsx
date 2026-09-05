@@ -35,15 +35,16 @@ import "./admin-user-cleanup-runtime";
 import "./interaction-motion-runtime";
 import "./native-notifications-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
+import { setupPushNotifications } from "./services/push-notifications";
 
 if (typeof document !== "undefined") {
   const platform = Capacitor.getPlatform();
   document.documentElement.classList.toggle("capacitor-ios", platform === "ios");
   document.documentElement.classList.toggle("capacitor-android", platform === "android");
   document.documentElement.classList.toggle("capacitor-native", Capacitor.isNativePlatform());
+  if (Capacitor.isNativePlatform()) void setupPushNotifications();
 }
 
-// Entrada principal do app.
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <HydraAppShell />
