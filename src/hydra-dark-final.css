@@ -425,3 +425,102 @@ html body #root .hydra-root.theme-dark .phone-app :is(
 .hydra-root .theme-dialog :is(p, small, .theme-dialog-close) {
   color: #a5b8ac !important;
 }
+
+
+/* Painel administrativo e Hydra Agro+: mesma base escura do aplicativo. */
+.hydra-root .phone-app :is(.admin-screen, .plus-screen) {
+  color: #eef6f1 !important;
+  background: #07130d !important;
+}
+
+.hydra-root .phone-app :is(
+  .admin-panel-section, .admin-metric-grid article, .admin-user-list,
+  .admin-user-list article, .admin-content-list, .admin-content-list article,
+  .admin-detail-card, .admin-stat-card, .admin-card, .admin-action-card,
+  .plus-dashboard, .plus-feature-card, .plus-benefit-card, .plus-status-card,
+  .plus-metric-card, .plus-goal-card, .plus-history-card, .plus-insight-card,
+  .plus-section, .plus-card, .premium-card
+) {
+  border-color: #294b3a !important;
+  color: #eef6f1 !important;
+  background: #0e2418 !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .2) !important;
+}
+
+.hydra-root .phone-app :is(
+  .admin-tabs, .admin-filter, .admin-search, .admin-toolbar,
+  .plus-tabs, .plus-filter, .plus-toolbar
+) {
+  border-color: #294b3a !important;
+  color: #dcebe1 !important;
+  background: #0b2015 !important;
+}
+
+.hydra-root .phone-app :is(.admin-tabs, .plus-tabs) button {
+  color: #9eb2a6 !important;
+  background: transparent !important;
+}
+
+.hydra-root .phone-app :is(.admin-tabs, .plus-tabs) button.active {
+  border-color: #3d805b !important;
+  color: #fff !important;
+  background: #2d704e !important;
+}
+
+.hydra-root .phone-app :is(.admin-screen, .plus-screen) :is(
+  input, select, textarea, .search-box
+) {
+  border-color: #315442 !important;
+  color: #eef6f1 !important;
+  background: #143323 !important;
+}
+
+.hydra-root .phone-app :is(.admin-screen, .plus-screen) :is(h1, h2, h3, strong) {
+  color: #eef6f1 !important;
+}
+
+.hydra-root .phone-app :is(.admin-screen, .plus-screen) :is(p, small, label, .muted) {
+  color: #a5b8ac !important;
+}
+
+.hydra-root .phone-app :is(
+  .admin-metric-grid article > span, .admin-icon, .plus-feature-icon,
+  .plus-metric-icon, .plus-crown-action
+) {
+  border-color: #3a5d49 !important;
+  color: #ffad62 !important;
+  background: #183927 !important;
+}
+
+/* O premium usa laranja/dourado apenas para destacar valor e benefícios. */
+.hydra-root .phone-app :is(.plus-price-hero, .plus-hero, .premium-hero) {
+  border-color: #41634f !important;
+  color: #fff !important;
+  background: linear-gradient(145deg, #174832, #0c2d20) !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .3) !important;
+}
+
+.hydra-root .phone-app :is(
+  .plus-price, .plus-badge, .premium-badge, .plus-screen .eyebrow
+) {
+  color: #ffc078 !important;
+}
+
+.hydra-root .phone-app :is(.plus-screen, .admin-screen) .primary-button {
+  border-color: transparent !important;
+  color: #fff !important;
+  background: #2d704e !important;
+}
+
+.hydra-root .phone-app .plus-screen :is(.plus-cta, .premium-cta) {
+  border-color: transparent !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff922e, #df741d) !important;
+  box-shadow: 0 12px 28px rgba(255, 126, 24, .22) !important;
+}
+
+.hydra-root .phone-app .admin-screen :is(.danger-button, .delete-button) {
+  border-color: #5a3531 !important;
+  color: #ffaaa2 !important;
+  background: #2b1918 !important;
+}
