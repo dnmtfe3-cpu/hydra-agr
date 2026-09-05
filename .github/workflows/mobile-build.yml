@@ -94,8 +94,12 @@ jobs:
           npm run env:check
       - name: Verify project
         run: npm run lint
-      - name: Prepare iOS app with NFC
-        run: npm run ios:setup
+      - name: Prepare iOS app without NFC
+        run: |
+          npm run ios:setup
+          /usr/libexec/PlistBuddy -c "Delete :NFCReaderUsageDescription" ios/App/App/Info.plist || true
+          rm -f ios/App/App/App.entitlements
+          sed -i '' '/CODE_SIGN_ENTITLEMENTS = App\/App.entitlements;/d' ios/App/App.xcodeproj/project.pbxproj
       - name: Resolve iOS Swift packages
         run: |
           xcodebuild -resolvePackageDependencies \
