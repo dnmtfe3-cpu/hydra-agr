@@ -805,3 +805,19 @@ html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts
   visibility: visible !important;
   background: transparent !important;
 }
+
+
+/* Heading containers share their parent surface in green mode. */
+html body #root .hydra-root.hydra-root.theme-dark :is(
+  .screen-heading, .section-heading, .greeting-block,
+  .screen-header, .admin-header
+),
+html body[data-hydra-theme="dark"] :is(.modal-head, .sheet-header) {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html body #root .hydra-root.hydra-root.theme-dark :is(h1, h2, h3),
+html body[data-hydra-theme="dark"] .modal-sheet :is(h1, h2, h3) {
+  background: transparent !important;
+  box-shadow: none !important;
+}
