@@ -106,6 +106,7 @@ jobs:
       - name: Build iPhone app without signing
         run: |
           set -o pipefail
+          mkdir -p build
           xcodebuild \
             -project ios/App/App.xcodeproj \
             -scheme App \
