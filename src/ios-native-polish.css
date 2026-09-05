@@ -19,7 +19,6 @@ html.capacitor-ios body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* O WKWebView já entrega a área útil do app. Não somar safe-area duas vezes. */
 html.capacitor-ios .phone-app,
 html.capacitor-ios .app-content {
   min-height: 100dvh !important;
@@ -44,7 +43,7 @@ html.capacitor-ios .home-brandbar {
   padding-top: 0 !important;
 }
 
-/* Login/cadastro: nada de carrossel, slide lateral ou elementos vazando. */
+/* Login/cadastro: fluxo vertical, sem carrossel, snap ou slide lateral. */
 html.capacitor-ios .auth-landing,
 html.capacitor-ios .auth-shell,
 html.capacitor-ios .auth-shell-motion,
@@ -83,7 +82,11 @@ html.capacitor-ios .auth-card-wide {
 }
 
 html.capacitor-ios .signup-motion-bg,
-html.capacitor-ios .signup-motion-bg * {
+html.capacitor-ios .signup-motion-bg *,
+html.capacitor-ios .step-dots,
+html.capacitor-ios .auth-step-dots,
+html.capacitor-ios [class*="carousel"],
+html.capacitor-ios [class*="slider"] {
   display: none !important;
   animation: none !important;
 }
@@ -112,7 +115,7 @@ html.capacitor-ios textarea {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Barra inferior mais compacta no iPhone e conteúdo sempre visível acima dela. */
+/* Barra inferior compacta e conteúdo sempre acima da home indicator. */
 @media (max-width: 899px) {
   html.capacitor-ios body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav {
     height: calc(58px + env(safe-area-inset-bottom)) !important;
@@ -141,7 +144,6 @@ html.capacitor-ios textarea {
   }
 }
 
-/* Teclado/rotação: evita saltos e travamentos de altura. */
 @supports (height: 100dvh) {
   html.capacitor-ios .auth-shell,
   html.capacitor-ios .auth-shell-motion,
