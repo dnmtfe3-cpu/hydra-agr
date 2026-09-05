@@ -39,15 +39,66 @@ export function canWriteNfcUrl() {
 
 export async function getNfcAvailability(): Promise<NfcAvailability> {
   if (!Capacitor.isNativePlatform()) return isWebNfcSupported() ? "ready" : "web";
-  const { supported } = await CapacitorNfc.isSupported();
-  if (!supported) return "unsupported";
-  const { status } = await CapacitorNfc.getStatus();
-  return status === "NFC_OK" ? "ready" : status === "NFC_DISABLED" ? "disabled" : "unsupported";
+  try {
+    const { supported } = await CapacitorNfc.isSupported();
+    if (!supported) return "unsupported";
+    const { status } = await CapacitorNfc.getStatus();
+    return status === "NFC_OK" ? "ready" : status === "NFC_DISABLED" ? "disabled" : "unsupported";
+  } catch {
+    return "unsupported";
+  }
 }
 
 export async function openNfcSettings() {
   if (!Capacitor.isNativePlatform()) return;
-  await CapacitorNfc.showSettings();
+  await CapacitorNfc.showSettings().catch(() => undefined);
+}
+
+const URI_PREFIXES: Record<number, string> = {
+  0x00: "",
+  0x01: "http://www.",
+  0x02: "https://www.",
+  0x03: "http://",
+  0x04: "https://",
+  0x05: "tel:",
+  0x06: "mailto:",
+};
+
+function decodeNdefRecord(record: NdefRecord | undefined) {
+  if (!record?.payload?.length) return "";
+  const payload = Uint8Array.from(record.payload);
+  const type = String.fromCharCode(...(record.type ?? []));
+
+  if (type === "U" && payload.length > 1) {
+    const prefix = URI_PREFIXES[payload[0]] ?? "";
+    return `${prefix}${new TextDecoder().decode(payload.slice(1))}`.trim();
+  }
+
+  if (type === "T" && payload.length > 1) {
+    const languageLength = payload[0] & 0x3f;
+    return new TextDecoder().decode(payload.slice(1 + languageLength)).trim();
+  }
+
+  return new TextDecoder().decode(payload).replace(/^\x00+/, "").replace(/^\x02[a-z]{2}/i, "").trim();
+}
+
+function normalizeTagValue(value: string) {
+  const clean = value.trim();
+  if (!clean) return "";
+
+  // Tags gravadas pelo Hydra usam URL. Quando só o NDEF está disponível no iOS,
+  // preservamos o identificador final para localizar o mesmo animal.
+  try {
+    const url = new URL(clean);
+    const fromQuery = url.searchParams.get("nfc") || url.searchParams.get("tag") || url.searchParams.get("id");
+    if (fromQuery) return fromQuery.trim();
+    const lastPath = url.pathname.split("/").filter(Boolean).at(-1);
+    if (lastPath) return decodeURIComponent(lastPath).trim();
+  } catch {
+    // Não é URL: usa o valor como veio da etiqueta.
+  }
+
+  return clean;
 }
 
 function tagCode(event: NfcEvent) {
@@ -55,9 +106,9 @@ function tagCode(event: NfcEvent) {
   if (bytes.length > 0) {
     return bytes.map((byte) => byte.toString(16).padStart(2, "0")).join("").toUpperCase();
   }
-  const payload = event.tag.ndefMessage?.[0]?.payload ?? [];
-  if (payload.length > 0) {
-    const decoded = new TextDecoder().decode(new Uint8Array(payload)).replace(/^\x02[a-z]{2}/i, "").trim();
+
+  for (const record of event.tag.ndefMessage ?? []) {
+    const decoded = normalizeTagValue(decodeNdefRecord(record));
     if (decoded) return decoded;
   }
   return "";
@@ -68,7 +119,7 @@ function webTagCode(event: WebNfcReadingEvent) {
   if (serial) return serial.toUpperCase();
   for (const record of event.message?.records ?? []) {
     if (!record.data) continue;
-    const decoded = new TextDecoder().decode(record.data).trim();
+    const decoded = normalizeTagValue(new TextDecoder().decode(record.data).trim());
     if (decoded) return decoded;
   }
   return "";
@@ -110,6 +161,70 @@ async function readWebNfcTag(timeoutMs: number) {
   });
 }
 
+function friendlyNfcError(error: unknown) {
+  const raw = error instanceof Error ? `${error.name} ${error.message}` : String(error ?? "");
+  if (/cancel|userCancelled/i.test(raw)) return new Error("Leitura NFC cancelada.");
+  if (/timeout|sessionTimeout/i.test(raw)) return new Error("Tempo de leitura esgotado. Tente novamente aproximando a tag da parte superior do iPhone.");
+  if (/entitlement|security|unsupportedFeature|NO_NFC/i.test(raw)) {
+    return new Error("O iPhone não liberou a sessão NFC para esta assinatura. Reassine o app com um perfil que permita NFC e tente novamente.");
+  }
+  return error instanceof Error ? error : new Error("Não foi possível iniciar a leitura NFC.");
+}
+
+async function readNativeSession(timeoutMs: number, iosSessionType: "tag" | "ndef") {
+  return new Promise<string>(async (resolve, reject) => {
+    let finished = false;
+    let timer: number | undefined;
+    let listener: { remove: () => Promise<void> } | undefined;
+    let sessionEndListener: { remove: () => Promise<void> } | undefined;
+
+    const cleanup = async () => {
+      if (timer) window.clearTimeout(timer);
+      await listener?.remove().catch(() => undefined);
+      await sessionEndListener?.remove().catch(() => undefined);
+      await CapacitorNfc.stopScanning().catch(() => undefined);
+    };
+
+    const finishError = async (error: unknown) => {
+      if (finished) return;
+      finished = true;
+      await cleanup();
+      reject(friendlyNfcError(error));
+    };
+
+    try {
+      listener = await CapacitorNfc.addListener("nfcEvent", async (event) => {
+        if (finished) return;
+        const code = tagCode(event);
+        if (!code) return;
+        finished = true;
+        await cleanup();
+        await Haptics.notification({ type: NotificationType.Success }).catch(() => undefined);
+        resolve(code);
+      });
+
+      sessionEndListener = await CapacitorNfc.addListener("nfcSessionEnd", (event) => {
+        if (!finished) void finishError(new Error(event.reason));
+      });
+
+      timer = window.setTimeout(() => {
+        void finishError(new Error("sessionTimeout"));
+      }, timeoutMs);
+
+      await CapacitorNfc.startScanning({
+        invalidateAfterFirstRead: true,
+        alertMessage: iosSessionType === "tag"
+          ? "Aproxime a parte superior do iPhone da tag ou brinco eletrônico."
+          : "Aproxime a parte superior do iPhone da etiqueta NFC.",
+        iosSessionType,
+        ...(iosSessionType === "tag" ? { iosPollingOptions: ["iso14443", "iso15693"] as const } : {}),
+      });
+    } catch (error) {
+      await finishError(error);
+    }
+  });
+}
+
 export async function readNfcTag(timeoutMs = 30_000): Promise<string> {
   if (!Capacitor.isNativePlatform()) return readWebNfcTag(timeoutMs);
 
@@ -120,43 +235,24 @@ export async function readNfcTag(timeoutMs = 30_000): Promise<string> {
     throw error;
   }
 
-  return new Promise<string>(async (resolve, reject) => {
-    let finished = false;
-    let timer: number | undefined;
-    const listener = await CapacitorNfc.addListener("nfcEvent", async (event) => {
-      if (finished) return;
-      const code = tagCode(event);
-      if (!code) return;
-      finished = true;
-      if (timer) window.clearTimeout(timer);
-      await listener.remove();
-      await CapacitorNfc.stopScanning().catch(() => undefined);
-      await Haptics.notification({ type: NotificationType.Success }).catch(() => undefined);
-      resolve(code);
-    });
+  await CapacitorNfc.stopScanning().catch(() => undefined);
 
-    timer = window.setTimeout(async () => {
-      if (finished) return;
-      finished = true;
-      await listener.remove();
-      await CapacitorNfc.stopScanning().catch(() => undefined);
-      reject(new Error("Tempo de leitura esgotado."));
-    }, timeoutMs);
-
+  if (Capacitor.getPlatform() === "ios") {
     try {
-      await CapacitorNfc.startScanning({
-        invalidateAfterFirstRead: true,
-        alertMessage: "Aproxime o brinco eletrônico ou tag do aparelho.",
-        iosSessionType: "tag",
-        iosPollingOptions: ["iso14443", "iso15693"],
-      });
+      // TAG lê UID e também NDEF; é o modo preferido para manter o mesmo código do Android.
+      return await readNativeSession(timeoutMs, "tag");
     } catch (error) {
-      finished = true;
-      if (timer) window.clearTimeout(timer);
-      await listener.remove();
-      reject(error);
+      const message = error instanceof Error ? error.message : String(error);
+      // Se a assinatura/perfil não aceitar TAG, tenta NDEF para etiquetas já gravadas.
+      if (/assinatura|sessão NFC|entitlement|security|NO_NFC/i.test(message)) {
+        await CapacitorNfc.stopScanning().catch(() => undefined);
+        return readNativeSession(timeoutMs, "ndef");
+      }
+      throw error;
     }
-  });
+  }
+
+  return readNativeSession(timeoutMs, "tag");
 }
 
 function urlNdefRecord(url: string): NdefRecord {
@@ -184,10 +280,12 @@ async function writeNativeNfcUrl(url: string, timeoutMs: number) {
     let writing = false;
     let timer: number | undefined;
     let listener: { remove: () => Promise<void> } | undefined;
+    let sessionEndListener: { remove: () => Promise<void> } | undefined;
 
     const cleanup = async () => {
       if (timer) window.clearTimeout(timer);
       await listener?.remove().catch(() => undefined);
+      await sessionEndListener?.remove().catch(() => undefined);
       await CapacitorNfc.stopScanning().catch(() => undefined);
     };
 
@@ -195,7 +293,7 @@ async function writeNativeNfcUrl(url: string, timeoutMs: number) {
       if (finished) return;
       finished = true;
       await cleanup();
-      reject(error instanceof Error ? error : new Error("Não foi possível gravar a etiqueta NFC."));
+      reject(friendlyNfcError(error));
     };
 
     try {
@@ -224,13 +322,19 @@ async function writeNativeNfcUrl(url: string, timeoutMs: number) {
         }
       });
 
+      sessionEndListener = await CapacitorNfc.addListener("nfcSessionEnd", (event) => {
+        if (!finished) void fail(new Error(event.reason));
+      });
+
       timer = window.setTimeout(() => {
         void fail(new Error("Tempo de gravação esgotado. Aproxime a etiqueta novamente."));
       }, timeoutMs);
 
       await CapacitorNfc.startScanning({
         invalidateAfterFirstRead: false,
-        alertMessage: "Aproxime a etiqueta para gravar o Hydra ID.",
+        alertMessage: Capacitor.getPlatform() === "ios"
+          ? "Aproxime a parte superior do iPhone da etiqueta para gravar o Hydra ID."
+          : "Aproxime a etiqueta para gravar o Hydra ID.",
         iosSessionType: "tag",
         iosPollingOptions: ["iso14443", "iso15693"],
       });
