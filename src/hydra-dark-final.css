@@ -1,3 +1,49 @@
+/* Portals inherit tokens from body rather than the app container. */
+body[data-hydra-theme="dark"] {
+  --paper: #1a382c;
+  --cream: #08261c;
+  --surface: #1a382c;
+  --card: #1a382c;
+  --ink: #eef6f1;
+  --muted: #aab8af;
+  --line: #3a594a;
+  --sage-soft: #204536;
+  --orange-soft: #503824;
+  color: #eef6f1;
+}
+
+/* Explicit portal surfaces: do not paint SVGs, photos or backdrop overlays. */
+html body[data-hydra-theme="dark"] :is(
+  .modal-sheet, .modal-head, .modal-body, .modal-action-row,
+  .quick-sheet, .theme-dialog, .regional-ranking-dialog,
+  .profile-settings-sheet, .profile-menu-card, .profile-menu-row,
+  .herd-care-intro, .herd-care-card, .herd-care-species button,
+  .regional-ranking-card, .regional-ranking-row,
+  .nutriciclo-intro, .nutriciclo-detail, .nutriciclo-form,
+  .nutriciclo-history article, .nutriciclo-cycles button
+) {
+  background: #1a382c !important;
+  border-color: #3a594a !important;
+  color: #eef6f1 !important;
+}
+
+html body[data-hydra-theme="dark"] :is(.modal-sheet, .quick-sheet, .regional-ranking-dialog) :is(input, select, textarea, option, .secondary-button, .icon-button) {
+  background: #153126 !important;
+  border-color: #3a594a !important;
+  color: #eef6f1 !important;
+  color-scheme: dark;
+}
+html body[data-hydra-theme="dark"] :is(.modal-sheet, .quick-sheet, .regional-ranking-dialog) :is(h1, h2, h3, strong, label) {
+  color: #eef6f1 !important;
+}
+html body[data-hydra-theme="dark"] :is(.modal-sheet, .quick-sheet, .regional-ranking-dialog) :is(p, small, input::placeholder, textarea::placeholder) {
+  color: #aab8af !important;
+}
+html body[data-hydra-theme="dark"] input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #153126 inset !important;
+  -webkit-text-fill-color: #eef6f1 !important;
+}
+
 /* Camada final do modo escuro.
    Carregada por último para impedir que módulos de tela restaurem cores claras. */
 
