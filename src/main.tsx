@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Capacitor } from "@capacitor/core";
 import "@fontsource/manrope/latin-400.css";
 import "@fontsource/manrope/latin-500.css";
 import "@fontsource/manrope/latin-600.css";
@@ -19,6 +20,7 @@ import "./authentic-ui.css";
 import "./auth-landing-ranking-cleanup.css";
 import "./auth-email-code.css";
 import "./interaction-polish.css";
+import "./ios-native-polish.css";
 import "./features/profile/profile-mobile-fix.css";
 import "./features/profile/profile-ranking-runtime";
 import "./features/profile/profile-ranking-spacing-fix.css";
@@ -32,6 +34,13 @@ import "./admin-user-management-polish-runtime";
 import "./admin-user-cleanup-runtime";
 import "./interaction-motion-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
+
+if (typeof document !== "undefined") {
+  const platform = Capacitor.getPlatform();
+  document.documentElement.classList.toggle("capacitor-ios", platform === "ios");
+  document.documentElement.classList.toggle("capacitor-android", platform === "android");
+  document.documentElement.classList.toggle("capacitor-native", Capacitor.isNativePlatform());
+}
 
 // Entrada principal do app.
 ReactDOM.createRoot(document.getElementById("root")!).render(
