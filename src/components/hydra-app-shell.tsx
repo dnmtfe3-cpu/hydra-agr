@@ -77,6 +77,11 @@ export function HydraAppShell() {
     const color = theme === "dark" ? "#07130d" : "#f8f6ef";
     document.documentElement.style.backgroundColor = color;
     document.body.style.backgroundColor = color;
+    // Portals and runtime dialogs are mounted on body, outside hydra-root.
+    document.body.classList.toggle("theme-dark", theme === "dark");
+    document.body.classList.toggle("green-mode", theme === "dark");
+    document.body.dataset.hydraTheme = theme;
+    document.body.style.colorScheme = theme === "dark" ? "dark" : "light";
 
     let themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
     if (!themeColor) {
