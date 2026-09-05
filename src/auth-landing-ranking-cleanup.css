@@ -11,3 +11,61 @@
 .hydra-root .regional-ranking-list {
   display: none !important;
 }
+
+
+/* Tela anterior a Entrar/Criar conta: conteúdo centralizado em web, Android e iOS. */
+.hydra-root .auth-landing {
+  display: grid;
+  place-items: center;
+  padding:
+    max(24px, calc(env(safe-area-inset-top) + 16px))
+    clamp(18px, 5vw, 40px)
+    max(24px, calc(env(safe-area-inset-bottom) + 16px));
+}
+
+.hydra-root .auth-landing-content {
+  position: relative;
+  inset: auto;
+  width: min(100%, 520px);
+  max-width: 520px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hydra-root .auth-landing-mark-wrap {
+  margin-inline: auto;
+}
+
+.hydra-root .auth-landing-copy {
+  margin-inline: auto;
+}
+
+.hydra-root .auth-landing-actions {
+  width: min(100%, 430px);
+  margin-inline: auto;
+}
+
+.hydra-root .auth-landing-staff {
+  width: min(100%, 430px);
+  margin-inline: auto;
+  margin-top: 11px;
+}
+
+@media (max-width: 560px) {
+  .hydra-root .auth-landing-content {
+    width: min(100%, 390px);
+  }
+
+  .hydra-root .auth-landing-actions {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .hydra-root :is(.auth-landing-primary, .auth-landing-secondary, .auth-landing-staff) {
+    min-height: 52px;
+  }
+}
