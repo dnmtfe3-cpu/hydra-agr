@@ -183,6 +183,32 @@ const css = String.raw`
     visibility: hidden !important;
     pointer-events: none !important;
   }
+
+  /* Tema escuro: a barra não pode herdar branco ou cinza do layout claro. */
+  html body #root .hydra-root.theme-dark.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav::before {
+    background: #0a1c13 !important;
+    box-shadow: 0 -7px 24px rgba(0, 0, 0, .42), inset 0 1px 0 rgba(122, 190, 143, .08) !important;
+  }
+
+  html body #root .hydra-root.theme-dark.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button {
+    color: #759083 !important;
+  }
+
+  html body #root .hydra-root.theme-dark.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.active:not(.nav-nfc) {
+    color: #8dcea0 !important;
+  }
+
+  html body #root .hydra-root.theme-dark.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.active:not(.nav-nfc)::after {
+    background: #ff922e !important;
+    box-shadow: 0 0 0 4px rgba(255, 146, 46, .12) !important;
+  }
+
+  html body #root .hydra-root.theme-dark.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple),
+  html body #root .hydra-root.theme-dark.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) {
+    background: #ff922e !important;
+    box-shadow: 0 9px 22px rgba(255, 146, 46, .28) !important;
+  }
+
 }
 `;
 
