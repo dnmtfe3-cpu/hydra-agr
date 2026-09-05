@@ -92,6 +92,7 @@ jobs:
           grep -R "gfwypccosftpchpbdiir.supabase.co" dist >/dev/null
           grep -R "sb_publishable_uL6O0N4LwLykHFprsFjm6A_Z8UHxj2I" dist >/dev/null
           echo "dist size: $(du -sh dist | awk '{print $1}')"
+          echo "dist bytes: $(du -sk dist | awk '{print $1 * 1024}')"
           echo "asset files: $(find dist/assets -type f | wc -l | tr -d ' ')"
           echo "Hydra Agro backend embedded successfully."
 
@@ -119,6 +120,9 @@ jobs:
           test -d "$APP_PATH"
           test -f "$APP_PATH/public/index.html"
           test -d "$APP_PATH/public/assets"
+          echo "App bundle size before ZIP: $(du -sh "$APP_PATH" | awk '{print $1}')"
+          echo "Web bundle inside app: $(du -sh "$APP_PATH/public" | awk '{print $1}')"
+          echo "Files inside app: $(find "$APP_PATH" -type f | wc -l | tr -d ' ')"
           cp -R "$APP_PATH" build/Payload/HydraAgro.app
           cd build
           zip -qry HydraAgro-complete-unsigned.ipa Payload
@@ -135,4 +139,4 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-# rebuild-trigger: 2026-09-05T00:30Z
+# rebuild-trigger: 2026-09-05T00:40Z
