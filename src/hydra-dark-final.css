@@ -360,3 +360,68 @@ html body #root .hydra-root.theme-dark .phone-app :is(
   color: #91cfa2 !important;
   background: #173827 !important;
 }
+
+
+/* Menu, configurações e funções: superfícies verdes, nunca brancas/cinzas. */
+.hydra-root .phone-app :is(
+  .profile-menu-card, .profile-menu-row, .setting-card, .settings-card,
+  .preferences-card, .appearance-card, .profile-group,
+  .menu-card, .menu-row, .action-card, .action-row
+) {
+  border-color: #294b3a !important;
+  color: #eef6f1 !important;
+  background: #0e2418 !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .phone-app :is(
+  .profile-menu-row, .menu-row, .action-row
+) {
+  border-bottom-color: #294b3a !important;
+}
+
+.hydra-root .phone-app :is(
+  .profile-menu-icon, .menu-icon, .setting-icon, .action-icon
+) {
+  color: #91cfa2 !important;
+  background: #173827 !important;
+}
+
+.hydra-root .phone-app :is(
+  .profile-menu-card, .profile-menu-row, .setting-card, .settings-card,
+  .preferences-card, .menu-card, .menu-row, .action-card, .action-row
+) :is(h2, h3, strong) {
+  color: #eef6f1 !important;
+}
+
+.hydra-root .phone-app :is(
+  .profile-menu-card, .profile-menu-row, .setting-card, .settings-card,
+  .preferences-card, .menu-card, .menu-row, .action-card, .action-row
+) :is(p, small, span:not(.profile-menu-icon)) {
+  color: #a5b8ac !important;
+}
+
+.hydra-root .theme-dialog {
+  border-color: #294b3a !important;
+  color: #eef6f1 !important;
+  background: #0e2418 !important;
+}
+
+.hydra-root .theme-option {
+  border-color: #315442 !important;
+  color: #eef6f1 !important;
+  background: #143323 !important;
+}
+
+.hydra-root .theme-option.active {
+  border-color: #4c8b65 !important;
+  background: #1a412c !important;
+}
+
+.hydra-root .theme-dialog :is(h2, strong) {
+  color: #eef6f1 !important;
+}
+
+.hydra-root .theme-dialog :is(p, small, .theme-dialog-close) {
+  color: #a5b8ac !important;
+}
