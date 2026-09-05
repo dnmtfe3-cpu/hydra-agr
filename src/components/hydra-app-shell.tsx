@@ -227,7 +227,7 @@ export function HydraAppShell() {
             </span>
             <div>
               <strong>Aparência</strong>
-              <small>{theme === "dark" ? "Modo escuro" : "Modo claro"}</small>
+              <small>{theme === "dark" ? "Modo escuro · BETA" : "Modo claro"}</small>
             </div>
             <ChevronRight size={19} />
           </button>
@@ -275,7 +275,7 @@ export function HydraAppShell() {
                   <Moon size={21} />
                 </span>
                 <div>
-                  <strong>Escuro</strong>
+                  <strong>Escuro <span className="theme-beta-badge">BETA</span></strong>
                   <small>Verde profundo com contraste suave</small>
                 </div>
                 {theme === "dark" && <Check size={19} />}
