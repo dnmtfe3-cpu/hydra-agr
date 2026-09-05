@@ -524,3 +524,99 @@ html body #root .hydra-root.theme-dark .phone-app :is(
   color: #ffaaa2 !important;
   background: #2b1918 !important;
 }
+
+
+/* Perfil e folha de configurações: modo verde integral, sem branco. */
+html body #root .hydra-root.hydra-root .phone-app:has(.profile-screen),
+html body #root .hydra-root.hydra-root .phone-app .app-content:has(> .profile-screen),
+html body #root .hydra-root.hydra-root .phone-app .profile-screen.profile-screen {
+  color: #eef6f1 !important;
+  background: #07130d !important;
+  background-image: none !important;
+}
+
+html body #root .hydra-root.hydra-root .phone-app .profile-screen :is(
+  .profile-group, .profile-menu-card, .profile-menu-row, .profile-social-tabs,
+  .plan-card, .admin-access-card, .student-hub-card, .support-channel-grid,
+  .support-channel-grid > *, .profile-message, .profile-information-card
+) {
+  border-color: #294b3a !important;
+  color: #eef6f1 !important;
+  background: #0e2418 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html body #root .hydra-root.hydra-root .phone-app .profile-screen .profile-menu-row {
+  border-bottom: 1px solid #294b3a !important;
+}
+
+html body #root .hydra-root.hydra-root .phone-app .profile-screen .profile-menu-row:last-child {
+  border-bottom: 0 !important;
+}
+
+html body #root .hydra-root.hydra-root .phone-app .profile-screen :is(
+  .profile-menu-icon, .plan-mark, .student-hub-row > span, .admin-access-card .profile-menu-icon
+) {
+  border-color: #315442 !important;
+  color: #91cfa2 !important;
+  background: #173827 !important;
+}
+
+html body #root .hydra-root.hydra-root .phone-app .profile-screen :is(
+  h1, h2, h3, strong, .profile-menu-row strong
+) {
+  color: #eef6f1 !important;
+}
+
+html body #root .hydra-root.hydra-root .phone-app .profile-screen :is(
+  p, small, .profile-menu-row small, .profile-version, .group-label
+) {
+  color: #a5b8ac !important;
+}
+
+html body #root .hydra-root.hydra-root .phone-app .profile-screen .group-label {
+  color: #8fc69e !important;
+}
+
+html body #root .hydra-root.hydra-root .profile-settings-sheet,
+html body #root .hydra-root.hydra-root .profile-settings-sheet :is(
+  .modal-sheet, .sheet, .profile-menu-card, .profile-menu-row, .setting-card
+) {
+  border-color: #294b3a !important;
+  color: #eef6f1 !important;
+  background: #0e2418 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html body #root .hydra-root.hydra-root .profile-settings-sheet :is(
+  header, .modal-head, .sheet-header
+) {
+  border-color: #294b3a !important;
+  color: #eef6f1 !important;
+  background: #0b2015 !important;
+}
+
+html body #root .hydra-root.hydra-root .profile-settings-sheet :is(
+  .profile-menu-icon, .setting-icon
+) {
+  color: #91cfa2 !important;
+  background: #173827 !important;
+}
+
+html body #root .hydra-root.hydra-root .profile-settings-sheet :is(h2, h3, strong) {
+  color: #eef6f1 !important;
+}
+
+html body #root .hydra-root.hydra-root .profile-settings-sheet :is(p, small, span) {
+  color: #a5b8ac !important;
+}
+
+/* Painel administrativo e premium também não herdam o papel branco do modo claro. */
+html body #root .hydra-root.hydra-root .phone-app :is(.admin-screen, .plus-screen),
+html body #root .hydra-root.hydra-root .phone-app .app-content:has(> :is(.admin-screen, .plus-screen)) {
+  color: #eef6f1 !important;
+  background: #07130d !important;
+  background-image: none !important;
+}
