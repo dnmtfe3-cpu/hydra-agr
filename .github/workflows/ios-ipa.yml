@@ -12,6 +12,7 @@ on:
       - 'capacitor.config.ts'
       - 'package.json'
       - 'package-lock.json'
+      - '.env.example'
 
 jobs:
   build-ipa:
@@ -30,6 +31,25 @@ jobs:
 
       - name: Install dependencies and iOS support
         run: npm install --no-audit --no-fund @capacitor/ios@8.5.0
+
+      - name: Configure Hydra Agro backend
+        shell: bash
+        env:
+          SECRET_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SECRET_SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          if [ -n "$SECRET_SUPABASE_URL" ] && [ -n "$SECRET_SUPABASE_KEY" ]; then
+            printf 'VITE_SUPABASE_URL=%s\nVITE_SUPABASE_PUBLISHABLE_KEY=%s\n' \
+              "$SECRET_SUPABASE_URL" "$SECRET_SUPABASE_KEY" > .env.production
+            echo "Using GitHub Secrets for Hydra Agro backend."
+          else
+            cp .env.example .env.production
+            echo "Secrets unavailable; using public Hydra Agro configuration from .env.example."
+          fi
+          npm run env:check
+
+      - name: Verify project
+        run: npm run lint
 
       - name: Prepare full iOS app with NFC
         run: npm run ios:setup
@@ -64,12 +84,16 @@ jobs:
           /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName Hydra Agro" ios/App/App/Info.plist || true
           /usr/libexec/PlistBuddy -c "Set :CFBundleName Hydra Agro" ios/App/App/Info.plist || true
 
-      - name: Verify web bundle copied
+      - name: Verify web bundle and backend config
         run: |
+          set -euo pipefail
           test -f dist/index.html
           test -d dist/assets
+          grep -R "gfwypccosftpchpbdiir.supabase.co" dist >/dev/null
+          grep -R "sb_publishable_uL6O0N4LwLykHFprsFjm6A_Z8UHxj2I" dist >/dev/null
           echo "dist size: $(du -sh dist | awk '{print $1}')"
           echo "asset files: $(find dist/assets -type f | wc -l | tr -d ' ')"
+          echo "Hydra Agro backend embedded successfully."
 
       - name: Build iPhone app without signing
         run: |
@@ -88,6 +112,7 @@ jobs:
 
       - name: Package complete IPA
         run: |
+          set -euo pipefail
           rm -rf build/Payload
           mkdir -p build/Payload
           APP_PATH="build/ios-derived/Build/Products/Release-iphoneos/App.app"
@@ -96,16 +121,16 @@ jobs:
           test -d "$APP_PATH/public/assets"
           cp -R "$APP_PATH" build/Payload/HydraAgro.app
           cd build
-          zip -qry HydraAgro-full-unsigned.ipa Payload
-          shasum -a 256 HydraAgro-full-unsigned.ipa > HydraAgro-full-unsigned.ipa.sha256
-          ls -lh HydraAgro-full-unsigned.ipa
+          zip -qry HydraAgro-complete-unsigned.ipa Payload
+          shasum -a 256 HydraAgro-complete-unsigned.ipa > HydraAgro-complete-unsigned.ipa.sha256
+          ls -lh HydraAgro-complete-unsigned.ipa
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
-          name: HydraAgro-iOS-full-unsigned
+          name: HydraAgro-iOS-complete-unsigned
           path: |
-            build/HydraAgro-full-unsigned.ipa
-            build/HydraAgro-full-unsigned.ipa.sha256
+            build/HydraAgro-complete-unsigned.ipa
+            build/HydraAgro-complete-unsigned.ipa.sha256
           if-no-files-found: error
           retention-days: 14
