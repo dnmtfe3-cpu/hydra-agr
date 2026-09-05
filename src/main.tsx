@@ -36,6 +36,7 @@ import "./interaction-motion-runtime";
 import "./native-notifications-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
 import { setupPushNotifications } from "./services/push-notifications";
+import { renderIosPreviewRoute } from "./ios-preview";
 
 if (typeof document !== "undefined") {
   const platform = Capacitor.getPlatform();
@@ -45,8 +46,10 @@ if (typeof document !== "undefined") {
   if (Capacitor.isNativePlatform()) void setupPushNotifications();
 }
 
+const preview = typeof window !== "undefined" ? renderIosPreviewRoute(window.location.pathname) : null;
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <HydraAppShell />
+    {preview ?? <HydraAppShell />}
   </React.StrictMode>,
 );
