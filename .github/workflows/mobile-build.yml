@@ -1,0 +1,176 @@
+name: Hydra Agro Android + iOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mobile-build.yml'
+      - 'src/**'
+      - 'public/**'
+      - 'android/**'
+      - 'scripts/setup-ios-nfc.mjs'
+      - 'capacitor.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.env.example'
+
+jobs:
+  android:
+    name: Android APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Configure backend
+        shell: bash
+        env:
+          SECRET_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SECRET_SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          if [ -n "$SECRET_SUPABASE_URL" ] && [ -n "$SECRET_SUPABASE_KEY" ]; then
+            printf 'VITE_SUPABASE_URL=%s\nVITE_SUPABASE_PUBLISHABLE_KEY=%s\n' "$SECRET_SUPABASE_URL" "$SECRET_SUPABASE_KEY" > .env.production
+          else
+            cp .env.example .env.production
+          fi
+          npm run env:check
+      - name: Verify project
+        run: npm run lint
+      - name: Build web
+        run: npx vite build
+      - name: Sync Android
+        run: npx cap sync android
+      - name: Build APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
+      - name: Prepare Android artifact
+        run: |
+          test -f android/app/build/outputs/apk/debug/app-debug.apk
+          mkdir -p mobile-output
+          cp android/app/build/outputs/apk/debug/app-debug.apk mobile-output/HydraAgro-Android.apk
+          ls -lh mobile-output/HydraAgro-Android.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HydraAgro-Android
+          path: mobile-output/HydraAgro-Android.apk
+          if-no-files-found: error
+          retention-days: 14
+
+  ios:
+    name: iOS IPA
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies and iOS support
+        run: npm install --no-audit --no-fund @capacitor/ios@8.5.0
+      - name: Configure backend
+        shell: bash
+        env:
+          SECRET_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SECRET_SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          if [ -n "$SECRET_SUPABASE_URL" ] && [ -n "$SECRET_SUPABASE_KEY" ]; then
+            printf 'VITE_SUPABASE_URL=%s\nVITE_SUPABASE_PUBLISHABLE_KEY=%s\n' "$SECRET_SUPABASE_URL" "$SECRET_SUPABASE_KEY" > .env.production
+          else
+            cp .env.example .env.production
+          fi
+          npm run env:check
+      - name: Verify project
+        run: npm run lint
+      - name: Prepare iOS app with NFC
+        run: npm run ios:setup
+      - name: Apply Hydra Agro native icon
+        run: |
+          set -euo pipefail
+          ICON_SRC="public/icon-512.png"
+          ICONSET="ios/App/App/Assets.xcassets/AppIcon.appiconset"
+          python3 - <<'PY'
+          import json, os, subprocess
+          icon_src='public/icon-512.png'
+          iconset='ios/App/App/Assets.xcassets/AppIcon.appiconset'
+          with open(os.path.join(iconset,'Contents.json'),'r',encoding='utf-8') as f:
+              data=json.load(f)
+          for item in data.get('images',[]):
+              filename=item.get('filename'); size=item.get('size'); scale=item.get('scale','1x')
+              if not filename or not size: continue
+              px=int(round(float(size.split('x')[0])*float(scale.rstrip('x'))))
+              subprocess.run(['sips','-z',str(px),str(px),icon_src,'--out',os.path.join(iconset,filename)],check=True,stdout=subprocess.DEVNULL)
+          PY
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName Hydra Agro" ios/App/App/Info.plist || true
+          /usr/libexec/PlistBuddy -c "Set :CFBundleName Hydra Agro" ios/App/App/Info.plist || true
+      - name: Build iPhone app without signing
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/ios-derived \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY='' \
+            build
+      - name: Package IPA
+        run: |
+          set -euo pipefail
+          APP_PATH="build/ios-derived/Build/Products/Release-iphoneos/App.app"
+          test -d "$APP_PATH"
+          rm -rf build/Payload
+          mkdir -p build/Payload mobile-output
+          cp -R "$APP_PATH" build/Payload/HydraAgro.app
+          cd build
+          zip -qry ../mobile-output/HydraAgro-iOS-unsigned.ipa Payload
+          cd ..
+          shasum -a 256 mobile-output/HydraAgro-iOS-unsigned.ipa > mobile-output/HydraAgro-iOS-unsigned.ipa.sha256
+          ls -lh mobile-output/HydraAgro-iOS-unsigned.ipa
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HydraAgro-iOS
+          path: |
+            mobile-output/HydraAgro-iOS-unsigned.ipa
+            mobile-output/HydraAgro-iOS-unsigned.ipa.sha256
+          if-no-files-found: error
+          retention-days: 14
+
+  bundle:
+    name: Android + iOS juntos
+    needs: [android, ios]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: HydraAgro-*
+          path: bundle
+          merge-multiple: true
+      - name: Create combined ZIP
+        run: |
+          ls -lh bundle
+          cd bundle
+          zip -9 HydraAgro-Android-iOS.zip HydraAgro-Android.apk HydraAgro-iOS-unsigned.ipa HydraAgro-iOS-unsigned.ipa.sha256
+          ls -lh HydraAgro-Android-iOS.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HydraAgro-Android-iOS
+          path: bundle/HydraAgro-Android-iOS.zip
+          if-no-files-found: error
+          retention-days: 14
