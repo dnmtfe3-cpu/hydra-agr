@@ -46,7 +46,8 @@ if (typeof document !== "undefined") {
   if (Capacitor.isNativePlatform()) void setupPushNotifications();
 }
 
-const preview = typeof window !== "undefined" ? renderIosPreviewRoute(window.location.pathname) : null;
+const path = typeof window !== "undefined" ? window.location.pathname : "";
+const preview = path === "/preview/ios/splash" ? null : renderIosPreviewRoute(path);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
