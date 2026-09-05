@@ -36,6 +36,7 @@ import "./interaction-motion-runtime";
 import "./native-notifications-runtime";
 import "./seo-runtime";
 import "./auth-no-carousel.css";
+import "./hydra-dark-final.css";
 import { HydraAppShell } from "./components/hydra-app-shell";
 import { setupPushNotifications } from "./services/push-notifications";
 import { renderIosPreviewRoute } from "./ios-preview";
