@@ -821,3 +821,59 @@ html body[data-hydra-theme="dark"] .modal-sheet :is(h1, h2, h3) {
   background: transparent !important;
   box-shadow: none !important;
 }
+
+/* Surfaces inside the five home shortcut destinations, including portals. */
+html body[data-hydra-theme="dark"] :is(.sector-board, .sector-board-row, .monitoring-card, .monitoring-detail,
+.sector-detail, .info-strip, .upload-placeholder, .activity-summary,
+.activity-detail, .activity-list > article, .activity-list > button,
+.assistant-bubble, .assistant-composer, .assistant-composer-field,
+.assistant-data-strip, .assistant-insight-card, .assistant-report-shortcut,
+.assistant-quick-grid > button, .assistant-boundaries,
+.production-block, .production-summary, .production-result-card,
+.production-money-grid > *, .production-movement, .production-tabs,
+.production-search, .production-toolbar, .production-record-list > *,
+.stock-list > *, .product-summary-list > *, .efficiency-list > *,
+.family-work-summary, .sale-total-preview,
+.nutriciclo-intro, .nutriciclo-detail, .nutriciclo-form,
+.nutriciclo-flow > div, .nutriciclo-cycles button, .nutriciclo-history article,
+.modal-sheet .detail-grid > div, .modal-sheet .detail-note) {
+  background: #153126 !important;
+  border-color: #3a594a !important;
+  color: #eef6f1 !important;
+}
+html body[data-hydra-theme="dark"] :is(.sector-board, .sector-board-row, .monitoring-card, .monitoring-detail,
+.sector-detail, .info-strip, .upload-placeholder, .activity-summary,
+.activity-detail, .activity-list > article, .activity-list > button,
+.assistant-bubble, .assistant-composer, .assistant-composer-field,
+.assistant-data-strip, .assistant-insight-card, .assistant-report-shortcut,
+.assistant-quick-grid > button, .assistant-boundaries,
+.production-block, .production-summary, .production-result-card,
+.production-money-grid > *, .production-movement, .production-tabs,
+.production-search, .production-toolbar, .production-record-list > *,
+.stock-list > *, .product-summary-list > *, .efficiency-list > *,
+.family-work-summary, .sale-total-preview,
+.nutriciclo-intro, .nutriciclo-detail, .nutriciclo-form,
+.nutriciclo-flow > div, .nutriciclo-cycles button, .nutriciclo-history article,
+.modal-sheet .detail-grid > div, .modal-sheet .detail-note) :is(strong, b, h2, h3, label) {
+  color: #eef6f1 !important;
+}
+html body[data-hydra-theme="dark"] :is(.sector-board, .sector-board-row, .monitoring-card, .monitoring-detail,
+.sector-detail, .info-strip, .upload-placeholder, .activity-summary,
+.activity-detail, .activity-list > article, .activity-list > button,
+.assistant-bubble, .assistant-composer, .assistant-composer-field,
+.assistant-data-strip, .assistant-insight-card, .assistant-report-shortcut,
+.assistant-quick-grid > button, .assistant-boundaries,
+.production-block, .production-summary, .production-result-card,
+.production-money-grid > *, .production-movement, .production-tabs,
+.production-search, .production-toolbar, .production-record-list > *,
+.stock-list > *, .product-summary-list > *, .efficiency-list > *,
+.family-work-summary, .sale-total-preview,
+.nutriciclo-intro, .nutriciclo-detail, .nutriciclo-form,
+.nutriciclo-flow > div, .nutriciclo-cycles button, .nutriciclo-history article,
+.modal-sheet .detail-grid > div, .modal-sheet .detail-note) :is(p, small, em) {
+  color: #b8cbbf !important;
+}
+html body[data-hydra-theme="dark"] :is(.production-tabs, .nutriciclo-cycles) button.active {
+  background: #287a55 !important;
+  color: #eef6f1 !important;
+}
