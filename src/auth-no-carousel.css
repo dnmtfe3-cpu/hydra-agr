@@ -1,0 +1,47 @@
+.auth-shell,
+.auth-card,
+.auth-content,
+.auth-enter,
+.auth-shell form,
+.auth-shell-signup,
+.auth-shell-staff,
+.auth-landing,
+.auth-landing-content {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  translate: none !important;
+  scroll-snap-type: none !important;
+}
+
+.signup-motion-bg,
+.signup-motion-bg span {
+  display: none !important;
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+}
+
+.auth-shell,
+.auth-card,
+.auth-content,
+.auth-shell form {
+  overflow-x: hidden !important;
+  overscroll-behavior-x: none !important;
+}
+
+.auth-content {
+  opacity: 1 !important;
+  left: auto !important;
+  right: auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .auth-shell *,
+  .auth-landing * {
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
+}
