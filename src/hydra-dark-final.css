@@ -713,3 +713,21 @@ html body #root .hydra-root.hydra-root .admin-screen :is(
   color: #ffaaa2 !important;
   background: #2b1918 !important;
 }
+
+
+/* Selo do recurso ainda em testes. */
+.hydra-root .theme-beta-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin-left: 6px !important;
+  padding: 2px 6px !important;
+  border: 1px solid rgba(255, 146, 46, .45) !important;
+  border-radius: 999px !important;
+  color: #ffad62 !important;
+  background: rgba(255, 146, 46, .12) !important;
+  font-size: 9px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: .08em !important;
+  vertical-align: middle !important;
+}
