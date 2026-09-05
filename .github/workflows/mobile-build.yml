@@ -100,6 +100,7 @@ jobs:
           rm -rf ios
           npx cap add ios --packagemanager SPM
           npx cap sync ios
+          npx capacitor-assets generate --ios --iconBackgroundColor '#174c36' --iconBackgroundColorDark '#174c36' --splashBackgroundColor '#174c36' --splashBackgroundColorDark '#174c36'
           /usr/libexec/PlistBuddy -c "Delete :NFCReaderUsageDescription" ios/App/App/Info.plist || true
           rm -f ios/App/App/App.entitlements
           sed -i '' '/CODE_SIGN_ENTITLEMENTS = App\/App.entitlements;/d' ios/App/App.xcodeproj/project.pbxproj
