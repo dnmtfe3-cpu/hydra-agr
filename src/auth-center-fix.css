@@ -78,3 +78,57 @@
     border-radius: 30px !important;
   }
 }
+
+
+/* Assinatura grande da marca somente no navegador desktop.
+   O app Capacitor e telas móveis continuam usando a marca compacta. */
+.hydra-root .auth-web-brand {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  html:not(.capacitor-native) .hydra-root .auth-web-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    margin: 0 auto 22px;
+    color: var(--forest-950, #0b3d2b);
+  }
+
+  html:not(.capacitor-native) .hydra-root .auth-web-brand-mark {
+    width: 76px;
+    height: 76px;
+    flex: 0 0 76px;
+  }
+
+  html:not(.capacitor-native) .hydra-root .auth-web-brand-name {
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+    font-family: "Sora", "Manrope", sans-serif;
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 1;
+    letter-spacing: -0.055em;
+  }
+
+  html:not(.capacitor-native) .hydra-root .auth-web-brand-name strong {
+    color: var(--forest-950, #0b3d2b);
+    font-weight: 800;
+  }
+
+  html:not(.capacitor-native) .hydra-root .auth-web-brand-name b {
+    color: var(--orange-500, #f89b2b);
+    font-weight: 800;
+  }
+
+  html:not(.capacitor-native) .hydra-root .auth-shell-motion:not(.auth-shell-staff) .auth-form-mark {
+    display: none !important;
+  }
+
+  html:not(.capacitor-native) .hydra-root .auth-shell-motion:not(.auth-shell-staff) .auth-card,
+  html:not(.capacitor-native) .hydra-root .auth-shell-motion:not(.auth-shell-staff) .auth-card-wide {
+    height: min(720px, calc(100svh - 32px)) !important;
+  }
+}
