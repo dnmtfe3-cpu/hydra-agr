@@ -1,0 +1,92 @@
+/* Hydra Agro — ajustes específicos para iOS nativo.
+   Evita overflow horizontal/efeito de carrossel no login/cadastro,
+   respeita safe areas e reduz bugs de teclado/viewport do WKWebView. */
+
+html.capacitor-ios,
+html.capacitor-ios body,
+html.capacitor-ios #root {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 100%;
+  overflow-x: hidden !important;
+  overscroll-behavior-x: none;
+  -webkit-text-size-adjust: 100%;
+}
+
+html.capacitor-ios body {
+  min-height: 100dvh;
+  -webkit-overflow-scrolling: touch;
+}
+
+html.capacitor-ios .auth-landing,
+html.capacitor-ios .auth-shell,
+html.capacitor-ios .auth-shell-motion,
+html.capacitor-ios .auth-card,
+html.capacitor-ios .auth-card-wide,
+html.capacitor-ios .auth-content,
+html.capacitor-ios .auth-enter,
+html.capacitor-ios form {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  transform: none !important;
+  translate: none !important;
+  scroll-snap-type: none !important;
+  scroll-snap-align: none !important;
+  touch-action: pan-y;
+}
+
+html.capacitor-ios .auth-shell,
+html.capacitor-ios .auth-shell-motion {
+  min-height: 100dvh !important;
+  height: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  padding-top: max(18px, env(safe-area-inset-top));
+  padding-right: max(16px, env(safe-area-inset-right));
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+  padding-left: max(16px, env(safe-area-inset-left));
+}
+
+html.capacitor-ios .auth-card,
+html.capacitor-ios .auth-card-wide {
+  margin-inline: auto !important;
+  animation: none !important;
+  transition-property: opacity, box-shadow, border-color !important;
+}
+
+/* O cadastro continua em etapas, mas sem deslizar lateralmente como carrossel. */
+html.capacitor-ios .auth-enter,
+html.capacitor-ios .auth-content {
+  animation-name: ios-auth-fade !important;
+  animation-duration: 160ms !important;
+  animation-timing-function: ease-out !important;
+}
+
+@keyframes ios-auth-fade {
+  from { opacity: .35; }
+  to { opacity: 1; }
+}
+
+/* Evita zoom automático do Safari/WKWebView ao focar campos menores que 16px. */
+html.capacitor-ios .auth-shell input,
+html.capacitor-ios .auth-shell select,
+html.capacitor-ios .auth-shell textarea {
+  font-size: 16px !important;
+}
+
+html.capacitor-ios button,
+html.capacitor-ios a,
+html.capacitor-ios input,
+html.capacitor-ios select,
+html.capacitor-ios textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html.capacitor-ios .bottom-nav,
+html.capacitor-ios .app-bottom-nav,
+html.capacitor-ios nav[aria-label="Navegação principal"] {
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+}
