@@ -33,6 +33,7 @@ import "./admin-panel-runtime";
 import "./admin-user-management-polish-runtime";
 import "./admin-user-cleanup-runtime";
 import "./interaction-motion-runtime";
+import "./native-notifications-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
 
 if (typeof document !== "undefined") {
