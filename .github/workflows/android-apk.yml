@@ -2,6 +2,17 @@ name: Gerar APK Hydra Agro
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/android-apk.yml'
+      - 'src/**'
+      - 'public/**'
+      - 'android/**'
+      - 'capacitor.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.env.example'
 
 jobs:
   build:
@@ -87,3 +98,6 @@ jobs:
           name: hydra-agro-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+          retention-days: 14
+
+# mobile-build-trigger: 2026-09-04T23:15-03:00
