@@ -1,10 +1,10 @@
-/* Hydra Agro — ajustes específicos para iOS nativo.
-   Evita overflow horizontal/efeito de carrossel no login/cadastro,
-   respeita safe areas e reduz bugs de teclado/viewport do WKWebView. */
+/* Hydra Agro — acabamento específico para o app iOS/WKWebView. */
 
 html.capacitor-ios,
 html.capacitor-ios body,
-html.capacitor-ios #root {
+html.capacitor-ios #root,
+html.capacitor-ios .hydra-root,
+html.capacitor-ios .phone-app {
   width: 100%;
   min-width: 0;
   max-width: 100%;
@@ -19,6 +19,32 @@ html.capacitor-ios body {
   -webkit-overflow-scrolling: touch;
 }
 
+/* O WKWebView já entrega a área útil do app. Não somar safe-area duas vezes. */
+html.capacitor-ios .phone-app,
+html.capacitor-ios .app-content {
+  min-height: 100dvh !important;
+}
+
+html.capacitor-ios .screen {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline: auto !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+html.capacitor-ios .home-screen,
+html.capacitor-ios .profile-screen {
+  padding-top: 10px !important;
+}
+
+html.capacitor-ios .home-brandbar {
+  min-height: 68px !important;
+  padding-top: 0 !important;
+}
+
+/* Login/cadastro: nada de carrossel, slide lateral ou elementos vazando. */
 html.capacitor-ios .auth-landing,
 html.capacitor-ios .auth-shell,
 html.capacitor-ios .auth-shell-motion,
@@ -26,11 +52,13 @@ html.capacitor-ios .auth-card,
 html.capacitor-ios .auth-card-wide,
 html.capacitor-ios .auth-content,
 html.capacitor-ios .auth-enter,
-html.capacitor-ios form {
+html.capacitor-ios .auth-shell form,
+html.capacitor-ios .signup-step,
+html.capacitor-ios .signup-panel {
   box-sizing: border-box;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
   transform: none !important;
   translate: none !important;
   scroll-snap-type: none !important;
@@ -41,36 +69,35 @@ html.capacitor-ios form {
 html.capacitor-ios .auth-shell,
 html.capacitor-ios .auth-shell-motion {
   min-height: 100dvh !important;
-  height: auto !important;
+  height: 100dvh !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
-  padding-top: max(18px, env(safe-area-inset-top));
-  padding-right: max(16px, env(safe-area-inset-right));
-  padding-bottom: max(24px, env(safe-area-inset-bottom));
-  padding-left: max(16px, env(safe-area-inset-left));
+  padding: 14px 16px calc(18px + env(safe-area-inset-bottom)) !important;
 }
 
 html.capacitor-ios .auth-card,
 html.capacitor-ios .auth-card-wide {
-  margin-inline: auto !important;
+  margin: auto !important;
   animation: none !important;
-  transition-property: opacity, box-shadow, border-color !important;
+  transition: opacity 140ms ease-out, box-shadow 140ms ease-out, border-color 140ms ease-out !important;
 }
 
-/* O cadastro continua em etapas, mas sem deslizar lateralmente como carrossel. */
+html.capacitor-ios .signup-motion-bg,
+html.capacitor-ios .signup-motion-bg * {
+  display: none !important;
+  animation: none !important;
+}
+
 html.capacitor-ios .auth-enter,
 html.capacitor-ios .auth-content {
-  animation-name: ios-auth-fade !important;
-  animation-duration: 160ms !important;
-  animation-timing-function: ease-out !important;
+  animation: ios-auth-fade 140ms ease-out both !important;
 }
 
 @keyframes ios-auth-fade {
-  from { opacity: .35; }
+  from { opacity: .55; }
   to { opacity: 1; }
 }
 
-/* Evita zoom automático do Safari/WKWebView ao focar campos menores que 16px. */
 html.capacitor-ios .auth-shell input,
 html.capacitor-ios .auth-shell select,
 html.capacitor-ios .auth-shell textarea {
@@ -85,8 +112,41 @@ html.capacitor-ios textarea {
   -webkit-tap-highlight-color: transparent;
 }
 
-html.capacitor-ios .bottom-nav,
-html.capacitor-ios .app-bottom-nav,
-html.capacitor-ios nav[aria-label="Navegação principal"] {
-  padding-bottom: max(8px, env(safe-area-inset-bottom));
+/* Barra inferior mais compacta no iPhone e conteúdo sempre visível acima dela. */
+@media (max-width: 899px) {
+  html.capacitor-ios body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav {
+    height: calc(58px + env(safe-area-inset-bottom)) !important;
+    min-height: calc(58px + env(safe-area-inset-bottom)) !important;
+    max-height: calc(58px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+    border-radius: 20px 20px 0 0 !important;
+  }
+
+  html.capacitor-ios body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button {
+    height: 50px !important;
+    min-height: 50px !important;
+  }
+
+  html.capacitor-ios body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple),
+  html.capacitor-ios body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc.active > span:first-of-type:not(.touch-ripple) {
+    top: -17px !important;
+    width: 58px !important;
+    min-width: 58px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+  }
+
+  html.capacitor-ios body #root .hydra-root .phone-app .app-content {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* Teclado/rotação: evita saltos e travamentos de altura. */
+@supports (height: 100dvh) {
+  html.capacitor-ios .auth-shell,
+  html.capacitor-ios .auth-shell-motion,
+  html.capacitor-ios .phone-app,
+  html.capacitor-ios .app-content {
+    min-height: 100dvh !important;
+  }
 }
