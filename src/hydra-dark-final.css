@@ -247,3 +247,68 @@
 .hydra-root.theme-dark * {
   scrollbar-color: #3b5949 var(--dark-bg);
 }
+
+
+/* Remoção final dos tons cinza nas funções e superfícies interativas. */
+.hydra-root.theme-dark :is(
+  .menu-card, .menu-row, .action-card, .action-row, .list-card, .list-row,
+  .data-card, .info-card, .form-card, .panel-card, .stats-card,
+  .profile-section, .herd-card, .management-card, .notification-list,
+  .admin-content-list article, .team-member-card, .employee-card
+) {
+  border-color: #294b3a !important;
+  color: var(--dark-text) !important;
+  background: #0e2418 !important;
+}
+
+.hydra-root.theme-dark :is(
+  .menu-row, .action-row, .list-row, .profile-menu-row,
+  .feature-link-grid > button, .shortcut-row > button,
+  .quick-grid > button, .operations-actions > button
+):not(.primary-button):not(.danger-button) {
+  border-color: #2d503e !important;
+  color: #e8f3eb !important;
+  background: #132c1e !important;
+}
+
+.hydra-root.theme-dark :is(
+  .menu-row, .action-row, .list-row, .profile-menu-row,
+  .feature-link-grid > button, .shortcut-row > button,
+  .quick-grid > button
+):active {
+  background: #193a28 !important;
+}
+
+.hydra-root.theme-dark :is(
+  .menu-icon, .action-icon, .row-icon, .shortcut-icon,
+  .profile-menu-icon, .notification-icon, .feature-icon
+) {
+  color: #91cfa2 !important;
+  background: #193a28 !important;
+}
+
+.hydra-root.theme-dark :is(
+  .toggle, .switch, [role="switch"], .checkbox-control
+) {
+  border-color: #355c47 !important;
+  background: #173525 !important;
+}
+
+.hydra-root.theme-dark :is(
+  .toggle.active, .toggle[aria-checked="true"],
+  .switch.active, [role="switch"][aria-checked="true"]
+) {
+  border-color: #3d805b !important;
+  background: #2d704e !important;
+}
+
+.hydra-root.theme-dark :is(.tab-list, .tabs, .filter-bar, .toolbar) {
+  border-color: #294b3a !important;
+  background: #0b2015 !important;
+}
+
+.hydra-root.theme-dark :is(.tab-list button.active, .tabs button.active, .filter-chips button.active) {
+  border-color: #3d805b !important;
+  color: #fff !important;
+  background: #2d704e !important;
+}
