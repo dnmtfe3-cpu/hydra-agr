@@ -731,3 +731,24 @@ html body #root .hydra-root.hydra-root .admin-screen :is(
   letter-spacing: .08em !important;
   vertical-align: middle !important;
 }
+
+
+/* Atalhos: mantém o desenho do ícone e remove somente o caixote de fundo. */
+html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button,
+html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button > span {
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html body #root .hydra-root.hydra-root .home-screen .shortcut-row.home-shortcuts-five > button > span > svg {
+  display: block !important;
+  width: 25px !important;
+  height: 25px !important;
+  color: #91cfa2 !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  background: transparent !important;
+}
