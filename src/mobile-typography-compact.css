@@ -4,18 +4,18 @@
   }
 
   html body #root .hydra-root .phone-app h1 {
-    font-size: clamp(23px, 6.2vw, 27px) !important;
-    line-height: 1.08 !important;
+    font-size: clamp(1.375rem, 1.1rem + 1vw, 1.625rem) !important;
+    line-height: 1.25 !important;
   }
 
   html body #root .hydra-root .phone-app h2 {
     font-size: clamp(18px, 5vw, 21px) !important;
-    line-height: 1.14 !important;
+    line-height: 1.3 !important;
   }
 
   html body #root .hydra-root .phone-app h3 {
     font-size: clamp(15px, 4.2vw, 17px) !important;
-    line-height: 1.18 !important;
+    line-height: 1.35 !important;
   }
 
   html body #root .hydra-root .phone-app p {
@@ -43,5 +43,36 @@
   html body #root .hydra-root .phone-app .wordmark-copy span,
   html body #root .hydra-root .phone-app .wordmark-copy strong {
     font-size: 18px !important;
+  }
+}
+
+/* Shared dialogs mount on body, so they need the same heading scale. */
+html body :is(.modal-head, .quick-sheet, .theme-dialog) h2 {
+  font-size: clamp(1.125rem, 1rem + .6vw, 1.5rem) !important;
+  line-height: 1.3 !important;
+  letter-spacing: -.02em !important;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  margin: 0;
+}
+html body .modal-head > div {
+  min-width: 0;
+  flex: 1;
+}
+html body .modal-head > button {
+  flex-shrink: 0;
+}
+html body #root .hydra-root .phone-app :is(h1, h2, h3) {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+html body #root .hydra-root .phone-app :is(.screen-heading, .greeting-block, .section-heading > div) {
+  min-width: 0;
+}
+@media (max-width: 899px) {
+  html body :is(.modal-sheet, .quick-sheet) :is(input, select, textarea),
+  html body #root .hydra-root .phone-app :is(input, select, textarea) {
+    font-size: 1rem !important;
   }
 }
