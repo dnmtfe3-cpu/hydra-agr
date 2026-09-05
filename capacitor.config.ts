@@ -28,6 +28,10 @@ const config: CapacitorConfig = {
     Keyboard: {
       resize: "native",
       resizeOnFullScreen: true
+    },
+    LocalNotifications: {
+      smallIcon: "ic_launcher_foreground",
+      iconColor: "#174C36"
     }
   }
 };
