@@ -409,7 +409,7 @@ html body #root .hydra-root.theme-dark .phone-app :is(
 
 
 /* Menu, configurações e funções: superfícies verdes, nunca brancas/cinzas. */
-.hydra-root .phone-app :is(
+.hydra-root.theme-dark .phone-app :is(
   .profile-menu-card, .profile-menu-row, .setting-card, .settings-card,
   .preferences-card, .appearance-card, .profile-group,
   .menu-card, .menu-row, .action-card, .action-row
@@ -420,66 +420,66 @@ html body #root .hydra-root.theme-dark .phone-app :is(
   box-shadow: none !important;
 }
 
-.hydra-root .phone-app :is(
+.hydra-root.theme-dark .phone-app :is(
   .profile-menu-row, .menu-row, .action-row
 ) {
   border-bottom-color: #294b3a !important;
 }
 
-.hydra-root .phone-app :is(
+.hydra-root.theme-dark .phone-app :is(
   .profile-menu-icon, .menu-icon, .setting-icon, .action-icon
 ) {
   color: #91cfa2 !important;
   background: #173827 !important;
 }
 
-.hydra-root .phone-app :is(
+.hydra-root.theme-dark .phone-app :is(
   .profile-menu-card, .profile-menu-row, .setting-card, .settings-card,
   .preferences-card, .menu-card, .menu-row, .action-card, .action-row
 ) :is(h2, h3, strong) {
   color: #eef6f1 !important;
 }
 
-.hydra-root .phone-app :is(
+.hydra-root.theme-dark .phone-app :is(
   .profile-menu-card, .profile-menu-row, .setting-card, .settings-card,
   .preferences-card, .menu-card, .menu-row, .action-card, .action-row
 ) :is(p, small, span:not(.profile-menu-icon)) {
   color: #a5b8ac !important;
 }
 
-.hydra-root .theme-dialog {
+.hydra-root.theme-dark .theme-dialog {
   border-color: #294b3a !important;
   color: #eef6f1 !important;
   background: #0e2418 !important;
 }
 
-.hydra-root .theme-option {
+.hydra-root.theme-dark .theme-option {
   border-color: #315442 !important;
   color: #eef6f1 !important;
   background: #143323 !important;
 }
 
-.hydra-root .theme-option.active {
+.hydra-root.theme-dark .theme-option.active {
   border-color: #4c8b65 !important;
   background: #1a412c !important;
 }
 
-.hydra-root .theme-dialog :is(h2, strong) {
+.hydra-root.theme-dark .theme-dialog :is(h2, strong) {
   color: #eef6f1 !important;
 }
 
-.hydra-root .theme-dialog :is(p, small, .theme-dialog-close) {
+.hydra-root.theme-dark .theme-dialog :is(p, small, .theme-dialog-close) {
   color: #a5b8ac !important;
 }
 
 
 /* Painel administrativo e Hydra Agro+: mesma base escura do aplicativo. */
-.hydra-root .phone-app :is(.admin-screen, .plus-screen) {
+.hydra-root.theme-dark .phone-app :is(.admin-screen, .plus-screen) {
   color: #eef6f1 !important;
   background: #07130d !important;
 }
 
-.hydra-root .phone-app :is(
+.hydra-root.theme-dark .phone-app :is(
   .admin-panel-section, .admin-metric-grid article, .admin-user-list,
   .admin-user-list article, .admin-content-list, .admin-content-list article,
   .admin-detail-card, .admin-stat-card, .admin-card, .admin-action-card,
@@ -493,7 +493,7 @@ html body #root .hydra-root.theme-dark .phone-app :is(
   box-shadow: 0 12px 30px rgba(0, 0, 0, .2) !important;
 }
 
-.hydra-root .phone-app :is(
+.hydra-root.theme-dark .phone-app :is(
   .admin-tabs, .admin-filter, .admin-search, .admin-toolbar,
   .plus-tabs, .plus-filter, .plus-toolbar
 ) {
@@ -502,18 +502,18 @@ html body #root .hydra-root.theme-dark .phone-app :is(
   background: #0b2015 !important;
 }
 
-.hydra-root .phone-app :is(.admin-tabs, .plus-tabs) button {
+.hydra-root.theme-dark .phone-app :is(.admin-tabs, .plus-tabs) button {
   color: #9eb2a6 !important;
   background: transparent !important;
 }
 
-.hydra-root .phone-app :is(.admin-tabs, .plus-tabs) button.active {
+.hydra-root.theme-dark .phone-app :is(.admin-tabs, .plus-tabs) button.active {
   border-color: #3d805b !important;
   color: #fff !important;
   background: #2d704e !important;
 }
 
-.hydra-root .phone-app :is(.admin-screen, .plus-screen) :is(
+.hydra-root.theme-dark .phone-app :is(.admin-screen, .plus-screen) :is(
   input, select, textarea, .search-box
 ) {
   border-color: #315442 !important;
@@ -521,15 +521,15 @@ html body #root .hydra-root.theme-dark .phone-app :is(
   background: #143323 !important;
 }
 
-.hydra-root .phone-app :is(.admin-screen, .plus-screen) :is(h1, h2, h3, strong) {
+.hydra-root.theme-dark .phone-app :is(.admin-screen, .plus-screen) :is(h1, h2, h3, strong) {
   color: #eef6f1 !important;
 }
 
-.hydra-root .phone-app :is(.admin-screen, .plus-screen) :is(p, small, label, .muted) {
+.hydra-root.theme-dark .phone-app :is(.admin-screen, .plus-screen) :is(p, small, label, .muted) {
   color: #a5b8ac !important;
 }
 
-.hydra-root .phone-app :is(
+.hydra-root.theme-dark .phone-app :is(
   .admin-metric-grid article > span, .admin-icon, .plus-feature-icon,
   .plus-metric-icon, .plus-crown-action
 ) {
@@ -539,33 +539,33 @@ html body #root .hydra-root.theme-dark .phone-app :is(
 }
 
 /* O premium usa laranja/dourado apenas para destacar valor e benefícios. */
-.hydra-root .phone-app :is(.plus-price-hero, .plus-hero, .premium-hero) {
+.hydra-root.theme-dark .phone-app :is(.plus-price-hero, .plus-hero, .premium-hero) {
   border-color: #41634f !important;
   color: #fff !important;
   background: linear-gradient(145deg, #174832, #0c2d20) !important;
   box-shadow: 0 18px 42px rgba(0, 0, 0, .3) !important;
 }
 
-.hydra-root .phone-app :is(
+.hydra-root.theme-dark .phone-app :is(
   .plus-price, .plus-badge, .premium-badge, .plus-screen .eyebrow
 ) {
   color: #ffc078 !important;
 }
 
-.hydra-root .phone-app :is(.plus-screen, .admin-screen) .primary-button {
+.hydra-root.theme-dark .phone-app :is(.plus-screen, .admin-screen) .primary-button {
   border-color: transparent !important;
   color: #fff !important;
   background: #2d704e !important;
 }
 
-.hydra-root .phone-app .plus-screen :is(.plus-cta, .premium-cta) {
+.hydra-root.theme-dark .phone-app .plus-screen :is(.plus-cta, .premium-cta) {
   border-color: transparent !important;
   color: #fff !important;
   background: linear-gradient(135deg, #ff922e, #df741d) !important;
   box-shadow: 0 12px 28px rgba(255, 126, 24, .22) !important;
 }
 
-.hydra-root .phone-app .admin-screen :is(.danger-button, .delete-button) {
+.hydra-root.theme-dark .phone-app .admin-screen :is(.danger-button, .delete-button) {
   border-color: #5a3531 !important;
   color: #ffaaa2 !important;
   background: #2b1918 !important;
@@ -573,15 +573,15 @@ html body #root .hydra-root.theme-dark .phone-app :is(
 
 
 /* Perfil e folha de configurações: modo verde integral, sem branco. */
-html body #root .hydra-root.hydra-root .phone-app:has(.profile-screen),
-html body #root .hydra-root.hydra-root .phone-app .app-content:has(> .profile-screen),
-html body #root .hydra-root.hydra-root .phone-app .profile-screen.profile-screen {
+html body #root .hydra-root.hydra-root.theme-dark .phone-app:has(.profile-screen),
+html body #root .hydra-root.hydra-root.theme-dark .phone-app .app-content:has(> .profile-screen),
+html body #root .hydra-root.hydra-root.theme-dark .phone-app .profile-screen.profile-screen {
   color: #eef6f1 !important;
   background: #07130d !important;
   background-image: none !important;
 }
 
-html body #root .hydra-root.hydra-root .phone-app .profile-screen :is(
+html body #root .hydra-root.hydra-root.theme-dark .phone-app .profile-screen :is(
   .profile-group, .profile-menu-card, .profile-menu-row, .profile-social-tabs,
   .plan-card, .admin-access-card, .student-hub-card, .support-channel-grid,
   .support-channel-grid > *, .profile-message, .profile-information-card
@@ -593,15 +593,15 @@ html body #root .hydra-root.hydra-root .phone-app .profile-screen :is(
   box-shadow: none !important;
 }
 
-html body #root .hydra-root.hydra-root .phone-app .profile-screen .profile-menu-row {
+html body #root .hydra-root.hydra-root.theme-dark .phone-app .profile-screen .profile-menu-row {
   border-bottom: 1px solid #294b3a !important;
 }
 
-html body #root .hydra-root.hydra-root .phone-app .profile-screen .profile-menu-row:last-child {
+html body #root .hydra-root.hydra-root.theme-dark .phone-app .profile-screen .profile-menu-row:last-child {
   border-bottom: 0 !important;
 }
 
-html body #root .hydra-root.hydra-root .phone-app .profile-screen :is(
+html body #root .hydra-root.hydra-root.theme-dark .phone-app .profile-screen :is(
   .profile-menu-icon, .plan-mark, .student-hub-row > span, .admin-access-card .profile-menu-icon
 ) {
   border-color: #315442 !important;
@@ -609,24 +609,24 @@ html body #root .hydra-root.hydra-root .phone-app .profile-screen :is(
   background: #173827 !important;
 }
 
-html body #root .hydra-root.hydra-root .phone-app .profile-screen :is(
+html body #root .hydra-root.hydra-root.theme-dark .phone-app .profile-screen :is(
   h1, h2, h3, strong, .profile-menu-row strong
 ) {
   color: #eef6f1 !important;
 }
 
-html body #root .hydra-root.hydra-root .phone-app .profile-screen :is(
+html body #root .hydra-root.hydra-root.theme-dark .phone-app .profile-screen :is(
   p, small, .profile-menu-row small, .profile-version, .group-label
 ) {
   color: #a5b8ac !important;
 }
 
-html body #root .hydra-root.hydra-root .phone-app .profile-screen .group-label {
+html body #root .hydra-root.hydra-root.theme-dark .phone-app .profile-screen .group-label {
   color: #8fc69e !important;
 }
 
-html body #root .hydra-root.hydra-root .profile-settings-sheet,
-html body #root .hydra-root.hydra-root .profile-settings-sheet :is(
+html body #root .hydra-root.hydra-root.theme-dark .profile-settings-sheet,
+html body #root .hydra-root.hydra-root.theme-dark .profile-settings-sheet :is(
   .modal-sheet, .sheet, .profile-menu-card, .profile-menu-row, .setting-card
 ) {
   border-color: #294b3a !important;
@@ -636,7 +636,7 @@ html body #root .hydra-root.hydra-root .profile-settings-sheet :is(
   box-shadow: none !important;
 }
 
-html body #root .hydra-root.hydra-root .profile-settings-sheet :is(
+html body #root .hydra-root.hydra-root.theme-dark .profile-settings-sheet :is(
   header, .modal-head, .sheet-header
 ) {
   border-color: #294b3a !important;
@@ -644,24 +644,24 @@ html body #root .hydra-root.hydra-root .profile-settings-sheet :is(
   background: #0b2015 !important;
 }
 
-html body #root .hydra-root.hydra-root .profile-settings-sheet :is(
+html body #root .hydra-root.hydra-root.theme-dark .profile-settings-sheet :is(
   .profile-menu-icon, .setting-icon
 ) {
   color: #91cfa2 !important;
   background: #173827 !important;
 }
 
-html body #root .hydra-root.hydra-root .profile-settings-sheet :is(h2, h3, strong) {
+html body #root .hydra-root.hydra-root.theme-dark .profile-settings-sheet :is(h2, h3, strong) {
   color: #eef6f1 !important;
 }
 
-html body #root .hydra-root.hydra-root .profile-settings-sheet :is(p, small, span) {
+html body #root .hydra-root.hydra-root.theme-dark .profile-settings-sheet :is(p, small, span) {
   color: #a5b8ac !important;
 }
 
 /* Painel administrativo e premium também não herdam o papel branco do modo claro. */
-html body #root .hydra-root.hydra-root .phone-app :is(.admin-screen, .plus-screen),
-html body #root .hydra-root.hydra-root .phone-app .app-content:has(> :is(.admin-screen, .plus-screen)) {
+html body #root .hydra-root.hydra-root.theme-dark .phone-app :is(.admin-screen, .plus-screen),
+html body #root .hydra-root.hydra-root.theme-dark .phone-app .app-content:has(> :is(.admin-screen, .plus-screen)) {
   color: #eef6f1 !important;
   background: #07130d !important;
   background-image: none !important;
@@ -669,7 +669,7 @@ html body #root .hydra-root.hydra-root .phone-app .app-content:has(> :is(.admin-
 
 
 /* Profundidade total: tudo que abre dentro de Perfil, Configurações, Admin e Plus fica escuro. */
-html body #root .hydra-root.hydra-root :is(
+html body #root .hydra-root.hydra-root.theme-dark :is(
   .profile-screen, .profile-settings-sheet, .admin-screen, .plus-screen
 ) :is(
   section, article, form, fieldset,
@@ -684,7 +684,7 @@ html body #root .hydra-root.hydra-root :is(
   box-shadow: none !important;
 }
 
-html body #root .hydra-root.hydra-root :is(
+html body #root .hydra-root.hydra-root.theme-dark :is(
   .profile-screen, .profile-settings-sheet, .admin-screen, .plus-screen
 ) :is(
   input, select, textarea, [role="combobox"], [role="listbox"],
@@ -695,7 +695,7 @@ html body #root .hydra-root.hydra-root :is(
   background: #143323 !important;
 }
 
-html body #root .hydra-root.hydra-root :is(
+html body #root .hydra-root.hydra-root.theme-dark :is(
   .profile-screen, .profile-settings-sheet, .admin-screen, .plus-screen
 ) :is(
   .secondary-button, .wide-outline-button, .icon-button,
@@ -706,7 +706,7 @@ html body #root .hydra-root.hydra-root :is(
   background: #143323 !important;
 }
 
-html body #root .hydra-root.hydra-root :is(
+html body #root .hydra-root.hydra-root.theme-dark :is(
   .profile-screen, .profile-settings-sheet, .admin-screen, .plus-screen
 ) :is(
   .primary-button, button.active, [aria-selected="true"]
@@ -716,19 +716,19 @@ html body #root .hydra-root.hydra-root :is(
   background: #2d704e !important;
 }
 
-html body #root .hydra-root.hydra-root :is(
+html body #root .hydra-root.hydra-root.theme-dark :is(
   .profile-screen, .profile-settings-sheet, .admin-screen, .plus-screen
 ) :is(h1, h2, h3, h4, strong, b, dt) {
   color: #eef6f1 !important;
 }
 
-html body #root .hydra-root.hydra-root :is(
+html body #root .hydra-root.hydra-root.theme-dark :is(
   .profile-screen, .profile-settings-sheet, .admin-screen, .plus-screen
 ) :is(p, small, label, dd, .muted, .subtitle) {
   color: #a5b8ac !important;
 }
 
-html body #root .hydra-root.hydra-root :is(
+html body #root .hydra-root.hydra-root.theme-dark :is(
   .profile-screen, .profile-settings-sheet, .admin-screen, .plus-screen
 ) :is(
   .profile-menu-icon, [class*="icon"]:not(.icon-button),
@@ -739,20 +739,20 @@ html body #root .hydra-root.hydra-root :is(
   background-color: #173827 !important;
 }
 
-html body #root .hydra-root.hydra-root :is(
+html body #root .hydra-root.hydra-root.theme-dark :is(
   .profile-screen, .profile-settings-sheet, .admin-screen, .plus-screen
 ) :is(.modal-backdrop, .sheet-backdrop, [class*="backdrop"]) {
   background: rgba(0, 0, 0, .78) !important;
 }
 
 /* Mantém apenas os acentos funcionais. */
-html body #root .hydra-root.hydra-root .plus-screen :is(
+html body #root .hydra-root.hydra-root.theme-dark .plus-screen :is(
   .plus-price, .plus-badge, .premium-badge, .plus-crown-action
 ) {
   color: #ffc078 !important;
 }
 
-html body #root .hydra-root.hydra-root .admin-screen :is(
+html body #root .hydra-root.hydra-root.theme-dark .admin-screen :is(
   .danger-button, .delete-button, button[class*="danger"]
 ) {
   border-color: #5a3531 !important;
