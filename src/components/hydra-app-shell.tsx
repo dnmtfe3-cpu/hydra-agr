@@ -60,12 +60,45 @@ function openNotificationsScreen() {
 }
 
 export function HydraAppShell() {
-  const [theme, setTheme] = useState<ThemeMode>(savedTheme);
+  const [theme, setTheme] = useState<ThemeMode>("light");
+  const [canUseDarkTheme, setCanUseDarkTheme] = useState(false);
   const [appearanceOpen, setAppearanceOpen] = useState(false);
   const [profileMenuTarget, setProfileMenuTarget] = useState<HTMLElement | null>(null);
   const [spreadsheetOpen, setSpreadsheetOpen] = useState(false);
   const [spreadsheetAccount, setSpreadsheetAccount] = useState<HydraAccount | null>(null);
   const [spreadsheetLoading, setSpreadsheetLoading] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    const resolveThemeAccess = async () => {
+      try {
+        const client = requireSupabase();
+        const {
+          data: { user },
+        } = await client.auth.getUser();
+        if (!user || !active) return;
+
+        const account = await loadAccount(user);
+        if (!active) return;
+
+        const allowed = ["moderator", "admin", "owner"].includes(account.role);
+        setCanUseDarkTheme(allowed);
+        setTheme(allowed ? savedTheme() : "light");
+        if (!allowed) window.localStorage.removeItem(THEME_KEY);
+      } catch {
+        if (active) {
+          setCanUseDarkTheme(false);
+          setTheme("light");
+        }
+      }
+    };
+
+    void resolveThemeAccess();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -184,6 +217,7 @@ export function HydraAppShell() {
   }, []);
 
   function chooseTheme(next: ThemeMode) {
+    if (next === "dark" && !canUseDarkTheme) return;
     setTheme(next);
     setAppearanceOpen(false);
   }
@@ -226,7 +260,7 @@ export function HydraAppShell() {
             </div>
             <ChevronRight size={19} />
           </button>
-          <button className="profile-menu-row theme-menu-row" onClick={() => setAppearanceOpen(true)}>
+          {canUseDarkTheme && (          <button className="profile-menu-row theme-menu-row" onClick={() => setAppearanceOpen(true)}>
             <span className="profile-menu-icon">
               <Palette size={21} />
             </span>
@@ -236,6 +270,7 @@ export function HydraAppShell() {
             </div>
             <ChevronRight size={19} />
           </button>
+          )}
         </>,
         profileMenuTarget,
       )
@@ -252,7 +287,7 @@ export function HydraAppShell() {
           onClose={() => setSpreadsheetOpen(false)}
         />
       )}
-      {appearanceOpen && (
+      {canUseDarkTheme && appearanceOpen && (
         <div className="theme-dialog-backdrop" onMouseDown={() => setAppearanceOpen(false)}>
           <section
             className="theme-dialog"
