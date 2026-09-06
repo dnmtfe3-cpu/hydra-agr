@@ -110,11 +110,15 @@ export function HydraAppShell() {
     const color = theme === "dark" ? "#07130d" : "#f8f6ef";
     document.documentElement.style.backgroundColor = color;
     document.body.style.backgroundColor = color;
-    // Portals and runtime dialogs are mounted on body, outside hydra-root.
-    document.body.classList.toggle("theme-dark", theme === "dark");
+    // Remove every previous theme marker before applying the selected mode.
+    for (const element of [document.documentElement, document.body]) {
+      element.classList.remove("theme-dark", "theme-light", "green-mode");
+      element.classList.add(`theme-${theme}`);
+      element.dataset.hydraTheme = theme;
+    }
     document.body.classList.toggle("green-mode", theme === "dark");
-    document.body.dataset.hydraTheme = theme;
-    document.body.style.colorScheme = theme === "dark" ? "dark" : "light";
+    document.documentElement.style.colorScheme = theme;
+    document.body.style.colorScheme = theme;
 
     let themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
     if (!themeColor) {
@@ -218,6 +222,11 @@ export function HydraAppShell() {
 
   function chooseTheme(next: ThemeMode) {
     if (next === "dark" && !canUseDarkTheme) return;
+    try {
+      window.localStorage.setItem(THEME_KEY, next);
+    } catch {
+      // armazenamento indisponível
+    }
     setTheme(next);
     setAppearanceOpen(false);
   }
