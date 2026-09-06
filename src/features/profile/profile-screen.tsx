@@ -281,7 +281,7 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
       <Modal open={settingsOpen} onClose={() => setSettingsOpen(false)} eyebrow="PERFIL" title="Menu e configurações" wide>
         <div className="profile-settings-sheet">
           <div className="profile-menu-card">
-            <MenuRow icon={<Palette size={21} />} title="Aparência" subtitle="Modo claro ou escuro" onClick={() => openInjectedMenu(".theme-menu-row")} />
+            {isAdmin && <MenuRow icon={<Palette size={21} />} title="Aparência" subtitle="Modo claro ou escuro · BETA" onClick={() => openInjectedMenu(".theme-menu-row")} />}
             <MenuRow icon={<Bell size={21} />} title="Notificações" subtitle="Avisos da conta e da propriedade" onClick={() => { setSettingsOpen(false); openNotificationPreferences(); }} />
             <MenuRow icon={<LockKeyhole size={21} />} title="Segurança" subtitle="Alterar e-mail ou senha" onClick={() => { setSettingsOpen(false); setSecurity({ email: account.email, password: "", confirmPassword: "" }); setSecurityFeedback(null); setSecurityOpen(true); }} />
           </div>
