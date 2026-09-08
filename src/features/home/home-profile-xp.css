@@ -35,7 +35,7 @@
   position: absolute;
   inset: 3px;
   border-radius: inherit;
-  background: #0b2116;
+  background: var(--paper, #fff);
   z-index: 0;
 }
 
@@ -53,7 +53,7 @@
   font-size: 18px;
   font-weight: 800;
   letter-spacing: -0.02em;
-  border: 2px solid #0b2116;
+  border: 2px solid var(--paper, #fff);
 }
 
 .home-profile-avatar img {
@@ -76,7 +76,7 @@
   place-items: center;
   background: #ef7f1a;
   color: #fff;
-  border: 2px solid #0b2116;
+  border: 2px solid var(--paper, #fff);
   font-size: 10px;
   line-height: 1;
   font-weight: 900;
@@ -92,16 +92,16 @@
   text-align: left;
   margin: 0;
   padding: 8px 10px;
-  border: 1px solid #315442;
+  border: 1px solid var(--line, #dce5de);
   border-radius: 14px;
-  background: #143323;
+  background: var(--sage-soft, #ecf2e9);
   z-index: 1;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
 .home-farm-xp strong {
-  color: #91d0a3;
+  color: var(--forest-700, #236044);
   font-size: 15px;
   line-height: 1.1;
   font-weight: 800;
@@ -109,7 +109,7 @@
 }
 
 .home-farm-xp span {
-  color: #a9bdb1;
+  color: var(--muted, #6b7d72);
   font-size: 11px;
   line-height: 1.15;
   font-weight: 650;
