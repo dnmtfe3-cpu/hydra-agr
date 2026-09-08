@@ -210,6 +210,40 @@ const css = String.raw`
   }
 
 }
+/* Touch feedback changes only scale/opacity, preserving the NFC offset. */
+@media (prefers-reduced-motion: no-preference) {
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button {
+    transition: color 180ms ease, opacity 120ms ease !important;
+  }
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple),
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .home-screen .shortcut-row.home-shortcuts-five > button > span:not(.touch-ripple) {
+    scale: 1 !important;
+    transition: scale 220ms cubic-bezier(.2,.8,.2,1), opacity 140ms ease !important;
+  }
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button:active > span:first-of-type:not(.touch-ripple),
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .home-screen .shortcut-row.home-shortcuts-five > button:active > span:not(.touch-ripple) {
+    scale: .92 !important;
+    opacity: .8 !important;
+  }
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.active:not(.nav-nfc)::after {
+    animation: hydra-nav-dot-in 180ms ease-out both !important;
+  }
+  @keyframes hydra-nav-dot-in {
+    from { opacity: 0; scale: .6; }
+    to { opacity: 1; scale: 1; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button,
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple),
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .home-screen .shortcut-row.home-shortcuts-five > button > span:not(.touch-ripple),
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.active:not(.nav-nfc)::after {
+    transition: none !important;
+    animation: none !important;
+    scale: 1 !important;
+  }
+}
+
 `;
 
 function installBottomNavFinalStyle() {
