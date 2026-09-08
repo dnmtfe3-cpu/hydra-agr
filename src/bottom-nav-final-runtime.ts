@@ -218,7 +218,7 @@ const css = String.raw`
   html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple),
   html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .home-screen .shortcut-row.home-shortcuts-five > button > span:not(.touch-ripple) {
     scale: 1 !important;
-    transition: scale 220ms cubic-bezier(.2,.8,.2,1), opacity 140ms ease !important;
+    transition: scale 300ms cubic-bezier(.22,1,.36,1), translate 300ms cubic-bezier(.22,1,.36,1), opacity 140ms ease !important;
   }
   html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button:active > span:first-of-type:not(.touch-ripple),
   html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .home-screen .shortcut-row.home-shortcuts-five > button:active > span:not(.touch-ripple) {
@@ -241,6 +241,42 @@ const css = String.raw`
     transition: none !important;
     animation: none !important;
     scale: 1 !important;
+  }
+}
+
+/* Selected tabs settle slightly above resting icons; press responds immediately. */
+@media (prefers-reduced-motion: no-preference) {
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button:not(.nav-nfc) > span:first-of-type:not(.touch-ripple) {
+    translate: 0 0 !important;
+  }
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.active:not(.nav-nfc) > span:first-of-type:not(.touch-ripple) {
+    translate: 0 -3px !important;
+    scale: 1.06 !important;
+  }
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button:active > span:first-of-type:not(.touch-ripple),
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app .home-screen .shortcut-row.home-shortcuts-five > button:active > span:not(.touch-ripple) {
+    transition-duration: 70ms !important;
+    scale: .9 !important;
+  }
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.active:not(.nav-nfc):active > span:first-of-type:not(.touch-ripple) {
+    translate: 0 0 !important;
+    scale: .9 !important;
+  }
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app :is(.profile-menu-row, .history-home-row, .secondary-button) {
+    transition: opacity 120ms ease, scale 220ms cubic-bezier(.22,1,.36,1) !important;
+  }
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app :is(.profile-menu-row, .history-home-row, .secondary-button):active {
+    scale: .985 !important;
+    opacity: .85 !important;
+    transition-duration: 70ms !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple),
+  html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app :is(.profile-menu-row, .history-home-row, .secondary-button) {
+    translate: none !important;
+    scale: 1 !important;
+    transition: none !important;
   }
 }
 
