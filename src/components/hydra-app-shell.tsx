@@ -70,24 +70,27 @@ export function HydraAppShell() {
 
   useEffect(() => {
     let active = true;
+    let revision = 0;
 
     const resolveThemeAccess = async () => {
+      const current = ++revision;
       try {
         const client = requireSupabase();
         const {
           data: { user },
         } = await client.auth.getUser();
-        if (!user || !active) return;
+        if (!active || current !== revision) return;
+        if (!user) { setCanUseDarkTheme(false); setTheme("light"); setAppearanceOpen(false); return; }
 
         const account = await loadAccount(user);
-        if (!active) return;
+        if (!active || current !== revision) return;
 
         const allowed = ["moderator", "admin", "owner"].includes(account.role);
         setCanUseDarkTheme(allowed);
         setTheme(allowed ? savedTheme() : "light");
         if (!allowed) window.localStorage.removeItem(THEME_KEY);
       } catch {
-        if (active) {
+        if (active && current === revision) {
           setCanUseDarkTheme(false);
           setTheme("light");
         }
@@ -95,19 +98,37 @@ export function HydraAppShell() {
     };
 
     void resolveThemeAccess();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let unsubscribe: (() => void) | undefined;
+    try {
+      const { data } = requireSupabase().auth.onAuthStateChange((event) => {
+        if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+        ++revision;
+        if (event === "SIGNED_OUT") {
+          setCanUseDarkTheme(false);
+          setTheme("light");
+          setAppearanceOpen(false);
+        }
+        clearTimeout(timer);
+        timer = setTimeout(() => { if (active) void resolveThemeAccess(); }, 0);
+      });
+      unsubscribe = () => data.subscription.unsubscribe();
+    } catch { /* Auth is unavailable in an unconfigured preview. */ }
     return () => {
       active = false;
+      clearTimeout(timer);
+      unsubscribe?.();
     };
   }, []);
 
   useEffect(() => {
     try {
-      window.localStorage.setItem(THEME_KEY, theme);
+      if (canUseDarkTheme) window.localStorage.setItem(THEME_KEY, theme);
     } catch {
       // armazenamento indisponível
     }
 
-    const color = theme === "dark" ? "#07130d" : "#f8f6ef";
+    const color = theme === "dark" ? "#08261c" : "#f8f6ef";
     document.documentElement.style.backgroundColor = color;
     document.body.style.backgroundColor = color;
     // Remove every previous theme marker before applying the selected mode.
@@ -127,7 +148,7 @@ export function HydraAppShell() {
       document.head.appendChild(themeColor);
     }
     themeColor.content = color;
-  }, [theme]);
+  }, [theme, canUseDarkTheme]);
 
   useEffect(() => {
     if (Capacitor.isNativePlatform() || typeof window === "undefined" || !("Notification" in window)) return;

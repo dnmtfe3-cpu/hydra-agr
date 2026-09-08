@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { AuthFlow } from "../src/features/auth/auth-flow";
 
@@ -11,6 +11,17 @@ const handlers = {
 };
 
 describe("autenticação", () => {
+  it("libera uma nova tentativa quando o login falha inesperadamente", async () => {
+    const onLogin = vi.fn().mockRejectedValue(new Error("network failed"));
+    render(<AuthFlow {...handlers} onLogin={onLogin} />);
+    fireEvent.click(screen.getByRole("button", { name: /^entrar$/i }));
+    fireEvent.change(screen.getByLabelText(/e-mail/i), { target: { value: "teste@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: /avançar/i }));
+    fireEvent.change(screen.getByLabelText("Senha", { exact: true }), { target: { value: "test-password" } });
+    fireEvent.click(screen.getByRole("button", { name: /^entrar$/i }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Verifique sua conexão");
+    await waitFor(() => expect(screen.getByRole("button", { name: /^entrar$/i })).toBeEnabled());
+  });
   it("mostra a tela inicial restaurada", () => {
     render(<AuthFlow {...handlers} />);
     expect(screen.getByRole("button", { name: /^entrar$/i })).toBeEnabled();

@@ -165,7 +165,7 @@ export function useHydraStore() {
     } catch (error) {
       if (currentBoot !== bootId.current) return;
       setLastError(friendlyError(error));
-      setSyncStatus(cached ? "offline" : "error");
+      setSyncStatus(cached && !navigator.onLine ? "offline" : "error");
       if (!cached) applyAccount(null);
     } finally {
       if (currentBoot === bootId.current) setReady(true);
@@ -191,7 +191,7 @@ export function useHydraStore() {
       setLastError("");
       await refreshPublicContent();
     } catch (error) {
-      setSyncStatus("offline");
+      setSyncStatus(navigator.onLine ? "error" : "offline");
       setLastError(friendlyError(error));
     }
   }, [refreshPublicContent]);

@@ -83,13 +83,24 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup }: Pro
     setLoginStep("password");
   }
 
+  async function runAuthAction(action: () => Promise<AuthResult>) {
+    if (submitting) return;
+    setError("");
+    setSubmitting(true);
+    try {
+      const result = await action();
+      if (!result.ok) setError(result.message);
+    } catch {
+      setError("Não foi possível entrar agora. Verifique sua conexão e tente novamente.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   async function submitLogin(event: FormEvent) {
     event.preventDefault();
     if (!password) { setError("Digite sua senha."); return; }
-    setSubmitting(true);
-    const result = await onLogin(email, password);
-    setSubmitting(false);
-    if (!result.ok) setError(result.message);
+    await runAuthAction(() => onLogin(email.trim(), password));
   }
 
   async function sendLoginCode() {
@@ -122,20 +133,14 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup }: Pro
   }
 
   async function submitGoogleLogin() {
-    setError(""); setSubmitting(true);
-    const result = await onGoogleLogin();
-    setSubmitting(false);
-    if (!result.ok) setError(result.message);
+    await runAuthAction(onGoogleLogin);
   }
 
   async function submitStaffLogin(event: FormEvent) {
     event.preventDefault();
     const compact = staffCode.toUpperCase().replace(/[^A-Z0-9]/g, "");
     if (!/^HA[A-Z2-9]{12}$/.test(compact)) { setError("Digite o código completo fornecido pelo dono da propriedade."); return; }
-    setError(""); setSubmitting(true);
-    const result = await onStaffLogin(staffCode);
-    setSubmitting(false);
-    if (!result.ok) setError(result.message);
+    await runAuthAction(() => onStaffLogin(staffCode));
   }
 
   function validateStep() {
@@ -257,6 +262,7 @@ export function AuthFlow({ onLogin, onGoogleLogin, onStaffLogin, onSignup }: Pro
           : <form onSubmit={submitPasswordResetCode}><button className="auth-back" type="button" onClick={() => { setLoginStep("recovery"); setRecoveryCode(""); setError(""); setNotice(""); }}><ArrowLeft size={17} /> Voltar</button><div className="auth-icon"><MailCheck size={22} /></div><h1>Confirme o código</h1><p className="auth-subtitle">Digite o código enviado para liberar a criação de uma nova senha.</p><Field label="Código"><input className="login-code-input" type="text" inputMode="numeric" pattern="[0-9]*" value={recoveryCode} onChange={(event) => { setRecoveryCode(event.target.value.replace(/\D/g, "").slice(0, 6)); setError(""); }} placeholder="000000" autoComplete="one-time-code" maxLength={6} autoFocus /></Field>{notice && <p className="form-notice" role="status">{notice}</p>}{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Validando…" : "Confirmar e trocar senha"}</button><button className="text-button" type="button" onClick={() => void resendRecoveryCode()} disabled={submitting || codeCooldown > 0}>{codeCooldown > 0 ? `Reenviar código em ${codeCooldown}s` : "Reenviar código"}</button></form>}
         </div> : <div className="signup-flow auth-enter">
           <div className="signup-topline"><button className="auth-back" type="button" onClick={() => { setView("landing"); switchMode("login"); }}><ArrowLeft size={17} /> Voltar</button><div className="step-dots" aria-label={`Etapa ${signupStep + 1} de 5`}>{[0,1,2,3,4].map((step) => <span key={step} className={`${step === signupStep ? "active" : ""} ${step < signupStep ? "done" : ""}`} />)}</div></div>
+          <p className="signup-progress-label" role="status">Etapa {signupStep + 1} de 5 · {["Seus dados", "Sua senha", "Propriedade", "Revisão", "Confirmar e-mail"][signupStep]}</p>
           {signupStep === 0 && <form onSubmit={nextSignup} className="signup-panel"><span className="eyebrow">DADOS PESSOAIS</span><h1>Vamos criar sua conta</h1><p className="auth-subtitle">Comece com as informações básicas.</p><button className="google-auth-button" type="button" onClick={() => void submitGoogleLogin()} disabled={submitting}><span className="google-g" aria-hidden="true">G</span>{submitting ? "Abrindo Google…" : "Criar conta com Google"}</button><div className="auth-divider"><span>ou preencha seus dados</span></div><div className="form-grid"><Field label="Nome completo"><input value={signup.name} onChange={(e) => changeSignup("name", e.target.value)} placeholder="Seu nome" autoComplete="name" /></Field><Field label="E-mail"><input type="email" value={signup.email} onChange={(e) => changeSignup("email", e.target.value)} placeholder="voce@email.com" autoComplete="email" /></Field></div>{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit">Continuar <ArrowRight size={18} /></button></form>}
           {signupStep === 1 && <form onSubmit={nextSignup} className="signup-panel"><span className="eyebrow">SEGURANÇA</span><h1>Proteja seu acesso</h1><p className="auth-subtitle">Crie uma senha segura para sua propriedade.</p><div className="form-grid"><Field label="Senha" hint="Use pelo menos 8 caracteres."><input type="password" value={signup.password} onChange={(e) => changeSignup("password", e.target.value)} placeholder="Mínimo 8 caracteres" autoComplete="new-password" /></Field><Field label="Confirmar senha"><input type="password" value={signup.confirmPassword} onChange={(e) => changeSignup("confirmPassword", e.target.value)} placeholder="Repita a senha" autoComplete="new-password" /></Field></div>{error && <p className="form-error" role="alert">{error}</p>}<div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(0)}>Voltar</button><button className="primary-button" type="submit">Continuar <ArrowRight size={18} /></button></div></form>}
           {signupStep === 2 && <form onSubmit={nextSignup} className="signup-panel"><span className="eyebrow">SUA PROPRIEDADE</span><h1>Onde fica sua propriedade?</h1><p className="auth-subtitle">Informe apenas UF, CEP e nome. O município será identificado automaticamente.</p><PropertyLocationFields property={property} onChange={(next) => { setProperty(next); setError(""); }} onError={setError} />{error && <p className="form-error" role="alert">{error}</p>}<div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(1)}>Voltar</button><button className="primary-button" type="submit">Revisar <ArrowRight size={18} /></button></div></form>}

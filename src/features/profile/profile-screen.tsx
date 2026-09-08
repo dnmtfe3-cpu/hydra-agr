@@ -276,7 +276,7 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
       </section>
 
       <button className="logout-button" onClick={() => setLogoutConfirm(true)}><LogOut size={19} /> Sair desta conta</button>
-      <p className="profile-version">Hydra Agro · versão 1.2.2</p>
+      <p className="profile-version">Hydra Agro · versão {__HYDRA_VERSION__} · {__HYDRA_BUILD__}</p>
 
       <Modal open={settingsOpen} onClose={() => setSettingsOpen(false)} eyebrow="PERFIL" title="Menu e configurações" wide>
         <div className="profile-settings-sheet">
