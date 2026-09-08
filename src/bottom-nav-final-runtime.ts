@@ -41,7 +41,7 @@ const css = String.raw`
     z-index: -1 !important;
     border: 0 !important;
     border-radius: 22px 22px 0 0 !important;
-    background: #0a1c13 !important;
+    background: #ffffff !important;
     box-shadow: 0 -5px 18px rgba(28, 50, 39, .07) !important;
     -webkit-mask: radial-gradient(circle 38px at 50% -14px, transparent 37px, #000 38px) !important;
     mask: radial-gradient(circle 38px at 50% -14px, transparent 37px, #000 38px) !important;
@@ -69,7 +69,7 @@ const css = String.raw`
     border-radius: 0 !important;
     background: transparent !important;
     box-shadow: none !important;
-    color: #759083 !important;
+    color: #6b7d72 !important;
     opacity: 1 !important;
     filter: none !important;
     overflow: visible !important;
@@ -109,7 +109,7 @@ const css = String.raw`
   }
 
   html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.active:not(.nav-nfc) {
-    color: #8dcea0 !important;
+    color: #174c36 !important;
   }
 
   html body #root .hydra-root.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav > button.active:not(.nav-nfc)::after {
@@ -186,7 +186,7 @@ const css = String.raw`
 
   /* Tema escuro: a barra não pode herdar branco ou cinza do layout claro. */
   html body #root .hydra-root.theme-dark.hydra-root.hydra-root .phone-app.phone-app nav.bottom-nav.bottom-nav::before {
-    background: #0a1c13 !important;
+    background: #153126 !important;
     box-shadow: 0 -7px 24px rgba(0, 0, 0, .42), inset 0 1px 0 rgba(122, 190, 143, .08) !important;
   }
 
