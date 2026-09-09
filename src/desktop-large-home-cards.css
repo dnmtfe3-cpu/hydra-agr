@@ -1,21 +1,15 @@
-/* Desktop web: mantém os cinco atalhos pequenos no visual original e separa somente os blocos grandes. */
+/* Desktop web: mantém os cinco atalhos pequenos como antes e reorganiza somente os blocos grandes da Home. */
 @media (min-width: 1024px) {
-  /* Restaura os atalhos pequenos exatamente para o desenho anterior. */
+  /* Atalhos pequenos: visual original. */
   html body #root .hydra-root .phone-app .home-screen .shortcut-row.home-shortcuts-five {
     width: 100% !important;
     max-width: 430px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
+    margin: 0 auto !important;
     padding: 0 !important;
     display: grid !important;
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
     align-items: center !important;
-    justify-content: normal !important;
     gap: 10px !important;
-    column-gap: 10px !important;
-    row-gap: 0 !important;
     border: 0 !important;
     border-radius: 0 !important;
     background: transparent !important;
@@ -67,29 +61,64 @@
     box-shadow: none !important;
   }
 
-  /* Blocos grandes da Home: mais respiro entre cada ação, sem redesenhar a tela. */
+  /* Somente os atalhos grandes: NFC + Propriedade lado a lado. */
+  html body #root .hydra-root .phone-app .home-screen {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 24px !important;
+    row-gap: 22px !important;
+    align-items: stretch !important;
+  }
+
+  html body #root .hydra-root .phone-app .home-screen > .home-brandbar,
+  html body #root .hydra-root .phone-app .home-screen > .greeting-block,
+  html body #root .hydra-root .phone-app .home-screen > .home-announcements,
+  html body #root .hydra-root .phone-app .home-screen > .shortcut-row.home-shortcuts-five,
+  html body #root .hydra-root .phone-app .home-screen > .home-summary-section {
+    grid-column: 1 / -1 !important;
+  }
+
   html body #root .hydra-root .phone-app .home-screen > .nfc-banner {
+    grid-column: 1 !important;
     width: 100% !important;
-    margin-top: 30px !important;
-    margin-bottom: 26px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    align-self: stretch !important;
   }
 
   html body #root .hydra-root .phone-app .home-screen > .property-hero {
+    grid-column: 2 !important;
     width: 100% !important;
-    margin-top: 0 !important;
-    margin-bottom: 28px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    align-self: stretch !important;
   }
 
+  /* Histórico + estado sem tarefas lado a lado, sem aumentar os cards. */
   html body #root .hydra-root .phone-app .home-screen > .home-summary-section {
     width: 100% !important;
-    margin-top: 0 !important;
+    margin: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 24px !important;
+    align-items: stretch !important;
   }
 
   html body #root .hydra-root .phone-app .home-screen .home-summary-section > .history-home-row,
-  html body #root .hydra-root .phone-app .home-screen .home-summary-section > .first-action-card,
-  html body #root .hydra-root .phone-app .home-screen .home-summary-section > .task-card,
   html body #root .hydra-root .phone-app .home-screen .home-summary-section > .calm-state {
-    margin-top: 0 !important;
-    margin-bottom: 22px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    align-self: stretch !important;
+  }
+
+  html body #root .hydra-root .phone-app .home-screen .home-summary-section > .first-action-card,
+  html body #root .hydra-root .phone-app .home-screen .home-summary-section > .task-card {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    margin: 0 !important;
   }
 }
