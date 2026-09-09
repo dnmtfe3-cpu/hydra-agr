@@ -36,7 +36,7 @@ function formatStaffCode(value: string) {
   return compact ? `HA${groups.length ? `-${groups.join("-")}` : ""}` : "";
 }
 
-export function AuthFlow({ initialView = "landing", onLogin, onGoogleLogin, onStaffLogin, onSignup }: Props) {
+export function AuthFlow({ initialView = "landing", onLogin, onStaffLogin, onSignup }: Props) {
   const [view, setView] = useState<"landing" | "auth">(initialView);
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [loginStep, setLoginStep] = useState<LoginStep>("email");
@@ -124,10 +124,6 @@ export function AuthFlow({ initialView = "landing", onLogin, onGoogleLogin, onSt
     try { await requestLoginCode(email); setCodeCooldown(60); setNotice("Um novo código foi enviado para seu e-mail."); }
     catch (caught) { setError(caught instanceof Error ? caught.message : "Não foi possível reenviar o código agora."); }
     finally { setSubmitting(false); }
-  }
-
-  async function submitGoogleLogin() {
-    await runAuthAction(onGoogleLogin);
   }
 
   async function submitStaffLogin(event: FormEvent) {
@@ -256,7 +252,7 @@ export function AuthFlow({ initialView = "landing", onLogin, onGoogleLogin, onSt
             {error && <p className="form-error" role="alert">{error}</p>}
             <button className="primary-button full" type="submit" disabled={submitting}>{submitting ? "Entrando…" : "Entrar"}<ArrowRight size={20} /></button>
             <div className="auth-divider"><span>ou</span></div>
-            <button className="google-auth-button" type="button" onClick={() => void submitGoogleLogin()} disabled={submitting}><span className="google-g" aria-hidden="true">G</span>Entrar com Google</button>
+            
             <button className="text-button" type="button" onClick={() => void sendLoginCode()} disabled={submitting}>Entrar com código de e-mail</button>
             <p className="auth-switch">Ainda não tem uma conta? <button type="button" onClick={() => switchMode("signup")}>Criar conta</button></p>
             <button className="text-button" type="button" onClick={() => { setLoginStep("staff"); setError(""); }}>Acesso de funcionário</button>
@@ -269,7 +265,7 @@ export function AuthFlow({ initialView = "landing", onLogin, onGoogleLogin, onSt
         </div> : <div className="signup-flow auth-enter">
           <div className="signup-topline"><button className="auth-back" type="button" onClick={() => { setView("landing"); switchMode("login"); }}><ArrowLeft size={17} /> Voltar</button><div className="step-dots" aria-label={`Etapa ${signupStep + 1} de 5`}>{[0,1,2,3,4].map((step) => <span key={step} aria-current={step === signupStep ? "step" : undefined} className={`${step === signupStep ? "active" : ""} ${step < signupStep ? "done" : ""}`}>{step + 1}</span>)}</div></div>
           <p className="signup-progress-label" role="status">Etapa {signupStep + 1} de 5 · {["Seus dados", "Sua senha", "Propriedade", "Revisão", "Confirmar e-mail"][signupStep]}</p>
-          {signupStep === 0 && <form onSubmit={nextSignup} className="signup-panel"><span className="eyebrow">DADOS PESSOAIS</span><h1>Vamos criar sua conta</h1><p className="auth-subtitle">Comece com as informações básicas.</p><button className="google-auth-button" type="button" onClick={() => void submitGoogleLogin()} disabled={submitting}><span className="google-g" aria-hidden="true">G</span>{submitting ? "Abrindo Google…" : "Criar conta com Google"}</button><div className="auth-divider"><span>ou preencha seus dados</span></div><div className="form-grid"><Field label="Nome completo"><input value={signup.name} onChange={(e) => changeSignup("name", e.target.value)} placeholder="Seu nome" autoComplete="name" /></Field><Field label="E-mail"><input type="email" value={signup.email} onChange={(e) => changeSignup("email", e.target.value)} placeholder="voce@email.com" autoComplete="email" /></Field></div>{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit">Continuar <ArrowRight size={18} /></button></form>}
+          {signupStep === 0 && <form onSubmit={nextSignup} className="signup-panel"><span className="eyebrow">DADOS PESSOAIS</span><h1>Vamos criar sua conta</h1><p className="auth-subtitle">Comece com as informações básicas.</p><div className="form-grid"><Field label="Nome completo"><input value={signup.name} onChange={(e) => changeSignup("name", e.target.value)} placeholder="Seu nome" autoComplete="name" /></Field><Field label="E-mail"><input type="email" value={signup.email} onChange={(e) => changeSignup("email", e.target.value)} placeholder="voce@email.com" autoComplete="email" /></Field></div>{error && <p className="form-error" role="alert">{error}</p>}<button className="primary-button full" type="submit">Continuar <ArrowRight size={18} /></button></form>}
           {signupStep === 1 && <form onSubmit={nextSignup} className="signup-panel"><span className="eyebrow">SEGURANÇA</span><h1>Proteja seu acesso</h1><p className="auth-subtitle">Crie uma senha segura para sua propriedade.</p><div className="form-grid"><Field label="Senha" hint="Use pelo menos 8 caracteres."><input type="password" value={signup.password} onChange={(e) => changeSignup("password", e.target.value)} placeholder="Mínimo 8 caracteres" autoComplete="new-password" /></Field><Field label="Confirmar senha"><input type="password" value={signup.confirmPassword} onChange={(e) => changeSignup("confirmPassword", e.target.value)} placeholder="Repita a senha" autoComplete="new-password" /></Field></div>{error && <p className="form-error" role="alert">{error}</p>}<div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(0)}>Voltar</button><button className="primary-button" type="submit">Continuar <ArrowRight size={18} /></button></div></form>}
           {signupStep === 2 && <form onSubmit={nextSignup} className="signup-panel"><span className="eyebrow">SUA PROPRIEDADE</span><h1>Onde fica sua propriedade?</h1><p className="auth-subtitle">Informe apenas UF, CEP e nome. O município será identificado automaticamente.</p><PropertyLocationFields property={property} onChange={(next) => { setProperty(next); setError(""); }} onError={setError} />{error && <p className="form-error" role="alert">{error}</p>}<div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(1)}>Voltar</button><button className="primary-button" type="submit">Revisar <ArrowRight size={18} /></button></div></form>}
           {signupStep === 3 && <div className="signup-panel review-panel"><span className="eyebrow">TUDO CERTO</span><h1>Sua base está pronta, {firstName}</h1><p className="auth-subtitle">Antes de criar a conta, vamos confirmar que o e-mail informado pertence a você.</p><div className="review-card"><div className="review-icon"><MapPin size={23} /></div><div><strong>{property.name}</strong><span>{property.municipality}, {property.state}</span><small>CEP {property.postalCode}</small></div></div>{error && <p className="form-error" role="alert">{error}</p>}<div className="form-actions"><button className="secondary-button" type="button" onClick={() => setSignupStep(2)}>Voltar</button><button className="primary-button" type="button" onClick={() => void startSignupVerification()} disabled={submitting}>{submitting ? "Enviando código…" : "Confirmar e-mail"}</button></div></div>}
