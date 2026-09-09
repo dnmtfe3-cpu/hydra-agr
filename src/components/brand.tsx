@@ -1,3 +1,4 @@
+import splashLogo from "../../splash-reference/hydra-splash-logo.png";
 import "./splash-stability.css";
 import "./splash-animation-fix.css";
 
@@ -44,9 +45,8 @@ export function HydraWordmark({ compact = false }: { compact?: boolean }) {
 
 export function SplashBrand() {
   return (
-    <div className="splash-brand" aria-label="Carregando Hydra Agro">
-      <span className="splash-expansion" aria-hidden="true" />
-      <span className="splash-mark-wrap"><HydraMark className="splash-mark" /></span>
+    <div className="splash-brand hydra-launch__center" role="status" aria-label="Abrindo Hydra Agro">
+      <img className="hydra-launch__mark" src={splashLogo} alt="" aria-hidden="true" />
     </div>
   );
 }
