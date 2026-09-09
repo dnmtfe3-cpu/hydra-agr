@@ -1,1 +1,19 @@
-/* Intencionalmente vazio: a splash usa diretamente o CSS do HTML enviado em splash-stability.css. */
+/* The supplied HTML owns the splash. Neutralize only the legacy React wrapper. */
+html body #root .hydra-root > .splash-screen,
+html body #root .hydra-root .splash-screen:has(> .hydra-launch) {
+  position: static !important;
+  inset: auto !important;
+  z-index: auto !important;
+  display: contents !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+  animation: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
