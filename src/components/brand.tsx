@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import splashLogo from "../../splash-reference/hydra-splash-logo.png";
 import "./splash-stability.css";
 import "./splash-animation-fix.css";
@@ -47,28 +47,52 @@ export function HydraWordmark({ compact = false }: { compact?: boolean }) {
 type SplashPhase = "loading" | "entering" | "exiting" | "done";
 
 export function SplashBrand() {
+  const imageRef = useRef<HTMLImageElement>(null);
   const [phase, setPhase] = useState<SplashPhase>("loading");
-  const [started, setStarted] = useState(false);
 
   useEffect(() => {
-    document.documentElement.classList.add("hydra-launch-active");
-    return () => document.documentElement.classList.remove("hydra-launch-active");
-  }, []);
+    const image = imageRef.current;
+    if (!image) return;
 
-  function start() {
-    if (started) return;
-    setStarted(true);
-    setPhase("entering");
-
+    let started = false;
+    let exitTimer: number | undefined;
+    let doneTimer: number | undefined;
+    let exitFrameA: number | undefined;
+    let exitFrameB: number | undefined;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => {
-      setPhase("exiting");
-      window.setTimeout(() => {
-        setPhase("done");
-        document.documentElement.classList.remove("hydra-launch-active");
-      }, reduced ? 180 : 720);
-    })), reduced ? 150 : 1250);
-  }
+
+    const start = () => {
+      if (started) return;
+      started = true;
+      document.documentElement.classList.add("hydra-launch-active");
+      setPhase("entering");
+      exitTimer = window.setTimeout(() => {
+        exitFrameA = window.requestAnimationFrame(() => {
+          exitFrameB = window.requestAnimationFrame(() => {
+            setPhase("exiting");
+            doneTimer = window.setTimeout(() => {
+              setPhase("done");
+              document.documentElement.classList.remove("hydra-launch-active");
+            }, reduced ? 180 : 720);
+          });
+        });
+      }, reduced ? 150 : 1250);
+    };
+
+    image.addEventListener("load", start);
+    image.addEventListener("error", start);
+    if (image.complete) start();
+
+    return () => {
+      image.removeEventListener("load", start);
+      image.removeEventListener("error", start);
+      if (exitTimer) window.clearTimeout(exitTimer);
+      if (doneTimer) window.clearTimeout(doneTimer);
+      if (exitFrameA) window.cancelAnimationFrame(exitFrameA);
+      if (exitFrameB) window.cancelAnimationFrame(exitFrameB);
+      document.documentElement.classList.remove("hydra-launch-active");
+    };
+  }, []);
 
   if (phase === "done") return null;
 
@@ -76,14 +100,13 @@ export function SplashBrand() {
     <div className="hydra-launch" data-phase={phase} role="status" aria-label="Abrindo Hydra Agro">
       <div className="hydra-launch__center">
         <img
+          ref={imageRef}
           className="hydra-launch__mark"
           src={splashLogo}
           alt=""
           width={1254}
           height={1254}
           draggable={false}
-          onLoad={start}
-          onError={start}
         />
       </div>
     </div>
