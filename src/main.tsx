@@ -59,9 +59,36 @@ if (typeof document !== "undefined") {
 
 const path = typeof window !== "undefined" ? window.location.pathname : "";
 const preview = path === "/preview/ios/splash" ? null : renderIosPreviewRoute(path);
+const desktopPhoneMode =
+  typeof window !== "undefined" &&
+  !Capacitor.isNativePlatform() &&
+  window.innerWidth >= 1024 &&
+  !path.startsWith("/preview/");
+
+function DesktopPhonePresentation() {
+  const mobileUrl = typeof window !== "undefined" ? window.location.href : "/";
+
+  return (
+    <main className="desktop-phone-stage" aria-label="Hydra Agro em visualização móvel">
+      <div className="desktop-phone-device">
+        <span className="desktop-phone-side-button desktop-phone-side-button-left" aria-hidden="true" />
+        <span className="desktop-phone-side-button desktop-phone-side-button-right" aria-hidden="true" />
+        <div className="desktop-phone-screen">
+          <span className="desktop-phone-island" aria-hidden="true" />
+          <iframe
+            className="desktop-phone-iframe"
+            src={mobileUrl}
+            title="Hydra Agro — versão mobile"
+            allow="clipboard-read; clipboard-write; camera; microphone"
+          />
+        </div>
+      </div>
+    </main>
+  );
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    {preview ?? <HydraAppShell />}
+    {preview ?? (desktopPhoneMode ? <DesktopPhonePresentation /> : <HydraAppShell />)}
   </React.StrictMode>,
 );
