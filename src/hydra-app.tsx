@@ -62,6 +62,15 @@ export default function HydraApp() {
   const mainTabs = store.account?.access.kind === "staff" ? staffMainTabs : ownerMainTabs;
   const mainRouteIds: AppRoute[] = mainTabs.map((tab) => tab.id);
   const [splash, setSplash] = useState(true);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [returnToLogin, setReturnToLogin] = useState(false);
+  async function logoutToLogin() {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    setReturnToLogin(true);
+    try { await store.logout(); setRoute("home"); setQuickOpen(false); }
+    finally { setLoggingOut(false); }
+  }
   const [route, setRoute] = useState<AppRoute>("home");
   const [backRoute, setBackRoute] = useState<AppRoute>("home");
   const [quickOpen, setQuickOpen] = useState(false);
@@ -324,9 +333,10 @@ export default function HydraApp() {
 
   if (!store.ready) return splashLayer;
 
-  if (!store.account) return <><AuthFlow onLogin={store.login} onGoogleLogin={store.loginGoogle} onStaffLogin={store.loginStaff} onSignup={store.createAccount} onResetPassword={store.resetPassword} />{splashLayer}</>;
-  if (store.account.bannedAt) return <><BannedScreen reason={store.account.banReason} logout={store.logout} />{splashLayer}</>;
-  if (passwordRecovery) return <><PasswordRecoveryScreen save={async (password) => { const result = await store.changeCredentials({ password }); if (result.ok) window.setTimeout(() => setPasswordRecovery(false), 650); return result; }} logout={async () => { setPasswordRecovery(false); await store.logout(); }} />{splashLayer}</>;
+  if (loggingOut) return <main className="auth-logout-status" role="status" aria-live="polite"><span>Saindo…</span><p>Encerrando sua sessão</p></main>;
+  if (!store.account) return <><AuthFlow initialView={returnToLogin ? "auth" : "landing"} onLogin={store.login} onGoogleLogin={store.loginGoogle} onStaffLogin={store.loginStaff} onSignup={store.createAccount} onResetPassword={store.resetPassword} />{splashLayer}</>;
+  if (store.account.bannedAt) return <><BannedScreen reason={store.account.banReason} logout={logoutToLogin} />{splashLayer}</>;
+  if (passwordRecovery) return <><PasswordRecoveryScreen save={async (password) => { const result = await store.changeCredentials({ password }); if (result.ok) window.setTimeout(() => setPasswordRecovery(false), 650); return result; }} logout={async () => { setPasswordRecovery(false); await logoutToLogin(); }} />{splashLayer}</>;
 
   const account = store.account;
   const isStaff = account.access.kind === "staff";
@@ -340,7 +350,7 @@ export default function HydraApp() {
       case "home": return isStaff ? <StaffHomeScreen account={account} announcements={store.announcements} navigate={navigate} /> : <HomeScreen account={account} announcements={store.announcements} navigate={navigate} onQuickAction={openQuick} />;
       case "herd": return <HerdScreen account={account} updateAccount={store.updateAccount} openNfc={openNfc} focusAnimalId={animalToOpen} saveAnimalPhoto={store.saveAnimalPhoto} createRequest={quickIntent?.kind === "animal" ? quickIntent.request : undefined} onRequestHandled={() => setQuickIntent(undefined)} />;
       case "monitor": return <MonitorScreen account={account} updateAccount={store.updateAccount} saveMonitoringPhoto={store.saveMonitoringPhoto} createSectorRequest={quickIntent?.kind === "sector" ? quickIntent.request : undefined} onRequestHandled={() => setQuickIntent(undefined)} />;
-      case "profile": return isStaff ? <StaffProfileScreen account={account} navigate={navigate} logout={store.logout} /> : <ProfileScreen account={account} links={store.links} updateAccount={store.updateAccount} navigate={navigate} logout={store.logout} saveAvatar={store.saveAvatar} savePropertyCover={store.savePropertyCover} changeCredentials={store.changeCredentials} />;
+      case "profile": return isStaff ? <StaffProfileScreen account={account} navigate={navigate} logout={logoutToLogin} /> : <ProfileScreen account={account} links={store.links} updateAccount={store.updateAccount} navigate={navigate} logout={logoutToLogin} saveAvatar={store.saveAvatar} savePropertyCover={store.savePropertyCover} changeCredentials={store.changeCredentials} />;
       case "community": return <CommunityScreen account={account} onBack={goBack} publishPost={store.publishPost} likePost={store.likePost} commentPost={store.commentPost} deletePost={store.deletePost} refreshCommunity={store.refreshCommunity} createRequest={quickIntent?.kind === "post" ? quickIntent.request : undefined} onRequestHandled={() => setQuickIntent(undefined)} />;
       case "challenges": return <ChallengesScreen account={account} onBack={goBack} />;
       case "property": return <PropertyScreen account={account} updateAccount={store.updateAccount} onBack={goBack} />;

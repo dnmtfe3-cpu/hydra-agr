@@ -11,12 +11,17 @@ const handlers = {
 };
 
 describe("autenticação", () => {
+  it("abre diretamente o login depois de sair, sem a apresentação", () => {
+    render(<AuthFlow {...handlers} initialView="auth" />);
+    expect(screen.getByRole("heading", { name: /bem-vindo de volta/i })).toBeInTheDocument();
+    expect(screen.getByLabelText("Senha", { exact: true })).toBeInTheDocument();
+    expect(screen.queryByText("Gestão rural em um só lugar")).not.toBeInTheDocument();
+  });
   it("libera uma nova tentativa quando o login falha inesperadamente", async () => {
     const onLogin = vi.fn().mockRejectedValue(new Error("network failed"));
     render(<AuthFlow {...handlers} onLogin={onLogin} />);
     fireEvent.click(screen.getByRole("button", { name: /^entrar$/i }));
     fireEvent.change(screen.getByLabelText(/e-mail/i), { target: { value: "teste@example.com" } });
-    fireEvent.click(screen.getByRole("button", { name: /avançar/i }));
     fireEvent.change(screen.getByLabelText("Senha", { exact: true }), { target: { value: "test-password" } });
     fireEvent.click(screen.getByRole("button", { name: /^entrar$/i }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Verifique sua conexão");
