@@ -1,21 +1,24 @@
-/* Minimal native welcome screen. Intentionally scoped to auth landing only. */
+/*
+ * Minimal native auth welcome.
+ * Scoped only to the screen shown after the existing splash.
+ */
 html body #root .hydra-root .auth-landing {
   position: relative !important;
   display: flex !important;
-  align-items: center !important;
+  align-items: flex-start !important;
   justify-content: center !important;
   min-height: 100dvh !important;
   padding:
-    max(28px, env(safe-area-inset-top))
-    24px
-    max(30px, env(safe-area-inset-bottom)) !important;
+    max(30px, env(safe-area-inset-top))
+    22px
+    max(24px, env(safe-area-inset-bottom)) !important;
   overflow: hidden !important;
   isolation: isolate !important;
+  color: #f7f6f0 !important;
   background:
-    radial-gradient(circle at 86% 8%, rgba(143, 164, 88, .08), transparent 28%),
-    radial-gradient(circle at 7% 88%, rgba(102, 145, 91, .06), transparent 31%),
-    linear-gradient(155deg, #062d21 0%, #063a29 52%, #073624 100%) !important;
-  color: #f8f6ef !important;
+    radial-gradient(circle at 86% 7%, rgba(166, 171, 91, .055), transparent 27%),
+    radial-gradient(circle at 3% 90%, rgba(96, 145, 91, .04), transparent 30%),
+    linear-gradient(158deg, #052f22 0%, #063a29 54%, #063524 100%) !important;
 }
 
 html body #root .hydra-root .auth-landing::before,
@@ -23,9 +26,9 @@ html body #root .hydra-root .auth-landing::after {
   content: "" !important;
   position: absolute !important;
   z-index: -1 !important;
-  width: 390px !important;
-  height: 390px !important;
-  border: 1px solid rgba(218, 229, 214, .09) !important;
+  width: 360px !important;
+  height: 360px !important;
+  border: 1px solid rgba(222, 233, 222, .065) !important;
   border-radius: 50% !important;
   background: transparent !important;
   box-shadow: none !important;
@@ -34,13 +37,13 @@ html body #root .hydra-root .auth-landing::after {
 }
 
 html body #root .hydra-root .auth-landing::before {
-  top: -250px !important;
-  right: -220px !important;
+  top: -245px !important;
+  right: -222px !important;
 }
 
 html body #root .hydra-root .auth-landing::after {
-  left: -265px !important;
-  bottom: -245px !important;
+  left: -270px !important;
+  bottom: -255px !important;
 }
 
 html body #root .hydra-root .auth-landing-shade {
@@ -53,11 +56,11 @@ html body #root .hydra-root .auth-landing-content {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  justify-content: center !important;
-  width: min(100%, 420px) !important;
-  min-height: min(720px, calc(100dvh - 90px)) !important;
+  justify-content: flex-start !important;
+  width: min(100%, 344px) !important;
+  min-height: 0 !important;
   margin: 0 auto !important;
-  padding: 0 !important;
+  padding: clamp(54px, 8dvh, 78px) 0 0 !important;
   text-align: center !important;
 }
 
@@ -65,49 +68,51 @@ html body #root .hydra-root .auth-landing-mark-wrap {
   position: relative !important;
   display: grid !important;
   place-items: center !important;
-  width: 76px !important;
-  height: 76px !important;
-  margin: 0 0 86px !important;
+  width: 68px !important;
+  height: 68px !important;
+  flex: 0 0 68px !important;
+  margin: 0 0 62px !important;
   padding: 0 !important;
-  border: 1px solid rgba(225, 235, 225, .16) !important;
-  border-radius: 23px !important;
-  background: rgba(7, 67, 47, .44) !important;
-  box-shadow: 0 10px 28px rgba(2, 23, 16, .13) !important;
+  border: 1px solid rgba(226, 235, 226, .13) !important;
+  border-radius: 21px !important;
+  background: rgba(8, 65, 47, .34) !important;
+  box-shadow: none !important;
   backdrop-filter: none !important;
 }
 
+/* Keep the actual brand treatment compact without adding marketing copy. */
 html body #root .hydra-root .auth-landing-mark-wrap::after {
   content: "hydra agro" !important;
   position: absolute !important;
-  top: 96px !important;
+  top: 86px !important;
   left: 50% !important;
   width: max-content !important;
-  max-width: 88vw !important;
+  max-width: 90vw !important;
   transform: translateX(-50%) !important;
-  background: linear-gradient(90deg, #fbf8f1 0 52%, #f39a48 52% 100%) !important;
+  background: linear-gradient(90deg, #f8f6ef 0 53%, #f39a48 53% 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   color: transparent !important;
   font-family: Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
-  font-size: clamp(34px, 9vw, 45px) !important;
+  font-size: clamp(32px, 8.4vw, 38px) !important;
   font-weight: 800 !important;
   line-height: 1 !important;
-  letter-spacing: -.055em !important;
+  letter-spacing: -.052em !important;
   white-space: nowrap !important;
 }
 
 html body #root .hydra-root .auth-landing-mark {
-  width: 50px !important;
-  height: 50px !important;
+  width: 44px !important;
+  height: 44px !important;
 }
 
 html body #root .hydra-root .auth-landing-kicker {
   order: 1 !important;
-  margin: 0 0 50px !important;
-  color: rgba(229, 237, 230, .66) !important;
-  font-size: 14px !important;
+  margin: 0 0 38px !important;
+  color: rgba(229, 237, 230, .62) !important;
+  font-size: 13px !important;
   font-weight: 500 !important;
-  line-height: 1.35 !important;
+  line-height: 1.3 !important;
   letter-spacing: -.01em !important;
   text-transform: lowercase !important;
 }
@@ -121,21 +126,23 @@ html body #root .hydra-root .auth-landing-actions {
   order: 2 !important;
   display: grid !important;
   grid-template-columns: 1fr !important;
-  gap: 12px !important;
+  gap: 11px !important;
   width: 100% !important;
   margin: 0 !important;
 }
 
 html body #root .hydra-root :is(.auth-landing-primary, .auth-landing-secondary) {
   width: 100% !important;
-  min-height: 58px !important;
-  padding: 0 20px !important;
-  border-radius: 19px !important;
+  min-height: 54px !important;
+  padding: 0 18px !important;
+  border-radius: 16px !important;
   font-size: 16px !important;
-  font-weight: 800 !important;
+  font-weight: 750 !important;
+  line-height: 1 !important;
   letter-spacing: -.015em !important;
   box-shadow: none !important;
-  transition: transform .15s ease, opacity .15s ease, background-color .15s ease !important;
+  -webkit-tap-highlight-color: transparent !important;
+  transition: transform .14s ease, opacity .14s ease, background-color .14s ease !important;
 }
 
 html body #root .hydra-root .auth-landing-primary {
@@ -145,70 +152,105 @@ html body #root .hydra-root .auth-landing-primary {
 }
 
 html body #root .hydra-root .auth-landing-secondary {
-  border: 1px solid rgba(223, 235, 226, .20) !important;
-  background: rgba(255, 255, 255, .025) !important;
-  color: #f7f5ef !important;
+  border: 1px solid rgba(226, 235, 227, .18) !important;
+  background: rgba(255, 255, 255, .018) !important;
+  color: #f5f4ef !important;
   backdrop-filter: none !important;
 }
 
 html body #root .hydra-root .auth-landing-staff {
   order: 3 !important;
+  position: relative !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 10px !important;
-  min-height: 46px !important;
-  margin: 24px 0 0 !important;
-  padding: 8px 12px !important;
+  gap: 9px !important;
+  min-height: 42px !important;
+  margin: 20px 0 0 !important;
+  padding: 7px 24px 7px 10px !important;
   border: 0 !important;
-  border-radius: 13px !important;
+  border-radius: 12px !important;
   background: transparent !important;
-  color: rgba(230, 238, 231, .69) !important;
-  font-size: 14px !important;
-  font-weight: 650 !important;
+  color: rgba(230, 238, 231, .67) !important;
+  font-size: 13px !important;
+  font-weight: 620 !important;
+  line-height: 1 !important;
   box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+html body #root .hydra-root .auth-landing-staff::after {
+  content: "›" !important;
+  position: absolute !important;
+  right: 5px !important;
+  top: 50% !important;
+  transform: translateY(-52%) !important;
+  color: rgba(235, 241, 236, .68) !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: 23px !important;
+  font-weight: 300 !important;
+  line-height: 1 !important;
 }
 
 html body #root .hydra-root .auth-landing-staff svg {
+  width: 17px !important;
+  height: 17px !important;
+  flex: 0 0 17px !important;
   color: #f39a48 !important;
-  width: 18px !important;
-  height: 18px !important;
+  stroke-width: 1.8 !important;
 }
 
 html body #root .hydra-root :is(.auth-landing-primary, .auth-landing-secondary, .auth-landing-staff):active {
-  transform: scale(.985) !important;
-  opacity: .86 !important;
+  transform: scale(.982) !important;
+  opacity: .84 !important;
 }
 
-@media (max-width: 390px) {
+@media (max-height: 700px) {
+  html body #root .hydra-root .auth-landing-content {
+    padding-top: 34px !important;
+  }
+
+  html body #root .hydra-root .auth-landing-mark-wrap {
+    width: 62px !important;
+    height: 62px !important;
+    flex-basis: 62px !important;
+    margin-bottom: 57px !important;
+    border-radius: 19px !important;
+  }
+
+  html body #root .hydra-root .auth-landing-mark-wrap::after {
+    top: 78px !important;
+    font-size: 31px !important;
+  }
+
+  html body #root .hydra-root .auth-landing-mark {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  html body #root .hydra-root .auth-landing-kicker {
+    margin-bottom: 28px !important;
+  }
+
+  html body #root .hydra-root .auth-landing-staff {
+    margin-top: 14px !important;
+  }
+}
+
+@media (max-width: 370px) {
   html body #root .hydra-root .auth-landing {
     padding-left: 18px !important;
     padding-right: 18px !important;
   }
 
   html body #root .hydra-root .auth-landing-content {
-    min-height: min(660px, calc(100dvh - 72px)) !important;
-  }
-
-  html body #root .hydra-root .auth-landing-mark-wrap {
-    width: 70px !important;
-    height: 70px !important;
-    margin-bottom: 82px !important;
-    border-radius: 21px !important;
-  }
-
-  html body #root .hydra-root .auth-landing-mark-wrap::after {
-    top: 90px !important;
-  }
-
-  html body #root .hydra-root .auth-landing-kicker {
-    margin-bottom: 42px !important;
+    width: min(100%, 326px) !important;
   }
 }
 
 @media (min-width: 700px) {
   html body #root .hydra-root .auth-landing-content {
-    width: min(100%, 430px) !important;
+    width: min(100%, 350px) !important;
   }
 }
 
