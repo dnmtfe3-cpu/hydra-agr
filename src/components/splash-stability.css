@@ -1,46 +1,56 @@
-/* Splash fixa: evita o centro mudar quando a viewport/safe area do iPhone termina de ajustar. */
+/* Splash baseada na referência enviada: fundo sólido, marca central fixa e sem deslocamento de safe-area. */
 html body #root .hydra-root .splash-screen {
   position: fixed !important;
+  z-index: 2147483647 !important;
   inset: 0 !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: auto !important;
   width: 100% !important;
-  height: 100vh !important;
-  min-height: 100vh !important;
-  max-height: 100vh !important;
-  display: block !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
   overflow: hidden !important;
+  isolation: isolate !important;
+  background: #0d4d34 !important;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
   transform: none !important;
   translate: none !important;
-  contain: layout paint;
+  contain: layout paint !important;
 }
 
-html body #root .hydra-root .splash-brand {
+html body #root .hydra-root .splash-brand,
+html body #root .hydra-root .hydra-launch__center {
   position: absolute !important;
-  left: 50% !important;
-  top: 50% !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
   margin: 0 !important;
-  transform: translate3d(-50%, -50%, 0) !important;
+  display: grid !important;
+  place-items: center !important;
+  pointer-events: none !important;
+  transform: none !important;
   translate: none !important;
-  transform-origin: center !important;
 }
 
-html body #root .hydra-root .splash-expansion,
-html body #root .hydra-root .splash-mark-wrap,
-html body #root .hydra-root .splash-mark {
-  transform-origin: center center !important;
+html body #root .hydra-root .hydra-launch__mark {
+  display: block !important;
+  width: clamp(160px, 46vw, 192px) !important;
+  max-width: none !important;
+  height: auto !important;
+  aspect-ratio: 1 !important;
+  object-fit: contain !important;
+  opacity: 0;
+  transform: scale(.86);
+  transform-origin: 50% 50% !important;
+  -webkit-mask-image: radial-gradient(ellipse closest-side, #000 88%, transparent 100%);
+  mask-image: radial-gradient(ellipse closest-side, #000 88%, transparent 100%);
+  will-change: transform, opacity, filter;
 }
 
 @supports (height: 100svh) {
   html body #root .hydra-root .splash-screen {
     height: 100svh !important;
     min-height: 100svh !important;
-    max-height: 100svh !important;
-  }
-
-  html body #root .hydra-root .splash-brand {
-    top: 50svh !important;
   }
 }
