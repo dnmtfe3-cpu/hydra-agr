@@ -1,0 +1,95 @@
+/* Desktop web: mantém os cinco atalhos pequenos no visual original e separa somente os blocos grandes. */
+@media (min-width: 1024px) {
+  /* Restaura os atalhos pequenos exatamente para o desenho anterior. */
+  html body #root .hydra-root .phone-app .home-screen .shortcut-row.home-shortcuts-five {
+    width: 100% !important;
+    max-width: 430px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: center !important;
+    justify-content: normal !important;
+    gap: 10px !important;
+    column-gap: 10px !important;
+    row-gap: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  html body #root .hydra-root .phone-app .home-screen .shortcut-row.home-shortcuts-five > button {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 52px !important;
+    padding: 4px !important;
+    margin: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+    grid-template-columns: 1fr !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  html body #root .hydra-root .phone-app .home-screen .shortcut-row.home-shortcuts-five > button > span {
+    width: 46px !important;
+    min-width: 46px !important;
+    height: 46px !important;
+    min-height: 46px !important;
+    margin: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: var(--forest-700) !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  html body #root .hydra-root .phone-app .home-screen .shortcut-row.home-shortcuts-five > button > span svg {
+    width: 23px !important;
+    height: 23px !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app .home-screen .shortcut-row.home-shortcuts-five > button > span {
+    background: transparent !important;
+    border: 0 !important;
+    color: #a9cfb3 !important;
+    box-shadow: none !important;
+  }
+
+  /* Blocos grandes da Home: mais respiro entre cada ação, sem redesenhar a tela. */
+  html body #root .hydra-root .phone-app .home-screen > .nfc-banner {
+    width: 100% !important;
+    margin-top: 30px !important;
+    margin-bottom: 26px !important;
+  }
+
+  html body #root .hydra-root .phone-app .home-screen > .property-hero {
+    width: 100% !important;
+    margin-top: 0 !important;
+    margin-bottom: 28px !important;
+  }
+
+  html body #root .hydra-root .phone-app .home-screen > .home-summary-section {
+    width: 100% !important;
+    margin-top: 0 !important;
+  }
+
+  html body #root .hydra-root .phone-app .home-screen .home-summary-section > .history-home-row,
+  html body #root .hydra-root .phone-app .home-screen .home-summary-section > .first-action-card,
+  html body #root .hydra-root .phone-app .home-screen .home-summary-section > .task-card,
+  html body #root .hydra-root .phone-app .home-screen .home-summary-section > .calm-state {
+    margin-top: 0 !important;
+    margin-bottom: 22px !important;
+  }
+}
