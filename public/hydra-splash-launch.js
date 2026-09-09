@@ -1,5 +1,5 @@
 (() => {
-  const artwork = "/hydra-splash-logo.png";
+  const artwork = "/hydra-splash-logo.png?v=web-splash-3";
   const html = document.documentElement;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let playing = false;
@@ -15,9 +15,32 @@
   const legacyGuard = new MutationObserver(clearLegacySplashLock);
   legacyGuard.observe(html, { attributes: true, attributeFilter: ["class"] });
 
-  function play() {
+  async function preloadArtwork() {
+    const image = new Image();
+    image.src = artwork;
+
+    if (typeof image.decode === "function") {
+      try {
+        await image.decode();
+        return;
+      } catch {
+        // Fallback abaixo para navegadores/WebViews que recusam decode().
+      }
+    }
+
+    if (image.complete) return;
+    await new Promise((resolve) => {
+      image.onload = resolve;
+      image.onerror = resolve;
+    });
+  }
+
+  async function play() {
     if (playing || !document.body) return;
     playing = true;
+
+    await preloadArtwork();
+
     html.classList.add("hydra-launch-active");
 
     const layer = document.createElement("div");
@@ -29,20 +52,26 @@
     const center = document.createElement("div");
     center.className = "hydra-launch__center";
 
-    const image = new Image();
-    image.className = "hydra-launch__mark";
-    image.alt = "";
-    image.width = 1254;
-    image.height = 1254;
-    image.draggable = false;
+    // Usa a arte como background em vez de <img>. Assim nenhum CSS global de img
+    // consegue zerar, redimensionar ou mascarar a logo da splash no site.
+    const mark = document.createElement("div");
+    mark.className = "hydra-launch__mark";
+    mark.setAttribute("aria-hidden", "true");
+    mark.style.backgroundImage = `url("${artwork}")`;
+    mark.style.backgroundRepeat = "no-repeat";
+    mark.style.backgroundPosition = "center";
+    mark.style.backgroundSize = "contain";
+    mark.style.webkitMaskImage = "none";
+    mark.style.maskImage = "none";
 
-    let started = false;
-    const start = () => {
-      if (started) return;
-      started = true;
+    center.append(mark);
+    layer.append(center);
+    document.body.append(layer);
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
       layer.dataset.phase = "entering";
 
-      window.setTimeout(() => window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+      window.setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => {
         layer.dataset.phase = "exiting";
         window.setTimeout(() => {
           layer.remove();
@@ -51,17 +80,9 @@
           clearLegacySplashLock();
         }, reduced ? 180 : 720);
       })), reduced ? 150 : 1250);
-    };
-
-    image.onload = start;
-    image.onerror = start;
-    center.append(image);
-    layer.append(center);
-    document.body.append(layer);
-    image.src = artwork;
-    if (image.complete) start();
+    }));
   }
 
-  if (document.body) play();
-  else document.addEventListener("DOMContentLoaded", play, { once: true });
+  if (document.body) void play();
+  else document.addEventListener("DOMContentLoaded", () => { void play(); }, { once: true });
 })();
