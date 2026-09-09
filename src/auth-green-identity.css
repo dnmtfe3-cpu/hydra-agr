@@ -1,0 +1,67 @@
+/* Hydra Agro auth identity — green, native, minimal. Public landing/splash are intentionally untouched. */
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) {
+  --auth-bg:#063524;
+  --auth-surface:#0b4935;
+  --auth-surface-2:#0e553d;
+  --auth-line:rgba(224,239,229,.14);
+  --auth-text:#f7faf6;
+  --auth-muted:rgba(231,240,233,.66);
+  --auth-soft:rgba(255,255,255,.055);
+  --auth-green:#2f8a5e;
+  --auth-green-press:#287851;
+  min-height:100dvh !important;
+  align-items:center !important;
+  padding:max(20px,env(safe-area-inset-top)) 18px max(20px,env(safe-area-inset-bottom)) !important;
+  color:var(--auth-text) !important;
+  background:linear-gradient(160deg,#052f22 0%,#063b2a 52%,#063524 100%) !important;
+}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup)::before,
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup)::after{display:none!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) .auth-card{
+  width:min(100%,420px)!important;max-width:420px!important;margin:auto!important;padding:24px 22px!important;
+  border:1px solid var(--auth-line)!important;border-radius:28px!important;background:var(--auth-surface)!important;
+  color:var(--auth-text)!important;box-shadow:none!important;backdrop-filter:none!important;
+}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) .auth-card::before{display:none!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) .auth-form-mark{
+  width:58px!important;height:58px!important;margin:0 0 22px!important;padding:6px!important;border:1px solid var(--auth-line)!important;
+  border-radius:18px!important;background:rgba(255,255,255,.045)!important;box-shadow:none!important;
+}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) .auth-form-mark :is(img,svg){width:44px!important;height:44px!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) :is(h1,h2,h3,strong,.field>span,label){color:var(--auth-text)!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) h1{font-size:clamp(29px,8vw,36px)!important;line-height:1.04!important;letter-spacing:-.045em!important;margin-bottom:8px!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) :is(.auth-subtitle,.signup-progress-label,.helper-text,.field small){color:var(--auth-muted)!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) .eyebrow{color:#9bd1ad!important;font-size:10px!important;letter-spacing:.14em!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) :is(.auth-home-back,.auth-back,.text-button){color:#d8eadf!important}
+html body #root .hydra-root .auth-shell-signup .signup-progress-label{border-color:var(--auth-line)!important}
+html body #root .hydra-root .auth-shell-signup .step-dots span{background:rgba(218,236,224,.2)!important}
+html body #root .hydra-root .auth-shell-signup .step-dots span.active{background:#79bd91!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) .field{margin-bottom:14px!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) .field>span{font-size:12px!important;font-weight:700!important;margin-bottom:7px!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) :is(input,select,textarea){
+  min-height:52px!important;padding:13px 15px!important;border:1px solid var(--auth-line)!important;border-radius:15px!important;
+  background:var(--auth-soft)!important;color:var(--auth-text)!important;box-shadow:none!important;font-size:15px!important;
+  -webkit-text-fill-color:var(--auth-text)!important;
+}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) textarea{min-height:92px!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) :is(input,textarea)::placeholder{color:rgba(225,237,229,.4)!important;-webkit-text-fill-color:rgba(225,237,229,.4)!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) select option{background:#0b4935!important;color:#f7faf6!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) :is(input,select,textarea):focus{border-color:#70b78a!important;box-shadow:0 0 0 3px rgba(112,183,138,.11)!important;outline:none!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) .login-code-input{background:rgba(255,255,255,.065)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;caret-color:#8fd0a5!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) .primary-button{
+  min-height:54px!important;border:0!important;border-radius:16px!important;background:var(--auth-green)!important;color:#fff!important;
+  box-shadow:none!important;font-size:15px!important;font-weight:750!important;
+}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) .secondary-button{
+  min-height:52px!important;border:1px solid var(--auth-line)!important;border-radius:16px!important;background:transparent!important;color:#eef7f0!important;box-shadow:none!important;
+}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) :is(.form-notice,.auth-email-chip,.email-chip){
+  border:1px solid var(--auth-line)!important;border-radius:15px!important;background:rgba(255,255,255,.045)!important;color:#dcebe1!important;box-shadow:none!important;
+}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) :is(.form-notice,.auth-email-chip,.email-chip) :is(strong,span,p){color:inherit!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) .form-error{color:#ffd2c9!important;background:rgba(154,52,39,.16)!important;border-color:rgba(255,167,151,.22)!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) :is(.auth-card,.auth-content,.signup-panel,.auth-form-mark,h1,.auth-subtitle,.field,.signup-topline,.signup-progress-label){animation:none!important;transition:none!important;transform:none!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) :is(button,.primary-button,.secondary-button){transition:transform .12s ease,opacity .12s ease,background-color .12s ease!important}
+html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) :is(button,.primary-button,.secondary-button):active{transform:scale(.985)!important;opacity:.86!important}
+@media(max-width:430px){html body #root .hydra-root :is(.auth-shell,.auth-shell-signup){padding-left:14px!important;padding-right:14px!important}html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) .auth-card{padding:22px 20px!important;border-radius:25px!important}}
+@media(max-height:720px){html body #root .hydra-root :is(.auth-shell,.auth-shell-signup){align-items:flex-start!important;overflow-y:auto!important}html body #root .hydra-root :is(.auth-shell,.auth-shell-signup) .auth-card{margin:8px auto!important}}
