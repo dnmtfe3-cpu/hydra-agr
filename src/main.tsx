@@ -70,27 +70,12 @@ function DesktopPhonePresentation() {
 
   return (
     <main className="desktop-phone-stage" aria-label="Hydra Agro em visualização móvel">
-      <aside className="desktop-phone-copy" aria-label="Informações da demonstração">
+      <aside className="desktop-phone-side-copy desktop-phone-side-copy-left" aria-label="Informações da demonstração">
         <span className="desktop-phone-kicker">Demonstração exclusiva</span>
-        <h1>Feira de Ciências</h1>
-        <p className="desktop-phone-intro">
-          Esta visualização foi preparada especialmente para apresentar o Hydra Agro em um computador durante a feira.
+        <h1><span>Feira de</span> Ciências</h1>
+        <p>
+          Esta versão foi preparada especialmente para demonstrar o Hydra Agro em computador durante a Feira de Ciências.
         </p>
-
-        <div className="desktop-phone-info-list">
-          <div>
-            <strong>Aplicativo</strong>
-            <span>Desenvolvido para uso em celulares.</span>
-          </div>
-          <div>
-            <strong>Versão web</strong>
-            <span>Disponível pelo navegador em hydraagro.sbs.</span>
-          </div>
-          <div>
-            <strong>APK e IPA</strong>
-            <span>Solicite gratuitamente ao responsável pelo projeto.</span>
-          </div>
-        </div>
       </aside>
 
       <div className="desktop-phone-device">
@@ -106,6 +91,21 @@ function DesktopPhonePresentation() {
           />
         </div>
       </div>
+
+      <aside className="desktop-phone-side-copy desktop-phone-side-copy-right" aria-label="Disponibilidade do Hydra Agro">
+        <div className="desktop-phone-side-item">
+          <strong>Aplicativo mobile</strong>
+          <span>O aplicativo completo foi desenvolvido para celulares.</span>
+        </div>
+        <div className="desktop-phone-side-item">
+          <strong>Versão web</strong>
+          <span>Acesse pelo navegador em hydraagro.sbs.</span>
+        </div>
+        <div className="desktop-phone-side-item">
+          <strong>APK e IPA</strong>
+          <span>Solicite gratuitamente os arquivos de instalação ao responsável pelo Hydra Agro.</span>
+        </div>
+      </aside>
     </main>
   );
 }
