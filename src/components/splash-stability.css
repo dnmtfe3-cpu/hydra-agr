@@ -1,54 +1,98 @@
-/* Splash baseada na referência enviada: fundo sólido, marca central fixa e sem deslocamento de safe-area. */
+/* CSS copiado da splash HTML enviada. O wrapper React antigo fica neutro. */
 html body #root .hydra-root .splash-screen {
   position: fixed !important;
-  z-index: 2147483647 !important;
   inset: 0 !important;
-  width: 100% !important;
-  height: 100dvh !important;
-  min-height: 100dvh !important;
+  z-index: 1000 !important;
   margin: 0 !important;
   padding: 0 !important;
-  overflow: hidden !important;
-  isolation: isolate !important;
-  background: #0c4c33 !important;
-  touch-action: none !important;
-  user-select: none !important;
-  -webkit-user-select: none !important;
-  transform: none !important;
-  translate: none !important;
-  contain: layout paint !important;
-}
-
-html body #root .hydra-root .splash-brand,
-html body #root .hydra-root .hydra-launch__center {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  margin: 0 !important;
-  display: grid !important;
-  place-items: center !important;
+  background: transparent !important;
+  animation: none !important;
   pointer-events: none !important;
-  transform: none !important;
-  translate: none !important;
 }
 
-html body #root .hydra-root .hydra-launch__mark {
-  display: block !important;
-  width: clamp(160px, 46vw, 192px) !important;
-  max-width: none !important;
-  height: auto !important;
-  aspect-ratio: 1 !important;
-  object-fit: contain !important;
+html.hydra-launch-active,
+html.hydra-launch-active body {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+.hydra-launch {
+  position: fixed;
+  z-index: 2147483647;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #0d4d34;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: opacity;
+  pointer-events: auto;
+}
+
+.hydra-launch__center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.hydra-launch__mark {
+  display: block;
+  width: clamp(160px, 46vw, 192px);
+  max-width: none;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
   opacity: 0;
   transform: scale(.86);
-  transform-origin: 50% 50% !important;
-  will-change: transform, opacity, filter;
+  transform-origin: 50% 50%;
+  -webkit-mask-image: radial-gradient(ellipse closest-side, #000 88%, transparent 100%);
+  mask-image: radial-gradient(ellipse closest-side, #000 88%, transparent 100%);
+  will-change: transform, opacity;
 }
 
-@supports (height: 100svh) {
-  html body #root .hydra-root .splash-screen {
-    height: 100svh !important;
-    min-height: 100svh !important;
+.hydra-launch[data-phase="entering"] .hydra-launch__mark {
+  animation: hydra-launch-arrive 620ms cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.hydra-launch[data-phase="exiting"] {
+  animation: hydra-launch-dismiss 700ms linear both;
+}
+
+.hydra-launch[data-phase="exiting"] .hydra-launch__mark {
+  animation: hydra-launch-zoom 700ms cubic-bezier(.64, 0, .8, .25) both;
+}
+
+@keyframes hydra-launch-arrive {
+  from { opacity: 0; transform: scale(.86); filter: blur(6px); }
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+@keyframes hydra-launch-zoom {
+  0% { opacity: 1; transform: scale(1); filter: blur(0); }
+  72% { opacity: 1; }
+  100% { opacity: 0; transform: scale(9); filter: blur(7px); }
+}
+
+@keyframes hydra-launch-dismiss {
+  0%, 45% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hydra-launch[data-phase] .hydra-launch__mark {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .hydra-launch[data-phase="exiting"] {
+    animation: hydra-launch-dismiss 160ms linear both;
   }
 }
