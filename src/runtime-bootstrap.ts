@@ -200,7 +200,7 @@ async function syncNativeStatusBarWithSplash() {
     await StatusBar.show();
     await StatusBar.setStyle({ style: Style.Dark });
     if (Capacitor.getPlatform() === "android") {
-      await StatusBar.setBackgroundColor({ color: "#08261c" });
+      await StatusBar.setBackgroundColor({ color: "#f8f6ef" });
     }
   } catch {
     // A interface continua utilizável mesmo se o sistema negar controle da status bar.
