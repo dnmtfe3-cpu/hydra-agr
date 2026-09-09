@@ -70,6 +70,29 @@ function DesktopPhonePresentation() {
 
   return (
     <main className="desktop-phone-stage" aria-label="Hydra Agro em visualização móvel">
+      <aside className="desktop-phone-copy" aria-label="Informações da demonstração">
+        <span className="desktop-phone-kicker">Demonstração exclusiva</span>
+        <h1>Feira de Ciências</h1>
+        <p className="desktop-phone-intro">
+          Esta visualização foi preparada especialmente para apresentar o Hydra Agro em um computador durante a feira.
+        </p>
+
+        <div className="desktop-phone-info-list">
+          <div>
+            <strong>Aplicativo</strong>
+            <span>Desenvolvido para uso em celulares.</span>
+          </div>
+          <div>
+            <strong>Versão web</strong>
+            <span>Disponível pelo navegador em hydraagro.sbs.</span>
+          </div>
+          <div>
+            <strong>APK e IPA</strong>
+            <span>Solicite gratuitamente ao responsável pelo projeto.</span>
+          </div>
+        </div>
+      </aside>
+
       <div className="desktop-phone-device">
         <span className="desktop-phone-side-button desktop-phone-side-button-left" aria-hidden="true" />
         <span className="desktop-phone-side-button desktop-phone-side-button-right" aria-hidden="true" />
