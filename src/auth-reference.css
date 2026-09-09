@@ -123,7 +123,12 @@ html body #root .hydra-root .auth-shell.auth-reference .form-actions .primary-bu
     flex-direction: row !important; justify-content: space-between !important; align-items: center !important;
     gap: 10px !important; padding: 0 !important; margin: 0 0 22px !important; border: 0 !important;
   }
-  html body #root .hydra-root .auth-shell.auth-reference .step-dots { gap: 5px !important; padding: 5px 8px !important; }
+  html body #root .hydra-root .auth-shell.auth-reference .step-dots {
+    display: inline-flex !important; flex: 0 0 auto !important;
+    width: max-content !important; min-width: 0 !important; max-width: 100% !important;
+    justify-content: center !important; align-items: center !important;
+    gap: 5px !important; padding: 5px 8px !important; margin: 0 !important;
+  }
   html body #root .hydra-root .auth-shell.auth-reference .step-dots span { width: 25px !important; height: 25px !important; }
   html body #root .hydra-root .auth-shell.auth-reference .auth-subtitle { margin-bottom: 20px !important; }
   html body #root .hydra-root .auth-shell.auth-reference .field { margin-bottom: 12px !important; }
