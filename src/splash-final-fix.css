@@ -49,10 +49,27 @@ html.hydra-splash-active body .splash-screen {
   transform: none !important;
 }
 
-html.hydra-splash-active body .splash-screen > * {
+/* O fluxo antigo aplicava position: relative !important em qualquer filho da
+   .splash-screen. Isso anulava o position: fixed da nova .hydra-launch,
+   colapsava a camada e deixava apenas o fundo verde visível. */
+html.hydra-splash-active body .splash-screen > :not(.hydra-launch) {
   position: relative !important;
   margin: 0 !important;
   flex: 0 0 auto !important;
+  transform-origin: center center !important;
+}
+
+html.hydra-splash-active body .splash-screen > .hydra-launch {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  min-width: 100vw !important;
+  max-width: none !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  max-height: none !important;
+  margin: 0 !important;
+  flex: none !important;
   transform-origin: center center !important;
 }
 
