@@ -1,328 +1,128 @@
-/* Hydra Agro — modo apresentação no desktop.
-   Em telas grandes, o app é exibido dentro de uma moldura de smartphone.
-   O mobile real permanece intocado. */
+/* Hydra Agro — apresentação no PC usando a versão mobile real dentro da moldura. */
+
+.desktop-phone-stage {
+  display: none;
+}
 
 @media (min-width: 1024px) {
   html,
   body,
   #root {
-    width: 100% !important;
-    min-width: 100% !important;
-    min-height: 100% !important;
+    width: 100%;
+    min-width: 100%;
+    min-height: 100%;
   }
 
   html {
-    background: #08271b !important;
+    background: #08271b;
   }
 
   body {
-    min-height: 100vh !important;
-    min-height: 100dvh !important;
-    overflow: hidden !important;
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: hidden;
     background:
       radial-gradient(circle at 50% 12%, rgba(131, 186, 91, .16), transparent 34%),
-      linear-gradient(145deg, #0d3b29 0%, #08271b 62%, #061e15 100%) !important;
+      linear-gradient(145deg, #0d3b29 0%, #08271b 62%, #061e15 100%);
   }
 
-  #root,
-  html body #root .hydra-root {
-    width: 100% !important;
-    min-height: 100vh !important;
-    min-height: 100dvh !important;
-    display: grid !important;
-    place-items: center !important;
-    padding: 24px !important;
-    background: transparent !important;
+  #root {
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
-  html body #root .hydra-root .app-shell {
-    position: relative !important;
-    width: min(430px, calc((100dvh - 48px) * .52)) !important;
-    min-width: 340px !important;
-    max-width: 430px !important;
-    height: min(860px, calc(100dvh - 48px)) !important;
-    min-height: 620px !important;
-    max-height: 860px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: visible !important;
-    border: 0 !important;
-    border-radius: 52px !important;
-    background: transparent !important;
-    box-shadow: none !important;
+  .desktop-phone-stage {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 14px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
   }
 
-  /* Botões físicos laterais da moldura. */
-  html body #root .hydra-root .app-shell::before,
-  html body #root .hydra-root .app-shell::after {
-    content: "" !important;
-    position: absolute !important;
-    z-index: 0 !important;
-    width: 5px !important;
-    border-radius: 4px !important;
-    background: #18231e !important;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.055) !important;
-    pointer-events: none !important;
-  }
-
-  html body #root .hydra-root .app-shell::before {
-    left: -5px !important;
-    top: 145px !important;
-    height: 88px !important;
-  }
-
-  html body #root .hydra-root .app-shell::after {
-    right: -5px !important;
-    top: 175px !important;
-    height: 108px !important;
-  }
-
-  html body #root .hydra-root .phone-app {
-    position: relative !important;
-    z-index: 1 !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    margin: 0 !important;
-    overflow: hidden !important;
-    border: 9px solid #111a16 !important;
-    border-radius: 52px !important;
-    background: var(--cream) !important;
+  .desktop-phone-device {
+    position: relative;
+    width: min(430px, calc((100dvh - 28px) * .49), calc(100vw - 56px));
+    height: min(900px, calc(100dvh - 28px));
+    min-width: 340px;
+    min-height: 620px;
+    border-radius: 50px;
+    background: #111a16;
     box-shadow:
-      0 35px 80px rgba(0, 0, 0, .38),
-      0 12px 28px rgba(0, 0, 0, .24),
-      inset 0 0 0 1px rgba(255,255,255,.06) !important;
-    transform: translateZ(0) !important;
-    isolation: isolate !important;
+      0 38px 88px rgba(0, 0, 0, .42),
+      0 12px 30px rgba(0, 0, 0, .28),
+      inset 0 0 0 1px rgba(255, 255, 255, .07);
   }
 
-  /* Ilha/câmera superior, apenas visual. */
-  html body #root .hydra-root .phone-app::before {
-    content: "" !important;
-    position: absolute !important;
-    z-index: 250 !important;
-    top: 9px !important;
-    left: 50% !important;
-    width: 92px !important;
-    height: 24px !important;
-    border-radius: 999px !important;
-    background: #0a0f0c !important;
-    box-shadow: inset 0 1px 1px rgba(255,255,255,.07), 0 1px 2px rgba(0,0,0,.22) !important;
-    transform: translateX(-50%) !important;
-    pointer-events: none !important;
+  .desktop-phone-screen {
+    position: absolute;
+    inset: 8px;
+    overflow: hidden;
+    border-radius: 42px;
+    background: #f8f6ef;
   }
 
-  html body #root .hydra-root .phone-app .app-content {
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    overscroll-behavior: contain !important;
-    scrollbar-width: none !important;
-    -webkit-overflow-scrolling: touch !important;
-    background: var(--cream) !important;
+  .desktop-phone-iframe {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 0;
+    background: #f8f6ef;
   }
 
-  html body #root .hydra-root .phone-app .app-content::-webkit-scrollbar {
-    width: 0 !important;
-    height: 0 !important;
-    display: none !important;
+  .desktop-phone-island {
+    position: absolute;
+    z-index: 20;
+    top: 8px;
+    left: 50%;
+    width: 90px;
+    height: 24px;
+    border-radius: 999px;
+    background: #090e0b;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, .07), 0 1px 2px rgba(0, 0, 0, .24);
+    transform: translateX(-50%);
+    pointer-events: none;
   }
 
-  /* Volta ao formato de tela móvel dentro da moldura. */
-  html body #root .hydra-root .phone-app .app-content > .screen,
-  html body #root .hydra-root .phone-app .screen,
-  html body #root .hydra-root .phone-app .extra-screen {
-    width: 100% !important;
-    max-width: none !important;
-    min-height: 100% !important;
-    margin: 0 !important;
-    padding-top: 38px !important;
-    padding-bottom: 96px !important;
+  .desktop-phone-side-button {
+    position: absolute;
+    z-index: -1;
+    width: 5px;
+    border-radius: 4px;
+    background: #18231e;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05);
   }
 
-  /* Bottom bar passa a fazer parte da própria tela do aparelho. */
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav {
-    position: absolute !important;
-    z-index: 220 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    top: auto !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    height: 70px !important;
-    min-height: 70px !important;
-    margin: 0 !important;
-    padding: 5px 7px 8px !important;
-    display: grid !important;
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    align-items: center !important;
-    gap: 0 !important;
-    overflow: visible !important;
-    border: 0 !important;
-    border-top: 1px solid rgba(23, 76, 54, .08) !important;
-    border-radius: 0 0 42px 42px !important;
-    background: rgba(255,255,255,.97) !important;
-    box-shadow: 0 -8px 24px rgba(17, 43, 32, .07) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    backdrop-filter: blur(16px) !important;
-    transform: none !important;
+  .desktop-phone-side-button-left {
+    left: -5px;
+    top: 145px;
+    height: 88px;
   }
 
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav::before,
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav::after,
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav .bottom-nav-indicator {
-    content: none !important;
-    display: none !important;
-  }
-
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button {
-    position: relative !important;
-    z-index: 2 !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    height: 56px !important;
-    min-height: 56px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: grid !important;
-    place-items: center !important;
-    border: 0 !important;
-    border-radius: 16px !important;
-    background: transparent !important;
-    color: #809087 !important;
-    box-shadow: none !important;
-    overflow: visible !important;
-    transform: none !important;
-  }
-
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple) {
-    width: 38px !important;
-    min-width: 38px !important;
-    height: 38px !important;
-    min-height: 38px !important;
-    display: grid !important;
-    place-items: center !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    border-radius: 50% !important;
-    background: transparent !important;
-    color: inherit !important;
-    box-shadow: none !important;
-    transform: none !important;
-  }
-
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple) svg {
-    width: 23px !important;
-    height: 23px !important;
-    stroke-width: 1.9 !important;
-  }
-
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button > small {
-    display: none !important;
-  }
-
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button.active:not(.nav-nfc) {
-    color: #1f6145 !important;
-    background: transparent !important;
-  }
-
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button.active:not(.nav-nfc)::after {
-    content: "" !important;
-    position: absolute !important;
-    left: 50% !important;
-    bottom: 2px !important;
-    width: 6px !important;
-    height: 6px !important;
-    border-radius: 50% !important;
-    background: #ff8712 !important;
-    transform: translateX(-50%) !important;
-  }
-
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc {
-    z-index: 5 !important;
-    height: 62px !important;
-    min-height: 62px !important;
-    color: #fff !important;
-    overflow: visible !important;
-    background: transparent !important;
-  }
-
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple) {
-    position: absolute !important;
-    left: 50% !important;
-    top: -22px !important;
-    width: 62px !important;
-    min-width: 62px !important;
-    height: 62px !important;
-    min-height: 62px !important;
-    border-radius: 50% !important;
-    background: #ff8712 !important;
-    color: #fff !important;
-    box-shadow: 0 9px 20px rgba(255,135,18,.27) !important;
-    transform: translateX(-50%) !important;
-  }
-
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple) svg {
-    width: 27px !important;
-    height: 27px !important;
-  }
-
-  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav.is-hidden {
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-  }
-
-  /* O perfil e a Home deixam de usar qualquer composição larga de desktop. */
-  html body #root .hydra-root .phone-app .home-screen,
-  html body #root .hydra-root .phone-app .profile-screen {
-    width: 100% !important;
-    max-width: none !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-
-  /* Tema escuro dentro da moldura. */
-  html body #root .hydra-root.theme-dark .phone-app,
-  html body #root .hydra-root.theme-dark .phone-app .app-content {
-    background: #09150f !important;
-  }
-
-  html body #root .hydra-root.theme-dark .phone-app nav.bottom-nav.bottom-nav {
-    border-top-color: rgba(169,207,179,.08) !important;
-    background: rgba(21,49,38,.97) !important;
-    box-shadow: 0 -8px 24px rgba(0,0,0,.24) !important;
-  }
-
-  html body #root .hydra-root.theme-dark .phone-app nav.bottom-nav.bottom-nav > button {
-    color: #789083 !important;
-  }
-
-  html body #root .hydra-root.theme-dark .phone-app nav.bottom-nav.bottom-nav > button.active:not(.nav-nfc) {
-    color: #a9cfb3 !important;
+  .desktop-phone-side-button-right {
+    right: -5px;
+    top: 175px;
+    height: 108px;
   }
 }
 
-/* Evita uma moldura grande demais em notebooks baixos. */
 @media (min-width: 1024px) and (max-height: 700px) {
-  html body #root .hydra-root {
-    padding: 14px !important;
+  .desktop-phone-stage {
+    padding: 10px;
   }
 
-  html body #root .hydra-root .app-shell {
-    width: min(360px, calc(100vw - 40px)) !important;
-    height: calc(100dvh - 28px) !important;
-    min-height: 0 !important;
+  .desktop-phone-device {
+    width: min(340px, calc(100vw - 40px));
+    height: calc(100dvh - 20px);
+    min-width: 0;
+    min-height: 0;
+    border-radius: 42px;
+  }
+
+  .desktop-phone-screen {
+    inset: 7px;
+    border-radius: 35px;
   }
 }
