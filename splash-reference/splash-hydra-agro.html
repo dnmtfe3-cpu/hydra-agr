@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d4d34">
+<title>Hydra Agro · Splash</title>
+<style>
+* { box-sizing: border-box; }
+html,body { margin:0; width:100%; min-height:100%; background:#08261c; }
+body { min-height:100dvh; color:#fff; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+#preview-controls { position:fixed; inset:0; display:grid; place-items:center; }
+button { min-height:48px; padding:0 26px; border:1px solid #47705e; border-radius:999px; background:transparent; color:#fdf5ec; font:500 15px system-ui; cursor:pointer; transition:transform 160ms,background 160ms; }
+button:active { transform:scale(.96); background:#174c36; }
+button:focus-visible { outline:2px solid #fc9421; outline-offset:5px; }
+/* Isolated from legacy splash/theme selectors. Original supplied artwork. */
+html.hydra-launch-active,
+html.hydra-launch-active body {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+.hydra-launch {
+  position: fixed;
+  z-index: 2147483647;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #0d4d34;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: opacity;
+}
+
+.hydra-launch__center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.hydra-launch__mark {
+  display: block;
+  width: clamp(160px, 46vw, 192px);
+  max-width: none;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(.86);
+  transform-origin: 50% 50%;
+  /* Blend only the empty outer margin; keep the logo pixels untouched. */
+  -webkit-mask-image: radial-gradient(ellipse closest-side, #000 88%, transparent 100%);
+  mask-image: radial-gradient(ellipse closest-side, #000 88%, transparent 100%);
+  will-change: transform, opacity;
+}
+
+.hydra-launch[data-phase="entering"] .hydra-launch__mark {
+  animation: hydra-launch-arrive 620ms cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.hydra-launch[data-phase="exiting"] {
+  animation: hydra-launch-dismiss 700ms linear both;
+}
+
+.hydra-launch[data-phase="exiting"] .hydra-launch__mark {
+  animation: hydra-launch-zoom 700ms cubic-bezier(.64, 0, .8, .25) both;
+}
+
+@keyframes hydra-launch-arrive {
+  from { opacity: 0; transform: scale(.86); filter: blur(6px); }
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+@keyframes hydra-launch-zoom {
+  0% { opacity: 1; transform: scale(1); filter: blur(0); }
+  72% { opacity: 1; }
+  100% { opacity: 0; transform: scale(9); filter: blur(7px); }
+}
+
+@keyframes hydra-launch-dismiss {
+  0%, 45% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hydra-launch[data-phase] .hydra-launch__mark {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .hydra-launch[data-phase="exiting"] {
+    animation: hydra-launch-dismiss 160ms linear both;
+  }
+}
+
+</style>
+</head>
+<body>
+<main id="preview-controls"><button type="button" id="replay">Rever animação</button></main>
+<script>
+const artwork = "./hydra-splash-logo.png";
+const controls = document.getElementById('preview-controls');
+const replay = document.getElementById('replay');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let playing = false;
+function play() {
+  if (playing) return;
+  playing = true;
+  controls.inert = true;
+  document.documentElement.classList.add('hydra-launch-active');
+  const layer = document.createElement('div');
+  layer.className = 'hydra-launch';
+  layer.dataset.phase = 'loading';
+  layer.setAttribute('role','status');
+  layer.setAttribute('aria-label','Abrindo Hydra Agro');
+  const center = document.createElement('div');
+  center.className = 'hydra-launch__center';
+  const image = new Image();
+  image.className = 'hydra-launch__mark';
+  image.alt = '';
+  image.width = image.height = 1254;
+  image.draggable = false;
+  let started = false;
+  const start = () => {
+    if (started) return;
+    started = true;
+    layer.dataset.phase = 'entering';
+    setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => {
+      layer.dataset.phase = 'exiting';
+      setTimeout(() => {
+        layer.remove();
+        document.documentElement.classList.remove('hydra-launch-active');
+        controls.inert = false;
+        playing = false;
+      }, reduced ? 180 : 720);
+    })), reduced ? 150 : 1250);
+  };
+  image.onload = start;
+  image.onerror = start;
+  center.append(image);
+  layer.append(center);
+  document.body.append(layer);
+  image.src = artwork;
+  if (image.complete) start();
+}
+replay.addEventListener('click', play);
+play();
+</script>
+</body>
+</html>
