@@ -1,0 +1,173 @@
+/* Bottom bar da versão web/PC. Mobile permanece intocado. */
+@media (min-width: 1024px) {
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav {
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: 22px !important;
+    top: auto !important;
+    width: min(680px, calc(100vw - 64px)) !important;
+    max-width: 680px !important;
+    height: 72px !important;
+    min-height: 72px !important;
+    margin: 0 !important;
+    padding: 7px 10px !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: center !important;
+    gap: 4px !important;
+    border: 1px solid rgba(23, 76, 54, .10) !important;
+    border-radius: 24px !important;
+    background: rgba(255, 255, 255, .96) !important;
+    box-shadow: 0 14px 34px rgba(17, 43, 32, .13), 0 2px 8px rgba(17, 43, 32, .05) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    backdrop-filter: blur(14px) !important;
+    overflow: visible !important;
+    transform: translateX(-50%) !important;
+    z-index: 180 !important;
+  }
+
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav::before,
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav .bottom-nav-indicator {
+    display: none !important;
+  }
+
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button {
+    position: relative !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    margin: 0 !important;
+    padding: 5px 8px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    border: 0 !important;
+    border-radius: 16px !important;
+    background: transparent !important;
+    color: #6f7b74 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    overflow: visible !important;
+    transition: background-color 160ms ease, color 160ms ease, transform 160ms ease !important;
+  }
+
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button:hover:not(.nav-nfc) {
+    background: #f1f4ef !important;
+    color: #174c36 !important;
+  }
+
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button.active:not(.nav-nfc) {
+    background: #edf3e9 !important;
+    color: #174c36 !important;
+  }
+
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple) {
+    width: 30px !important;
+    min-width: 30px !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+    border: 0 !important;
+    border-radius: 50% !important;
+    background: transparent !important;
+    color: inherit !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button > span:first-of-type:not(.touch-ripple) svg {
+    width: 22px !important;
+    height: 22px !important;
+    stroke-width: 1.9 !important;
+  }
+
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button > small {
+    display: block !important;
+    margin: 0 !important;
+    color: inherit !important;
+    font-size: 10px !important;
+    font-weight: 750 !important;
+    line-height: 1 !important;
+    letter-spacing: -.01em !important;
+  }
+
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc {
+    position: relative !important;
+    z-index: 3 !important;
+    color: #fff !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple) {
+    position: absolute !important;
+    left: 50% !important;
+    top: -23px !important;
+    width: 62px !important;
+    min-width: 62px !important;
+    height: 62px !important;
+    min-height: 62px !important;
+    border-radius: 50% !important;
+    background: #ff8712 !important;
+    color: #fff !important;
+    box-shadow: 0 9px 20px rgba(255, 135, 18, .26) !important;
+    transform: translateX(-50%) !important;
+  }
+
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > span:first-of-type:not(.touch-ripple) svg {
+    width: 27px !important;
+    height: 27px !important;
+    color: #fff !important;
+  }
+
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > small {
+    position: absolute !important;
+    left: 50% !important;
+    bottom: 4px !important;
+    color: #174c36 !important;
+    transform: translateX(-50%) !important;
+  }
+
+  html body #root .hydra-root .phone-app .app-content,
+  html body #root .hydra-root .phone-app .screen {
+    padding-bottom: 118px !important;
+  }
+
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav.is-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app nav.bottom-nav.bottom-nav {
+    border-color: rgba(169, 207, 179, .10) !important;
+    background: rgba(21, 49, 38, .96) !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, .34) !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app nav.bottom-nav.bottom-nav > button {
+    color: #799185 !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app nav.bottom-nav.bottom-nav > button:hover:not(.nav-nfc),
+  html body #root .hydra-root.theme-dark .phone-app nav.bottom-nav.bottom-nav > button.active:not(.nav-nfc) {
+    background: #1d4233 !important;
+    color: #a9cfb3 !important;
+  }
+
+  html body #root .hydra-root.theme-dark .phone-app nav.bottom-nav.bottom-nav > button.nav-nfc.nav-nfc > small {
+    color: #a9cfb3 !important;
+  }
+}
