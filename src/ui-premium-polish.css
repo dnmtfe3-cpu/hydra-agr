@@ -1,0 +1,43 @@
+/* Hydra Agro — acabamento visual das telas principais (iOS/mobile). */
+:root{--hydra-soft:#f7f5ef;--hydra-card:#fffefa;--hydra-ink:#082f22;--hydra-green:#145b40;--hydra-orange:#f38b24;--hydra-line:rgba(15,74,53,.13)}
+
+@media (max-width:700px){
+  .screen:not(.auth-screen){padding-left:20px;padding-right:20px}
+  .screen-header{margin-bottom:22px}.screen-header h1{letter-spacing:-.045em;line-height:1.02}.screen-header p{max-width:92%;line-height:1.42}
+  .icon-button.accent{border-radius:20px!important;box-shadow:0 10px 24px rgba(220,116,22,.15)}
+  .segmented-control{padding:5px;border-radius:19px;background:#ebece6;box-shadow:inset 0 0 0 1px rgba(20,91,64,.025)}
+  .segmented-control button{min-height:43px;border-radius:15px!important;font-weight:750;transition:transform .18s ease,background .18s ease,box-shadow .18s ease}
+  .segmented-control button.active{background:#fff!important;box-shadow:0 4px 14px rgba(24,48,38,.08)}
+  .content-section{margin-top:24px}.section-header{align-items:center;margin-bottom:14px}.section-header h2{letter-spacing:-.035em}.text-button{font-weight:750}
+
+  .sector-board{overflow:hidden;border:1px solid var(--hydra-line);border-radius:20px!important;background:var(--hydra-card);box-shadow:0 8px 28px rgba(18,52,39,.045)}
+  .sector-board-head{background:#f4f5f0;border-bottom:1px solid var(--hydra-line);padding:12px 14px}
+  .sector-board-row{min-height:74px;padding:14px!important;background:var(--hydra-card)!important}
+  .sector-board-copy strong{font-size:15px}.sector-board-copy em{font-size:11px}.sector-board-copy small{margin-top:6px;font-size:11px!important;color:#89958f!important}
+  .sector-board-status{border-radius:999px!important;padding:6px 9px!important;font-weight:800}
+  .monitor-register-button{margin-top:12px;min-height:58px;border-radius:18px!important;background:#fff!important;box-shadow:0 7px 20px rgba(18,52,39,.035)}
+
+  .monitoring-list{gap:10px!important}.monitoring-card{min-height:86px!important;border:1px solid var(--hydra-line)!important;border-radius:20px!important;padding:13px!important;background:var(--hydra-card)!important;grid-template-columns:48px minmax(0,1fr) auto!important;box-shadow:0 7px 24px rgba(18,52,39,.045);overflow:hidden}
+  .monitoring-date{width:48px!important;height:48px!important;border-radius:15px!important;background:#11583e!important;font-size:10px!important;line-height:1.15}
+  .monitoring-card small{font-size:11px!important;font-weight:650}.monitoring-card strong{font-size:14px!important;line-height:1.25}.monitoring-card p{font-size:12px!important;color:#77857f!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;margin-top:4px!important}
+
+  .activity-summary{gap:10px!important}.activity-summary>div{border-radius:20px!important;border:1px solid var(--hydra-line)!important;background:var(--hydra-card)!important;box-shadow:0 7px 22px rgba(18,52,39,.04)}
+  .activity-card{border-radius:20px!important;border-color:var(--hydra-line)!important;background:var(--hydra-card)!important;box-shadow:0 7px 24px rgba(18,52,39,.04);overflow:hidden}.activity-card strong{line-height:1.25}.activity-card p{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;color:#78857f!important}
+
+  .property-history-summary{border-radius:20px!important;border:1px solid var(--hydra-line)!important;background:var(--hydra-card)!important;box-shadow:0 7px 24px rgba(18,52,39,.04)}
+  .property-history-screen .chip-row,.property-history-screen .filter-row{scrollbar-width:none}.property-history-screen .chip-row::-webkit-scrollbar,.property-history-screen .filter-row::-webkit-scrollbar{display:none}
+  .property-history-screen .history-group>h2{letter-spacing:-.035em}.property-history-screen .history-list{border-radius:20px!important;overflow:hidden;border:1px solid var(--hydra-line)!important;box-shadow:0 7px 24px rgba(18,52,39,.035)}
+
+  .profile-screen .settings-group,.profile-screen .profile-menu-group{border-radius:22px!important;overflow:hidden;box-shadow:0 8px 28px rgba(18,52,39,.04)}
+  .profile-screen .setting-row,.profile-screen .profile-menu-row{min-height:76px}.profile-screen .admin-card,.profile-screen [class*="admin-entry"]{border-radius:20px!important;box-shadow:0 8px 25px rgba(243,139,36,.07)}
+
+  .auth-shell,.auth-screen{background:#063a2a!important}.auth-card,.auth-panel{border-radius:28px!important;box-shadow:0 28px 70px rgba(0,24,16,.18)!important}.auth-card h1,.auth-panel h1{letter-spacing:-.05em}.auth-card input,.auth-panel input{border-radius:17px!important}.auth-card .primary-button,.auth-panel .primary-button{border-radius:17px!important;min-height:56px;box-shadow:0 10px 22px rgba(16,86,59,.14)}
+}
+
+/* O conteúdo técnico nunca deve vazar para o texto visível dos cartões. */
+.monitoring-card p,.activity-card p{word-break:normal}
+
+/* Manutenção: limpa, sem botão que permita contornar o bloqueio. */
+.hydra-maintenance-screen{background:linear-gradient(180deg,#063c2b 0%,#043426 100%)!important}
+.hydra-maintenance-inner{max-width:340px!important}.hydra-maintenance-mark{width:78px!important;height:78px!important;border-radius:24px!important;background:rgba(255,255,255,.055)!important;border:1px solid rgba(255,255,255,.10)!important;box-shadow:0 18px 50px rgba(0,0,0,.08)}
+.hydra-maintenance-screen h1{font-size:31px!important;letter-spacing:-.05em!important}.hydra-maintenance-screen p{font-size:15px!important;line-height:1.5!important;color:rgba(255,255,255,.62)!important}.hydra-maintenance-screen small{margin-top:30px!important;color:rgba(255,255,255,.34)!important}.hydra-maintenance-admin{display:none!important}
