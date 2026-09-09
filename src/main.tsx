@@ -40,6 +40,7 @@ import "./hydra-dark-final.css";
 import "./auth-landing-native.css";
 import "./auth-signup-native.css";
 import "./ui-premium-polish.css";
+import "./native-screen-cleanup.css";
 import "./maintenance-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
 import { setupPushNotifications } from "./services/push-notifications";
