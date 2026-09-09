@@ -1,12 +1,12 @@
 /* Desktop web: espalha os atalhos da Home pela largura disponível sem alterar o mobile. */
 @media (min-width: 1024px) {
   html body #root .hydra-root .phone-app .home-screen .shortcut-row.home-shortcuts-five {
-    width: min(calc(100% - 48px), 1040px) !important;
-    max-width: 1040px !important;
-    margin: 20px auto 28px !important;
+    width: min(calc(100% - 48px), 1120px) !important;
+    max-width: 1120px !important;
+    margin: 22px auto 30px !important;
     padding: 0 !important;
     display: grid !important;
-    grid-template-columns: repeat(5, 80px) !important;
+    grid-template-columns: repeat(5, 112px) !important;
     justify-content: space-between !important;
     align-items: center !important;
     column-gap: 0 !important;
@@ -17,11 +17,11 @@
   }
 
   html body #root .hydra-root .phone-app .home-screen .shortcut-row.home-shortcuts-five > button {
-    width: 80px !important;
-    min-width: 80px !important;
-    max-width: 80px !important;
-    height: 80px !important;
-    min-height: 80px !important;
+    width: 112px !important;
+    min-width: 112px !important;
+    max-width: 112px !important;
+    height: 104px !important;
+    min-height: 104px !important;
     padding: 0 !important;
     margin: 0 !important;
     display: grid !important;
@@ -32,10 +32,15 @@
   }
 
   html body #root .hydra-root .phone-app .home-screen .shortcut-row.home-shortcuts-five > button > span {
-    width: 62px !important;
-    min-width: 62px !important;
-    height: 62px !important;
-    min-height: 62px !important;
-    border-radius: 19px !important;
+    width: 82px !important;
+    min-width: 82px !important;
+    height: 82px !important;
+    min-height: 82px !important;
+    border-radius: 24px !important;
+  }
+
+  html body #root .hydra-root .phone-app .home-screen .shortcut-row.home-shortcuts-five > button > span svg {
+    width: 32px !important;
+    height: 32px !important;
   }
 }
