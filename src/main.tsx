@@ -94,6 +94,10 @@ function DesktopPhonePresentation() {
 
       <aside className="desktop-phone-side-copy desktop-phone-side-copy-right" aria-label="Disponibilidade do Hydra Agro">
         <div className="desktop-phone-side-item">
+          <strong>Teste ao vivo</strong>
+          <span>Use o mouse do Chromebook para navegar e testar o Hydra Agro.</span>
+        </div>
+        <div className="desktop-phone-side-item">
           <strong>Aplicativo mobile</strong>
           <span>O aplicativo completo foi desenvolvido para celulares.</span>
         </div>
