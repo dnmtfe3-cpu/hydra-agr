@@ -10,7 +10,7 @@ html body #root .hydra-root .splash-screen {
   padding: 0 !important;
   overflow: hidden !important;
   isolation: isolate !important;
-  background: #0d4d34 !important;
+  background: #0c4c33 !important;
   touch-action: none !important;
   user-select: none !important;
   -webkit-user-select: none !important;
@@ -43,8 +43,6 @@ html body #root .hydra-root .hydra-launch__mark {
   opacity: 0;
   transform: scale(.86);
   transform-origin: 50% 50% !important;
-  -webkit-mask-image: radial-gradient(ellipse closest-side, #000 88%, transparent 100%);
-  mask-image: radial-gradient(ellipse closest-side, #000 88%, transparent 100%);
   will-change: transform, opacity, filter;
 }
 
