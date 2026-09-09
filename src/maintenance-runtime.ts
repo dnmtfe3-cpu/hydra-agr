@@ -1,32 +1,15 @@
 import { requireSupabase } from "./services/supabase";
 
 type MaintenanceSetting = { enabled?: boolean; message?: string };
-
-const STYLE_ID = "hydra-maintenance-runtime-style";
-const CHECK_INTERVAL = 30_000;
-
-const css = `
-.hydra-maintenance-screen{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:max(28px,env(safe-area-inset-top)) 28px max(28px,env(safe-area-inset-bottom));background:#063524;color:#f7f5ee;font-family:Manrope,system-ui,sans-serif;text-align:center}.hydra-maintenance-inner{width:min(100%,360px)}.hydra-maintenance-mark{width:76px;height:76px;margin:0 auto 28px;border-radius:23px;display:grid;place-items:center;background:#0c4b34;border:1px solid rgba(255,255,255,.1);font-family:Sora,Manrope,sans-serif;font-size:26px;font-weight:800;color:#f39a49}.hydra-maintenance-screen h1{margin:0;color:#fffaf3;font-family:Sora,Manrope,sans-serif;font-size:30px;line-height:1.08;letter-spacing:-.04em}.hydra-maintenance-screen p{margin:13px auto 0;max-width:310px;color:rgba(244,247,242,.68);font-size:15px;line-height:1.5}.hydra-maintenance-screen small{display:block;margin-top:28px;color:rgba(244,247,242,.42);font-size:11px;letter-spacing:.12em;text-transform:uppercase}.hydra-maintenance-admin{margin-top:24px;border:0;background:transparent;color:rgba(255,255,255,.42);font:700 12px Manrope,system-ui;padding:10px}.hydra-maintenance-admin:hover{color:#fff}
+const STYLE_ID="hydra-maintenance-runtime-style";const CHECK_INTERVAL=30_000;let latest:MaintenanceSetting={enabled:false,message:"App em atualização. Volte em breve!"};
+const css=`
+.hydra-maintenance-screen{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:max(28px,env(safe-area-inset-top)) 28px max(28px,env(safe-area-inset-bottom));background:#063524;color:#f7f5ee;font-family:Manrope,system-ui,sans-serif;text-align:center}.hydra-maintenance-inner{width:min(100%,360px)}.hydra-maintenance-mark{width:76px;height:76px;margin:0 auto 28px;border-radius:23px;display:grid;place-items:center;background:#0c4b34;border:1px solid rgba(255,255,255,.1);font:800 26px Sora,Manrope,sans-serif;color:#f39a49}.hydra-maintenance-screen h1{margin:0;color:#fffaf3;font:700 30px/1.08 Sora,Manrope,sans-serif;letter-spacing:-.04em}.hydra-maintenance-screen p{margin:13px auto 0;max-width:310px;color:rgba(244,247,242,.68);font-size:15px;line-height:1.5}.hydra-maintenance-screen small{display:block;margin-top:28px;color:rgba(244,247,242,.42);font-size:11px;letter-spacing:.12em;text-transform:uppercase}.hydra-maintenance-admin{margin-top:24px;border:0;background:transparent;color:rgba(255,255,255,.42);font:700 12px Manrope;padding:10px}.maintenance-admin-card{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 16px;padding:18px;border:1px solid var(--border,#dfe5df);border-radius:18px;background:var(--surface,#fff)}.maintenance-admin-card div{display:grid;gap:4px}.maintenance-admin-card strong{font-size:14px}.maintenance-admin-card small{color:var(--muted,#748078);line-height:1.35}.maintenance-admin-switch{flex:0 0 auto;min-width:82px;height:40px;border:0;border-radius:999px;background:#e6ebe7;color:#365345;font-weight:800}.maintenance-admin-switch.on{background:#18533a;color:#fff}.maintenance-admin-switch:disabled{opacity:.55}
 `;
-
 function ensureStyle(){if(document.getElementById(STYLE_ID))return;const s=document.createElement("style");s.id=STYLE_ID;s.textContent=css;document.head.appendChild(s)}
-function currentRole(){try{const raw=localStorage.getItem("hydra-account");if(!raw)return "";return String(JSON.parse(raw)?.role||"")}catch{return ""}}
-function isAdmin(){return ["moderator","admin","owner"].includes(currentRole())}
+function currentRole(){try{const raw=localStorage.getItem("hydra-account");if(!raw)return"";return String(JSON.parse(raw)?.role||"")}catch{return""}}
+function isAdmin(){return["moderator","admin","owner"].includes(currentRole())}
 function hide(){document.querySelector(".hydra-maintenance-screen")?.remove()}
-function show(message:string){if(isAdmin()){hide();return}ensureStyle();let el=document.querySelector<HTMLElement>(".hydra-maintenance-screen");if(!el){el=document.createElement("main");el.className="hydra-maintenance-screen";el.innerHTML='<div class="hydra-maintenance-inner"><div class="hydra-maintenance-mark">H</div><h1>App em atualização</h1><p></p><small>hydra agro</small><button class="hydra-maintenance-admin" type="button">Acesso administrativo</button></div>';el.querySelector("button")?.addEventListener("click",()=>{hide()});document.body.appendChild(el)}const p=el.querySelector("p");if(p)p.textContent=message||"Volte em breve!"}
-
-export async function checkMaintenanceMode(){
-  try{
-    const db=requireSupabase();
-    const {data,error}=await db.from("app_settings").select("value").eq("key","maintenance_mode").maybeSingle();
-    if(error)throw error;
-    const value=(data?.value||{}) as MaintenanceSetting;
-    if(value.enabled)show(value.message||"Volte em breve!");else hide();
-  }catch{ /* Falha aberta: não bloqueia o app se a configuração não puder ser consultada. */ }
-}
-
-if(typeof window!=="undefined"){
-  void checkMaintenanceMode();
-  window.setInterval(()=>void checkMaintenanceMode(),CHECK_INTERVAL);
-  window.addEventListener("focus",()=>void checkMaintenanceMode());
-}
+function show(message:string){if(isAdmin()){hide();return}ensureStyle();let el=document.querySelector<HTMLElement>(".hydra-maintenance-screen");if(!el){el=document.createElement("main");el.className="hydra-maintenance-screen";el.innerHTML='<div class="hydra-maintenance-inner"><div class="hydra-maintenance-mark">H</div><h1>App em atualização</h1><p></p><small>hydra agro</small><button class="hydra-maintenance-admin" type="button">Acesso administrativo</button></div>';el.querySelector("button")?.addEventListener("click",hide);document.body.appendChild(el)}const p=el.querySelector("p");if(p)p.textContent=message||"Volte em breve!"}
+function updateAdminSwitch(){ensureStyle();const panel=document.querySelector(".admin-screen .admin-panel-section");if(!panel||document.querySelector(".maintenance-admin-card"))return;const card=document.createElement("div");card.className="maintenance-admin-card";card.innerHTML='<div><strong>Modo manutenção</strong><small>Bloqueia o aplicativo para usuários enquanto você atualiza.</small></div><button class="maintenance-admin-switch" type="button"></button>';const button=card.querySelector<HTMLButtonElement>("button")!;const paint=()=>{button.textContent=latest.enabled?"Ativado":"Desativado";button.classList.toggle("on",!!latest.enabled)};paint();button.addEventListener("click",async()=>{button.disabled=true;try{const db=requireSupabase();const next=!latest.enabled;const value={enabled:next,message:"App em atualização. Volte em breve!"};const{error}=await db.from("app_settings").upsert({key:"maintenance_mode",value,updated_at:new Date().toISOString()},{onConflict:"key"});if(error)throw error;latest=value;paint();await checkMaintenanceMode()}catch(e){console.error("maintenance toggle",e)}finally{button.disabled=false}});panel.prepend(card)}
+export async function checkMaintenanceMode(){try{const db=requireSupabase();const{data,error}=await db.from("app_settings").select("value").eq("key","maintenance_mode").maybeSingle();if(error)throw error;latest=(data?.value||{}) as MaintenanceSetting;if(latest.enabled)show(latest.message||"Volte em breve!");else hide();updateAdminSwitch()}catch{/* Falha aberta para não bloquear o app por indisponibilidade de configuração. */}}
+if(typeof window!=="undefined"){ensureStyle();void checkMaintenanceMode();window.setInterval(()=>void checkMaintenanceMode(),CHECK_INTERVAL);window.addEventListener("focus",()=>void checkMaintenanceMode());new MutationObserver(()=>updateAdminSwitch()).observe(document.body,{childList:true,subtree:true})}
