@@ -11,10 +11,12 @@ const config: CapacitorConfig = {
   },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 1800,
+      // A animação de abertura é controlada pelo HTML em index.html.
+      // Não mantenha uma segunda splash nativa cobrindo a logo web.
+      launchShowDuration: 0,
       launchAutoHide: true,
-      launchFadeOutDuration: 320,
-      backgroundColor: "#0f3727",
+      launchFadeOutDuration: 0,
+      backgroundColor: "#0d4d34",
       androidScaleType: "CENTER_CROP",
       showSpinner: false,
       splashFullScreen: true,
