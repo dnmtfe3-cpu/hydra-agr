@@ -55,12 +55,116 @@
       .wordmark-copy strong { color: #f49a31; }
     </style>
 
+    <style id="hydra-static-launch-style">
+      html.hydra-launch-active,
+      html.hydra-launch-active body {
+        overflow: hidden !important;
+        overscroll-behavior: none;
+      }
+
+      .hydra-launch {
+        position: fixed;
+        z-index: 2147483647;
+        inset: 0;
+        overflow: hidden;
+        isolation: isolate;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: #0d4d34;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+        will-change: opacity;
+      }
+
+      .hydra-launch__center {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        pointer-events: none;
+      }
+
+      .hydra-launch__mark {
+        display: block;
+        width: clamp(160px, 46vw, 192px);
+        max-width: none;
+        height: auto;
+        aspect-ratio: 1;
+        object-fit: contain;
+        opacity: 0;
+        transform: scale(.86);
+        transform-origin: 50% 50%;
+        -webkit-mask-image: radial-gradient(ellipse closest-side, #000 88%, transparent 100%);
+        mask-image: radial-gradient(ellipse closest-side, #000 88%, transparent 100%);
+        will-change: transform, opacity;
+      }
+
+      .hydra-launch[data-phase="entering"] .hydra-launch__mark {
+        animation: hydra-launch-arrive 620ms cubic-bezier(.16, 1, .3, 1) both;
+      }
+
+      .hydra-launch[data-phase="exiting"] {
+        animation: hydra-launch-dismiss 700ms linear both;
+      }
+
+      .hydra-launch[data-phase="exiting"] .hydra-launch__mark {
+        animation: hydra-launch-zoom 700ms cubic-bezier(.64, 0, .8, .25) both;
+      }
+
+      @keyframes hydra-launch-arrive {
+        from { opacity: 0; transform: scale(.86); filter: blur(6px); }
+        to { opacity: 1; transform: scale(1); filter: blur(0); }
+      }
+
+      @keyframes hydra-launch-zoom {
+        0% { opacity: 1; transform: scale(1); filter: blur(0); }
+        72% { opacity: 1; }
+        100% { opacity: 0; transform: scale(9); filter: blur(7px); }
+      }
+
+      @keyframes hydra-launch-dismiss {
+        0%, 45% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .hydra-launch[data-phase] .hydra-launch__mark {
+          animation: none;
+          opacity: 1;
+          transform: none;
+          filter: none;
+        }
+        .hydra-launch[data-phase="exiting"] {
+          animation: hydra-launch-dismiss 160ms linear both;
+        }
+      }
+
+      /* A splash real fica fora do React. A antiga não pode cobrir nem alterar a nova. */
+      #root .hydra-launch { display: none !important; }
+      #root .splash-screen {
+        display: contents !important;
+        position: static !important;
+        inset: auto !important;
+        width: auto !important;
+        height: auto !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        pointer-events: none !important;
+      }
+    </style>
+
     <link rel="stylesheet" href="/src/app-entry.css?v=app-entry-23" />
 
     <title>Hydra Agro</title>
   </head>
   <body>
     <div id="root"></div>
+    <script src="/hydra-splash-launch.js"></script>
     <script type="module" src="/src/runtime-bootstrap.ts"></script>
     <script type="module" src="/src/auth-validation.ts"></script>
     <script type="module" src="/src/password-change-guard.ts"></script>
@@ -190,6 +294,11 @@
         touch-action: none !important;
         transform: none !important;
       }
+
+      /* O lock legado não manda mais na splash nova. */
+      html.hydra-splash-active:not(.hydra-launch-active) body .app-shell { display: block !important; pointer-events: auto !important; }
+      html.hydra-splash-active:not(.hydra-launch-active) body .bottom-nav { display: flex !important; pointer-events: auto !important; }
+      html.hydra-splash-active:not(.hydra-launch-active) body #root .splash-screen { display: contents !important; background: transparent !important; pointer-events: none !important; }
     </style>
   </body>
 </html>
