@@ -1,228 +1,27 @@
 /* Mobile profile overlap + spacing fix */
 @media (max-width: 700px) {
-  .phone-app .profile-screen {
-    overflow-x: hidden !important;
-    min-height: 0 !important;
-    height: auto !important;
-    padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px)) !important;
-  }
-
-  .phone-app .profile-screen .profile-hero {
-    position: relative !important;
-    min-height: 0 !important;
-    height: auto !important;
-    margin: 14px 18px 0 !important;
-    padding: 78px 22px 30px !important;
-    border-radius: 0 0 34px 34px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    text-align: center !important;
-    overflow: hidden !important;
-  }
-
-  .phone-app .profile-screen .profile-rings { pointer-events: none !important; }
-
-  .phone-app .profile-screen .profile-top-edit,
-  .phone-app .profile-screen .profile-settings-trigger {
-    position: absolute !important;
-    top: 20px !important;
-    width: 42px !important;
-    height: 42px !important;
-    min-width: 42px !important;
-    min-height: 42px !important;
-    padding: 0 !important;
-    border: 1px solid rgba(255,255,255,.22) !important;
-    border-radius: 50% !important;
-    color: #fff !important;
-    background: rgba(4,39,26,.48) !important;
-    box-shadow: 0 8px 20px rgba(2,24,15,.16) !important;
-    backdrop-filter: blur(10px) !important;
-    display: grid !important;
-    place-items: center !important;
-    z-index: 8 !important;
-    transform: none !important;
-  }
-
-  .phone-app .profile-screen .profile-top-edit { left: 20px !important; }
-  .phone-app .profile-screen .profile-settings-trigger { right: 20px !important; left: auto !important; }
-
-  .phone-app .profile-screen .profile-top-edit svg,
-  .phone-app .profile-screen .profile-settings-trigger svg {
-    width: 18px !important;
-    height: 18px !important;
-    stroke-width: 2.2 !important;
-  }
-
-  .phone-app .profile-screen .profile-avatar-wrap {
-    position: relative !important;
-    width: 112px !important;
-    height: 112px !important;
-    margin: 8px auto 22px !important;
-    inset: auto !important;
-    transform: none !important;
-    flex: 0 0 112px !important;
-    z-index: 4 !important;
-  }
-
-  .phone-app .profile-screen .profile-avatar,
-  .phone-app .profile-screen .profile-avatar.image {
-    width: 112px !important;
-    height: 112px !important;
-    min-width: 112px !important;
-    min-height: 112px !important;
-    border-radius: 50% !important;
-    object-fit: cover !important;
-    display: grid !important;
-    place-items: center !important;
-  }
-
-  .phone-app .profile-screen .avatar-edit-button {
-    position: absolute !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    top: auto !important;
-    left: auto !important;
-    width: 38px !important;
-    height: 38px !important;
-    min-width: 38px !important;
-    min-height: 38px !important;
-    padding: 0 !important;
-    border: 3px solid #174c36 !important;
-    border-radius: 50% !important;
-    color: #fff !important;
-    background: #f28a19 !important;
-    box-shadow: 0 8px 18px rgba(5,34,22,.22) !important;
-    transform: none !important;
-    z-index: 9 !important;
-  }
-
-  .phone-app .profile-screen .avatar-edit-button svg {
-    width: 16px !important;
-    height: 16px !important;
-    stroke-width: 2.3 !important;
-  }
-
-  .phone-app .profile-screen .profile-hero h1 {
-    position: static !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-    font-size: clamp(28px, 8vw, 38px) !important;
-    line-height: 1.05 !important;
-    text-align: center !important;
-    overflow-wrap: anywhere !important;
-    transform: none !important;
-  }
-
-  .phone-app .profile-screen .profile-hero > strong {
-    position: static !important;
-    margin-top: 10px !important;
-    font-size: 15px !important;
-    line-height: 1.3 !important;
-    text-align: center !important;
-    transform: none !important;
-  }
-
-  .phone-app .profile-screen .profile-hero > p {
-    position: static !important;
-    margin: 8px 0 0 !important;
-    max-width: 92% !important;
-    font-size: 13px !important;
-    line-height: 1.4 !important;
-    text-align: center !important;
-    transform: none !important;
-  }
-
-  .phone-app .profile-screen .profile-bio {
-    position: static !important;
-    display: block !important;
-    width: min(100%, 320px) !important;
-    margin: 22px auto 0 !important;
-    padding-top: 18px !important;
-    border-top: 1px solid rgba(255,255,255,.18) !important;
-    font-size: 11px !important;
-    line-height: 1.45 !important;
-    text-align: center !important;
-    transform: none !important;
-  }
-
-  .phone-app .profile-screen .profile-social-tabs { margin-top: 18px !important; }
-  .phone-app .profile-screen .plan-card { margin-left: 20px !important; margin-right: 20px !important; }
-
-  .phone-app .profile-screen .logout-button { margin-bottom: 12px !important; }
-  .phone-app .profile-screen .profile-version { margin: 0 auto 4px !important; padding: 0 !important; }
-  .phone-app .profile-screen > :last-child { margin-bottom: 0 !important; }
+  .phone-app .profile-screen { overflow-x:hidden!important; min-height:0!important; height:auto!important; padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))!important; }
+  .phone-app .profile-screen .profile-hero { position:relative!important; min-height:0!important; height:auto!important; margin:14px 18px 0!important; padding:78px 22px 30px!important; border-radius:0 0 34px 34px!important; display:flex!important; flex-direction:column!important; align-items:center!important; justify-content:flex-start!important; text-align:center!important; overflow:hidden!important; }
+  .phone-app .profile-screen .profile-rings{pointer-events:none!important}
+  .phone-app .profile-screen .profile-top-edit,.phone-app .profile-screen .profile-settings-trigger{position:absolute!important;top:20px!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;padding:0!important;border:1px solid rgba(255,255,255,.22)!important;border-radius:50%!important;color:#fff!important;background:rgba(4,39,26,.48)!important;box-shadow:0 8px 20px rgba(2,24,15,.16)!important;backdrop-filter:blur(10px)!important;display:grid!important;place-items:center!important;z-index:8!important;transform:none!important}
+  .phone-app .profile-screen .profile-top-edit{left:20px!important}.phone-app .profile-screen .profile-settings-trigger{right:20px!important;left:auto!important}
+  .phone-app .profile-screen .profile-top-edit svg,.phone-app .profile-screen .profile-settings-trigger svg{width:18px!important;height:18px!important;stroke-width:2.2!important}
+  .phone-app .profile-screen .profile-avatar-wrap{position:relative!important;width:112px!important;height:112px!important;margin:8px auto 22px!important;inset:auto!important;transform:none!important;flex:0 0 112px!important;z-index:4!important}
+  .phone-app .profile-screen .profile-avatar,.phone-app .profile-screen .profile-avatar.image{width:112px!important;height:112px!important;min-width:112px!important;min-height:112px!important;border-radius:50%!important;object-fit:cover!important;display:grid!important;place-items:center!important}
+  .phone-app .profile-screen .avatar-edit-button{position:absolute!important;right:0!important;bottom:0!important;top:auto!important;left:auto!important;width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;padding:0!important;border:3px solid #174c36!important;border-radius:50%!important;color:#fff!important;background:#f28a19!important;box-shadow:0 8px 18px rgba(5,34,22,.22)!important;transform:none!important;z-index:9!important}
+  .phone-app .profile-screen .avatar-edit-button svg{width:16px!important;height:16px!important;stroke-width:2.3!important}
+  .phone-app .profile-screen .profile-hero h1{position:static!important;margin:0!important;max-width:100%!important;font-size:clamp(28px,8vw,38px)!important;line-height:1.05!important;text-align:center!important;overflow-wrap:anywhere!important;transform:none!important}
+  .phone-app .profile-screen .profile-hero>strong{position:static!important;margin-top:10px!important;font-size:15px!important;line-height:1.3!important;text-align:center!important;transform:none!important}
+  .phone-app .profile-screen .profile-hero>p{position:static!important;margin:8px 0 0!important;max-width:92%!important;font-size:13px!important;line-height:1.4!important;text-align:center!important;transform:none!important}
+  .phone-app .profile-screen .profile-bio{position:static!important;display:block!important;width:min(100%,320px)!important;margin:22px auto 0!important;padding-top:18px!important;border-top:1px solid rgba(255,255,255,.18)!important;font-size:11px!important;line-height:1.45!important;text-align:center!important;transform:none!important}
+  .phone-app .profile-screen .profile-social-tabs{margin-top:18px!important}.phone-app .profile-screen .plan-card{margin-left:20px!important;margin-right:20px!important}.phone-app .profile-screen .logout-button{margin-bottom:12px!important}.phone-app .profile-screen .profile-version{margin:0 auto 4px!important;padding:0!important}.phone-app .profile-screen>:last-child{margin-bottom:0!important}
 }
+@media (min-width:701px){.phone-app .profile-screen .profile-hero{position:relative!important}.phone-app .profile-screen .profile-top-edit,.phone-app .profile-screen .profile-settings-trigger{position:absolute!important;top:20px!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;padding:0!important;border:1px solid rgba(255,255,255,.22)!important;border-radius:50%!important;display:grid!important;place-items:center!important;color:#fff!important;background:rgba(4,39,26,.48)!important;box-shadow:0 8px 20px rgba(2,24,15,.16)!important;backdrop-filter:blur(10px)!important;transform:none!important;z-index:8!important}.phone-app .profile-screen .profile-top-edit{left:20px!important;right:auto!important}.phone-app .profile-screen .profile-settings-trigger{right:20px!important;left:auto!important}.phone-app .profile-screen .profile-top-edit svg,.phone-app .profile-screen .profile-settings-trigger svg{width:18px!important;height:18px!important;stroke-width:2.2!important}.phone-app .profile-screen .avatar-edit-button{right:-2px!important;bottom:-2px!important;top:auto!important;left:auto!important;width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;padding:0!important;border:3px solid #174c36!important;border-radius:50%!important;display:grid!important;place-items:center!important;color:#fff!important;background:#f28a19!important;box-shadow:0 8px 18px rgba(5,34,22,.22)!important;transform:none!important;z-index:9!important}.phone-app .profile-screen .avatar-edit-button svg{width:16px!important;height:16px!important;stroke-width:2.3!important}}
 
-/* O navegador largo continua usando o app mobile, com os mesmos controles do perfil. */
-@media (min-width: 701px) {
-  .phone-app .profile-screen .profile-hero {
-    position: relative !important;
-  }
-
-  .phone-app .profile-screen .profile-top-edit,
-  .phone-app .profile-screen .profile-settings-trigger {
-    position: absolute !important;
-    top: 20px !important;
-    width: 42px !important;
-    height: 42px !important;
-    min-width: 42px !important;
-    min-height: 42px !important;
-    padding: 0 !important;
-    border: 1px solid rgba(255,255,255,.22) !important;
-    border-radius: 50% !important;
-    display: grid !important;
-    place-items: center !important;
-    color: #fff !important;
-    background: rgba(4,39,26,.48) !important;
-    box-shadow: 0 8px 20px rgba(2,24,15,.16) !important;
-    backdrop-filter: blur(10px) !important;
-    transform: none !important;
-    z-index: 8 !important;
-  }
-
-  .phone-app .profile-screen .profile-top-edit {
-    left: 20px !important;
-    right: auto !important;
-  }
-
-  .phone-app .profile-screen .profile-settings-trigger {
-    right: 20px !important;
-    left: auto !important;
-  }
-
-  .phone-app .profile-screen .profile-top-edit svg,
-  .phone-app .profile-screen .profile-settings-trigger svg {
-    width: 18px !important;
-    height: 18px !important;
-    stroke-width: 2.2 !important;
-  }
-
-  .phone-app .profile-screen .avatar-edit-button {
-    right: -2px !important;
-    bottom: -2px !important;
-    top: auto !important;
-    left: auto !important;
-    width: 36px !important;
-    height: 36px !important;
-    min-width: 36px !important;
-    min-height: 36px !important;
-    padding: 0 !important;
-    border: 3px solid #174c36 !important;
-    border-radius: 50% !important;
-    display: grid !important;
-    place-items: center !important;
-    color: #fff !important;
-    background: #f28a19 !important;
-    box-shadow: 0 8px 18px rgba(5,34,22,.22) !important;
-    transform: none !important;
-    z-index: 9 !important;
-  }
-
-  .phone-app .profile-screen .avatar-edit-button svg {
-    width: 16px !important;
-    height: 16px !important;
-    stroke-width: 2.3 !important;
-  }
-}
+/* The profile hero is a branded dark-green surface even while the app is in light mode. */
+.phone-app:not(.theme-dark) .profile-screen .profile-hero h1,
+.phone-app:not(.theme-dark) .profile-screen .profile-hero > strong { color:#f8fbf8!important; -webkit-text-fill-color:#f8fbf8!important; }
+.phone-app:not(.theme-dark) .profile-screen .profile-hero > p,
+.phone-app:not(.theme-dark) .profile-screen .profile-hero .profile-bio { color:rgba(239,247,241,.72)!important; -webkit-text-fill-color:rgba(239,247,241,.72)!important; }
+.phone-app:not(.theme-dark) .profile-screen .profile-hero .profile-bio { border-top-color:rgba(255,255,255,.18)!important; }
+.phone-app:not(.theme-dark) .profile-screen .profile-hero :is(.profile-top-edit,.profile-settings-trigger) { color:#fff!important; -webkit-text-fill-color:#fff!important; }
