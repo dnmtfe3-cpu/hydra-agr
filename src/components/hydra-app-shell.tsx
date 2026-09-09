@@ -1,24 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Capacitor } from "@capacitor/core";
-import { Check, ChevronRight, FileSpreadsheet, Moon, Palette, Sun } from "lucide-react";
+import { ChevronRight, FileSpreadsheet } from "lucide-react";
 import HydraApp from "../hydra-app";
 import type { HydraAccount } from "../lib/hydra-types";
 import { loadAccount } from "../services/hydra-repository";
 import { requireSupabase } from "../services/supabase";
 import { HydraSpreadsheetPanel } from "../features/spreadsheets/hydra-spreadsheet-panel";
-
-type ThemeMode = "light" | "dark";
-
-const THEME_KEY = "hydra-agro.theme";
-
-function savedTheme(): ThemeMode {
-  try {
-    return window.localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light";
-  } catch {
-    return "light";
-  }
-}
 
 function openDailyBriefingPanelFromNotification() {
   let observer: MutationObserver | null = null;
@@ -60,75 +48,20 @@ function openNotificationsScreen() {
 }
 
 export function HydraAppShell() {
-  const [theme, setTheme] = useState<ThemeMode>("light");
-  const [canUseDarkTheme, setCanUseDarkTheme] = useState(false);
-  const [appearanceOpen, setAppearanceOpen] = useState(false);
+  const theme = "dark";
   const [profileMenuTarget, setProfileMenuTarget] = useState<HTMLElement | null>(null);
   const [spreadsheetOpen, setSpreadsheetOpen] = useState(false);
   const [spreadsheetAccount, setSpreadsheetAccount] = useState<HydraAccount | null>(null);
   const [spreadsheetLoading, setSpreadsheetLoading] = useState(false);
 
   useEffect(() => {
-    let active = true;
-    let revision = 0;
-
-    const resolveThemeAccess = async () => {
-      const current = ++revision;
-      try {
-        const client = requireSupabase();
-        const {
-          data: { user },
-        } = await client.auth.getUser();
-        if (!active || current !== revision) return;
-        if (!user) { setCanUseDarkTheme(false); setTheme("light"); setAppearanceOpen(false); return; }
-
-        const account = await loadAccount(user);
-        if (!active || current !== revision) return;
-
-        const allowed = ["moderator", "admin", "owner"].includes(account.role);
-        setCanUseDarkTheme(allowed);
-        setTheme(allowed ? savedTheme() : "light");
-        if (!allowed) window.localStorage.removeItem(THEME_KEY);
-      } catch {
-        if (active && current === revision) {
-          setCanUseDarkTheme(false);
-          setTheme("light");
-        }
-      }
-    };
-
-    void resolveThemeAccess();
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    let unsubscribe: (() => void) | undefined;
     try {
-      const { data } = requireSupabase().auth.onAuthStateChange((event) => {
-        if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
-        ++revision;
-        if (event === "SIGNED_OUT") {
-          setCanUseDarkTheme(false);
-          setTheme("light");
-          setAppearanceOpen(false);
-        }
-        clearTimeout(timer);
-        timer = setTimeout(() => { if (active) void resolveThemeAccess(); }, 0);
-      });
-      unsubscribe = () => data.subscription.unsubscribe();
-    } catch { /* Auth is unavailable in an unconfigured preview. */ }
-    return () => {
-      active = false;
-      clearTimeout(timer);
-      unsubscribe?.();
-    };
-  }, []);
-
-  useEffect(() => {
-    try {
-      if (canUseDarkTheme) window.localStorage.setItem(THEME_KEY, theme);
+      window.localStorage.setItem("hydra-agro.theme", theme);
     } catch {
       // armazenamento indisponível
     }
 
-    const color = theme === "dark" ? "#08261c" : "#f8f6ef";
+    const color = "#08261c";
     document.documentElement.style.backgroundColor = color;
     document.body.style.backgroundColor = color;
     // Remove every previous theme marker before applying the selected mode.
@@ -148,7 +81,7 @@ export function HydraAppShell() {
       document.head.appendChild(themeColor);
     }
     themeColor.content = color;
-  }, [theme, canUseDarkTheme]);
+  }, [theme]);
 
   useEffect(() => {
     if (Capacitor.isNativePlatform() || typeof window === "undefined" || !("Notification" in window)) return;
@@ -232,7 +165,6 @@ export function HydraAppShell() {
       );
       const nextTarget = accountGroup?.querySelector<HTMLElement>(".profile-menu-card") ?? null;
       setProfileMenuTarget((current) => (current === nextTarget ? current : nextTarget));
-      if (!nextTarget) setAppearanceOpen(false);
     }
 
     findProfileMenu();
@@ -240,17 +172,6 @@ export function HydraAppShell() {
     observer.observe(document.body, { childList: true, subtree: true });
     return () => observer.disconnect();
   }, []);
-
-  function chooseTheme(next: ThemeMode) {
-    if (next === "dark" && !canUseDarkTheme) return;
-    try {
-      window.localStorage.setItem(THEME_KEY, next);
-    } catch {
-      // armazenamento indisponível
-    }
-    setTheme(next);
-    setAppearanceOpen(false);
-  }
 
   async function openSpreadsheet() {
     if (spreadsheetLoading) return;
@@ -290,17 +211,6 @@ export function HydraAppShell() {
             </div>
             <ChevronRight size={19} />
           </button>
-          {canUseDarkTheme && (          <button className="profile-menu-row theme-menu-row" onClick={() => setAppearanceOpen(true)}>
-            <span className="profile-menu-icon">
-              <Palette size={21} />
-            </span>
-            <div>
-              <strong>Aparência</strong>
-              <small>{theme === "dark" ? "Modo escuro · BETA" : "Modo claro"}</small>
-            </div>
-            <ChevronRight size={19} />
-          </button>
-          )}
         </>,
         profileMenuTarget,
       )
@@ -316,46 +226,6 @@ export function HydraAppShell() {
           open={spreadsheetOpen}
           onClose={() => setSpreadsheetOpen(false)}
         />
-      )}
-      {canUseDarkTheme && appearanceOpen && (
-        <div className="theme-dialog-backdrop" onMouseDown={() => setAppearanceOpen(false)}>
-          <section
-            className="theme-dialog"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="theme-dialog-title"
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <span className="theme-dialog-kicker">APARÊNCIA</span>
-            <h2 id="theme-dialog-title">Escolher tema</h2>
-            <p>Use o visual que ficar mais confortável para você. A escolha fica salva neste aparelho.</p>
-            <div className="theme-option-list">
-              <button className={`theme-option ${theme === "light" ? "active" : ""}`} onClick={() => chooseTheme("light")}>
-                <span>
-                  <Sun size={21} />
-                </span>
-                <div>
-                  <strong>Claro</strong>
-                  <small>Visual original do Hydra Agro</small>
-                </div>
-                {theme === "light" && <Check size={19} />}
-              </button>
-              <button className={`theme-option ${theme === "dark" ? "active" : ""}`} onClick={() => chooseTheme("dark")}>
-                <span>
-                  <Moon size={21} />
-                </span>
-                <div>
-                  <strong>Escuro <span className="theme-beta-badge">BETA</span></strong>
-                  <small>Verde profundo com contraste suave</small>
-                </div>
-                {theme === "dark" && <Check size={19} />}
-              </button>
-            </div>
-            <button className="theme-dialog-close" onClick={() => setAppearanceOpen(false)}>
-              Cancelar
-            </button>
-          </section>
-        </div>
       )}
     </div>
   );
