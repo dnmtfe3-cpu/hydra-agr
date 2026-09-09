@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import splashLogo from "../../splash-reference/hydra-splash-logo.png";
 import "./splash-stability.css";
 import "./splash-animation-fix.css";
@@ -44,9 +45,34 @@ export function HydraWordmark({ compact = false }: { compact?: boolean }) {
 }
 
 export function SplashBrand() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const screen = rootRef.current?.closest(".splash-screen") as HTMLElement | null;
+    if (!screen) return;
+
+    screen.dataset.phase = ready ? "entering" : "loading";
+    if (!ready) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const timer = window.setTimeout(() => {
+      if (screen.isConnected) screen.dataset.phase = "exiting";
+    }, reduced ? 150 : 1250);
+
+    return () => window.clearTimeout(timer);
+  }, [ready]);
+
   return (
-    <div className="splash-brand hydra-launch__center" role="status" aria-label="Abrindo Hydra Agro">
-      <img className="hydra-launch__mark" src={splashLogo} alt="" aria-hidden="true" />
+    <div ref={rootRef} className="splash-brand hydra-launch__center" role="status" aria-label="Abrindo Hydra Agro">
+      <img
+        className="hydra-launch__mark"
+        src={splashLogo}
+        alt=""
+        aria-hidden="true"
+        onLoad={() => setReady(true)}
+        onError={() => setReady(true)}
+      />
     </div>
   );
 }
