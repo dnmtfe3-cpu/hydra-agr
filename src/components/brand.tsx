@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import splashLogo from "../../splash-reference/hydra-splash-logo.png";
 import "./splash-stability.css";
 import "./splash-animation-fix.css";
@@ -44,35 +44,48 @@ export function HydraWordmark({ compact = false }: { compact?: boolean }) {
   );
 }
 
+type SplashPhase = "loading" | "entering" | "exiting" | "done";
+
 export function SplashBrand() {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [ready, setReady] = useState(false);
+  const [phase, setPhase] = useState<SplashPhase>("loading");
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
-    const screen = rootRef.current?.closest(".splash-screen") as HTMLElement | null;
-    if (!screen) return;
+    document.documentElement.classList.add("hydra-launch-active");
+    return () => document.documentElement.classList.remove("hydra-launch-active");
+  }, []);
 
-    screen.dataset.phase = ready ? "entering" : "loading";
-    if (!ready) return;
+  function start() {
+    if (started) return;
+    setStarted(true);
+    setPhase("entering");
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const timer = window.setTimeout(() => {
-      if (screen.isConnected) screen.dataset.phase = "exiting";
-    }, reduced ? 150 : 1250);
+    window.setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => {
+      setPhase("exiting");
+      window.setTimeout(() => {
+        setPhase("done");
+        document.documentElement.classList.remove("hydra-launch-active");
+      }, reduced ? 180 : 720);
+    })), reduced ? 150 : 1250);
+  }
 
-    return () => window.clearTimeout(timer);
-  }, [ready]);
+  if (phase === "done") return null;
 
   return (
-    <div ref={rootRef} className="splash-brand hydra-launch__center" role="status" aria-label="Abrindo Hydra Agro">
-      <img
-        className="hydra-launch__mark"
-        src={splashLogo}
-        alt=""
-        aria-hidden="true"
-        onLoad={() => setReady(true)}
-        onError={() => setReady(true)}
-      />
+    <div className="hydra-launch" data-phase={phase} role="status" aria-label="Abrindo Hydra Agro">
+      <div className="hydra-launch__center">
+        <img
+          className="hydra-launch__mark"
+          src={splashLogo}
+          alt=""
+          width={1254}
+          height={1254}
+          draggable={false}
+          onLoad={start}
+          onError={start}
+        />
+      </div>
     </div>
   );
 }
