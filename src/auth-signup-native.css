@@ -1,0 +1,172 @@
+/* Native mobile treatment for the account creation flow. */
+html body #root .hydra-root .auth-shell-signup {
+  align-items: center !important;
+  padding: max(18px, env(safe-area-inset-top)) 14px max(18px, env(safe-area-inset-bottom)) !important;
+  background: #063524 !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .auth-card {
+  width: min(100%, 430px) !important;
+  max-width: 430px !important;
+  padding: 22px 22px 24px !important;
+  border: 0 !important;
+  border-radius: 28px !important;
+  background: #f8f7f2 !important;
+  box-shadow: 0 14px 34px rgba(2, 25, 17, .13) !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .auth-card::before {
+  display: none !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .auth-form-mark {
+  width: 48px !important;
+  height: 48px !important;
+  margin: 0 0 14px !important;
+  padding: 5px !important;
+  border: 1px solid #dce4dd !important;
+  border-radius: 15px !important;
+  box-shadow: none !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .auth-form-mark :is(svg, img) {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .signup-topline {
+  display: flex !important;
+  align-items: center !important;
+  gap: 18px !important;
+  margin: 0 0 8px !important;
+}
+
+html body #root .hydra-root .auth-shell-signup :is(.auth-home-back, .auth-back) {
+  min-height: 36px !important;
+  margin: 0 !important;
+  padding: 4px 0 !important;
+  font-size: 13px !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .step-dots {
+  gap: 5px !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .step-dots span {
+  width: 20px !important;
+  height: 4px !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .step-dots span.active {
+  width: 28px !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .signup-progress-label {
+  margin: 0 0 18px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid #e2e6e1 !important;
+  color: #7b887f !important;
+  font-size: 11px !important;
+  font-weight: 650 !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .eyebrow {
+  margin-bottom: 8px !important;
+  font-size: 10px !important;
+  letter-spacing: .12em !important;
+}
+
+html body #root .hydra-root .auth-shell-signup h1 {
+  margin: 0 0 6px !important;
+  font-size: clamp(27px, 7vw, 32px) !important;
+  line-height: 1.04 !important;
+  letter-spacing: -.045em !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .auth-subtitle {
+  margin: 0 0 20px !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .field {
+  margin-bottom: 13px !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .field > span {
+  margin-bottom: 6px !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+}
+
+html body #root .hydra-root .auth-shell-signup :is(input, select, textarea) {
+  min-height: 50px !important;
+  padding: 12px 14px !important;
+  border-color: #d6ddd7 !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  font-size: 15px !important;
+  box-shadow: none !important;
+}
+
+html body #root .hydra-root .auth-shell-signup :is(input, select, textarea):focus {
+  border-color: #47755d !important;
+  box-shadow: 0 0 0 3px rgba(34, 93, 63, .09) !important;
+}
+
+html body #root .hydra-root .auth-shell-signup .primary-button {
+  min-height: 52px !important;
+  margin-top: 3px !important;
+  border-radius: 15px !important;
+  background: #18533a !important;
+  box-shadow: none !important;
+  font-size: 15px !important;
+}
+
+/* No card/content entrance movement. Only controls respond to touch. */
+html body #root .hydra-root .auth-shell-signup :is(.auth-card, .auth-enter, .signup-panel, .auth-content, .auth-form-mark, h1, .auth-subtitle, .field, .signup-topline, .signup-progress-label) {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+}
+
+html body #root .hydra-root .auth-shell-signup :is(.primary-button, .secondary-button, .auth-back, .auth-home-back) {
+  transition: transform .12s ease, opacity .12s ease, background-color .12s ease !important;
+}
+
+html body #root .hydra-root .auth-shell-signup :is(.primary-button, .secondary-button, .auth-back, .auth-home-back):active {
+  transform: scale(.985) !important;
+  opacity: .86 !important;
+}
+
+@media (max-height: 720px) {
+  html body #root .hydra-root .auth-shell-signup {
+    align-items: flex-start !important;
+    overflow-y: auto !important;
+  }
+
+  html body #root .hydra-root .auth-shell-signup .auth-card {
+    margin: 8px auto !important;
+    padding-top: 18px !important;
+    padding-bottom: 20px !important;
+  }
+
+  html body #root .hydra-root .auth-shell-signup .auth-form-mark {
+    width: 42px !important;
+    height: 42px !important;
+    margin-bottom: 10px !important;
+  }
+
+  html body #root .hydra-root .auth-shell-signup .auth-form-mark :is(svg, img) {
+    width: 31px !important;
+    height: 31px !important;
+  }
+
+  html body #root .hydra-root .auth-shell-signup .signup-progress-label {
+    margin-bottom: 13px !important;
+  }
+
+  html body #root .hydra-root .auth-shell-signup .auth-subtitle {
+    margin-bottom: 15px !important;
+  }
+}
