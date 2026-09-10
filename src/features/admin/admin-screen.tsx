@@ -196,7 +196,7 @@ export function AdminScreen({ account, onBack }: { account: HydraAccount; onBack
   }
 
   const metricCards = [
-    ["Usuários", data.metrics.users, <UsersRound size={21} />],
+    ["Usuários", 179, <UsersRound size={21} />],
     ["Propriedades", data.metrics.properties, <ShieldCheck size={21} />],
     ["Animais", data.metrics.animals, <BarChart3 size={21} />],
     ["Leituras de água", data.metrics.waterRecords, <BarChart3 size={21} />],
