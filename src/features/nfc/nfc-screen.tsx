@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Capacitor } from "@capacitor/core";
 import { AlertCircle, Beef as Cow, CheckCircle2, ChevronRight, Keyboard, LoaderCircle, Nfc, Radio, ScanLine, Settings, Smartphone } from "lucide-react";
 import { EmptyState, Field, LoadingButton, Modal, ScreenHeader } from "../../components/ui";
@@ -17,7 +17,9 @@ type Props = {
 
 export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnimalId, onRealRead }: Props) {
   const canLink = account.access.kind === "owner" || account.access.staffRole === "manager";
+  const isWeb = !Capacitor.isNativePlatform();
   const isIos = Capacitor.getPlatform() === "ios";
+  const webSimulationTimer = useRef<number | null>(null);
   const [mode, setMode] = useState<"locate" | "link">(initialAnimalId && canLink ? "link" : "locate");
   const [code, setCode] = useState("");
   const [animalId, setAnimalId] = useState(initialAnimalId ?? "");
@@ -30,7 +32,10 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
 
   useEffect(() => {
     void getNfcAvailability().then(setAvailability).catch(() => setAvailability("unsupported"));
-    return () => { void stopNfcRead(); };
+    return () => {
+      if (webSimulationTimer.current !== null) window.clearTimeout(webSimulationTimer.current);
+      void stopNfcRead();
+    };
   }, []);
 
   useEffect(() => {
@@ -102,7 +107,37 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
     }
   }
 
-  async function startNativeRead() {
+  function startWebSimulation() {
+    if (scanning) return;
+    setMode("locate");
+    setScanning(true);
+    setResult(null);
+    setMessage("Procurando uma tag NFC/RFID próxima…");
+
+    webSimulationTimer.current = window.setTimeout(() => {
+      const found = account.animals.find((animal) => animal.electronicId?.trim()) ?? account.animals[0] ?? null;
+      webSimulationTimer.current = null;
+      setScanning(false);
+
+      if (!found) {
+        setMessage("Nenhum animal cadastrado para demonstrar a leitura.");
+        return;
+      }
+
+      const simulatedCode = found.electronicId?.trim() || `HYDRA-${found.identification}`;
+      setCode(simulatedCode);
+      setResult(found);
+      setMessage("Tag lida. Animal localizado na demonstração.");
+      showAppToast("Tag NFC/RFID detectada");
+    }, 1800);
+  }
+
+  async function startNfcRead() {
+    if (isWeb) {
+      startWebSimulation();
+      return;
+    }
+
     if (isIos) {
       setAvailability("unsupported");
       setNativeInfo(true);
@@ -149,6 +184,8 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
 
   const availabilityText = isIos
     ? "NFC disponível em breve no iOS"
+    : isWeb
+      ? "Demonstração de leitura disponível na web"
     : availability === "ready"
     ? "NFC pronto para leitura"
     : availability === "disabled"
@@ -170,16 +207,16 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
         <span><Smartphone size={26} /></span>
         <div>
           <small>LEITURA POR APROXIMAÇÃO</small>
-          <strong>{isIos ? "NFC disponível em breve no iOS" : "Use um celular Android com NFC"}</strong>
-          <p>{isIos ? "Enquanto isso, localize ou vincule o animal digitando o código da identificação." : "Em dispositivos sem leitura NFC compatível, localize o animal pelo código da identificação."}</p>
+          <strong>{isWeb ? "Simulação NFC disponível" : isIos ? "NFC disponível em breve no iOS" : "Use um celular Android com NFC"}</strong>
+          <p>{isWeb ? "Inicie a demonstração para visualizar a leitura e a identificação de um animal cadastrado." : isIos ? "Enquanto isso, localize ou vincule o animal digitando o código da identificação." : "Em dispositivos sem leitura NFC compatível, localize o animal pelo código da identificação."}</p>
         </div>
       </section>
 
       <section className={`nfc-hero ${scanning ? "is-scanning" : ""}`}>
         <div className="nfc-waves"><span /><span /><span />{scanning ? <LoaderCircle size={38} className="spin" /> : <Nfc size={38} />}</div>
-        <h2>{scanning ? "Lendo identificação…" : "Aproxime a tag do celular"}</h2>
-        <p>Encoste o brinco eletrônico ou a tag na área NFC do aparelho.</p>
-        <button className="nfc-native-read-button" onClick={() => void startNativeRead()} disabled={scanning}><Radio size={18} /> {scanning ? "Aguardando etiqueta" : "Iniciar leitura"}</button>
+        <h2>{scanning ? "Lendo identificação…" : isWeb ? "Simular leitura da tag" : "Aproxime a tag do celular"}</h2>
+        <p>{isWeb ? "Veja como o Hydra Agro identifica um animal por NFC/RFID." : "Encoste o brinco eletrônico ou a tag na área NFC do aparelho."}</p>
+        <button className="nfc-native-read-button" onClick={() => void startNfcRead()} disabled={scanning}><Radio size={18} /> {scanning ? "Aguardando etiqueta" : isWeb ? "Simular leitura" : "Iniciar leitura"}</button>
         <small><Smartphone size={15} /> {availabilityText}</small>
       </section>
 
@@ -190,7 +227,7 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
             <Nfc size={30} />
           </div>
           <strong>Lendo etiqueta NFC…</strong>
-          <small>Mantenha a etiqueta próxima ao celular.</small>
+          <small>{isWeb ? "Simulando a aproximação da etiqueta." : "Mantenha a etiqueta próxima ao celular."}</small>
         </div>
       )}
 
