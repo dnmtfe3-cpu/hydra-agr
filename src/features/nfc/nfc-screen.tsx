@@ -5,6 +5,7 @@ import { EmptyState, Field, LoadingButton, Modal, ScreenHeader } from "../../com
 import { showAppToast } from "../../components/modal-system";
 import type { Animal, HydraAccount, UpdateAccount } from "../../lib/hydra-types";
 import { getNfcAvailability, openNfcSettings, readNfcTag, stopNfcRead, type NfcAvailability } from "../../services/nfc-service";
+import { TagTrackerDemo } from "./tag-tracker-demo";
 
 type Props = {
   account: HydraAccount;
@@ -260,6 +261,8 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
           ? <button className="nfc-result-card" onClick={() => onFound(result)}><span><Cow size={27} /></span><div><small>{result.identification}</small><strong>{result.name || "Animal sem nome"}</strong><p>{result.species}{result.breed ? ` · ${result.breed}` : ""}</p></div><ChevronRight size={20} /></button>
           : <div className="nfc-result-card"><span><Cow size={27} /></span><div><small>{result.identification}</small><strong>{result.name || "Animal sem nome"}</strong><p>{result.species}{result.breed ? ` · ${result.breed}` : ""}</p></div><CheckCircle2 size={20} /></div>
       )}
+
+      {isWeb && <TagTrackerDemo animals={account.animals} />}
 
       <Modal open={nativeInfo} onClose={() => setNativeInfo(false)} eyebrow="LEITURA NFC" title={availability === "disabled" ? "Ative o NFC do celular" : "Leitura por aproximação indisponível"}>
         <div className="hardware-message">
