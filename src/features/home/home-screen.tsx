@@ -1,3 +1,4 @@
+import { EasyHome, useEasyMode } from "../easy-mode/easy-mode";
 "use client";
 
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
@@ -35,6 +36,7 @@ function welcomeMessage() { const hour = new Date().getHours(); if (hour < 5) re
 function countLabel(count: number, singular: string, plural: string) { return `${count} ${count === 1 ? singular : plural}`; }
 
 export function HomeScreen({ account, navigate, announcements }: Props) {
+  const { enabled: easy } = useEasyMode();
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [nutriCicloOpen, setNutriCicloOpen] = useState(false);
   const [missionProgress, setMissionProgress] = useState<MissionProgress | null>(null);
@@ -72,6 +74,7 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
 
   const pendingSetup = [account.animals.length === 0 && { label: "Cadastrar o primeiro animal", icon: <Cow size={21} />, route: "herd" as AppRoute }, account.sectors.length === 0 && { label: "Criar o primeiro setor", icon: <Map size={21} />, route: "monitor" as AppRoute }].filter(Boolean) as { label: string; icon: ReactNode; route: AppRoute }[];
 
+  if (easy) return <EasyHome navigate={navigate} />;
   return <div className="screen home-screen page-enter">
     <div className="home-brandbar profile-brandbar">
       <button className="home-profile-progress" onClick={() => navigate("profile")} aria-label={`Abrir perfil. Nível ${farmXp.level}, ${farmXp.xp} XP da fazenda`} title="Abrir perfil" style={{ "--profile-progress": `${farmXp.progress}%` } as CSSProperties}><span className="home-profile-avatar">{account.profile.avatarUrl ? <img src={account.profile.avatarUrl} alt="" /> : profileInitials}</span><span className="home-profile-level" aria-hidden="true">{farmXp.level}</span></button>

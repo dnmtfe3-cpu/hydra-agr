@@ -26,6 +26,7 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
   const [animalId, setAnimalId] = useState(initialAnimalId ?? "");
   const [result, setResult] = useState<Animal | null>(null);
   const [message, setMessage] = useState("");
+  const [demoOpen, setDemoOpen] = useState(false);
   const [nativeInfo, setNativeInfo] = useState(false);
   const [availability, setAvailability] = useState<NfcAvailability>("web");
   const [scanning, setScanning] = useState(false);
@@ -200,7 +201,7 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
       <ScreenHeader
         eyebrow="IDENTIFICAÇÃO ANIMAL"
         title="NFC e RFID"
-        subtitle={canLink ? "Leia uma tag por aproximação ou informe o código manualmente." : "Localize animais pela identificação eletrônica."}
+        subtitle={canLink ? "Leia uma tag por aproximação ou informe o código manualmente." : "Abra a ficha do animal pelo código da tag."}
         onBack={onBack}
       />
 
@@ -262,7 +263,8 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
           : <div className="nfc-result-card"><span><Cow size={27} /></span><div><small>{result.identification}</small><strong>{result.name || "Animal sem nome"}</strong><p>{result.species}{result.breed ? ` · ${result.breed}` : ""}</p></div><CheckCircle2 size={20} /></div>
       )}
 
-      {isWeb && <TagTrackerDemo animals={account.animals} />}
+      <section className="nfc-inline-card" aria-label="Localização do animal"><div><strong>Rastreamento não conectado</strong><p>Para mostrar a localização real, conecte um rastreador compatível. Nenhum dispositivo está conectado.</p><p>A tag NFC identifica o animal por aproximação. Ela não informa onde ele está.</p></div></section>
+      {isWeb && <details onToggle={event => setDemoOpen(event.currentTarget.open)}><summary>Modo demonstração</summary>{demoOpen && <TagTrackerDemo animals={account.animals} />}</details>}
 
       <Modal open={nativeInfo} onClose={() => setNativeInfo(false)} eyebrow="LEITURA NFC" title={availability === "disabled" ? "Ative o NFC do celular" : "Leitura por aproximação indisponível"}>
         <div className="hardware-message">

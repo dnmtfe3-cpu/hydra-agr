@@ -28,6 +28,9 @@ describe("demonstração NFC na web", () => {
       onRealRead={onRealRead}
     />);
 
+    expect(screen.getByText("Rastreamento não conectado")).toBeInTheDocument();
+    expect(screen.getByText("Modo demonstração", { selector: "summary" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Simular localização" })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Simular leitura" }));
     expect(screen.getByRole("status", { name: "Lendo etiqueta NFC" })).toBeInTheDocument();
 

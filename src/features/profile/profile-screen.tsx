@@ -1,3 +1,4 @@
+import { EasyModeSetting } from "../easy-mode/easy-mode-setting";
 import { useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import { Capacitor } from "@capacitor/core";
 import {
@@ -280,6 +281,7 @@ export function ProfileScreen({ account, links, updateAccount, navigate, logout,
 
       <Modal open={settingsOpen} onClose={() => setSettingsOpen(false)} eyebrow="PERFIL" title="Menu e configurações" wide>
         <div className="profile-settings-sheet">
+          <EasyModeSetting />
           <div className="profile-menu-card">
             {isAdmin && <MenuRow icon={<Palette size={21} />} title="Aparência" subtitle="Modo claro ou escuro · BETA" onClick={() => openInjectedMenu(".theme-menu-row")} />}
             <MenuRow icon={<Bell size={21} />} title="Notificações" subtitle="Avisos da conta e da propriedade" onClick={() => { setSettingsOpen(false); openNotificationPreferences(); }} />

@@ -1,3 +1,4 @@
+import { GuidedForm } from "../easy-mode/easy-mode";
 "use client";
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
@@ -293,7 +294,7 @@ export function WaterScreen({ account, updateAccount, createRecordRequest, onReq
       </section>
 
       <Modal open={sourceOpen} onClose={() => { setSourceOpen(false); setEditingSourceId(undefined); setError(""); }} eyebrow="RECURSO HÍDRICO" title={editingSourceId ? "Editar fonte de água" : "Cadastrar fonte de água"} dismissible={!saving}>
-        <form className="modal-form" onSubmit={addSource}>
+        <GuidedForm className="modal-form" onSubmit={addSource}>
           <Field label="Nome da fonte">
             <input value={sourceName} onChange={(e) => { setSourceName(e.target.value); setError(""); }} placeholder="Ex.: Cisterna principal" autoFocus />
           </Field>
@@ -311,7 +312,7 @@ export function WaterScreen({ account, updateAccount, createRecordRequest, onReq
           </Field>
           {error && <p className="form-error" role="alert">{error}</p>}
           <div className="modal-action-row"><button className="secondary-button" type="button" onClick={() => setSourceOpen(false)} disabled={saving === "source"}>Cancelar</button><LoadingButton className="primary-button" type="submit" loading={saving === "source"} loadingLabel="Salvando fonte...">{editingSourceId ? "Confirmar alterações" : "Confirmar fonte"}</LoadingButton></div>
-        </form>
+        </GuidedForm>
       </Modal>
 
       <Modal open={recordOpen} onClose={() => { setRecordOpen(false); setEditingRecordId(undefined); setError(""); }} eyebrow={editingRecordId ? "EDIÇÃO" : "NOVA LEITURA"} title={editingRecordId ? "Editar leitura" : "Registrar água"} dismissible={!saving}>
@@ -323,7 +324,7 @@ export function WaterScreen({ account, updateAccount, createRecordRequest, onReq
             action={<button className="primary-button" onClick={() => { setRecordOpen(false); setSourceOpen(true); }}>Cadastrar fonte</button>}
           />
         ) : (
-          <form className="modal-form" onSubmit={addRecord}>
+          <GuidedForm className="modal-form" onSubmit={addRecord}>
             <div className="field-combo">
               <Field label="Data"><input type="date" value={record.date} onChange={(e) => setRecord({ ...record, date: e.target.value })} /></Field>
               <Field label="Quantidade (L)"><input inputMode="decimal" value={record.amount} onChange={(e) => { setRecord({ ...record, amount: e.target.value }); setError(""); }} placeholder="0" /></Field>
@@ -342,7 +343,7 @@ export function WaterScreen({ account, updateAccount, createRecordRequest, onReq
             <Field label="Observação (opcional)"><textarea value={record.note} onChange={(e) => setRecord({ ...record, note: e.target.value })} placeholder="Alguma informação importante?" /></Field>
             {error && <p className="form-error" role="alert">{error}</p>}
             <div className="modal-action-row"><button className="secondary-button" type="button" onClick={() => setRecordOpen(false)} disabled={saving === "record"}>Cancelar</button><LoadingButton className="primary-button" type="submit" loading={saving === "record"} loadingLabel="Salvando leitura...">{editingRecordId ? "Confirmar alterações" : "Confirmar leitura"}</LoadingButton></div>
-          </form>
+          </GuidedForm>
         )}
       </Modal>
 

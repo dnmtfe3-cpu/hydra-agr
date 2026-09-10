@@ -1,3 +1,4 @@
+import { AudioHelp, useEasyMode } from "../features/easy-mode/easy-mode";
 "use client";
 
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from "react";
@@ -19,17 +20,19 @@ export function ScreenHeader({
   action?: ReactNode;
   onBack?: () => void;
 }) {
+  const { enabled: easy } = useEasyMode();
+  const simpleTitle = easy ? ({ Rebanho: "Animais", Atividades: "Tarefas", "Central NFC": "Ler tag", "NFC e RFID": "Ler tag" }[title] || title) : title;
   return (
     <header className="screen-header">
       <div className="screen-header-row">
         {onBack && (
           <button className="icon-button quiet" onClick={onBack} aria-label="Voltar">
-            <ChevronLeft size={23} strokeWidth={2.1} />
+            <ChevronLeft size={23} strokeWidth={2.1} />{easy && <span className="easy-back">Voltar</span>}
           </button>
         )}
         <div className="screen-heading">
           {eyebrow && <span className="eyebrow">{eyebrow}</span>}
-          <h1>{title}</h1>
+          <h1>{simpleTitle}</h1>{easy && <AudioHelp text={`${simpleTitle}. ${subtitle || "Escolha uma opção para continuar."}`} />}
           {subtitle && <p>{subtitle}</p>}
         </div>
         {action && <div className="screen-action">{action}</div>}
@@ -220,11 +223,12 @@ export function ConfirmDialog({
   danger?: boolean;
   error?: string;
 }) {
+  const { enabled: easy } = useEasyMode();
   return (
     <Modal open={open} title={title} eyebrow="CONFIRMAÇÃO OBRIGATÓRIA" onClose={onCancel} dismissible={!busy}>
       <div className="confirm-action">
         <span><X size={27} /></span>
-        <p>{text}</p>
+        <p>{text}</p>{easy && <AudioHelp text={`${title}. ${text}`} />}
         {error && <p className="form-error" role="alert">{appMessagePtBr(error)}</p>}
         <div className="modal-action-row">
           <button className="secondary-button" onClick={onCancel} disabled={busy}>Cancelar</button>
@@ -254,6 +258,7 @@ export function LoadingButton({
 
 export function AppToastRegion() {
   const toasts = useAppToasts();
+  const { enabled: easy } = useEasyMode();
   return (
     <div className="app-toast-region" aria-live="polite" aria-atomic="true">
       {toasts.map((toast) => {
@@ -261,7 +266,7 @@ export function AppToastRegion() {
         return (
           <div key={toast.id} className={`app-toast ${toast.tone}`} role={toast.tone === "error" ? "alert" : "status"}>
             <span className="app-toast-icon" aria-hidden="true">{toast.tone === "success" ? <CheckCircle2 size={21} /> : toast.tone === "error" ? <AlertCircle size={21} /> : <Info size={21} />}</span>
-            <span className="app-toast-copy"><strong>{title}</strong><small>{toast.message}</small></span>
+            <span className="app-toast-copy"><strong>{title}</strong><small>{easy ? toast.message.replace(" com sucesso", "").replace("Atividade adicionada à rotina", "Tarefa criada") : toast.message}</small></span>{easy && <AudioHelp text={toast.message} />}
           </div>
         );
       })}
@@ -278,11 +283,14 @@ export function Field({
   children: ReactNode;
   hint?: string;
 }) {
-  return (
+  const { enabled: easy } = useEasyMode();
+  const simpleLabel = easy ? ({ "Identificação": "Número do animal", "Espécie": "Tipo de animal", "Código NFC/RFID (opcional)": "Código da tag (opcional)", "Finalidade": "Para que usou?", "Origem": "De onde veio?", "Atividade": "Tarefa" }[label] || label) : label;
+  const field = (
     <label className="field">
-      <span>{label}</span>
+      <span>{simpleLabel}</span>
       {children}
       {hint && <small>{hint}</small>}
     </label>
   );
+  return easy ? <div className="easy-field">{field}<AudioHelp text={`${simpleLabel}. ${hint || "Preencha esta informação."}`} /></div> : field;
 }

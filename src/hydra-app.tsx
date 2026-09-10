@@ -1,3 +1,4 @@
+import { EasyModeProvider } from "./features/easy-mode/easy-mode";
 import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { App as CapacitorApp } from "@capacitor/app";
 import { Capacitor } from "@capacitor/core";
@@ -376,7 +377,7 @@ export default function HydraApp() {
   const navStyle = { "--active-index": activeIndex } as CSSProperties;
 
   return (
-    <>
+    <EasyModeProvider key={account.id} accountId={account.id}>
     <main className="app-shell">
       <div className={`phone-app ${modalNavigationOpen ? "is-overlay-open" : ""}`}>
         <SyncBanner status={store.syncStatus} error={store.lastError} retry={store.retrySync} />
@@ -395,7 +396,7 @@ export default function HydraApp() {
       </div>
     </main>
     {splashLayer}
-    </>
+    </EasyModeProvider>
   );
 }
 

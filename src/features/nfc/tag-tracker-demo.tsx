@@ -19,7 +19,7 @@ export function TagTrackerDemo({ animals }: { animals: Animal[] }) {
   }, [step, running]);
 
   return <section className="tag-tracker-demo" aria-label="Rastreador demonstrativo">
-    <header><Radio size={20} /><strong>Encontrar {animal?.name || `animal da tag ${tag}`}</strong><small>SIMULAÇÃO</small></header>
+    <header><Radio size={20} /><strong>Encontrar {animal?.name || `animal da tag ${tag}`}</strong><small>Modo demonstração</small></header>
     <p>Distância e direção fictícias para demonstrar a busca do animal.</p>
     <div className="tag-tracker-choices" role="group" aria-label="Escolher tag">
       {["530", "529", "528"].map((value) => <button key={value} type="button" aria-pressed={tag === value} onClick={() => { setTag(value); setStep(null); }}>Tag {value}</button>)}
@@ -34,7 +34,7 @@ export function TagTrackerDemo({ animals }: { animals: Animal[] }) {
       </div>
     </>}
     <button className="primary-button full" type="button" onClick={() => setStep(running ? null : 0)}>
-      {running ? "Cancelar busca" : found ? "Simular novamente" : "Localizar animal"}
+      {running ? "Cancelar busca" : found ? "Simular novamente" : "Simular localização"}
     </button>
   </section>;
 }
