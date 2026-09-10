@@ -46,7 +46,7 @@ const information = {
       ["Bases e finalidades", "O tratamento ocorre conforme a finalidade do recurso utilizado, podendo se apoiar na execução do serviço solicitado, cumprimento de obrigação legal, legítimo interesse relacionado à segurança e funcionamento do produto ou consentimento quando aplicável."],
       ["Acesso e segurança", "Registros privados ficam vinculados à conta e seguem regras de acesso configuradas no servidor. Recursos administrativos exigem permissão válida. São aplicadas medidas técnicas para reduzir acesso indevido, abuso e exposição de dados."],
       ["Fornecedores e infraestrutura", "O Hydra Agro pode utilizar provedores de autenticação, banco de dados, hospedagem, e-mail, notificações e outros serviços necessários. Somente os dados necessários para cada finalidade devem ser tratados por esses serviços."],
-      ["Clima e serviços externos", "Na consulta do clima, o aplicativo usa a localização cadastrada necessária para obter a previsão. Informações do rebanho não fazem parte dessa consulta."],
+      ["Clima e serviços externos", "Na consulta do clima, o aplicativo envia ao provedor somente a localização necessária da propriedade para obter dados meteorológicos da região. Não há rastreamento contínuo. Informações do rebanho não fazem parte dessa consulta."],
       ["Retenção e exclusão", "Os dados são mantidos enquanto necessários para a conta, segurança, funcionamento do serviço ou cumprimento de obrigações aplicáveis. Solicitações de exclusão serão atendidas quando juridicamente e tecnicamente cabíveis."],
       ["Seus direitos", "Você pode solicitar confirmação de tratamento, acesso, correção, informações sobre uso e compartilhamento, portabilidade quando aplicável e exclusão nas hipóteses previstas pela LGPD, pelos canais oficiais do Hydra Agro."],
     ],
@@ -77,6 +77,8 @@ const information = {
       ["Abrangência", "O Hydra Agro pode ser utilizado por propriedades cadastradas em diferentes municípios e estados. A localização cadastrada também pode ser usada em recursos como previsão do tempo."],
       ["Informações da conta", "Telas, históricos e indicadores usam os registros disponíveis na sua conta."],
       ["Recursos externos", "Algumas funções dependem de hardware, internet ou serviços externos, como NFC, clima e notificações."],
+      ["Acesso à tecnologia no campo", "O Hydra Agro busca democratizar o acesso à tecnologia e à informação técnica no campo, com ferramentas que também possam ser usadas por pequenos produtores e pessoas com pouca familiaridade com tecnologia."],
+      ["Comunidades tradicionais", "Comunidades quilombolas, produtores negros rurais e outros grupos tradicionais podem enfrentar barreiras históricas de acesso à tecnologia e informação. O Hydra Agro busca diminuir barreiras de uso, sem afirmar que o aplicativo sozinho resolve essas desigualdades e sem limitar recursos por raça ou pertencimento."],
     ],
   },
 } as const;

@@ -1,5 +1,5 @@
 import { Children, createContext, isValidElement, useContext, useEffect, useRef, useState, type FormHTMLAttributes, type ReactNode } from "react";
-import { Beef, ClipboardCheck, Droplets, ScanLine, Settings, Volume2 } from "lucide-react";
+import { Beef, ClipboardCheck, CloudSun, Droplets, ScanLine, Settings, Volume2 } from "lucide-react";
 import type { AppRoute } from "../../lib/hydra-types";
 import "./easy-mode.css";
 
@@ -31,6 +31,7 @@ export function AudioHelp({ text }: { text: string }) {
 const shortcuts = [
   { route: "herd", title: "Animais", text: "Animais. Veja seus animais ou toque no mais para cadastrar um animal.", icon: Beef },
   { route: "water", title: "Água", text: "Água. Veja de onde vem a água e anote a quantidade usada.", icon: Droplets },
+  { route: "climate", title: "Clima", text: "Clima. Veja se pode chover, o calor e os avisos para a propriedade.", icon: CloudSun },
   { route: "activities", title: "Tarefas", text: "Tarefas. Veja o que precisa fazer. Toque no mais para criar uma tarefa.", icon: ClipboardCheck },
   { route: "nfc", title: "Ler tag", text: "Ler tag. Aproxime o celular da identificação do animal para abrir sua ficha. Isso não rastreia o animal.", icon: ScanLine },
   { route: "profile", title: "Configurações", text: "Configurações. Abra o menu do perfil para ligar ou desligar o Modo Fácil.", icon: Settings },

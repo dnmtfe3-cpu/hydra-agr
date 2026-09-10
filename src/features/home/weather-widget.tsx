@@ -40,7 +40,7 @@ function timeLabel(value?: string) {
   return value.match(/T(\d{2}:\d{2})/)?.[1] ?? "—";
 }
 
-export function WeatherWidget({ municipality, state, onCompleteProperty }: { municipality: string; state: string; onCompleteProperty: () => void }) {
+export function WeatherWidget({ municipality, state, onCompleteProperty, onOpenScience }: { municipality: string; state: string; onCompleteProperty: () => void; onOpenScience?: () => void }) {
   const [weather, setWeather] = useState<WeatherSnapshot | null>(null);
   const [status, setStatus] = useState<WeatherState>("idle");
   const [error, setError] = useState("");
@@ -99,6 +99,7 @@ export function WeatherWidget({ municipality, state, onCompleteProperty }: { mun
         </div>
         <div className="weather-dayline"><div><small>Mínima</small><strong>{Math.round(weather.minimumTemperature)}°</strong></div><div><small>Máxima</small><strong>{Math.round(weather.maximumTemperature)}°</strong></div><div><small>Nascer do sol</small><strong>{timeLabel(weather.sunrise)}</strong></div><div><small>Pôr do sol</small><strong>{timeLabel(weather.sunset)}</strong></div></div>
         <p className="weather-source"><MapPin size={15} /> Estimativa meteorológica para {locationLabel} · dados Open-Meteo.</p>
+        {onOpenScience && <button className="secondary-button full" onClick={() => { setOpen(false); window.setTimeout(onOpenScience, 200); }}>Abrir Clima & Ciência</button>}
         <button className="primary-button full" onClick={() => void refresh(true)} disabled={status === "loading"}>{status === "loading" ? <><span className="button-spinner" /> Atualizando…</> : <><RefreshCw size={18} /> Atualizar clima</>}</button>
       </div> : null}
     </Modal>

@@ -12,11 +12,17 @@ export type WeatherSnapshot = {
   humidity: number;
   precipitation: number;
   windSpeed: number;
+  windDirection: number;
   weatherCode: number;
   isDay: boolean;
   minimumTemperature: number;
   maximumTemperature: number;
   rainChance: number;
+  forecast: WeatherDay[];
+  recentPrecipitation: number;
+  forecastPrecipitation: number;
+  forecastEt0: number;
+  daysWithoutRain: number | null;
   sunrise?: string;
   sunset?: string;
   observedAt: string;
@@ -24,12 +30,14 @@ export type WeatherSnapshot = {
   stale: boolean;
 };
 
+export type WeatherDay = { date: string; minimum: number; maximum: number; rainChance: number; precipitation: number; et0: number; windSpeed: number; windDirection: number; weatherCode: number };
+
 export type WeatherDescription = { label: string; icon: WeatherIconName };
 
 type GeocodingResponse = { results?: Array<{ name?: string; latitude?: number; longitude?: number; country_code?: string; admin1?: string }> };
 type ForecastResponse = {
-  current?: { time?: string; temperature_2m?: number; apparent_temperature?: number; relative_humidity_2m?: number; precipitation?: number; weather_code?: number; wind_speed_10m?: number; is_day?: number };
-  daily?: { temperature_2m_min?: number[]; temperature_2m_max?: number[]; precipitation_probability_max?: number[]; sunrise?: string[]; sunset?: string[] };
+  current?: { time?: string; temperature_2m?: number; apparent_temperature?: number; relative_humidity_2m?: number; precipitation?: number; weather_code?: number; wind_speed_10m?: number; wind_direction_10m?: number; is_day?: number };
+  daily?: { time?: string[]; temperature_2m_min?: number[]; temperature_2m_max?: number[]; precipitation_probability_max?: number[]; precipitation_sum?: number[]; et0_fao_evapotranspiration?: number[]; wind_speed_10m_max?: number[]; wind_direction_10m_dominant?: number[]; weather_code?: number[]; sunrise?: string[]; sunset?: string[] };
 };
 type CachedWeather = { savedAt: number; snapshot: WeatherSnapshot };
 
@@ -42,7 +50,7 @@ function normalize(value: string) {
 }
 
 function cacheKey(municipality: string, state: string) {
-  return `hydra.weather.${normalize(state)}.${normalize(municipality).replace(/\s+/g, "-")}`;
+  return `hydra.weather.v2.${normalize(state)}.${normalize(municipality).replace(/\s+/g, "-")}`;
 }
 
 function readCache(municipality: string, state: string): CachedWeather | null {
@@ -91,13 +99,23 @@ async function requestForecast(municipality: string, state: string): Promise<Wea
   const location = await locateMunicipality(municipality, state);
   const params = new URLSearchParams({
     latitude: String(location.latitude), longitude: String(location.longitude),
-    current: "temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,is_day",
-    daily: "temperature_2m_min,temperature_2m_max,precipitation_probability_max,sunrise,sunset",
-    timezone: "auto", forecast_days: "1",
+    current: "temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m,is_day",
+    daily: "weather_code,temperature_2m_min,temperature_2m_max,precipitation_probability_max,precipitation_sum,et0_fao_evapotranspiration,wind_speed_10m_max,wind_direction_10m_dominant,sunrise,sunset",
+    timezone: "auto", forecast_days: "7", past_days: "7",
   });
   const data = await fetchJson<ForecastResponse>(`https://api.open-meteo.com/v1/forecast?${params}`);
   if (!data.current || !data.daily) throw new Error("O serviço de clima não retornou as condições atuais.");
   const now = new Date().toISOString();
+  const dates = data.daily.time ?? [];
+  const today = (data.current.time ?? now).slice(0, 10);
+  const todayIndex = Math.max(0, dates.indexOf(today));
+  const forecast: WeatherDay[] = dates.slice(todayIndex, todayIndex + 7).map((date, offset) => {
+    const index = todayIndex + offset;
+    return { date, minimum: finite(data.daily!.temperature_2m_min?.[index], "a mínima"), maximum: finite(data.daily!.temperature_2m_max?.[index], "a máxima"), rainChance: finite(data.daily!.precipitation_probability_max?.[index] ?? 0, "a chance de chuva"), precipitation: finite(data.daily!.precipitation_sum?.[index] ?? 0, "a precipitação"), et0: finite(data.daily!.et0_fao_evapotranspiration?.[index] ?? 0, "a evapotranspiração"), windSpeed: finite(data.daily!.wind_speed_10m_max?.[index] ?? 0, "o vento"), windDirection: finite(data.daily!.wind_direction_10m_dominant?.[index] ?? 0, "a direção do vento"), weatherCode: finite(data.daily!.weather_code?.[index] ?? 0, "a condição") };
+  });
+  const recentRain = (data.daily.precipitation_sum ?? []).slice(0, todayIndex).map(Number).filter(Number.isFinite);
+  let daysWithoutRain: number | null = recentRain.length ? 0 : null;
+  if (recentRain.length) for (let index = recentRain.length - 1; index >= 0 && recentRain[index] < 1; index -= 1) daysWithoutRain = (daysWithoutRain ?? 0) + 1;
   return {
     municipality, state, latitude: location.latitude, longitude: location.longitude,
     temperature: finite(data.current.temperature_2m, "a temperatura"),
@@ -105,12 +123,18 @@ async function requestForecast(municipality: string, state: string): Promise<Wea
     humidity: finite(data.current.relative_humidity_2m, "a umidade"),
     precipitation: finite(data.current.precipitation, "a precipitação"),
     windSpeed: finite(data.current.wind_speed_10m, "o vento"),
+    windDirection: finite(data.current.wind_direction_10m ?? 0, "a direção do vento"),
     weatherCode: finite(data.current.weather_code, "a condição"),
     isDay: finite(data.current.is_day, "o período") === 1,
-    minimumTemperature: finite(data.daily.temperature_2m_min?.[0], "a mínima"),
-    maximumTemperature: finite(data.daily.temperature_2m_max?.[0], "a máxima"),
-    rainChance: finite(data.daily.precipitation_probability_max?.[0] ?? 0, "a chance de chuva"),
-    sunrise: data.daily.sunrise?.[0], sunset: data.daily.sunset?.[0], observedAt: data.current.time ?? now, fetchedAt: now, stale: false,
+    minimumTemperature: forecast[0]?.minimum ?? finite(data.daily.temperature_2m_min?.[todayIndex], "a mínima"),
+    maximumTemperature: forecast[0]?.maximum ?? finite(data.daily.temperature_2m_max?.[todayIndex], "a máxima"),
+    rainChance: forecast[0]?.rainChance ?? finite(data.daily.precipitation_probability_max?.[todayIndex] ?? 0, "a chance de chuva"),
+    forecast,
+    recentPrecipitation: recentRain.reduce((sum, value) => sum + value, 0),
+    forecastPrecipitation: forecast.reduce((sum, day) => sum + day.precipitation, 0),
+    forecastEt0: forecast.reduce((sum, day) => sum + day.et0, 0),
+    daysWithoutRain,
+    sunrise: data.daily.sunrise?.[todayIndex], sunset: data.daily.sunset?.[todayIndex], observedAt: data.current.time ?? now, fetchedAt: now, stale: false,
   };
 }
 

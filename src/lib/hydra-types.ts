@@ -12,6 +12,7 @@ export type AppRoute =
   | "history"
   | "nfc"
   | "notifications"
+  | "climate"
   | "plus"
   | "production"
   | "admin";

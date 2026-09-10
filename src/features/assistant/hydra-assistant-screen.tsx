@@ -15,6 +15,9 @@ import {
   Sparkles,
   Trash2,
   TriangleAlert,
+  CloudRain,
+  Droplets,
+  ThermometerSun,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { showAppToast } from "../../components/modal-system";
@@ -22,6 +25,8 @@ import { ScreenHeader } from "../../components/ui";
 import type { HydraAccount } from "../../lib/hydra-types";
 import { downloadPropertyReportPdf } from "../../services/property-report";
 import { supabase } from "../../services/supabase";
+import { animalComfort, waterSituation } from "../../services/climate-science";
+import { loadWeather, type WeatherSnapshot } from "../../services/weather-service";
 
 type Props = { account: HydraAccount; onBack: () => void };
 type AssistantMessage = { id: string; role: "user" | "assistant"; text: string; mode?: "ai" | "local" | "action" };
@@ -33,15 +38,18 @@ type AssistantContext = {
   dataQuality: { score: number; missingProperty: number; missingNfc: number; missingWeight: number; issues: string[] };
   priorities: string[];
   nfcReadCount: number;
+  climate?: { temperature: number; apparentTemperature: number; humidity: number; rainChance: number; precipitation: number; forecastPrecipitation: number; updatedAt: string; comfort: string; water: string; dataKind: "previsão meteorológica e dado atual do modelo" };
 };
 
 const quickQuestions = [
+  { label: "Vai chover hoje?", detail: "Previsão da região", icon: CloudRain },
+  { label: "Está quente para os animais?", detail: "Conforto térmico estimado", icon: ThermometerSun },
+  { label: "Como está a água?", detail: "Chuva, ET₀ e registros", icon: Droplets },
   { label: "O que precisa de atenção hoje?", detail: "Pendências da propriedade", icon: TriangleAlert },
   { label: "Resuma minha propriedade", detail: "Rebanho, tarefas e registros", icon: Sparkles },
   { label: "O que falta cadastrar?", detail: "Campos que ainda estão vazios", icon: Database },
   { label: "Como está meu rebanho?", detail: "NFC, peso e observações", icon: Cow },
   { label: "Quais tarefas estão atrasadas?", detail: "Prazos que já passaram", icon: ClipboardCheck },
-  { label: "Há ocorrências nos monitoramentos?", detail: "Registros para revisar", icon: RadioTower },
 ];
 
 function dateOnly(value: string) {
@@ -53,7 +61,7 @@ function countLabel(count: number, singular: string, plural: string) {
   return `${count} ${count === 1 ? singular : plural}`;
 }
 
-function contextFromAccount(account: HydraAccount): AssistantContext {
+function contextFromAccount(account: HydraAccount, weather: WeatherSnapshot | null): AssistantContext {
   const now = new Date();
   const thirtyDaysAgo = new Date(now);
   thirtyDaysAgo.setDate(now.getDate() - 30);
@@ -106,6 +114,8 @@ function contextFromAccount(account: HydraAccount): AssistantContext {
   if (missingWeight) priorities.push(countLabel(missingWeight, "animal sem peso", "animais sem peso"));
   if (monitoringWithOccurrence) priorities.push(countLabel(monitoringWithOccurrence, "ocorrência registrada", "ocorrências registradas"));
 
+  const comfort = weather ? animalComfort(account, weather) : null;
+  const water = weather ? waterSituation(account, weather) : null;
   return {
     property: {
       name: account.property.name,
@@ -152,6 +162,7 @@ function contextFromAccount(account: HydraAccount): AssistantContext {
     dataQuality: { score: dataQualityScore, missingProperty: missingPropertyFields, missingNfc, missingWeight, issues },
     priorities: priorities.slice(0, 5),
     nfcReadCount: account.nfcReadCount,
+    climate: weather ? { temperature: weather.temperature, apparentTemperature: weather.apparentTemperature, humidity: weather.humidity, rainChance: weather.rainChance, precipitation: weather.precipitation, forecastPrecipitation: weather.forecastPrecipitation, updatedAt: weather.fetchedAt, comfort: comfort!.status, water: water!.status, dataKind: "previsão meteorológica e dado atual do modelo" } : undefined,
   };
 }
 
@@ -163,8 +174,17 @@ function localAnswer(question: string, context: AssistantContext) {
     return "Posso organizar os registros e mostrar quais animais precisam de acompanhamento, mas não faço diagnóstico nem indico medicamentos, doses ou quantidades de alimentação. Para decisões de saúde ou nutrição, confirme com um profissional responsável.";
   }
 
+  if (/por que.*alerta.*calor|alerta.*calor/.test(normalized)) {
+    return context.climate ? `O alerta usa previsão meteorológica e cálculo do Hydra. A sensação térmica está em ${Math.round(context.climate.apparentTemperature)} °C e o conforto dos bovinos ficou como ${context.climate.comfort}. É uma estimativa regional, não um diagnóstico.` : "Ainda não há dados meteorológicos disponíveis para explicar um alerta de calor.";
+  }
+  if (/vai chover|chuva|tempo|clima/.test(normalized)) {
+    return context.climate ? `Previsão meteorológica: ${Math.round(context.climate.rainChance)}% de chance de chuva hoje. O dado atual do modelo indica ${context.climate.precipitation.toFixed(1)} mm neste momento. Última consulta: ${new Date(context.climate.updatedAt).toLocaleString("pt-BR")}.` : "Não consegui consultar o clima agora. Confira se o município e a UF da propriedade estão cadastrados.";
+  }
+  if (/quente|calor|conforto.*animal|estresse.*t[eé]rmico/.test(normalized)) {
+    return context.climate ? `Dado atual do modelo: ${Math.round(context.climate.temperature)} °C, sensação de ${Math.round(context.climate.apparentTemperature)} °C e umidade de ${Math.round(context.climate.humidity)}%. Estimativa do Hydra para conforto dos bovinos: ${context.climate.comfort}. Não é diagnóstico veterinário.` : "Ainda não há dados suficientes para estimar o conforto térmico dos animais.";
+  }
   if (/água|agua|consumo.*agua|fonte.*agua/.test(normalized)) {
-    return "A gestão de água não faz parte da versão atual do Hydra Agro. Posso ajudar com rebanho, NFC, tarefas, setores, equipe e monitoramentos.";
+    return context.climate ? `A situação da água está como ${context.climate.water}. É uma estimativa do Hydra que cruza os registros disponíveis com chuva e evapotranspiração previstas. Abra Clima & Ciência para ver como foi calculado.` : "Não há dados suficientes para calcular a situação da água. Cadastre a localização, uma fonte e pelo menos um registro de água.";
   }
 
   if (/falta cadastrar|dados incomplet|qualidade|cadastro/.test(normalized)) {
@@ -195,7 +215,13 @@ function localAnswer(question: string, context: AssistantContext) {
 }
 
 export function HydraAssistantScreen({ account, onBack }: Props) {
-  const context = useMemo(() => contextFromAccount(account), [account]);
+  const [weather, setWeather] = useState<WeatherSnapshot | null>(null);
+  useEffect(() => {
+    let active = true;
+    if (account.property.municipality && account.property.state) void loadWeather(account.property.municipality, account.property.state).then(value => { if (active) setWeather(value); }).catch(() => undefined);
+    return () => { active = false; };
+  }, [account.property.municipality, account.property.state]);
+  const context = useMemo(() => contextFromAccount(account, weather), [account, weather]);
   const storageKey = `hydra.assistant.chat.${account.id}`;
   const [question, setQuestion] = useState("");
   const [busy, setBusy] = useState(false);
@@ -367,7 +393,7 @@ export function HydraAssistantScreen({ account, onBack }: Props) {
         </div>
 
         <form className="assistant-composer" onSubmit={submit}>
-          <div className="assistant-composer-field"><textarea value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Pergunte sobre rebanho, NFC, tarefas, setores ou monitoramentos…" maxLength={600} rows={2} /><small>{question.length}/600</small></div>
+          <div className="assistant-composer-field"><textarea value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Pergunte sobre clima, água, animais, tarefas ou setores…" maxLength={600} rows={2} /><small>{question.length}/600</small></div>
           <button type="submit" disabled={busy || !question.trim()} aria-label="Enviar pergunta"><Send size={19} /></button>
         </form>
       </section>

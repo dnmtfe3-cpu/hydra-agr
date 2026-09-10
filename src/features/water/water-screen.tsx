@@ -20,6 +20,7 @@ import {
 import { ConfirmDialog, EmptyState, Field, LoadingButton, Modal, ScreenHeader, SectionHeader, Toggle } from "../../components/ui";
 import { showAppToast } from "../../components/modal-system";
 import { makeId, type HydraAccount, type UpdateAccount, type WaterRecord, type WaterSource } from "../../lib/hydra-types";
+import { WaterScienceCard } from "../climate/water-science-card";
 
 type Props = {
   account: HydraAccount;
@@ -196,6 +197,7 @@ export function WaterScreen({ account, updateAccount, createRecordRequest, onReq
         subtitle="Registre apenas leituras reais da propriedade."
         action={<button className="icon-button accent" onClick={openSourceForm} aria-label="Adicionar fonte"><Plus size={21} /></button>}
       />
+      <WaterScienceCard account={account} />
 
       <section className="water-overview">
         <div className="water-total">

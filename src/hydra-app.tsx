@@ -32,6 +32,7 @@ const NotificationsScreen = lazy(() => import("./features/notifications/notifica
 const PlusScreen = lazy(() => import("./features/premium/plus-screen").then((module) => ({ default: module.PlusScreen })));
 const FamilyFarmingScreen = lazy(() => import("./features/family-farming/family-farming-screen").then((module) => ({ default: module.FamilyFarmingScreen })));
 const AdminScreen = lazy(() => import("./features/admin/admin-screen").then((module) => ({ default: module.AdminScreen })));
+const ClimateScienceScreen = lazy(() => import("./features/climate/climate-science-screen").then((module) => ({ default: module.ClimateScienceScreen })));
 
 type NavTab = { id: AppRoute; label: string; icon: typeof Home };
 
@@ -363,6 +364,7 @@ export default function HydraApp() {
       case "nfc": return <NfcScreen account={account} updateAccount={store.updateAccount} onBack={goBack} initialAnimalId={nfcAnimalId} onRealRead={store.registerNfcRead} onFound={(animal) => { if (!canOpenAnimalManagement) return; setAnimalToOpen(animal.id); navigate("herd"); }} />;
       case "production": return <FamilyFarmingScreen account={account} onBack={goBack} />;
       case "notifications": return <NotificationsScreen account={account} updateAccount={store.updateAccount} onBack={goBack} />;
+      case "climate": return <ClimateScienceScreen account={account} onBack={goBack} navigate={navigate} />;
       case "plus": return <PlusScreen account={account} updateAccount={store.updateAccount} onBack={goBack} />;
       case "admin": return ["moderator", "admin", "owner"].includes(account.role) ? <AdminScreen account={account} onBack={goBack} /> : isStaff ? <StaffHomeScreen account={account} announcements={store.announcements} navigate={navigate} /> : <HomeScreen account={account} announcements={store.announcements} navigate={navigate} onQuickAction={openQuick} />;
       default: return null;
