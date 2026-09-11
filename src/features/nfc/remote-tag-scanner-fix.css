@@ -1,4 +1,4 @@
-/* Correcoes finais do leitor Hydra Tag: camera no topo, sem sobreposicao da navegacao. */
+/* NFC/RFID é a ação principal. Câmera, QR e Hydra ID são alternativas de identificação. */
 body.hydra-distance-scanner-open {
   overflow: hidden !important;
   overscroll-behavior: none !important;
@@ -7,6 +7,142 @@ body.hydra-distance-scanner-open {
 body.hydra-distance-scanner-open .bottom-nav {
   visibility: hidden !important;
   pointer-events: none !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .nfc-hero {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-height: 220px !important;
+  margin: 10px 0 12px !important;
+  padding: 22px 18px !important;
+  border: 1px solid rgba(23, 76, 54, .16) !important;
+  border-radius: 24px !important;
+  background: linear-gradient(145deg, #edf7f1 0%, #ffffff 72%) !important;
+  box-shadow: 0 14px 34px rgba(31, 66, 51, .09) !important;
+  text-align: center !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .nfc-hero .nfc-waves {
+  width: 86px !important;
+  height: 86px !important;
+  min-width: 86px !important;
+  margin: 0 0 3px !important;
+  border-radius: 50% !important;
+  background: #dfeee5 !important;
+  color: #174c36 !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .nfc-hero .nfc-waves > span {
+  display: block !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .nfc-hero .nfc-waves > svg {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .nfc-hero h2 {
+  margin: 0 !important;
+  color: #173f2f !important;
+  font-size: 19px !important;
+  line-height: 1.18 !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .nfc-hero p {
+  max-width: 34ch !important;
+  margin: 0 !important;
+  color: #65766d !important;
+  font-size: 11.5px !important;
+  line-height: 1.4 !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .nfc-hero .nfc-native-read-button {
+  width: 100% !important;
+  min-height: 52px !important;
+  margin: 5px 0 0 !important;
+  padding: 0 16px !important;
+  border-radius: 15px !important;
+  background: linear-gradient(145deg, #1f6247, #174c36) !important;
+  color: #fff !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  box-shadow: 0 9px 20px rgba(23, 76, 54, .16) !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .nfc-hero > small {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  color: #718078 !important;
+  font-size: 9.5px !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .distance-id-runtime-host {
+  margin: 0 0 12px !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .distance-id-card {
+  padding: 13px !important;
+  border: 1px solid rgba(23, 76, 54, .09) !important;
+  border-radius: 17px !important;
+  background: #f8faf9 !important;
+  box-shadow: none !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .distance-id-icon {
+  width: 40px !important;
+  height: 40px !important;
+  flex-basis: 40px !important;
+  border-radius: 12px !important;
+  background: #e9f2ed !important;
+  color: #174c36 !important;
+  box-shadow: none !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .distance-id-copy small {
+  color: #7a8981 !important;
+  font-size: 8px !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .distance-id-copy strong {
+  color: #294b3a !important;
+  font-size: 13px !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .distance-id-copy p {
+  color: #75847c !important;
+  font-size: 9.5px !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .distance-id-actions {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 7px !important;
+  margin-top: 10px !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .distance-action-primary,
+body:not(.hydra-easy-mode) .nfc-screen .distance-action:not(.distance-action-primary) {
+  grid-column: auto !important;
+  min-height: 48px !important;
+  padding: 9px 10px !important;
+  border: 1px solid rgba(23, 76, 54, .09) !important;
+  border-radius: 13px !important;
+  background: #fff !important;
+  color: #294b3a !important;
+  box-shadow: none !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .distance-action-primary small {
+  color: #7a8981 !important;
+}
+
+body:not(.hydra-easy-mode) .nfc-screen .distance-id-safety {
+  margin-top: 8px !important;
+  padding: 8px 8px 0 !important;
+  font-size: 8.5px !important;
 }
 
 .distance-scanner-layer {
@@ -31,11 +167,6 @@ body.hydra-distance-scanner-open .bottom-nav {
 
 .distance-camera-wrap {
   max-height: min(55dvh, 520px) !important;
-}
-
-.distance-id-runtime-host {
-  margin-top: 8px !important;
-  margin-bottom: 12px !important;
 }
 
 .nfc-capability-alert {
@@ -97,6 +228,20 @@ body.hydra-distance-scanner-open .bottom-nav {
   color: #f1c7a4;
 }
 
+.theme-dark body:not(.hydra-easy-mode) .nfc-screen .nfc-hero {
+  border-color: rgba(255,255,255,.08) !important;
+  background: linear-gradient(145deg, #17392c, #102d23) !important;
+}
+
+.theme-dark body:not(.hydra-easy-mode) .nfc-screen .nfc-hero h2 {
+  color: #eef6f1 !important;
+}
+
+.theme-dark body:not(.hydra-easy-mode) .nfc-screen .nfc-hero p,
+.theme-dark body:not(.hydra-easy-mode) .nfc-screen .nfc-hero > small {
+  color: #afbeb6 !important;
+}
+
 @media (max-width: 699px) {
   .distance-scanner-layer {
     padding-top: max(4px, env(safe-area-inset-top)) !important;
@@ -118,5 +263,16 @@ body.hydra-distance-scanner-open .bottom-nav {
 
   .nfc-capability-alert {
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 390px) {
+  body:not(.hydra-easy-mode) .nfc-screen .nfc-hero {
+    min-height: 205px !important;
+    padding: 18px 14px !important;
+  }
+
+  body:not(.hydra-easy-mode) .nfc-screen .distance-id-actions {
+    grid-template-columns: 1fr !important;
   }
 }
