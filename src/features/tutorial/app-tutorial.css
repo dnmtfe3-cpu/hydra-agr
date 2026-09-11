@@ -24,10 +24,10 @@
 
 .app-tutorial-card {
   position: fixed;
-  left: 16px;
-  right: 16px;
+  left: max(14px, env(safe-area-inset-left));
+  right: max(14px, env(safe-area-inset-right));
   z-index: 2;
-  width: min(430px, calc(100vw - 32px));
+  width: min(430px, calc(100vw - 28px));
   margin-inline: auto;
   padding: 18px;
   border: 1px solid rgba(23, 76, 54, 0.12);
