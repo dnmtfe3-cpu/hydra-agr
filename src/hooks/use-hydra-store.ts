@@ -48,6 +48,16 @@ function friendlyError(error: unknown) {
   return message || "Não foi possível concluir a operação.";
 }
 
+function isPermanentSyncFailure(error: unknown) {
+  const normalized = (error instanceof Error ? error.message : String(error)).toLowerCase();
+  return normalized.includes("row-level security")
+    || normalized.includes("permission denied")
+    || normalized.includes("not authorized")
+    || normalized.includes("unauthorized")
+    || normalized.includes("violates")
+    || normalized.includes("constraint");
+}
+
 async function readCachedAccount(userId: string) {
   const { value } = await Preferences.get({ key: accountCacheKey(userId) });
   if (!value) return null;
@@ -178,10 +188,26 @@ export function useHydraStore() {
     if (!user || !local || local.bannedAt) return;
     const pendingValue = (await Preferences.get({ key: accountPendingKey(user.id) })).value;
     if (!pendingValue) {
-      await refreshPublicContent();
+      try {
+        const network = await Network.getStatus();
+        if (network.connected) {
+          setSyncStatus("saved");
+          setLastError("");
+          await refreshPublicContent();
+        } else {
+          setSyncStatus("offline");
+        }
+      } catch {
+        await refreshPublicContent();
+      }
       return;
     }
     try {
+      const network = await Network.getStatus();
+      if (!network.connected) {
+        setSyncStatus("offline");
+        return;
+      }
       setSyncStatus("saving");
       const remote = await loadAccount(user);
       if (remote.bannedAt) { applyAccount(remote); await Preferences.remove({ key: accountPendingKey(user.id) }); await cacheAccount(remote); setSyncStatus("saved"); return; }
@@ -191,10 +217,11 @@ export function useHydraStore() {
       setLastError("");
       await refreshPublicContent();
     } catch (error) {
-      setSyncStatus(navigator.onLine ? "error" : "offline");
+      const network = await Network.getStatus().catch(() => ({ connected: navigator.onLine }));
+      setSyncStatus(network.connected ? "error" : "offline");
       setLastError(friendlyError(error));
     }
-  }, [refreshPublicContent]);
+  }, [applyAccount, refreshPublicContent]);
 
   useEffect(() => {
     let active = true;
@@ -226,6 +253,10 @@ export function useHydraStore() {
       }, 0);
     });
 
+    void Network.getStatus().then((status) => {
+      if (!status.connected && accountRef.current) setSyncStatus("offline");
+    }).catch(() => undefined);
+
     let networkHandle: { remove: () => Promise<void> } | undefined;
     void Network.addListener("networkStatusChange", (status) => {
       if (status.connected) void retrySync();
@@ -238,6 +269,18 @@ export function useHydraStore() {
       void networkHandle?.remove();
     };
   }, [applyAccount, loadUser, retrySync]);
+
+  useEffect(() => {
+    function syncWhenVisible() {
+      if (document.visibilityState === "visible" && accountRef.current) void retrySync();
+    }
+    document.addEventListener("visibilitychange", syncWhenVisible);
+    window.addEventListener("focus", syncWhenVisible);
+    return () => {
+      document.removeEventListener("visibilitychange", syncWhenVisible);
+      window.removeEventListener("focus", syncWhenVisible);
+    };
+  }, [retrySync]);
 
   useEffect(() => {
     const userId = account?.id;
@@ -334,7 +377,7 @@ export function useHydraStore() {
       subscription: previous.subscription,
     };
     applyAccount(next);
-    setSyncStatus("saving");
+    setSyncStatus(navigator.onLine ? "saving" : "offline");
     const serializedNext = JSON.stringify(next);
     const localPersistence = Promise.all([
       cacheAccount(next),
@@ -345,25 +388,26 @@ export function useHydraStore() {
       .catch(() => undefined)
       .then(async () => {
         await localPersistence;
+        const network = await Network.getStatus().catch(() => ({ connected: navigator.onLine }));
+        if (!network.connected) {
+          setSyncStatus("offline");
+          return;
+        }
         await syncAccountDelta(previous, next);
         setSyncStatus(await finishPendingSync(next.id, serializedNext, next) ? "saved" : "saving");
         setLastError("");
       });
 
-    syncQueue.current = syncOperation.catch((error) => {
-        setSyncStatus(navigator.onLine ? "error" : "offline");
-        setLastError(friendlyError(error));
-      });
+    syncQueue.current = syncOperation.catch(async (error) => {
+      const network = await Network.getStatus().catch(() => ({ connected: navigator.onLine }));
+      setSyncStatus(network.connected ? "error" : "offline");
+      setLastError(friendlyError(error));
+    });
 
     if (!options.requireRemote) return syncQueue.current;
-    return syncOperation.catch(async (error) => {
-      if (accountRef.current === next) applyAccount(previous);
-      const pending = await Preferences.get({ key: accountPendingKey(next.id) });
-      if (pending.value === serializedNext) {
-        await Preferences.remove({ key: accountPendingKey(next.id) });
-        await cacheAccount(previous);
-      }
-      throw new Error(friendlyError(error));
+    return syncOperation.catch((error) => {
+      if (isPermanentSyncFailure(error)) throw new Error(friendlyError(error));
+      // Em falhas transitórias a alteração permanece no aparelho e será reenviada.
     });
   }, [applyAccount]);
 
