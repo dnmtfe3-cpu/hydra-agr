@@ -7,12 +7,9 @@ import {
   CalendarDays,
   ChevronRight,
   ClipboardCheck,
-  Droplets,
   FileCheck2,
   GraduationCap,
   Info,
-  MapPin,
-  Megaphone,
   Search,
   ShieldCheck,
   Store,
@@ -30,119 +27,115 @@ type ServiceGuide = {
   title: string;
   subtitle: string;
   category: Exclude<ServiceCategory, "Todos">;
-  noticeKind: string;
   icon: LucideIcon;
   tone: "green" | "blue" | "orange";
-  when: string[];
+  usefulFor: string;
+  purpose: string;
   prepare: string[];
-  verify: string[];
+  check: string[];
 };
 
 type Props = {
   account: HydraAccount;
-  onOpenWater: () => void;
-  onOpenAnimals: () => void;
-  onOpenOccurrences: () => void;
   onOpenNotices: () => void;
-  onCreateNotice: (kind: string) => void;
 };
 
 const serviceGuides: ServiceGuide[] = [
   {
     id: "assistencia",
     title: "Assistência técnica",
-    subtitle: "Orientação para produção, manejo, solo, pastagem e organização da propriedade.",
+    subtitle: "Ajuda para organizar dúvidas de manejo, produção, solo, pastagem e estrutura.",
     category: "Produção",
-    noticeKind: "Produção",
     icon: Wrench,
     tone: "green",
-    when: ["Quando houver dúvida técnica que afete produtividade, manejo ou organização.", "Antes de fazer mudanças importantes em estrutura, alimentação, pastagem ou rotina produtiva."],
-    prepare: ["Fotos e registros do problema.", "Área ou setor envolvido.", "Histórico recente e objetivo que você quer alcançar."],
-    verify: ["Confira quem presta o atendimento e qual é a área de atuação.", "Diferencie orientação técnica de propaganda de produto.", "Registre no Hydra Agro o que foi recomendado e o que realmente foi feito."],
+    usefulFor: "Quando um problema da propriedade precisa de orientação técnica antes de virar gasto ou perda.",
+    purpose: "O Hydra ajuda você a chegar ao atendimento com o problema melhor descrito: setor, histórico, fotos e objetivo. Isso reduz informação solta e facilita explicar a situação.",
+    prepare: ["Fotos e registros recentes.", "Setor ou área onde o problema acontece.", "O que mudou e há quanto tempo.", "Qual resultado você quer alcançar."],
+    check: ["Quem presta o atendimento e qual é a especialidade.", "Se a orientação é técnica ou divulgação comercial.", "O que foi recomendado e o que realmente foi executado."],
   },
   {
     id: "cursos",
     title: "Cursos e capacitações",
-    subtitle: "Treinamentos, oficinas, dias de campo e conteúdos para aprender novas práticas.",
+    subtitle: "Oficinas, dias de campo, treinamentos e oportunidades de aprendizagem.",
     category: "Capacitação",
-    noticeKind: "Curso",
     icon: GraduationCap,
     tone: "blue",
-    when: ["Para aprender uma prática nova ou melhorar uma atividade que já existe.", "Quando surgir curso presencial, remoto, oficina ou dia de campo na região."],
-    prepare: ["Tema que você quer aprender.", "Disponibilidade de data e horário.", "Requisitos de idade, inscrição e documentos, quando existirem."],
-    verify: ["Veja quem organiza e onde a informação foi publicada.", "Confirme data, local, custo e exigências antes de sair de casa.", "Não trate certificado como garantia de qualidade sem verificar o conteúdo."],
+    usefulFor: "Quando você quer aprender uma prática nova ou melhorar uma atividade que já faz.",
+    purpose: "Centralizar informações úteis de curso evita depender de mensagens espalhadas. O produtor consegue conferir tema, local, data, responsável e exigências antes de se deslocar.",
+    prepare: ["Tema que você quer aprender.", "Data e horário disponíveis.", "Requisitos de idade ou inscrição.", "Documentos pedidos pela organização, se houver."],
+    check: ["Quem organiza o curso.", "Data, local e custo confirmados.", "Se existe inscrição oficial ou limite de vagas."],
   },
   {
     id: "eventos",
     title: "Feiras e eventos rurais",
-    subtitle: "Feiras, exposições, encontros, reuniões e atividades abertas na região.",
+    subtitle: "Feiras, exposições, reuniões, encontros e dias de campo da região.",
     category: "Eventos",
-    noticeKind: "Evento",
     icon: CalendarDays,
     tone: "orange",
-    when: ["Para acompanhar eventos que possam ajudar produção, comercialização ou contato entre produtores.", "Para divulgar uma atividade comunitária com local, data e responsável identificados."],
-    prepare: ["Data e horário confirmados.", "Local ou ponto de referência público.", "Nome de quem organiza e forma segura de confirmar a informação."],
-    verify: ["Evite publicar endereço particular sem autorização.", "Atualize o aviso se houver mudança ou cancelamento.", "Não marque evento como oficial se a entidade responsável não confirmou isso."],
+    usefulFor: "Para acompanhar atividades que possam ajudar na produção, comercialização ou contato entre produtores.",
+    purpose: "Reunir os dados essenciais de cada evento em um lugar simples: quando, onde, quem organiza e para quem é destinado.",
+    prepare: ["Data e horário.", "Local ou ponto de referência público.", "Nome de quem organiza.", "Se precisa de inscrição prévia."],
+    check: ["Se houve mudança de horário ou cancelamento.", "Se a organização realmente confirmou o evento.", "Evite publicar endereço particular sem autorização."],
   },
   {
     id: "manejo",
     title: "Vacinação e manejo animal",
-    subtitle: "Organização de campanhas, manejo preventivo e cuidados do rebanho.",
+    subtitle: "Organização de campanhas, manejo preventivo e registros do rebanho.",
     category: "Animais",
-    noticeKind: "Animais",
     icon: Cow,
     tone: "green",
-    when: ["Para lembrar ou divulgar ações de manejo e campanhas confirmadas.", "Quando o produtor precisar organizar registros de aplicação, lote e data."],
-    prepare: ["Identificação dos animais ou lotes.", "Histórico sanitário disponível.", "Informação confirmada sobre campanha ou atendimento."],
-    verify: ["Orientações de saúde animal devem vir de profissional ou fonte competente.", "O Hydra Agro organiza informação; ele não substitui avaliação veterinária.", "Não publique dados privados da propriedade no aviso comunitário."],
+    usefulFor: "Para organizar lotes, datas, histórico e informações confirmadas de campanhas ou atendimentos.",
+    purpose: "O Hydra pode reunir os registros do rebanho e facilitar a preparação antes de um atendimento ou ação de manejo.",
+    prepare: ["Identificação dos animais ou lotes.", "Histórico sanitário disponível.", "Datas de manejos anteriores.", "Informação confirmada sobre campanha ou atendimento."],
+    check: ["Orientações de saúde animal devem vir de profissional ou fonte competente.", "O app não substitui avaliação veterinária.", "Dados privados da propriedade não devem ir para avisos públicos."],
   },
   {
     id: "associacoes",
     title: "Associações e cooperativas",
-    subtitle: "Organização coletiva, reuniões, serviços, compras e iniciativas da comunidade.",
+    subtitle: "Reuniões, serviços, compras coletivas e iniciativas da comunidade rural.",
     category: "Organização",
-    noticeKind: "Reunião",
     icon: UsersRound,
     tone: "blue",
-    when: ["Para encontrar ou divulgar grupos rurais identificados na região.", "Quando houver reunião, assembleia, ação coletiva ou serviço para associados."],
-    prepare: ["Nome completo da organização.", "Objetivo do encontro ou serviço.", "Regras de participação, quando houver."],
-    verify: ["Confirme se a publicação veio da própria organização ou de responsável identificado.", "Não presuma parceria com o Hydra Agro.", "Contribuições, taxas e compromissos devem ser verificados diretamente com a organização."],
+    usefulFor: "Quando o produtor precisa acompanhar uma organização coletiva da região.",
+    purpose: "Organizar informações sobre reuniões, serviços e ações coletivas sem tratar nenhuma entidade como parceira oficial sem autorização.",
+    prepare: ["Nome completo da organização.", "Objetivo do encontro ou serviço.", "Data, local e regras de participação."],
+    check: ["Se a informação veio da própria organização ou de responsável identificado.", "Taxas e condições diretamente com a organização.", "Se houve atualização depois da publicação."],
   },
   {
     id: "oportunidades",
     title: "Oportunidades rurais",
-    subtitle: "Chamadas, vagas, compras coletivas, iniciativas e oportunidades úteis ao produtor.",
+    subtitle: "Chamadas, vagas, iniciativas, compras coletivas e oportunidades úteis.",
     category: "Oportunidades",
-    noticeKind: "Oportunidade",
     icon: ClipboardCheck,
     tone: "orange",
-    when: ["Quando houver uma oportunidade concreta e com origem identificável.", "Para reunir informações que normalmente ficam espalhadas em grupos e conversas."],
-    prepare: ["Prazo, público e requisitos.", "Responsável pela oportunidade.", "Forma oficial ou segura de obter mais informações."],
-    verify: ["Desconfie de cobrança antecipada sem origem clara.", "Não publique documentos pessoais, senhas ou dados bancários no aviso.", "Confirme condições antes de assumir qualquer compromisso."],
+    usefulFor: "Para encontrar uma oportunidade concreta sem depender só de grupos de mensagem.",
+    purpose: "Mostrar prazo, público, requisitos e origem da oportunidade de forma curta e comparável.",
+    prepare: ["Prazo de participação.", "Quem pode participar.", "Requisitos principais.", "Responsável ou fonte da oportunidade."],
+    check: ["Desconfie de cobrança antecipada sem origem clara.", "Nunca publique senha, documento ou dado bancário.", "Confirme as condições antes de assumir compromisso."],
   },
   {
     id: "documentos",
     title: "Documentação e regularização",
-    subtitle: "Checklist para organizar documentos da propriedade e demandas administrativas.",
+    subtitle: "Checklist para chegar mais preparado a cadastros e atendimentos administrativos.",
     category: "Organização",
-    noticeKind: "Outro",
     icon: FileCheck2,
     tone: "green",
-    when: ["Quando precisar separar documentos para atendimento, cadastro ou atualização.", "Antes de deslocamentos para resolver uma demanda administrativa."],
-    prepare: ["Liste o objetivo do atendimento antes de separar documentos.", "Leve apenas o necessário e mantenha cópias organizadas.", "Confirme previamente quais documentos são exigidos pela fonte responsável."],
-    verify: ["Exigências e prazos podem mudar; confirme na fonte responsável.", "Não envie documentos pessoais em avisos públicos.", "O Hydra Agro não valida documento nem substitui órgão responsável."],
+    usefulFor: "Antes de resolver um cadastro, atualização ou atendimento que exige documentação.",
+    purpose: "Ajudar o produtor a organizar o que precisa conferir antes de sair da propriedade, sem armazenar documentos pessoais em área pública.",
+    prepare: ["Objetivo do atendimento.", "Lista de documentos exigidos pela fonte responsável.", "Cópias ou versões digitais organizadas, quando necessário."],
+    check: ["Exigências e prazos podem mudar.", "Confirme sempre na fonte responsável.", "O Hydra não valida documentos nem substitui o órgão competente."],
   },
   {
     id: "comercializacao",
     title: "Comercialização e produção",
-    subtitle: "Informações comunitárias sobre produção, entrega, organização e canais de venda.",
+    subtitle: "Organização de produção, entrega, disponibilidade e informações de mercado local.",
     category: "Produção",
-    noticeKind: "Produção",
     icon: Store,
     tone: "blue",
-    when: ["Para divulgar informação útil sobre produção ou organização comercial da região.", "Quando produtores precisarem combinar logística, entrega ou disponibilidade sem expor dados privados."],
-    prepare: ["Produto ou atividade.", "Período ou disponibilidade.", "Região de referência sem endereço particular."],
-    verify: ["Negociações financeiras devem acontecer fora do aviso público.", "Evite promessas de preço ou garantia que não estejam confirmadas.", "Mantenha o aviso informativo e objetivo."],
+    usefulFor: "Quando produtores precisam compartilhar informações de produção sem expor dados privados.",
+    purpose: "Permitir avisos objetivos sobre produto, período, disponibilidade e região, mantendo negociação financeira fora da área pública.",
+    prepare: ["Produto ou atividade.", "Quantidade ou disponibilidade quando fizer sentido.", "Período e região de referência."],
+    check: ["Não publique dados bancários.", "Não prometa preço ou condição que não esteja confirmada.", "Mantenha o aviso informativo e objetivo."],
   },
 ];
 
@@ -158,7 +151,7 @@ function cleanPostText(post: CommunityPost) {
   return post.text.replace(/^\[[^\]]+\]\s*/, "");
 }
 
-export function CommunityServicesPanel({ account, onOpenWater, onOpenAnimals, onOpenOccurrences, onOpenNotices, onCreateNotice }: Props) {
+export function CommunityServicesPanel({ account, onOpenNotices }: Props) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<ServiceCategory>("Todos");
   const [selected, setSelected] = useState<ServiceGuide | null>(null);
@@ -168,7 +161,7 @@ export function CommunityServicesPanel({ account, onOpenWater, onOpenAnimals, on
     return serviceGuides.filter((guide) => {
       if (category !== "Todos" && guide.category !== category) return false;
       if (!normalized) return true;
-      return `${guide.title} ${guide.subtitle} ${guide.category}`.toLocaleLowerCase("pt-BR").includes(normalized);
+      return `${guide.title} ${guide.subtitle} ${guide.category} ${guide.usefulFor}`.toLocaleLowerCase("pt-BR").includes(normalized);
     });
   }, [category, query]);
 
@@ -179,7 +172,7 @@ export function CommunityServicesPanel({ account, onOpenWater, onOpenAnimals, on
       if (!account.property.municipality || !account.property.state) return true;
       return post.municipality === account.property.municipality && post.state === account.property.state;
     });
-    return sameRegion.slice(0, 4);
+    return sameRegion.slice(0, 3);
   }, [account.posts, account.property.municipality, account.property.state]);
 
   return (
@@ -187,62 +180,69 @@ export function CommunityServicesPanel({ account, onOpenWater, onOpenAnimals, on
       <section className="community-rural-hero community-services-hero">
         <div>
           <small>CENTRAL RURAL</small>
-          <h2>Serviços e informações que ajudam no dia a dia</h2>
-          <p>Guias práticos do Hydra e avisos reais publicados pela comunidade, sempre com origem identificada.</p>
-          <div className="community-services-hero-actions">
-            <button className="community-rural-primary" onClick={() => onCreateNotice("Outro")}><Megaphone size={16} /> Publicar informação</button>
-            <button className="community-rural-secondary" onClick={onOpenNotices}>Ver avisos</button>
-          </div>
+          <h2>Informação útil, sem complicar.</h2>
+          <p>Consulte guias práticos e veja informações da sua região. Nada aqui presume parceria oficial com órgão público ou empresa.</p>
         </div>
         <span className="community-rural-hero-icon"><BookOpenCheck size={24} /></span>
       </section>
 
-      <div className="community-service-summary">
-        <div><strong>{serviceGuides.length}</strong><span>guias úteis</span></div>
-        <div><strong>{regionalPosts.length}</strong><span>avisos da região</span></div>
-        <div><strong>{account.property.municipality || "Sua região"}</strong><span>{account.property.state || "localidade"}</span></div>
+      <div className="community-service-context">
+        <div><span>Localidade</span><strong>{[account.property.municipality, account.property.state].filter(Boolean).join("/") || "Não informada"}</strong></div>
+        <div><span>Guias disponíveis</span><strong>{serviceGuides.length}</strong></div>
+        <div><span>Informações recentes</span><strong>{regionalPosts.length}</strong></div>
       </div>
 
-      <div className="community-service-search">
-        <Search size={18} />
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar assistência, curso, evento…" aria-label="Buscar serviços e informações" />
+      <div className="community-service-tools">
+        <label className="community-service-search">
+          <Search size={18} />
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar assunto…" aria-label="Buscar serviços e informações" />
+        </label>
+        <label className="community-service-filter">
+          <span>Categoria</span>
+          <select value={category} onChange={(event) => setCategory(event.target.value as ServiceCategory)}>
+            {serviceCategories.map((item) => <option key={item} value={item}>{item}</option>)}
+          </select>
+        </label>
       </div>
 
-      <div className="community-rural-chips" aria-label="Categorias de serviços">
-        {serviceCategories.map((item) => <button key={item} className={`community-rural-chip ${category === item ? "active" : ""}`} onClick={() => setCategory(item)}>{item}</button>)}
-      </div>
-
-      <div className="community-rural-section-title"><div><small>GUIA HYDRA</small><h3>Encontre o que você precisa</h3></div><span className="community-service-count">{filteredGuides.length}</span></div>
+      <div className="community-rural-section-title"><div><small>GUIAS PRÁTICOS</small><h3>O que você precisa resolver?</h3></div><span className="community-service-count">{filteredGuides.length}</span></div>
 
       {filteredGuides.length ? <div className="community-services-grid">{filteredGuides.map((guide) => {
         const Icon = guide.icon;
-        return <button className={`community-service-card ${guide.tone}`} key={guide.id} onClick={() => setSelected(guide)}><span className="community-service-card-icon"><Icon size={19} /></span><span className="community-service-card-copy"><small>{guide.category}</small><strong>{guide.title}</strong><p>{guide.subtitle}</p><span className="community-service-card-foot"><BadgeCheck size={13} /> Guia informativo do Hydra</span></span><ChevronRight size={17} className="community-service-card-arrow" /></button>;
-      })}</div> : <div className="community-rural-empty"><Search size={22} /><strong>Nenhum guia encontrado</strong><p>Tente outra palavra ou selecione outra categoria.</p></div>}
+        return <button className={`community-service-card ${guide.tone}`} key={guide.id} onClick={() => setSelected(guide)}>
+          <span className="community-service-card-icon"><Icon size={19} /></span>
+          <span className="community-service-card-copy"><small>{guide.category}</small><strong>{guide.title}</strong><p>{guide.subtitle}</p></span>
+          <ChevronRight size={17} className="community-service-card-arrow" />
+        </button>;
+      })}</div> : <div className="community-rural-empty"><Search size={22} /><strong>Nenhum guia encontrado</strong><p>Tente outra palavra ou mude a categoria.</p></div>}
 
-      <div className="community-rural-section-title"><div><small>NA SUA REGIÃO</small><h3>Informações recentes</h3></div><button onClick={onOpenNotices}>Ver todas</button></div>
-      {regionalPosts.length ? <div className="community-service-news">{regionalPosts.map((post) => <button className="community-service-news-card" key={post.id} onClick={onOpenNotices}><span className="community-service-news-icon"><Bell size={16} /></span><span><small>{postCategory(post)} · {post.author}</small><strong>{cleanPostText(post) || "Informação comunitária"}</strong><p>{[post.municipality, post.state].filter(Boolean).join("/") || "Região informada"} · {new Date(post.date).toLocaleDateString("pt-BR")}</p></span><ChevronRight size={16} /></button>)}</div> : <div className="community-rural-empty compact"><Bell size={21} /><strong>Ainda não há informações desse tipo na região</strong><p>Você pode publicar um curso, evento, reunião ou oportunidade com origem identificada.</p><button className="community-rural-secondary" onClick={() => onCreateNotice("Outro")}>Publicar informação</button></div>}
+      <section className="community-service-explain">
+        <span className="community-service-explain-icon"><BadgeCheck size={18} /></span>
+        <div><small>COMO ESSA ÁREA FUNCIONA</small><strong>Guia é orientação. Aviso é informação da comunidade.</strong><p>Os guias ajudam a organizar o que verificar e preparar. Já cursos, eventos e oportunidades publicados por usuários aparecem separados, com autor, região e data.</p></div>
+      </section>
 
-      <div className="community-rural-section-title"><div><small>ATALHOS ÚTEIS</small><h3>Resolver outras necessidades</h3></div></div>
-      <div className="community-service-shortcuts">
-        <button onClick={onOpenWater}><span className="blue"><Droplets size={18} /></span><div><strong>Problema de água</strong><small>Falta, vazamento ou abastecimento</small></div><ChevronRight size={16} /></button>
-        <button onClick={onOpenAnimals}><span><Cow size={18} /></span><div><strong>Animal encontrado</strong><small>Identificação e registro seguro</small></div><ChevronRight size={16} /></button>
-        <button onClick={onOpenOccurrences}><span className="orange"><MapPin size={18} /></span><div><strong>Estrada ou acesso</strong><small>Registrar ocorrência rural</small></div><ChevronRight size={16} /></button>
-      </div>
+      <div className="community-rural-section-title"><div><small>NA SUA REGIÃO</small><h3>Informações recentes</h3></div>{regionalPosts.length > 0 && <button onClick={onOpenNotices}>Ver avisos</button>}</div>
+      {regionalPosts.length ? <div className="community-service-news">{regionalPosts.map((post) => <article className="community-service-news-card" key={post.id}>
+        <span className="community-service-news-icon"><Bell size={16} /></span>
+        <span><small>{postCategory(post)} · {post.author}</small><strong>{cleanPostText(post) || "Informação comunitária"}</strong><p>{[post.municipality, post.state].filter(Boolean).join("/") || "Região informada"} · {new Date(post.date).toLocaleDateString("pt-BR")}</p></span>
+      </article>)}</div> : <div className="community-rural-empty compact"><Bell size={21} /><strong>Nenhuma informação regional publicada ainda</strong><p>Quando houver curso, evento, reunião ou oportunidade identificada, ela aparecerá aqui.</p></div>}
 
       <div className="community-service-trust">
         <span><ShieldCheck size={18} /></span>
-        <div><strong>Informação com origem clara</strong><p>Guias do Hydra são orientativos. Avisos da comunidade mostram autor e região. Nenhuma entidade é tratada como parceira oficial sem autorização e configuração específica.</p></div>
+        <div><strong>Origem e privacidade primeiro</strong><p>Não exibimos documentos, endereço exato ou dados bancários. Informações comunitárias não recebem selo oficial automaticamente.</p></div>
       </div>
 
       <Modal open={Boolean(selected)} onClose={() => setSelected(null)} eyebrow={selected?.category.toUpperCase() || "GUIA RURAL"} title={selected?.title || "Informação"}>
-        {selected && <div className="community-service-detail">
-          <div className={`community-service-detail-head ${selected.tone}`}><span><selected.icon size={22} /></span><div><small>GUIA INFORMATIVO</small><strong>{selected.subtitle}</strong></div></div>
-          <section><h4><Info size={16} /> Quando faz sentido usar</h4>{selected.when.map((item) => <p key={item}>{item}</p>)}</section>
-          <section><h4><ClipboardCheck size={16} /> O que preparar</h4>{selected.prepare.map((item) => <p key={item}>{item}</p>)}</section>
-          <section><h4><ShieldCheck size={16} /> Como verificar a informação</h4>{selected.verify.map((item) => <p key={item}>{item}</p>)}</section>
-          <div className="community-service-detail-note"><BadgeCheck size={17} /><span>Este conteúdo é um guia de organização do Hydra Agro. Ele não representa atendimento, recomendação profissional individual nem comunicação oficial de órgão público.</span></div>
-          <div className="community-rural-actions"><button className="community-rural-primary" onClick={() => { setSelected(null); onCreateNotice(selected.noticeKind); }}><Megaphone size={16} /> Publicar sobre isso</button><button className="community-rural-secondary" onClick={() => setSelected(null)}>Fechar</button></div>
-        </div>}
+        {selected && (() => {
+          const Icon = selected.icon;
+          return <div className="community-service-detail">
+            <div className={`community-service-detail-head ${selected.tone}`}><span><Icon size={22} /></span><div><small>PARA QUE SERVE</small><strong>{selected.purpose}</strong></div></div>
+            <section><h4><Info size={16} /> Quando isso pode ajudar</h4><p>{selected.usefulFor}</p></section>
+            <section><h4><ClipboardCheck size={16} /> O que preparar</h4>{selected.prepare.map((item) => <p key={item}>{item}</p>)}</section>
+            <section><h4><ShieldCheck size={16} /> Antes de confiar na informação</h4>{selected.check.map((item) => <p key={item}>{item}</p>)}</section>
+            <div className="community-service-detail-note"><BadgeCheck size={17} /><span>Conteúdo de organização do Hydra Agro. Não substitui atendimento profissional nem comunicação oficial da entidade responsável.</span></div>
+          </div>;
+        })()}
       </Modal>
     </div>
   );
