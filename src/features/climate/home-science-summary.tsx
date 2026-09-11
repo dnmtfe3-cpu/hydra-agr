@@ -4,7 +4,9 @@ import type { HydraAccount } from "../../lib/hydra-types";
 import { animalComfort, waterSituation } from "../../services/climate-science";
 import { loadWeather, type WeatherSnapshot } from "../../services/weather-service";
 
-export function HomeScienceSummary({ account, onOpen }: { account: HydraAccount; onOpen: () => void }) {
+export type ScienceSummaryView = "climate" | "animals" | "water";
+
+export function HomeScienceSummary({ account, onOpen }: { account: HydraAccount; onOpen: (view: ScienceSummaryView) => void }) {
   const [weather, setWeather] = useState<WeatherSnapshot | null>(null);
   useEffect(() => {
     let active = true;
@@ -12,12 +14,19 @@ export function HomeScienceSummary({ account, onOpen }: { account: HydraAccount;
     void loadWeather(account.property.municipality, account.property.state).then(result => { if (active) setWeather(result); }).catch(() => undefined);
     return () => { active = false; };
   }, [account.property.municipality, account.property.state]);
-  if (!weather) return <section className="home-science-summary" aria-label="Clima"><button onClick={onOpen}><CloudSun size={21} /><span><small>CLIMA</small><strong>Consultar</strong><em>Abrir clima e informações da região</em></span></button></section>;
+
+  if (!weather) {
+    return <section className="home-science-summary" aria-label="Clima">
+      <button onClick={() => onOpen("climate")}><CloudSun size={21} /><span><small>CLIMA</small><strong>Consultar</strong><em>Abrir clima e informações da região</em></span></button>
+    </section>;
+  }
+
   const comfort = animalComfort(account, weather);
   const water = waterSituation(account, weather);
+
   return <section className="home-science-summary" aria-label="Resumo de clima e ciência">
-    <button onClick={onOpen}><CloudSun size={21} /><span><small>CLIMA</small><strong>{Math.round(weather.temperature)} °C</strong><em>{weather.rainChance >= 60 ? "Pode chover hoje" : "Ver previsão"}</em></span></button>
-    <button onClick={onOpen}><ThermometerSun size={21} /><span><small>ANIMAIS</small><strong>{comfort.status}</strong><em>Conforto térmico</em></span></button>
-    <button onClick={onOpen}><Droplets size={21} /><span><small>ÁGUA</small><strong>{water.status}</strong><em>Situação estimada</em></span></button>
+    <button onClick={() => onOpen("climate")}><CloudSun size={21} /><span><small>CLIMA</small><strong>{Math.round(weather.temperature)} °C</strong><em>{weather.rainChance >= 60 ? "Pode chover hoje" : "Ver previsão"}</em></span></button>
+    <button onClick={() => onOpen("animals")}><ThermometerSun size={21} /><span><small>ANIMAIS</small><strong>{comfort.status}</strong><em>Conforto térmico</em></span></button>
+    <button onClick={() => onOpen("water")}><Droplets size={21} /><span><small>ÁGUA</small><strong>{water.status}</strong><em>Situação estimada</em></span></button>
   </section>;
 }
