@@ -17,6 +17,7 @@ import { useHydraStore } from "./hooks/use-hydra-store";
 import type { AppRoute, StaffRole } from "./lib/hydra-types";
 import { handleAuthCallbackUrl, supabase } from "./services/supabase";
 
+const WaterScreen = lazy(() => import("./features/water/water-screen").then((module) => ({ default: module.WaterScreen })));
 const HerdScreen = lazy(() => import("./features/herd/herd-screen").then((module) => ({ default: module.HerdScreen })));
 const MonitorScreen = lazy(() => import("./features/monitor/monitor-screen").then((module) => ({ default: module.MonitorScreen })));
 const ProfileScreen = lazy(() => import("./features/profile/profile-screen").then((module) => ({ default: module.ProfileScreen })));
@@ -198,7 +199,6 @@ export default function HydraApp() {
       setQuickOpen(false);
       return;
     }
-    if (route === "water") setRoute("operations");
     if (route === "admin" && !["moderator", "admin", "owner"].includes(store.account.role)) setRoute("home");
   }, [route, store.account?.id, store.account?.role, store.account?.access.kind, store.account?.access.staffRole]);
 
@@ -276,7 +276,6 @@ export default function HydraApp() {
   }, [store.account?.id, store.account?.animals, store.account?.access.kind, publicAnimal]);
 
   function navigate(next: AppRoute) {
-    if (next === "water") next = "operations";
     if (next === route) return;
     const access = store.account?.access;
     if (access?.kind === "staff" && !staffRouteAllowed(next, access.staffRole)) return;
@@ -351,6 +350,7 @@ export default function HydraApp() {
     }
     switch (route) {
       case "home": return isStaff ? <StaffHomeScreen account={account} announcements={store.announcements} navigate={navigate} /> : <HomeScreen account={account} announcements={store.announcements} navigate={navigate} onQuickAction={openQuick} />;
+      case "water": return <WaterScreen account={account} updateAccount={store.updateAccount} />;
       case "herd": return <HerdScreen account={account} updateAccount={store.updateAccount} openNfc={openNfc} focusAnimalId={animalToOpen} saveAnimalPhoto={store.saveAnimalPhoto} createRequest={quickIntent?.kind === "animal" ? quickIntent.request : undefined} onRequestHandled={() => setQuickIntent(undefined)} />;
       case "monitor": return <MonitorScreen account={account} updateAccount={store.updateAccount} saveMonitoringPhoto={store.saveMonitoringPhoto} createSectorRequest={quickIntent?.kind === "sector" ? quickIntent.request : undefined} onRequestHandled={() => setQuickIntent(undefined)} />;
       case "profile": return isStaff ? <StaffProfileScreen account={account} navigate={navigate} logout={logoutToLogin} /> : <ProfileScreen account={account} links={store.links} updateAccount={store.updateAccount} navigate={navigate} logout={logoutToLogin} saveAvatar={store.saveAvatar} savePropertyCover={store.savePropertyCover} changeCredentials={store.changeCredentials} />;
