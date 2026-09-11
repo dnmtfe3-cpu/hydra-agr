@@ -19,7 +19,6 @@ type Props = {
 export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnimalId, onRealRead }: Props) {
   const canLink = account.access.kind === "owner" || account.access.staffRole === "manager";
   const isWeb = !Capacitor.isNativePlatform();
-  const isIos = Capacitor.getPlatform() === "ios";
   const [mode, setMode] = useState<"locate" | "link">(initialAnimalId && canLink ? "link" : "locate");
   const [code, setCode] = useState("");
   const [animalId, setAnimalId] = useState(initialAnimalId ?? "");
@@ -28,12 +27,25 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
   const [demoOpen, setDemoOpen] = useState(false);
   const [nativeInfo, setNativeInfo] = useState(false);
   const [availability, setAvailability] = useState<NfcAvailability>("web");
+  const [availabilityChecked, setAvailabilityChecked] = useState(isWeb);
   const [scanning, setScanning] = useState(false);
   const [linking, setLinking] = useState(false);
 
   useEffect(() => {
-    void getNfcAvailability().then(setAvailability).catch(() => setAvailability("unsupported"));
+    let active = true;
+    void getNfcAvailability()
+      .then((value) => {
+        if (!active) return;
+        setAvailability(value);
+        setAvailabilityChecked(true);
+      })
+      .catch(() => {
+        if (!active) return;
+        setAvailability("unsupported");
+        setAvailabilityChecked(true);
+      });
     return () => {
+      active = false;
       void stopNfcRead();
     };
   }, []);
@@ -110,18 +122,14 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
   async function startNfcRead() {
     if (isWeb) {
       setAvailability("web");
-      setNativeInfo(true);
-      return;
-    }
-
-    if (isIos) {
-      setAvailability("unsupported");
+      setAvailabilityChecked(true);
       setNativeInfo(true);
       return;
     }
 
     const currentAvailability = await getNfcAvailability().catch(() => "unsupported" as NfcAvailability);
     setAvailability(currentAvailability);
+    setAvailabilityChecked(true);
 
     if (currentAvailability !== "ready") {
       setNativeInfo(true);
@@ -158,17 +166,18 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
     setMessage("");
   }
 
-  const availabilityText = isIos
-    ? "NFC disponível em breve no iOS"
-    : isWeb
-      ? "Leitura NFC disponível no app Android"
+  const availabilityText = isWeb
+    ? "Use QR ou código manual neste dispositivo"
+    : !availabilityChecked
+      ? "Verificando NFC deste aparelho…"
       : availability === "ready"
         ? "NFC pronto para leitura"
         : availability === "disabled"
           ? "NFC desativado no celular"
-          : availability === "unsupported"
-            ? "Este aparelho não oferece NFC compatível"
-            : "Leitura por aproximação disponível no app Android";
+          : "Este celular não oferece NFC compatível";
+
+  const nfcUnavailable = !isWeb && availabilityChecked && availability === "unsupported";
+  const nfcDisabled = !isWeb && availabilityChecked && availability === "disabled";
 
   return (
     <div className="screen page-enter extra-screen nfc-screen">
@@ -178,25 +187,62 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
         subtitle={isWeb
           ? "No computador, localize ou vincule o animal pelo código da identificação."
           : canLink
-            ? "Leia uma tag por aproximação ou informe o código manualmente."
-            : "Abra a ficha do animal pelo código da tag."}
+            ? "Leia por NFC, QR Code ou informe o Hydra ID."
+            : "Abra a ficha do animal por NFC, QR Code ou Hydra ID."}
         onBack={onBack}
       />
 
-      <section className="nfc-desktop-notice" aria-label="Leitura NFC no celular">
+      {isWeb && <section className="nfc-desktop-notice" aria-label="Leitura NFC no celular">
         <span><Smartphone size={26} /></span>
         <div>
           <small>LEITURA POR APROXIMAÇÃO</small>
-          <strong>{isWeb ? "Use o app Android para ler por NFC" : isIos ? "NFC disponível em breve no iOS" : "Use um celular Android com NFC"}</strong>
-          <p>{isWeb ? "No computador não há leitura NFC simulada. Use o código da identificação abaixo ou faça a leitura real em um celular Android com NFC." : isIos ? "Enquanto isso, localize ou vincule o animal digitando o código da identificação." : "Em dispositivos sem leitura NFC compatível, localize o animal pelo código da identificação."}</p>
+          <strong>Use um celular com NFC compatível</strong>
+          <p>Neste dispositivo, use o QR Code ou o código da identificação. A leitura por aproximação só aparece quando o aparelho informa suporte a NFC.</p>
         </div>
-      </section>
+      </section>}
+
+      {nfcUnavailable && <section className="nfc-capability-alert" role="status" aria-live="polite">
+        <AlertCircle size={20} />
+        <div><strong>Este celular não tem NFC compatível</strong><span>Sem problema: use o leitor de QR acima ou digite o Hydra ID.</span></div>
+      </section>}
+
+      {nfcDisabled && <section className="nfc-capability-alert is-disabled" role="status" aria-live="polite">
+        <Nfc size={20} />
+        <div><strong>NFC desativado</strong><span>Ative o NFC do aparelho para usar a leitura por aproximação.</span></div>
+        <button type="button" onClick={() => void openNfcSettings()}><Settings size={15} /> Ativar</button>
+      </section>}
 
       <section className={`nfc-hero ${scanning ? "is-scanning" : ""}`}>
         <div className="nfc-waves"><span /><span /><span />{scanning ? <LoaderCircle size={38} className="spin" /> : <Nfc size={38} />}</div>
-        <h2>{scanning ? "Lendo identificação…" : isWeb ? "Leitura NFC pelo celular" : "Aproxime a tag do celular"}</h2>
-        <p>{isWeb ? "No computador, use o código manual. Para ler a tag por aproximação, abra o Hydra Agro em um Android com NFC." : "Encoste o brinco eletrônico ou a tag na área NFC do aparelho."}</p>
-        <button className="nfc-native-read-button" onClick={() => void startNfcRead()} disabled={scanning}><Radio size={18} /> {scanning ? "Aguardando etiqueta" : isWeb ? "Como usar NFC" : "Iniciar leitura"}</button>
+        <h2>{scanning
+          ? "Lendo identificação…"
+          : isWeb
+            ? "Leitura NFC pelo celular"
+            : !availabilityChecked
+              ? "Verificando NFC do celular…"
+              : availability === "unsupported"
+                ? "Celular sem NFC compatível"
+                : availability === "disabled"
+                  ? "NFC desativado"
+                  : "Aproxime a tag do celular"}</h2>
+        <p>{isWeb
+          ? "Use QR Code ou código manual aqui. Para leitura por aproximação, abra o Hydra Agro em um celular com NFC compatível."
+          : !availabilityChecked
+            ? "O Hydra Agro está verificando se este aparelho possui NFC."
+            : availability === "unsupported"
+              ? "Use o QR Code acima ou digite o Hydra ID para identificar o animal."
+              : availability === "disabled"
+                ? "Ative o NFC nas configurações do aparelho e tente novamente."
+                : "Encoste o brinco eletrônico ou a tag na área NFC do aparelho."}</p>
+        <button className="nfc-native-read-button" onClick={() => void startNfcRead()} disabled={scanning || (!isWeb && !availabilityChecked)}><Radio size={18} /> {scanning
+          ? "Aguardando etiqueta"
+          : isWeb
+            ? "Como usar NFC"
+            : availability === "disabled"
+              ? "Ativar NFC"
+              : availability === "unsupported"
+                ? "Ver alternativas"
+                : "Iniciar leitura"}</button>
         <small><Smartphone size={15} /> {availabilityText}</small>
       </section>
 
@@ -225,7 +271,7 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
             <Field label="Animal">
               <select value={animalId} onChange={(event) => { setAnimalId(event.target.value); setMessage(""); }}>
                 <option value="">Selecione</option>
-                {account.animals.map((animal) => <option key={animal.id} value={animal.id}>{animal.name || animal.identification} · {animal.identification}</option>)}
+                {account.animals.map((animal) => <option key={animal.id} value={animal.name || animal.identification}>{animal.name || animal.identification} · {animal.identification}</option>)}
               </select>
             </Field>
           )}
@@ -248,15 +294,13 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
         <div className="hardware-message">
           <span><Smartphone size={31} /></span>
           <p>{availability === "disabled"
-            ? "O NFC está desativado. Ative-o nas configurações do Android e tente novamente."
-            : isIos
-              ? "O NFC estará disponível em breve no iOS. Enquanto isso, use o código manual."
-              : availability === "web"
-                ? "A leitura por aproximação funciona no app Android. Neste dispositivo, use o código manual."
-                : "Este aparelho não oferece leitura NFC compatível. Use o código manual ou outro celular Android com NFC."}</p>
-          <div className="future-data-list"><div><Nfc size={17} /> Leitura por aproximação no Android</div><div><span className="tiny-shield" /> Código manual em qualquer dispositivo</div></div>
+            ? "O NFC está desativado. Ative-o nas configurações do aparelho e tente novamente."
+            : availability === "web"
+              ? "Este dispositivo não oferece a leitura NFC do aplicativo. Use o QR Code ou o código manual."
+              : "Este celular não oferece leitura NFC compatível. Use o QR Code ou o Hydra ID."}</p>
+          <div className="future-data-list"><div><Nfc size={17} /> Leitura por aproximação em aparelhos compatíveis</div><div><span className="tiny-shield" /> QR Code e Hydra ID continuam disponíveis</div></div>
           {availability === "disabled" && <button className="secondary-button full" onClick={() => void openNfcSettings()}><Settings size={17} /> Abrir configurações</button>}
-          <button className="primary-button full" onClick={() => setNativeInfo(false)}>Usar código manual</button>
+          <button className="primary-button full" onClick={() => setNativeInfo(false)}>Usar QR ou código manual</button>
         </div>
       </Modal>
     </div>
