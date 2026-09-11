@@ -22,9 +22,17 @@ function mountScanner() {
 
   const host = document.createElement("div");
   host.className = "distance-id-runtime-host";
-  const anchor = screen.querySelector<HTMLElement>(".nfc-hero");
-  if (anchor) screen.insertBefore(host, anchor);
-  else screen.appendChild(host);
+
+  // Mantém o fluxo principal do NFC no topo. A identificação à distância entra
+  // logo depois do hero e antes dos controles de localizar/vincular.
+  const segment = screen.querySelector<HTMLElement>(".nfc-segment");
+  if (segment) {
+    screen.insertBefore(host, segment);
+  } else {
+    const hero = screen.querySelector<HTMLElement>(".nfc-hero");
+    if (hero?.nextSibling) screen.insertBefore(host, hero.nextSibling);
+    else screen.appendChild(host);
+  }
 
   mountedHost = host;
   mountedRoot = createRoot(host);
