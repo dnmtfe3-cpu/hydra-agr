@@ -1,0 +1,400 @@
+.water-consumption-panel {
+  margin: 4px 0 18px;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(30, 99, 72, 0.12);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(95, 184, 145, 0.13), transparent 34%),
+    linear-gradient(180deg, #ffffff 0%, #f7faf7 100%);
+  box-shadow: 0 14px 34px rgba(20, 70, 50, 0.07);
+}
+
+.water-consumption-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.water-consumption-heading > div {
+  min-width: 0;
+}
+
+.water-consumption-heading > div > span {
+  color: #3f785f;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.water-consumption-heading h2 {
+  margin: 4px 0 3px;
+  color: #173f30;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.water-consumption-heading p {
+  margin: 0;
+  color: #708178;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.water-consumption-heading-icon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 43px;
+  height: 43px;
+  place-items: center;
+  border-radius: 15px;
+  background: #e7f3ec;
+  color: #1e6449;
+}
+
+.water-consumption-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.water-consumption-volume,
+.water-consumption-comparison {
+  min-width: 0;
+  border-radius: 18px;
+}
+
+.water-consumption-volume {
+  padding: 14px;
+  background: #153f30;
+  color: #fff;
+}
+
+.water-consumption-volume small {
+  display: block;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  opacity: .68;
+}
+
+.water-consumption-volume strong {
+  display: block;
+  margin: 5px 0 2px;
+  font-size: clamp(22px, 7vw, 30px);
+  line-height: 1;
+}
+
+.water-consumption-volume span {
+  display: block;
+  color: rgba(255, 255, 255, .7);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.water-consumption-comparison {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  background: #f1f5f2;
+  color: #38574a;
+}
+
+.water-consumption-comparison > svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.water-consumption-comparison div {
+  min-width: 0;
+}
+
+.water-consumption-comparison strong,
+.water-consumption-comparison span {
+  display: block;
+}
+
+.water-consumption-comparison strong {
+  color: #244b3b;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.water-consumption-comparison span {
+  margin-top: 4px;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.water-consumption-comparison.saving {
+  background: #e9f5ed;
+  color: #21734e;
+}
+
+.water-consumption-comparison.higher {
+  background: #fff1e8;
+  color: #b75e23;
+}
+
+.water-consumption-comparison.stable {
+  background: #f1f3ef;
+}
+
+.water-consumption-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.water-consumption-metrics > div {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 8px;
+  border: 1px solid rgba(23, 76, 54, .08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .78);
+  color: #4b6b5e;
+}
+
+.water-consumption-metrics svg {
+  flex: 0 0 auto;
+  color: #438167;
+}
+
+.water-consumption-metrics span,
+.water-consumption-metrics small,
+.water-consumption-metrics strong {
+  display: block;
+  min-width: 0;
+}
+
+.water-consumption-metrics small {
+  overflow: hidden;
+  color: #7b8a83;
+  font-size: 8px;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.water-consumption-metrics strong {
+  margin-top: 2px;
+  color: #254b3b;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.water-consumption-chart-block,
+.water-consumption-breakdown {
+  margin-top: 15px;
+  padding-top: 13px;
+  border-top: 1px solid rgba(23, 76, 54, .08);
+}
+
+.water-consumption-subhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.water-consumption-subhead strong {
+  color: #244b3b;
+  font-size: 12px;
+}
+
+.water-consumption-subhead span {
+  color: #87928d;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.water-consumption-bars {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  min-height: 88px;
+  gap: 5px;
+  align-items: end;
+}
+
+.water-consumption-bar {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+  text-align: center;
+}
+
+.water-consumption-bar > span {
+  overflow: hidden;
+  color: #718079;
+  font-size: 7px;
+  text-overflow: ellipsis;
+}
+
+.water-consumption-bar > i {
+  position: relative;
+  display: block;
+  height: 55px;
+  overflow: hidden;
+  border-radius: 7px;
+  background: #edf2ee;
+}
+
+.water-consumption-bar > i > b {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #61ad88, #27674d);
+}
+
+.water-consumption-bar small {
+  color: #859089;
+  font-size: 7px;
+}
+
+.water-consumption-uses {
+  display: grid;
+  gap: 9px;
+}
+
+.water-consumption-uses > div > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.water-consumption-uses strong {
+  overflow: hidden;
+  color: #345848;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.water-consumption-uses span {
+  flex: 0 0 auto;
+  color: #77847e;
+  font-size: 9px;
+}
+
+.water-consumption-uses i {
+  display: block;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e9eeea;
+}
+
+.water-consumption-uses i b {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #e7792b;
+}
+
+.water-consumption-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 13px;
+  padding: 9px 10px;
+  border-radius: 13px;
+  background: #edf5f0;
+  color: #466557;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.water-consumption-note svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: #2f7657;
+}
+
+.water-consumption-method {
+  margin: 11px 2px 0;
+  color: #8a948f;
+  font-size: 8px;
+  line-height: 1.45;
+}
+
+.water-consumption-empty {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 13px;
+  border-radius: 17px;
+  background: #f1f6f2;
+}
+
+.water-consumption-empty > span {
+  display: grid;
+  width: 39px;
+  height: 39px;
+  place-items: center;
+  border-radius: 13px;
+  background: #fff;
+  color: #2f7657;
+}
+
+.water-consumption-empty strong {
+  display: block;
+  color: #294f3e;
+  font-size: 11px;
+}
+
+.water-consumption-empty p {
+  margin: 3px 0 0;
+  color: #718078;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.water-consumption-empty button {
+  border: 0;
+  border-radius: 11px;
+  padding: 8px 10px;
+  background: #e7792b;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+@media (max-width: 390px) {
+  .water-consumption-panel {
+    padding: 15px;
+  }
+
+  .water-consumption-main {
+    grid-template-columns: 1fr;
+  }
+
+  .water-consumption-metrics {
+    gap: 5px;
+  }
+
+  .water-consumption-metrics svg {
+    display: none;
+  }
+
+  .water-consumption-empty {
+    grid-template-columns: auto 1fr;
+  }
+
+  .water-consumption-empty button {
+    grid-column: 1 / -1;
+  }
+}
