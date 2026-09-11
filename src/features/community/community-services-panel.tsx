@@ -38,6 +38,10 @@ type ServiceGuide = {
 type Props = {
   account: HydraAccount;
   onOpenNotices: () => void;
+  onOpenWater?: () => void;
+  onOpenAnimals?: () => void;
+  onOpenOccurrences?: () => void;
+  onCreateNotice?: (kind: string) => void;
 };
 
 const serviceGuides: ServiceGuide[] = [
