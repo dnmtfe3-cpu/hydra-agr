@@ -49,6 +49,7 @@ import "./product-finish.css";
 import "./desktop-layout.css";
 import "./desktop-bottom-bar.css";
 import "./desktop-organized-polish.css";
+import "./desktop-mobile-like-final.css";
 import "./maintenance-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
 import { PublicTagLookup } from "./features/herd/public-tag-lookup";
