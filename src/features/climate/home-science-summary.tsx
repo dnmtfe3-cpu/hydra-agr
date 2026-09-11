@@ -12,7 +12,7 @@ export function HomeScienceSummary({ account, onOpen }: { account: HydraAccount;
     void loadWeather(account.property.municipality, account.property.state).then(result => { if (active) setWeather(result); }).catch(() => undefined);
     return () => { active = false; };
   }, [account.property.municipality, account.property.state]);
-  if (!weather) return null;
+  if (!weather) return <section className="home-science-summary" aria-label="Clima"><button onClick={onOpen}><CloudSun size={21} /><span><small>CLIMA</small><strong>Consultar</strong><em>Abrir clima e informações da região</em></span></button></section>;
   const comfort = animalComfort(account, weather);
   const water = waterSituation(account, weather);
   return <section className="home-science-summary" aria-label="Resumo de clima e ciência">

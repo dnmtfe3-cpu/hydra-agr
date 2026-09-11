@@ -29,7 +29,6 @@ import { refreshDailyBriefingCopy } from "../../services/daily-briefing";
 import { syncMissionProgress, type MissionProgress } from "../../services/mission-progress";
 import { requireSupabase } from "../../services/supabase";
 import { NutriCicloPanel } from "../family-farming/nutriciclo-panel";
-import { WeatherWidget } from "./weather-widget";
 import { HomeScienceSummary } from "../climate/home-science-summary";
 
 type Props = { account: HydraAccount; navigate: (route: AppRoute) => void; onQuickAction: () => void; announcements: Announcement[] };
@@ -84,7 +83,7 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
       <button className="icon-button bare" onClick={() => navigate("notifications")} aria-label="Notificações"><Bell size={23} />{hasUnreadNotifications && <span className="notification-dot" />}</button>
     </div>
 
-    <section className="greeting-block"><div><h1><span className="greeting-time">{welcome},</span> <strong className="greeting-name">{firstName}</strong></h1><p className="capitalize">{today}</p></div><WeatherWidget municipality={account.property.municipality} state={account.property.state} onCompleteProperty={() => navigate("property")} onOpenScience={() => navigate("climate")} /></section>
+    <section className="greeting-block"><div><h1><span className="greeting-time">{welcome},</span> <strong className="greeting-name">{firstName}</strong></h1><p className="capitalize">{today}</p></div></section>
     <HomeScienceSummary account={account} onOpen={() => navigate("climate")} />
     {announcements.length > 0 && <section className="home-announcements" aria-label="Avisos do Hydra Agro">{announcements.slice(0, 3).map((announcement) => <article key={announcement.id} className={announcement.level}><span>{announcement.level === "critical" ? "IMPORTANTE" : announcement.level === "attention" ? "ATENÇÃO" : "AVISO"}</span><strong>{announcement.title}</strong><p>{announcement.body}</p></article>)}</section>}
 
