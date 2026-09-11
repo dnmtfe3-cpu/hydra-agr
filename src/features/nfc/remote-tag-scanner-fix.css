@@ -1,4 +1,4 @@
-/* Correcoes do leitor de Hydra Tag: modal acima da navegacao e camera centralizada. */
+/* Correcoes finais do leitor Hydra Tag: camera no topo, sem sobreposicao da navegacao. */
 body.hydra-distance-scanner-open {
   overflow: hidden !important;
   overscroll-behavior: none !important;
@@ -11,23 +11,26 @@ body.hydra-distance-scanner-open .bottom-nav {
 
 .distance-scanner-layer {
   z-index: 2147483000 !important;
-  align-items: center !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  overflow-y: auto !important;
   padding:
-    max(12px, env(safe-area-inset-top))
-    max(12px, env(safe-area-inset-right))
-    max(12px, env(safe-area-inset-bottom))
-    max(12px, env(safe-area-inset-left)) !important;
+    max(8px, env(safe-area-inset-top))
+    max(10px, env(safe-area-inset-right))
+    max(10px, env(safe-area-inset-bottom))
+    max(10px, env(safe-area-inset-left)) !important;
 }
 
 .distance-scanner-panel {
   width: min(520px, 100%) !important;
-  max-height: calc(100dvh - max(24px, env(safe-area-inset-top)) - max(24px, env(safe-area-inset-bottom))) !important;
-  border-radius: 22px !important;
+  max-height: calc(100dvh - max(16px, env(safe-area-inset-top)) - max(12px, env(safe-area-inset-bottom))) !important;
+  margin: 0 auto !important;
+  border-radius: 20px !important;
   overscroll-behavior: contain !important;
 }
 
 .distance-camera-wrap {
-  max-height: min(58dvh, 560px) !important;
+  max-height: min(55dvh, 520px) !important;
 }
 
 .distance-id-runtime-host {
@@ -35,13 +38,85 @@ body.hydra-distance-scanner-open .bottom-nav {
   margin-bottom: 12px !important;
 }
 
+.nfc-capability-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 12px;
+  padding: 11px 12px;
+  border: 1px solid rgba(221, 116, 34, 0.24);
+  border-radius: 14px;
+  background: #fff3e7;
+  color: #75431d;
+}
+
+.nfc-capability-alert > svg {
+  flex: 0 0 auto;
+  color: #df761f;
+}
+
+.nfc-capability-alert > div {
+  min-width: 0;
+  flex: 1;
+}
+
+.nfc-capability-alert strong,
+.nfc-capability-alert span {
+  display: block;
+}
+
+.nfc-capability-alert strong {
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.nfc-capability-alert span {
+  margin-top: 2px;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.nfc-capability-alert button {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 10px;
+  background: #155f3c;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.theme-dark .nfc-capability-alert {
+  border-color: rgba(224, 112, 41, 0.25);
+  background: rgba(224, 112, 41, 0.11);
+  color: #f1c7a4;
+}
+
 @media (max-width: 699px) {
+  .distance-scanner-layer {
+    padding-top: max(4px, env(safe-area-inset-top)) !important;
+  }
+
   .distance-scanner-panel {
-    padding: 12px !important;
+    padding: 10px !important;
+    border-radius: 18px !important;
+  }
+
+  .distance-scanner-panel > header {
+    padding-bottom: 8px !important;
   }
 
   .distance-camera-wrap {
     aspect-ratio: 4 / 5 !important;
-    max-height: 56dvh !important;
+    max-height: 52dvh !important;
+  }
+
+  .nfc-capability-alert {
+    align-items: flex-start;
   }
 }
