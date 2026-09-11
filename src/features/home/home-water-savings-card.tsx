@@ -19,12 +19,13 @@ function formatLiters(value: number) {
 
 export function HomeWaterSavingsCard({ account, onOpen }: Props) {
   const summary = calculateWaterConsumption(account.waterRecords);
+  const topPurpose = summary.purposeBreakdown[0];
 
   const statusIcon = summary.status === "saving"
-    ? <TrendingDown size={13} />
+    ? <TrendingDown size={12} />
     : summary.status === "higher"
-      ? <TrendingUp size={13} />
-      : <Minus size={13} />;
+      ? <TrendingUp size={12} />
+      : <Minus size={12} />;
 
   const statusLabel = summary.status === "saving"
     ? `${Math.abs(summary.changePercent).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}% menos`
@@ -32,21 +33,29 @@ export function HomeWaterSavingsCard({ account, onOpen }: Props) {
       ? `${Math.abs(summary.changePercent).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}% mais`
       : summary.status === "stable"
         ? "Estável"
-        : "Medindo";
+        : "Sem comparação";
 
-  const detail = summary.status === "saving"
-    ? `${formatLiters(summary.savingsLiters)} economizados vs. período anterior`
+  const insight = summary.status === "saving"
+    ? `${formatLiters(summary.savingsLiters)} economizados no período comparado`
     : summary.status === "higher"
       ? `${formatLiters(Math.abs(summary.differenceLiters))} acima do período anterior`
       : summary.status === "stable"
-        ? `Média recente de ${formatLiters(summary.currentDailyAverage)}/dia`
+        ? "Consumo praticamente igual ao período anterior"
         : summary.measuredDays === 0
-          ? "Registre o consumo para começar"
+          ? "Registre o primeiro consumo para começar"
           : `Faltam ${summary.readingsNeeded} dia${summary.readingsNeeded === 1 ? "" : "s"} medido${summary.readingsNeeded === 1 ? "" : "s"} para comparar`;
 
-  const monthMeta = summary.currentMonthDays > 0
-    ? `${summary.currentMonthDays} dia${summary.currentMonthDays === 1 ? "" : "s"} registrado${summary.currentMonthDays === 1 ? "" : "s"}`
-    : "Sem registro neste mês";
+  const averageText = summary.measuredDays > 0
+    ? `Média ${formatLiters(summary.currentDailyAverage)}/dia`
+    : "Média —";
+
+  const daysText = summary.currentMonthDays > 0
+    ? `${summary.currentMonthDays} dia${summary.currentMonthDays === 1 ? "" : "s"} no mês`
+    : "0 dias no mês";
+
+  const purposeText = topPurpose
+    ? `${topPurpose.key} ${Math.round(topPurpose.percent)}%`
+    : "Uso ainda não definido";
 
   return (
     <button
@@ -55,18 +64,28 @@ export function HomeWaterSavingsCard({ account, onOpen }: Props) {
       onClick={onOpen}
       aria-label="Abrir consumo e economia de água da fazenda"
     >
-      <span className="home-water-savings-icon"><Droplets size={20} /></span>
+      <span className="home-water-savings-icon"><Droplets size={19} /></span>
 
       <span className="home-water-savings-copy">
         <span className="home-water-savings-topline">
-          <small>ÁGUA DA FAZENDA</small>
+          <strong>Água</strong>
           <span className={`home-water-card-status ${summary.status}`}>{statusIcon}{statusLabel}</span>
         </span>
+
         <span className="home-water-savings-value">
           <strong>{summary.currentMonthTotal > 0 ? formatLiters(summary.currentMonthTotal) : "—"}</strong>
-          <em>no mês</em>
+          <em>consumidos neste mês</em>
         </span>
-        <span className="home-water-savings-detail">{monthMeta} · {detail}</span>
+
+        <span className="home-water-savings-meta" aria-label="Resumo do consumo de água">
+          <span>{averageText}</span>
+          <i aria-hidden="true" />
+          <span>{daysText}</span>
+          <i aria-hidden="true" />
+          <span>{purposeText}</span>
+        </span>
+
+        <span className="home-water-savings-detail">{insight}</span>
       </span>
 
       <ChevronRight className="home-water-savings-arrow" size={18} />
