@@ -122,7 +122,7 @@ export function RemoteTagScanner() {
     const decoder = jsQrRef.current;
     if (!decoder || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return "";
 
-    const maxWidth = 900;
+    const maxWidth = 1280;
     const scale = Math.min(1, maxWidth / video.videoWidth);
     const width = Math.max(1, Math.round(video.videoWidth * scale));
     const height = Math.max(1, Math.round(video.videoHeight * scale));
@@ -141,29 +141,38 @@ export function RemoteTagScanner() {
   async function scanFrame() {
     if (!scanningRef.current || !videoRef.current) return;
 
-    try {
-      let raw = "";
-      if (detectorRef.current) {
+    let raw = "";
+
+    // Alguns iPhones expõem BarcodeDetector, mas a implementação não reconhece
+    // QR de forma confiável. Por isso ele é apenas a primeira tentativa.
+    if (detectorRef.current) {
+      try {
         const results = await detectorRef.current.detect(videoRef.current);
         raw = results.map((item) => item.rawValue?.trim()).find(Boolean) ?? "";
-      } else if (jsQrRef.current) {
-        raw = readWithJsQr(videoRef.current);
+      } catch {
+        // Continua imediatamente para o leitor por canvas/jsQR.
       }
-
-      if (raw) {
-        const hydraUrl = parseHydraTag(raw);
-        if (hydraUrl) {
-          stopCamera();
-          setOpen(false);
-          window.location.assign(hydraUrl);
-          return;
-        }
-      }
-    } catch {
-      // A câmera pode falhar em frames isolados enquanto ajusta foco/exposição.
     }
 
-    timerRef.current = window.setTimeout(() => void scanFrame(), detectorRef.current ? 360 : 240);
+    if (!raw && jsQrRef.current) {
+      try {
+        raw = readWithJsQr(videoRef.current);
+      } catch {
+        // Um frame isolado pode falhar por foco/exposição.
+      }
+    }
+
+    if (raw) {
+      const hydraUrl = parseHydraTag(raw);
+      if (hydraUrl) {
+        stopCamera();
+        setOpen(false);
+        window.location.assign(hydraUrl);
+        return;
+      }
+    }
+
+    timerRef.current = window.setTimeout(() => void scanFrame(), 140);
   }
 
   async function startCamera() {
@@ -171,8 +180,18 @@ export function RemoteTagScanner() {
     const Detector = (window as typeof window & { BarcodeDetector?: BarcodeDetectorConstructor }).BarcodeDetector;
 
     try {
+      // Carrega o leitor alternativo sempre. Isso evita o bug em aparelhos que
+      // dizem suportar BarcodeDetector mas não conseguem decodificar o QR.
+      void loadJsQrDecoder().then((decoder) => {
+        jsQrRef.current = decoder;
+      });
+
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: "environment" }, width: { ideal: 1920 }, height: { ideal: 1080 } },
+        video: {
+          facingMode: { ideal: "environment" },
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+        },
         audio: false,
       });
       streamRef.current = stream;
@@ -187,6 +206,13 @@ export function RemoteTagScanner() {
         setZoomRange(null);
       }
 
+      // Tenta manter foco contínuo em aparelhos que oferecem essa capacidade.
+      try {
+        await track.applyConstraints({ advanced: [{ focusMode: "continuous" } as MediaTrackConstraintSet] });
+      } catch {
+        // Nem todo navegador expõe controle de foco.
+      }
+
       if (!videoRef.current) {
         stopCamera();
         return;
@@ -195,17 +221,21 @@ export function RemoteTagScanner() {
       await videoRef.current.play();
 
       if (Detector) {
-        detectorRef.current = new Detector({ formats: ["qr_code"] });
-      } else {
-        jsQrRef.current = await loadJsQrDecoder();
-        if (!jsQrRef.current) {
-          setError("Não consegui ativar o leitor automático neste aparelho. Use o Hydra ID abaixo.");
-          return;
+        try {
+          detectorRef.current = new Detector({ formats: ["qr_code"] });
+        } catch {
+          detectorRef.current = null;
         }
       }
 
       scanningRef.current = true;
       void scanFrame();
+
+      window.setTimeout(() => {
+        if (scanningRef.current && !detectorRef.current && !jsQrRef.current) {
+          setError("O leitor automático não iniciou neste aparelho. Use o Hydra ID abaixo.");
+        }
+      }, 5500);
     } catch {
       stopCamera();
       setError("Não foi possível abrir a câmera. Verifique a permissão do Hydra Agro para usar a câmera.");
@@ -340,7 +370,7 @@ export function RemoteTagScanner() {
         <div className="distance-camera-wrap">
           <video ref={videoRef} className="distance-camera-video" playsInline muted />
           <div className="distance-camera-frame"><span /><span /><span /><span /></div>
-          <div className="distance-camera-hint">Aponte para o QR e mantenha alguns segundos no quadro. O Hydra Agro abre a ficha automaticamente.</div>
+          <div className="distance-camera-hint">Centralize o QR dentro do quadro. A leitura é automática.</div>
         </div>
 
         {zoomRange && <div className="distance-zoom-control">
