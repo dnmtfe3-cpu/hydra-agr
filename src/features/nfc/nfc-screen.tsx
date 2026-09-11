@@ -5,7 +5,6 @@ import { EmptyState, Field, LoadingButton, Modal, ScreenHeader } from "../../com
 import { showAppToast } from "../../components/modal-system";
 import type { Animal, HydraAccount, UpdateAccount } from "../../lib/hydra-types";
 import { getNfcAvailability, openNfcSettings, readNfcTag, stopNfcRead, type NfcAvailability } from "../../services/nfc-service";
-import { TagTrackerDemo } from "./tag-tracker-demo";
 
 type Props = {
   account: HydraAccount;
@@ -24,7 +23,6 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
   const [animalId, setAnimalId] = useState(initialAnimalId ?? "");
   const [result, setResult] = useState<Animal | null>(null);
   const [message, setMessage] = useState("");
-  const [demoOpen, setDemoOpen] = useState(false);
   const [nativeInfo, setNativeInfo] = useState(false);
   const [availability, setAvailability] = useState<NfcAvailability>("web");
   const [availabilityChecked, setAvailabilityChecked] = useState(isWeb);
@@ -203,7 +201,7 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
 
       {nfcUnavailable && <section className="nfc-capability-alert" role="status" aria-live="polite">
         <AlertCircle size={20} />
-        <div><strong>Este celular não tem NFC compatível</strong><span>Sem problema: use o leitor de QR acima ou digite o Hydra ID.</span></div>
+        <div><strong>Este celular não tem NFC compatível</strong><span>Use a câmera para ler o QR ou digite o Hydra ID.</span></div>
       </section>}
 
       {nfcDisabled && <section className="nfc-capability-alert is-disabled" role="status" aria-live="polite">
@@ -226,11 +224,11 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
                   ? "NFC desativado"
                   : "Aproxime a tag do celular"}</h2>
         <p>{isWeb
-          ? "Use QR Code ou código manual aqui. Para leitura por aproximação, abra o Hydra Agro em um celular com NFC compatível."
+          ? "Para ler por aproximação, abra o Hydra Agro em um celular com NFC compatível. Neste dispositivo, use QR ou Hydra ID."
           : !availabilityChecked
             ? "O Hydra Agro está verificando se este aparelho possui NFC."
             : availability === "unsupported"
-              ? "Use o QR Code acima ou digite o Hydra ID para identificar o animal."
+              ? "Use a câmera para ler o QR ou digite o Hydra ID."
               : availability === "disabled"
                 ? "Ative o NFC nas configurações do aparelho e tente novamente."
                 : "Encoste o brinco eletrônico ou a tag na área NFC do aparelho."}</p>
@@ -287,8 +285,7 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
           : <div className="nfc-result-card"><span><Cow size={27} /></span><div><small>{result.identification}</small><strong>{result.name || "Animal sem nome"}</strong><p>{result.species}{result.breed ? ` · ${result.breed}` : ""}</p></div><CheckCircle2 size={20} /></div>
       )}
 
-      <section className="nfc-inline-card" aria-label="Localização do animal"><div><strong>Rastreamento não conectado</strong><p>Para mostrar a localização real, conecte um rastreador compatível. Nenhum dispositivo está conectado.</p><p>A tag NFC identifica o animal por aproximação. Ela não informa onde ele está.</p></div></section>
-      {isWeb && <details onToggle={event => setDemoOpen(event.currentTarget.open)}><summary>Modo demonstração</summary>{demoOpen && <TagTrackerDemo animals={account.animals} />}</details>}
+      <section className="nfc-inline-card" aria-label="Localização do animal"><div><strong>NFC identifica, mas não rastreia</strong><p>A tag NFC abre a identificação do animal por aproximação. Para localização real, seria necessário um rastreador compatível conectado ao Hydra Agro.</p></div></section>
 
       <Modal open={nativeInfo} onClose={() => setNativeInfo(false)} eyebrow="LEITURA NFC" title={availability === "disabled" ? "Ative o NFC do celular" : "Leitura por aproximação indisponível"}>
         <div className="hardware-message">
@@ -296,11 +293,11 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
           <p>{availability === "disabled"
             ? "O NFC está desativado. Ative-o nas configurações do aparelho e tente novamente."
             : availability === "web"
-              ? "Este dispositivo não oferece a leitura NFC do aplicativo. Use o QR Code ou o código manual."
-              : "Este celular não oferece leitura NFC compatível. Use o QR Code ou o Hydra ID."}</p>
+              ? "Este dispositivo não oferece a leitura NFC do aplicativo. Use a câmera para ler o QR ou digite o Hydra ID."
+              : "Este celular não oferece leitura NFC compatível. Use a câmera para ler o QR ou digite o Hydra ID."}</p>
           <div className="future-data-list"><div><Nfc size={17} /> Leitura por aproximação em aparelhos compatíveis</div><div><span className="tiny-shield" /> QR Code e Hydra ID continuam disponíveis</div></div>
           {availability === "disabled" && <button className="secondary-button full" onClick={() => void openNfcSettings()}><Settings size={17} /> Abrir configurações</button>}
-          <button className="primary-button full" onClick={() => setNativeInfo(false)}>Usar QR ou código manual</button>
+          <button className="primary-button full" onClick={() => setNativeInfo(false)}>Usar QR ou Hydra ID</button>
         </div>
       </Modal>
     </div>
