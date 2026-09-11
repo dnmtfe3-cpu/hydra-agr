@@ -129,7 +129,6 @@ export function PropertyMapScreen({ account, onBack }: { account: HydraAccount; 
         zoomControl: true,
         attributionControl: true,
         preferCanvas: true,
-        tap: true,
       }).setView([-14.235, -51.925], 4);
 
       const featuresLayer = L.layerGroup().addTo(map);
