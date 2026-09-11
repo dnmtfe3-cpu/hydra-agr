@@ -46,9 +46,7 @@ import "./native-screen-cleanup.css";
 import "./auth-green-identity.css";
 import "./auth-reference.css";
 import "./product-finish.css";
-import "./desktop-layout.css";
-import "./desktop-bottom-bar.css";
-import "./desktop-app-v2.css";
+import "./desktop-phone-frame.css";
 import "./maintenance-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
 import { PublicTagLookup } from "./features/herd/public-tag-lookup";
@@ -69,9 +67,39 @@ const publicAnimalQuery =
   typeof window !== "undefined" && new URLSearchParams(window.location.search).get("pa") === "1";
 const standalonePublicMode = publicTagMode || publicAnimalQuery;
 const preview = path === "/preview/ios/splash" ? null : renderIosPreviewRoute(path);
+const desktopPhoneMode =
+  typeof window !== "undefined" &&
+  !Capacitor.isNativePlatform() &&
+  window.innerWidth >= 1024 &&
+  !path.startsWith("/preview/") &&
+  !standalonePublicMode;
+
+function DesktopPhonePresentation() {
+  const mobileUrl = typeof window !== "undefined" ? window.location.href : "/";
+
+  return (
+    <main className="desktop-phone-stage" aria-label="Hydra Agro em visualização móvel">
+      <div aria-hidden="true" />
+      <div className="desktop-phone-device">
+        <span className="desktop-phone-side-button desktop-phone-side-button-left" aria-hidden="true" />
+        <span className="desktop-phone-side-button desktop-phone-side-button-right" aria-hidden="true" />
+        <div className="desktop-phone-screen">
+          <span className="desktop-phone-island" aria-hidden="true" />
+          <iframe
+            className="desktop-phone-iframe"
+            src={mobileUrl}
+            title="Hydra Agro — versão mobile"
+            allow="clipboard-read; clipboard-write; camera; microphone"
+          />
+        </div>
+      </div>
+      <div aria-hidden="true" />
+    </main>
+  );
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    {preview ?? (standalonePublicMode ? <PublicTagLookup /> : <HydraAppShell />)}
+    {preview ?? (standalonePublicMode ? <PublicTagLookup /> : desktopPhoneMode ? <DesktopPhonePresentation /> : <HydraAppShell />)}
   </React.StrictMode>,
 );
