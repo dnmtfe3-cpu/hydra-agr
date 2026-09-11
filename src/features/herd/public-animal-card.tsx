@@ -4,6 +4,7 @@ import type { Animal } from "../../lib/hydra-types";
 import { publicMediaUrl, requireSupabase } from "../../services/supabase";
 import "./found-animal-contact-runtime";
 import { PENDING_FOUND_ANIMAL_URL_KEY } from "./found-animal-login-return-runtime";
+import { PublicAnimalLocationShare } from "./public-animal-location-share";
 
 export type PublicAnimalOrigin = {
   propertyName?: string;
@@ -231,6 +232,8 @@ export function PublicAnimalScreen({ animal, onOpenApp }: { animal: PublicAnimal
             <div><span>Propriedade de origem</span><strong>{current.propertyName || "Propriedade cadastrada"}</strong><small>{location || "Origem registrada no Hydra Agro"}</small></div>
           </div>
         )}
+
+        <PublicAnimalLocationShare hydraCode={current.identification} />
 
         <section className="public-animal-section">
           <div className="public-animal-section-title"><Fingerprint size={17} /><div><strong>Identificação</strong><small>Dados públicos autorizados</small></div></div>
