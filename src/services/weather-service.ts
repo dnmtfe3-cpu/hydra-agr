@@ -160,9 +160,11 @@ export async function loadWeather(municipality: string, state: string, options: 
     writeCache(city, uf, snapshot);
     return snapshot;
   } catch (error) {
-    if (cached && Date.now() - cached.savedAt < STALE_CACHE_LIMIT) return { ...cached.snapshot, stale: true };
+    const offline = typeof navigator !== "undefined" && !navigator.onLine;
+    const cacheAge = cached ? Date.now() - cached.savedAt : Number.POSITIVE_INFINITY;
+    if (cached && (offline || cacheAge < STALE_CACHE_LIMIT)) return { ...cached.snapshot, stale: true };
     if (error instanceof DOMException && error.name === "AbortError") throw new Error("A consulta de clima demorou demais. Tente novamente.");
-    if (typeof navigator !== "undefined" && !navigator.onLine) throw new Error("Sem internet para atualizar o clima desta região.");
+    if (offline) throw new Error("Sem internet para atualizar o clima desta região.");
     throw error instanceof Error ? error : new Error("Não foi possível consultar o clima agora.");
   }
 }
