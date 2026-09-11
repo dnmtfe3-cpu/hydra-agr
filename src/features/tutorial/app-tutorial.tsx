@@ -15,7 +15,7 @@ type TutorialStep = {
 type FocusRect = { top: number; left: number; width: number; height: number };
 
 // Cada versão nova é exibida uma vez para todas as contas, inclusive as já cadastradas.
-const TUTORIAL_VERSION = "v2";
+const TUTORIAL_VERSION = "v3";
 
 function findNav(label: string) {
   return Array.from(document.querySelectorAll<HTMLButtonElement>(".bottom-nav button")).find((button) =>
@@ -59,7 +59,7 @@ function buildSteps(mode: TutorialMode): TutorialStep[] {
       },
       {
         title: "Água, clima e tarefas",
-        body: "Esses atalhos ajudam a acompanhar a propriedade sem precisar procurar em vários menus.",
+        body: "Em Água, registre o consumo da fazenda. O Hydra calcula total, média e compara períodos medidos para mostrar economia ou aumento sem contar dias sem registro como zero.",
         target: () => document.querySelector<HTMLElement>(".easy-home .easy-shortcuts"),
       },
       {
@@ -95,12 +95,12 @@ function buildSteps(mode: TutorialMode): TutorialStep[] {
 
   return [
     {
-      title: "Aprenda o básico em 1 minuto",
-      body: "Vou mostrar as partes principais usando as telas reais do Hydra Agro. Você pode pular agora e refazer depois pelo Perfil.",
+      title: "Conheça o Hydra Agro",
+      body: "Vou mostrar as partes principais e as novas ferramentas usando as telas reais do aplicativo. Você pode pular agora e refazer depois pelo Perfil.",
     },
     {
       title: "Início",
-      body: "Esta é a visão rápida da propriedade. Aqui aparecem avisos, resumo do dia e os principais dados.",
+      body: "Esta é a visão rápida da propriedade. Aqui aparecem avisos, clima, mapa, consumo de água e os principais dados do dia.",
       navLabel: "Início",
       target: () => document.querySelector<HTMLElement>(".home-screen .greeting-block") ?? document.querySelector<HTMLElement>(".home-screen"),
     },
@@ -111,6 +111,18 @@ function buildSteps(mode: TutorialMode): TutorialStep[] {
       target: () => document.querySelector<HTMLElement>(".home-science-summary"),
     },
     {
+      title: "Mapa da propriedade",
+      body: "O mapa fica visível na Home. Toque nele para abrir a visão completa, desenhar os limites e setores e registrar pontos como água, curral e entrada. Localizações de animais mostram apenas o último registro compartilhado, não rastreamento em tempo real.",
+      navLabel: "Início",
+      target: () => document.querySelector<HTMLElement>(".home-property-map-card"),
+    },
+    {
+      title: "Consumo e economia de água",
+      body: "Este atalho resume o consumo registrado: total do mês, média, dias medidos, principal uso e tendência. O Hydra compara períodos com a mesma quantidade de dias registrados para mostrar economia ou aumento sem criar economia falsa.",
+      navLabel: "Início",
+      target: () => document.querySelector<HTMLElement>(".home-water-savings-card"),
+    },
+    {
       title: "Atalhos do dia a dia",
       body: "Monitoramento, tarefas, assistente e produção ficam aqui para acesso rápido. Em Monitorar você também organiza os setores da propriedade.",
       navLabel: "Início",
@@ -119,7 +131,7 @@ function buildSteps(mode: TutorialMode): TutorialStep[] {
     managementStep,
     {
       title: "Hydra Tag",
-      body: "Use esta área para identificar animais. QR e Hydra ID também podem ser usados sem NFC quando necessário.",
+      body: "Identifique animais por NFC/RFID, QR ou Hydra ID. Se alguém encontrar um animal pela tag pública, pode compartilhar a localização somente com permissão; isso registra um ponto de avistamento e não funciona como rastreador em tempo real.",
       navLabel: "NFC",
       target: () => findNav("NFC"),
     },
@@ -131,7 +143,7 @@ function buildSteps(mode: TutorialMode): TutorialStep[] {
     },
     {
       title: "Pronto",
-      body: "Você já conhece o básico do Hydra Agro. O tutorial não bloqueia nenhuma função e pode ser aberto novamente quando quiser.",
+      body: "Você já conhece as principais funções do Hydra Agro. O tutorial não bloqueia nenhuma ferramenta e pode ser aberto novamente quando quiser.",
     },
   ];
 }
