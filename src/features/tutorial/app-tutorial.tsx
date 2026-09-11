@@ -150,7 +150,14 @@ export function AppTutorial() {
   const steps = useMemo(() => buildSteps(mode), [mode]);
 
   const startTutorial = useCallback(() => {
-    setMode(detectMode());
+    const nextMode = detectMode();
+    setMode(nextMode);
+    if (nextMode === "easy" && !document.querySelector(".easy-home")) {
+      const backButton = Array.from(document.querySelectorAll<HTMLButtonElement>("button")).find((button) =>
+        button.textContent?.includes("Voltar aos atalhos"),
+      );
+      backButton?.click();
+    }
     setStep(0);
     setOpen(true);
   }, []);
