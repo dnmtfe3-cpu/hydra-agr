@@ -1,63 +1,172 @@
 import type { WaterRecord } from "./hydra-types";
 
+export type WaterConsumptionStatus = "insufficient" | "saving" | "higher" | "stable";
+
+export type WaterBreakdownItem = {
+  key: string;
+  liters: number;
+  percent: number;
+};
+
+export type WaterDailyTotal = {
+  date: string;
+  liters: number;
+};
+
+export type WaterConsumptionSummary = {
+  status: WaterConsumptionStatus;
+  totalRegistered: number;
+  measuredDays: number;
+  currentMonthTotal: number;
+  currentMonthDays: number;
+  comparisonDays: number;
+  currentWindowTotal: number;
+  previousWindowTotal: number;
+  currentDailyAverage: number;
+  previousDailyAverage: number;
+  changePercent: number;
+  differenceLiters: number;
+  savingsLiters: number;
+  readingsNeeded: number;
+  dailyTotals: WaterDailyTotal[];
+  recentDailyTotals: WaterDailyTotal[];
+  purposeBreakdown: WaterBreakdownItem[];
+  sourceBreakdown: WaterBreakdownItem[];
+};
+
 export type WaterSavingsInsight = {
-  status: "insufficient" | "saving" | "higher" | "stable";
+  status: WaterConsumptionStatus;
   percent: number;
   litersPerReading: number;
   currentAverage: number;
   previousAverage: number;
   sampleSize: number;
   readingsNeeded: number;
+  litersDifference: number;
+  savingsLiters: number;
+  comparisonDays: number;
+  measuredDays: number;
+  currentTotal: number;
+  previousTotal: number;
 };
 
-export function calculateWaterSavings(records: WaterRecord[]): WaterSavingsInsight {
-  if (records.length < 4) {
-    return {
-      status: "insufficient",
-      percent: 0,
-      litersPerReading: 0,
-      currentAverage: 0,
-      previousAverage: 0,
-      sampleSize: 0,
-      readingsNeeded: Math.max(0, 4 - records.length),
-    };
+function validAmount(value: number) {
+  return Number.isFinite(value) && value > 0 ? value : 0;
+}
+
+function sum(values: number[]) {
+  return values.reduce((total, value) => total + value, 0);
+}
+
+function buildBreakdown(records: WaterRecord[], keyFor: (record: WaterRecord) => string): WaterBreakdownItem[] {
+  const grouped = new Map<string, number>();
+  for (const record of records) {
+    const amount = validAmount(record.amount);
+    if (!amount) continue;
+    const key = keyFor(record) || "Não informado";
+    grouped.set(key, (grouped.get(key) ?? 0) + amount);
   }
 
-  const ordered = [...records].sort((left, right) => left.date.localeCompare(right.date));
-  const sampleSize = Math.min(3, Math.floor(ordered.length / 2));
-  const current = ordered.slice(-sampleSize);
-  const previous = ordered.slice(-(sampleSize * 2), -sampleSize);
-  const currentAverage = current.reduce((sum, item) => sum + item.amount, 0) / current.length;
-  const previousAverage = previous.reduce((sum, item) => sum + item.amount, 0) / previous.length;
+  const total = sum([...grouped.values()]);
+  if (total <= 0) return [];
 
-  if (!Number.isFinite(previousAverage) || previousAverage <= 0) {
-    return {
-      status: "insufficient",
-      percent: 0,
-      litersPerReading: 0,
-      currentAverage,
-      previousAverage,
-      sampleSize,
-      readingsNeeded: 0,
-    };
+  return [...grouped.entries()]
+    .map(([key, liters]) => ({ key, liters, percent: (liters / total) * 100 }))
+    .sort((left, right) => right.liters - left.liters);
+}
+
+function localMonthKey(now: Date) {
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  return `${year}-${month}`;
+}
+
+export function calculateWaterConsumption(records: WaterRecord[], now = new Date()): WaterConsumptionSummary {
+  const cleanRecords = records.filter((record) => validAmount(record.amount) > 0 && /^\d{4}-\d{2}-\d{2}$/.test(record.date));
+  const totalRegistered = sum(cleanRecords.map((record) => record.amount));
+
+  const dailyMap = new Map<string, number>();
+  for (const record of cleanRecords) {
+    dailyMap.set(record.date, (dailyMap.get(record.date) ?? 0) + record.amount);
   }
 
-  const change = ((currentAverage - previousAverage) / previousAverage) * 100;
-  const percent = Math.abs(change);
-  const litersPerReading = Math.abs(previousAverage - currentAverage);
-  const status: WaterSavingsInsight["status"] = Math.abs(change) < 3
-    ? "stable"
-    : change < 0
-      ? "saving"
-      : "higher";
+  const dailyTotals = [...dailyMap.entries()]
+    .map(([date, liters]) => ({ date, liters }))
+    .sort((left, right) => left.date.localeCompare(right.date));
+
+  const measuredDays = dailyTotals.length;
+  const comparisonDays = Math.min(7, Math.floor(measuredDays / 2));
+  const canCompare = comparisonDays >= 2;
+
+  const currentWindow = canCompare
+    ? dailyTotals.slice(-comparisonDays)
+    : dailyTotals.slice(-Math.min(7, measuredDays));
+  const previousWindow = canCompare
+    ? dailyTotals.slice(-(comparisonDays * 2), -comparisonDays)
+    : [];
+
+  const currentWindowTotal = sum(currentWindow.map((item) => item.liters));
+  const previousWindowTotal = sum(previousWindow.map((item) => item.liters));
+  const currentDailyAverage = currentWindow.length ? currentWindowTotal / currentWindow.length : 0;
+  const previousDailyAverage = previousWindow.length ? previousWindowTotal / previousWindow.length : 0;
+
+  let status: WaterConsumptionStatus = "insufficient";
+  let changePercent = 0;
+  let differenceLiters = 0;
+
+  if (canCompare && previousWindowTotal > 0) {
+    differenceLiters = currentWindowTotal - previousWindowTotal;
+    changePercent = (differenceLiters / previousWindowTotal) * 100;
+    status = Math.abs(changePercent) < 3 ? "stable" : changePercent < 0 ? "saving" : "higher";
+  }
+
+  const currentDates = new Set(currentWindow.map((item) => item.date));
+  const windowRecords = cleanRecords.filter((record) => currentDates.has(record.date));
+  const breakdownRecords = windowRecords.length ? windowRecords : cleanRecords;
+
+  const monthKey = localMonthKey(now);
+  const monthRecords = cleanRecords.filter((record) => record.date.startsWith(monthKey));
+  const monthDays = new Set(monthRecords.map((record) => record.date));
 
   return {
     status,
-    percent,
-    litersPerReading,
-    currentAverage,
-    previousAverage,
-    sampleSize,
-    readingsNeeded: 0,
+    totalRegistered,
+    measuredDays,
+    currentMonthTotal: sum(monthRecords.map((record) => record.amount)),
+    currentMonthDays: monthDays.size,
+    comparisonDays,
+    currentWindowTotal,
+    previousWindowTotal,
+    currentDailyAverage,
+    previousDailyAverage,
+    changePercent,
+    differenceLiters,
+    savingsLiters: status === "saving" ? Math.abs(differenceLiters) : 0,
+    readingsNeeded: canCompare ? 0 : Math.max(0, 4 - measuredDays),
+    dailyTotals,
+    recentDailyTotals: dailyTotals.slice(-7),
+    purposeBreakdown: buildBreakdown(breakdownRecords, (record) => record.purpose),
+    sourceBreakdown: buildBreakdown(breakdownRecords, (record) => record.sourceId),
+  };
+}
+
+export function calculateWaterSavings(records: WaterRecord[]): WaterSavingsInsight {
+  const summary = calculateWaterConsumption(records);
+  const days = Math.max(summary.comparisonDays, 1);
+
+  return {
+    status: summary.status,
+    percent: Math.abs(summary.changePercent),
+    litersPerReading: Math.abs(summary.differenceLiters) / days,
+    currentAverage: summary.currentDailyAverage,
+    previousAverage: summary.previousDailyAverage,
+    sampleSize: summary.comparisonDays,
+    readingsNeeded: summary.readingsNeeded,
+    litersDifference: summary.differenceLiters,
+    savingsLiters: summary.savingsLiters,
+    comparisonDays: summary.comparisonDays,
+    measuredDays: summary.measuredDays,
+    currentTotal: summary.currentWindowTotal,
+    previousTotal: summary.previousWindowTotal,
   };
 }
