@@ -1,17 +1,14 @@
 .home-water-savings-card {
   position: relative;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 10px;
   width: 100%;
   margin: -2px 0 16px;
-  padding: 11px 12px;
+  padding: 11px 12px 10px;
   overflow: hidden;
   border: 1px solid rgba(35, 111, 146, 0.11);
   border-radius: 18px;
   background:
-    radial-gradient(circle at 95% 12%, rgba(74, 164, 205, 0.10), transparent 28%),
+    radial-gradient(circle at 94% 0%, rgba(74, 164, 205, 0.09), transparent 29%),
     linear-gradient(145deg, #fbfdfe 0%, #ffffff 58%, #f8fbf9 100%);
   color: inherit;
   text-align: left;
@@ -32,12 +29,20 @@
 .home-water-savings-card.higher::before { background: #e7792b; }
 .home-water-savings-card.stable::before { background: #5d8876; }
 
+.home-water-card-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
 .home-water-savings-icon {
   display: grid;
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   place-items: center;
-  border-radius: 12px;
+  border-radius: 11px;
   background: rgba(72, 158, 201, 0.10);
   color: #2b7faa;
   box-shadow: inset 0 0 0 1px rgba(72, 158, 201, 0.04);
@@ -53,34 +58,36 @@
   color: #c86623;
 }
 
-.home-water-savings-copy {
+.home-water-card-heading {
   display: grid;
   min-width: 0;
-  gap: 2px;
+  gap: 1px;
 }
 
-.home-water-savings-topline {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  min-width: 0;
-}
-
-.home-water-savings-topline > strong {
+.home-water-card-heading strong {
+  overflow: hidden;
   color: #244b3b;
-  font-size: 11px;
+  font-size: 11.2px;
   font-weight: 850;
   line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-water-card-heading small {
+  color: #84938d;
+  font-size: 7.8px;
+  font-weight: 650;
+  line-height: 1.1;
 }
 
 .home-water-card-status {
   display: inline-flex;
-  flex: 0 0 auto;
   align-items: center;
   gap: 3px;
-  min-height: 19px;
+  min-height: 20px;
   padding: 0 6px;
-  border-radius: 7px;
+  border-radius: 8px;
   background: rgba(78, 116, 101, 0.07);
   color: #61786e;
   font-size: 7.8px;
@@ -98,75 +105,100 @@
   color: #c86623;
 }
 
-.home-water-savings-value {
-  display: flex;
-  align-items: baseline;
-  gap: 5px;
-  min-width: 0;
+.home-water-savings-arrow {
+  color: #93a29c;
 }
 
-.home-water-savings-value strong {
+.home-water-card-body {
+  display: grid;
+  grid-template-columns: 94px minmax(0, 1fr);
+  align-items: stretch;
+  gap: 10px;
+  margin-top: 9px;
+}
+
+.home-water-card-month {
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  min-width: 0;
+  padding-right: 9px;
+  border-right: 1px solid rgba(45, 96, 75, 0.08);
+}
+
+.home-water-card-month small,
+.home-water-card-stats small {
+  color: #8a9892;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.055em;
+}
+
+.home-water-card-month strong {
+  overflow: hidden;
   color: #143d2e;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 850;
-  line-height: 1.04;
+  line-height: 1.06;
   letter-spacing: -0.025em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.home-water-savings-value em {
+.home-water-card-month strong.empty {
+  color: #62776e;
+  font-size: 10px;
+  letter-spacing: 0;
+}
+
+.home-water-card-stats {
+  display: grid;
+  grid-template-columns: .9fr .8fr 1.35fr;
+  gap: 7px;
+  min-width: 0;
+}
+
+.home-water-card-stats > span {
+  display: grid;
+  align-content: center;
+  min-width: 0;
+  gap: 2px;
+}
+
+.home-water-card-stats strong {
   overflow: hidden;
-  color: #7a8c85;
-  font-size: 8.5px;
+  color: #3e5e51;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-water-card-stats strong em {
+  margin-left: 3px;
+  color: #7d9188;
+  font-size: 7.2px;
   font-style: normal;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.home-water-savings-meta {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  min-width: 0;
-  overflow: hidden;
-  color: #587269;
-  font-size: 8px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.home-water-savings-meta > span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.home-water-savings-meta > span:last-child {
-  min-width: 0;
-  flex: 1;
-}
-
-.home-water-savings-meta i {
-  width: 3px;
-  height: 3px;
-  flex: 0 0 auto;
-  border-radius: 999px;
-  background: #a7b4af;
+  font-weight: 750;
 }
 
 .home-water-savings-detail {
+  display: block;
   overflow: hidden;
-  color: #80918a;
-  font-size: 8.2px;
-  line-height: 1.2;
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid rgba(45, 96, 75, 0.065);
+  color: #788b83;
+  font-size: 8px;
+  font-weight: 650;
+  line-height: 1.15;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .home-water-savings-card.saving .home-water-savings-detail { color: #5e8373; }
 .home-water-savings-card.higher .home-water-savings-detail { color: #9a7154; }
-
-.home-water-savings-arrow {
-  color: #93a29c;
-}
 
 .home-water-savings-card:hover {
   border-color: rgba(42, 118, 147, 0.18);
@@ -179,26 +211,41 @@
 
 @media (max-width: 390px) {
   .home-water-savings-card {
-    gap: 9px;
-    padding: 10px 11px;
+    padding: 10px 11px 9px;
     border-radius: 17px;
   }
 
+  .home-water-card-head {
+    gap: 7px;
+  }
+
   .home-water-savings-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 11px;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
   }
 
-  .home-water-savings-value strong {
-    font-size: 17px;
+  .home-water-card-body {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 8px;
+    margin-top: 8px;
   }
 
-  .home-water-savings-meta {
-    font-size: 7.7px;
+  .home-water-card-stats {
+    gap: 5px;
+  }
+
+  .home-water-card-month strong {
+    font-size: 15px;
+  }
+
+  .home-water-card-stats strong {
+    font-size: 8.5px;
   }
 
   .home-water-savings-detail {
-    max-width: 245px;
+    margin-top: 7px;
+    padding-top: 6px;
+    font-size: 7.7px;
   }
 }
