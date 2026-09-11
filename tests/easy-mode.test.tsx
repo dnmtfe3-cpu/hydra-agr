@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, cleanup } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { useState } from "react";
-import { EasyModeProvider, GuidedForm, AudioHelp } from "../src/features/easy-mode/easy-mode";
+import { EasyModeProvider, GuidedForm, AudioHelp, EasyRoute, StandardNavigation } from "../src/features/easy-mode/easy-mode";
 import { EasyModeSetting } from "../src/features/easy-mode/easy-mode-setting";
 import { Field } from "../src/components/ui";
 
@@ -17,6 +17,18 @@ function DemoForm({ save }: { save: () => void }) {
 }
 
 describe("Modo Fácil", () => {
+  it("removes bottom navigation, keeps a way back and restores the full profile when disabled", () => {
+    localStorage.setItem("hydra-easy-mode:a", "true");
+    const home = vi.fn();
+    render(<EasyModeProvider accountId="a"><EasyRoute route="profile" onHome={home} settings={<EasyModeSetting />}><h1>Perfil completo</h1></EasyRoute><StandardNavigation><nav aria-label="Principal" /></StandardNavigation></EasyModeProvider>);
+    expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
+    expect(screen.queryByText("Perfil completo")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Voltar aos atalhos" }));
+    expect(home).toHaveBeenCalledOnce();
+    fireEvent.click(screen.getByRole("switch"));
+    expect(screen.getByRole("navigation")).toBeInTheDocument();
+    expect(screen.getByText("Perfil completo")).toBeInTheDocument();
+  });
   it("starts off, restores the original form when disabled, and stores the preference per account", () => {
     render(<EasyModeProvider accountId="a"><EasyModeSetting /><DemoForm save={vi.fn()} /></EasyModeProvider>);
     expect(screen.getByRole("switch")).toHaveAttribute("aria-checked", "false");

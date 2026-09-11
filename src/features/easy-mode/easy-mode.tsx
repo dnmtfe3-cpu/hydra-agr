@@ -1,10 +1,21 @@
 import { Children, createContext, isValidElement, useContext, useEffect, useRef, useState, type FormHTMLAttributes, type ReactNode } from "react";
-import { Beef, ChevronRight, ClipboardCheck, CloudSun, Droplets, ScanLine, Settings, Volume2 } from "lucide-react";
+import { ArrowLeft, Beef, ChevronRight, ClipboardCheck, CloudSun, Droplets, ScanLine, Settings, Volume2 } from "lucide-react";
 import type { AppRoute } from "../../lib/hydra-types";
 import "./easy-mode.css";
 
 const EasyContext = createContext({ enabled: false, setEnabled: (_value: boolean) => {} });
 export const useEasyMode = () => useContext(EasyContext);
+
+export function StandardNavigation({ children }: { children: ReactNode }) {
+  const { enabled } = useEasyMode();
+  return enabled ? null : <>{children}</>;
+}
+
+export function EasyRoute({ route, onHome, settings, children }: { route: AppRoute; onHome: () => void; settings: ReactNode; children: ReactNode }) {
+  const { enabled } = useEasyMode();
+  if (!enabled || route === "home") return <>{children}</>;
+  return <div className="easy-route"><div className="easy-route-back"><button className="secondary-button" onClick={onHome}><ArrowLeft size={20} /> Voltar aos atalhos</button></div>{route === "profile" ? <section className="screen easy-settings-screen"><h1>Configurações</h1>{settings}</section> : children}</div>;
+}
 
 export function EasyModeProvider({ children, accountId }: { children: ReactNode; accountId: string }) {
   const key = `hydra-easy-mode:${accountId}`;

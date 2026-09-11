@@ -1,4 +1,5 @@
-import { EasyModeProvider } from "./features/easy-mode/easy-mode";
+import { EasyModeProvider, EasyRoute, StandardNavigation } from "./features/easy-mode/easy-mode";
+import { EasyModeSetting } from "./features/easy-mode/easy-mode-setting";
 import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { App as CapacitorApp } from "@capacitor/app";
 import { Capacitor } from "@capacitor/core";
@@ -383,15 +384,15 @@ export default function HydraApp() {
     <main className="app-shell">
       <div className={`phone-app ${modalNavigationOpen ? "is-overlay-open" : ""}`}>
         <SyncBanner status={store.syncStatus} error={store.lastError} retry={store.retrySync} />
-        <div key={route} className={`app-content route-motion-${routeMotion}`}><Suspense fallback={<div className="route-loading"><span /><small>Carregando…</small></div>}>{mainContent()}</Suspense></div>
+        <div key={route} className={`app-content route-motion-${routeMotion}`}><EasyRoute route={route} onHome={() => navigate("home")} settings={<EasyModeSetting />}><Suspense fallback={<div className="route-loading"><span /><small>Carregando…</small></div>}>{mainContent()}</Suspense></EasyRoute></div>
 
-        <nav className={`bottom-nav ${modalNavigationOpen ? "is-hidden" : ""}`} aria-label="Navegação principal" aria-hidden={modalNavigationOpen} style={navStyle}>
+        <StandardNavigation><nav className={`bottom-nav ${modalNavigationOpen ? "is-hidden" : ""}`} aria-label="Navegação principal" aria-hidden={modalNavigationOpen} style={navStyle}>
           <span className="bottom-nav-indicator" aria-hidden="true" />
           {mainTabs.map((tab) => {
             const Icon = tab.icon;
             return <button key={tab.id} className={`${activeTab === tab.id ? "active" : ""} ${tab.id === "nfc" ? "nav-nfc" : ""}`.trim()} onClick={() => openMainTab(tab.id)} aria-current={activeTab === tab.id ? "page" : undefined}><span><Icon size={21} strokeWidth={activeTab === tab.id ? 2.5 : 2} /></span><small>{tab.label}</small></button>;
           })}
-        </nav>
+        </nav></StandardNavigation>
 
         {quickOpen && !isStaff && <div className={`quick-layer ${quickClosing ? "is-closing" : ""}`} onMouseDown={() => closeQuick()}><section className="quick-sheet" onMouseDown={(event) => event.stopPropagation()}><div className="sheet-handle" /><header><div><span className="eyebrow orange">Nova ação</span><h2>O que você quer registrar?</h2></div><button className="icon-button" onClick={() => closeQuick()} aria-label="Fechar ações rápidas"><X size={22} /></button></header><div className="quick-grid"><QuickAction index={0} icon={<UsersRound size={22} />} title="Equipe e operações" subtitle="Funcionários, relatórios e tarefas" onClick={() => closeQuick(() => navigate("operations"))} /><QuickAction index={1} icon={<Cow size={22} />} title="Cadastrar animal" subtitle="Adicionar ao rebanho" onClick={() => closeQuick(() => launchQuick("animal", "herd"))} /><QuickAction index={2} icon={<Nfc size={22} />} title="Ler identificação" subtitle="NFC/RFID ou código" onClick={() => closeQuick(() => openNfc())} /><QuickAction index={3} icon={<ClipboardCheck size={22} />} title="Nova atividade" subtitle="Adicionar à rotina" onClick={() => closeQuick(() => launchQuick("activity", "activities"))} /><QuickAction index={4} icon={<MapPin size={22} />} title="Criar setor" subtitle="Organizar a propriedade" onClick={() => closeQuick(() => launchQuick("sector", "monitor"))} /><QuickAction index={5} icon={<Send size={22} />} title="Nova publicação" subtitle="Publicar na comunidade" onClick={() => closeQuick(() => launchQuick("post", "community"))} /></div></section></div>}
         <AppToastRegion />
