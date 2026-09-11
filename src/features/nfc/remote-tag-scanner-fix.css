@@ -1,0 +1,47 @@
+/* Correcoes do leitor de Hydra Tag: modal acima da navegacao e camera centralizada. */
+body.hydra-distance-scanner-open {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+
+body.hydra-distance-scanner-open .bottom-nav {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.distance-scanner-layer {
+  z-index: 2147483000 !important;
+  align-items: center !important;
+  padding:
+    max(12px, env(safe-area-inset-top))
+    max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left)) !important;
+}
+
+.distance-scanner-panel {
+  width: min(520px, 100%) !important;
+  max-height: calc(100dvh - max(24px, env(safe-area-inset-top)) - max(24px, env(safe-area-inset-bottom))) !important;
+  border-radius: 22px !important;
+  overscroll-behavior: contain !important;
+}
+
+.distance-camera-wrap {
+  max-height: min(58dvh, 560px) !important;
+}
+
+.distance-id-runtime-host {
+  margin-top: 8px !important;
+  margin-bottom: 12px !important;
+}
+
+@media (max-width: 699px) {
+  .distance-scanner-panel {
+    padding: 12px !important;
+  }
+
+  .distance-camera-wrap {
+    aspect-ratio: 4 / 5 !important;
+    max-height: 56dvh !important;
+  }
+}
