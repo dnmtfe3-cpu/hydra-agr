@@ -44,6 +44,7 @@ import {
   type RuralOccurrence,
   type RuralOccurrenceCategory,
 } from "./community-rural-service";
+import { CommunityServicesPanel } from "./community-services-panel";
 
 type Props = {
   account: HydraAccount;
@@ -523,7 +524,7 @@ export function CommunityScreen({ account, onBack, publishPost, likePost, commen
           <div className="community-rural-indicator"><strong>{waterRegions}</strong><span>regiões com água</span></div>
         </div>
 
-        <button className="community-rural-card" style={{ minHeight: 74 }} onClick={() => setView("services")}><span className="community-rural-card-icon"><Info size={19} /></span><div><strong>Serviços e informações</strong><p>Cursos, assistência, feiras e oportunidades</p></div></button>
+        <button className="community-rural-card" style={{ minHeight: 74 }} onClick={() => setView("services")}><span className="community-rural-card-icon"><Info size={19} /></span><div><strong>Serviços e informações</strong><p>Guias, cursos, eventos e oportunidades</p></div></button>
 
         <div className="community-rural-note"><Shield size={17} /><span>O Hydra Agro organiza relatos da comunidade. Protocolos gerados aqui são internos e não representam protocolo oficial de Prefeitura, companhia de água ou outro órgão.</span></div>
         {!navigator.onLine && <div className="community-rural-note warning"><WifiOff size={17} /><span>Sem internet. Novas ocorrências ficam salvas no aparelho e entram na fila de sincronização.</span></div>}
@@ -590,7 +591,7 @@ export function CommunityScreen({ account, onBack, publishPost, likePost, commen
   }
 
   function renderMine() {
-    return <div className="community-rural-body"><div className="community-rural-section-title"><div><small>HISTÓRICO ÚNICO</small><h3>Minhas ocorrências</h3></div><button onClick={() => void loadOccurrences(true)}>Sincronizar</button></div><div className="community-rural-chips"><button className="community-rural-chip active">Todas</button><button className="community-rural-chip" onClick={() => setView("water")}>Água</button><button className="community-rural-chip" onClick={() => { setAnimalAction("found"); setView("animals"); }}>Animais</button><button className="community-rural-chip" onClick={() => setView("occurrences")}>Estradas e outras</button></div>{renderOccurrenceList(mine)}</div>;
+    return <div className="community-rural-body"><div className="community-rural-section-title"><div><small>HISTÓRICO ÚNICO</small><h3>Minhas ocorrências</h3></div><button onClick={() => void loadOccurrences(true)}>Sincronizar</button></div><div className="community-rural-chips"><button className="community-rural-chip active" onClick={() => setView("mine")}>Todas</button><button className="community-rural-chip" onClick={() => setView("water")}>Água</button><button className="community-rural-chip" onClick={() => { setAnimalAction("found"); setView("animals"); }}>Animais</button><button className="community-rural-chip" onClick={() => setView("occurrences")}>Estradas e outras</button></div>{renderOccurrenceList(mine)}</div>;
   }
 
   function renderMyCommunity() {
@@ -607,7 +608,7 @@ export function CommunityScreen({ account, onBack, publishPost, likePost, commen
   }
 
   function renderServices() {
-    return <div className="community-rural-body"><section className="community-rural-hero"><div><small>SERVIÇOS E INFORMAÇÕES</small><h2>Referências úteis do campo</h2><p>Espaço preparado para informações identificadas, sem parceria oficial presumida.</p></div><span className="community-rural-hero-icon"><Info size={24} /></span></section><div className="community-rural-services">{[["Assistência técnica", Wrench], ["Cursos e capacitações", FileText], ["Feiras e eventos", Bell], ["Vacinação e manejo", Cow], ["Associações e cooperativas", UsersRound], ["Oportunidades", ClipboardList]].map(([label, Icon]) => { const RowIcon = Icon as typeof Info; return <div className="community-rural-service-row" key={String(label)}><span><RowIcon size={18} /></span><div><strong>{String(label)}</strong><small>Cadastros identificados poderão aparecer aqui</small></div></div>; })}</div><div className="community-rural-note"><Info size={17} /><span>As informações podem ser cadastradas pela comunidade ou por fontes parceiras identificadas. Nenhuma entidade recebe selo ou acesso especial sem configuração e autorização.</span></div></div>;
+    return <CommunityServicesPanel account={account} onOpenWater={() => setView("water")} onOpenAnimals={() => { setAnimalAction("found"); setView("animals"); }} onOpenOccurrences={() => setView("occurrences")} onOpenNotices={() => setView("notices")} onCreateNotice={(kind) => { setNoticeKind(kind); setComposerOpen(true); }} />;
   }
 
   function renderNotices() {
@@ -621,7 +622,7 @@ export function CommunityScreen({ account, onBack, publishPost, likePost, commen
     mine: { title: "Minhas ocorrências", subtitle: "Registros, pendências e histórico." },
     "my-community": { title: "Minha comunidade", subtitle: "O que está acontecendo na sua região." },
     notices: { title: "Avisos", subtitle: "Informações curtas, sem virar feed social." },
-    services: { title: "Serviços e informações", subtitle: "Referências rurais identificadas." },
+    services: { title: "Serviços e informações", subtitle: "Guias práticos e informações da região." },
     animals: { title: animalAction === "found" ? "Animal encontrado" : "Animal desaparecido", subtitle: "Identificação e recuperação com privacidade." },
     map: { title: "Mapa rural", subtitle: "Ocorrências com posição aproximada." },
   };
