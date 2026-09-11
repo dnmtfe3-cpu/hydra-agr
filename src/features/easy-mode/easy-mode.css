@@ -125,8 +125,17 @@
 .easy-step-heading strong { display: block; color: #244535; font-size: 13px; }
 .easy-step-heading small { display: block; margin-top: 2px; color: #718078; font-size: 10px; line-height: 1.35; }
 
-.easy-route-back { margin-bottom: 8px; }
-.easy-route-back > button { color: #174c36; }
+.easy-route { display: grid; gap: 8px; }
+.easy-route-back { margin: 0 0 2px; }
+.easy-route-back > button {
+  min-height: 46px;
+  padding: 0 13px;
+  border: 1px solid rgba(23, 76, 54, .09);
+  border-radius: 14px;
+  background: #f3f8f5;
+  color: #174c36;
+  font-weight: 800;
+}
 
 .easy-voice-dock {
   position: fixed;
@@ -160,12 +169,182 @@
 .hydra-easy-mode fieldset[hidden] { display: none; }
 .hydra-easy-mode .field > span { font-size: 1rem; font-weight: 800; color: #315242; }
 .hydra-easy-mode .field > small { font-size: .9rem; line-height: 1.4; }
-.hydra-easy-mode .screen-heading h1 { font-size: 1.55rem; }
-.hydra-easy-mode .screen-heading p { font-size: .95rem; line-height: 1.45; }
-.hydra-easy-mode .screen-action button { min-width: 52px; }
-.hydra-easy-mode .easy-back { display: inline; font-size: 1rem; }
-.hydra-easy-mode .screen-header .icon-button:has(.easy-back) { width: auto; min-width: 84px; gap: 4px; }
 .hydra-easy-mode .modal-body { padding-bottom: 78px; }
+
+/* O Modo Fácil usa uma apresentação própria. Remove controles de navegação do modo normal. */
+.hydra-easy-mode .easy-route > .screen > .screen-header {
+  margin: 0 0 11px;
+  padding: 14px;
+  border: 1px solid rgba(23, 76, 54, .10);
+  border-radius: 19px;
+  background: linear-gradient(145deg, #f5faf7, #fff);
+  box-shadow: 0 8px 20px rgba(31, 66, 51, .045);
+}
+.hydra-easy-mode .easy-route > .screen > .screen-header .eyebrow,
+.hydra-easy-mode .easy-route > .screen > .screen-header .icon-button.quiet { display: none !important; }
+.hydra-easy-mode .easy-route > .screen > .screen-header .screen-header-row { align-items: center; }
+.hydra-easy-mode .easy-route > .screen > .screen-header .screen-heading { min-width: 0; }
+.hydra-easy-mode .easy-route > .screen > .screen-header .screen-heading h1 { font-size: 1.45rem; color: #173f2f; }
+.hydra-easy-mode .easy-route > .screen > .screen-header .screen-heading p { margin-top: 3px; font-size: .93rem; line-height: 1.35; color: #687970; }
+.hydra-easy-mode .easy-route > .screen > .screen-header .screen-heading > .easy-audio { margin-top: 8px; }
+.hydra-easy-mode .easy-route > .screen > .screen-header .screen-action .icon-button {
+  min-width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #174c36;
+  color: #fff;
+}
+
+/* Rebanho: só cadastro, busca simples e lista dos animais. NFC e ferramentas avançadas ficam nos atalhos próprios. */
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) > .screen-header .screen-action .icon-button {
+  width: auto;
+  padding: 0 14px;
+  gap: 0;
+  font-size: 0;
+}
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) > .screen-header .screen-action .icon-button svg { display: none; }
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) > .screen-header .screen-action .icon-button::after {
+  content: "Cadastrar animal";
+  font-size: 12px;
+  font-weight: 850;
+}
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) > .search-row { grid-template-columns: minmax(0, 1fr); }
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) > .search-row .filter-button,
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) > .filter-chips,
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) > .nfc-inline-card,
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) > .herd-tools-toggle,
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) > .herd-tools-expanded,
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) > .herd-plus-lock { display: none !important; }
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) .search-box {
+  min-height: 56px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(23, 76, 54, .11);
+}
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) .animal-list { gap: 10px; }
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) .animal-card {
+  min-height: 78px;
+  padding: 12px;
+  border-radius: 17px;
+  border: 1px solid rgba(23, 76, 54, .10);
+  background: #fff;
+}
+.hydra-easy-mode .easy-route > .screen:has(> .search-row) .animal-side .tag-badge { display: none; }
+
+/* Água: mantém só situação, consumo principal e as duas ações que o produtor realmente usa. */
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) > .screen-header .screen-action { display: none; }
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) > .water-overview,
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) > .content-section { display: none !important; }
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) > .water-science-card {
+  margin-bottom: 2px;
+  border-radius: 18px;
+}
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) .water-consumption-panel {
+  padding: 14px;
+  border-radius: 19px;
+}
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) .water-consumption-heading p,
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) .water-consumption-chart-block,
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) .water-consumption-breakdown,
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) .water-consumption-note,
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) .water-consumption-method { display: none !important; }
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) .water-consumption-main { grid-template-columns: minmax(0, 1fr); gap: 9px; }
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) .water-consumption-comparison span { display: none; }
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) .water-consumption-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) > .action-pair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 9px;
+  margin-top: 3px;
+}
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) > .action-pair button {
+  min-height: 58px;
+  border-radius: 16px;
+  font-size: 0;
+}
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) > .action-pair .primary-button::after { content: "Anotar água"; font-size: 15px; font-weight: 850; }
+.hydra-easy-mode .easy-route > .screen:has(> .water-science-card) > .action-pair .secondary-button::after { content: "Cadastrar fonte de água"; font-size: 14px; font-weight: 850; }
+
+/* Tarefas: sem botões duplicados do cabeçalho normal. */
+.hydra-easy-mode .easy-route > .screen:has(> .activity-summary) > .screen-header .screen-action .icon-button {
+  width: auto;
+  padding: 0 14px;
+  font-size: 0;
+}
+.hydra-easy-mode .easy-route > .screen:has(> .activity-summary) > .screen-header .screen-action .icon-button svg { display: none; }
+.hydra-easy-mode .easy-route > .screen:has(> .activity-summary) > .screen-header .screen-action .icon-button::after { content: "Nova tarefa"; font-size: 12px; font-weight: 850; }
+.hydra-easy-mode .easy-route > .screen:has(> .activity-summary) .activity-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.hydra-easy-mode .easy-route > .screen:has(> .activity-summary) .activity-card {
+  grid-template-columns: auto minmax(0, 1fr);
+  min-height: 72px;
+  border-radius: 17px;
+  border: 1px solid rgba(23, 76, 54, .10);
+  background: #fff;
+}
+.hydra-easy-mode .easy-route > .screen:has(> .activity-summary) .activity-card > svg { display: none; }
+.hydra-easy-mode .easy-route > .screen:has(> .activity-summary) .activity-main span { display: none; }
+
+/* Comunidade: mostra apenas caminhos essenciais em cartões grandes. */
+.hydra-easy-mode .community-rural-screen > .screen-header .screen-action { display: none !important; }
+.hydra-easy-mode .community-rural-screen .community-rural-hero { padding: 15px; border-radius: 19px; }
+.hydra-easy-mode .community-rural-screen .community-rural-hero p { max-width: 28ch; font-size: 11px; }
+.hydra-easy-mode .community-rural-screen .community-rural-indicators { display: none; }
+.hydra-easy-mode .community-rural-screen .community-rural-body:has(> .community-rural-indicators) > .community-rural-grid {
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+.hydra-easy-mode .community-rural-screen .community-rural-body:has(> .community-rural-indicators) > .community-rural-grid > :nth-child(5),
+.hydra-easy-mode .community-rural-screen .community-rural-body:has(> .community-rural-indicators) > .community-rural-grid > :nth-child(6),
+.hydra-easy-mode .community-rural-screen .community-rural-body:has(> .community-rural-indicators) > .community-rural-grid > :nth-child(8) { display: none; }
+.hydra-easy-mode .community-rural-screen .community-rural-card {
+  min-height: 70px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: 17px;
+}
+.hydra-easy-mode .community-rural-screen .community-rural-card .community-rural-card-icon { flex: 0 0 auto; width: 40px; height: 40px; }
+.hydra-easy-mode .community-rural-screen .community-rural-card p { margin-top: 2px; }
+.hydra-easy-mode .community-rural-screen .community-rural-grid { grid-template-columns: 1fr; }
+.hydra-easy-mode .community-rural-screen .community-services-body .community-service-summary,
+.hydra-easy-mode .community-rural-screen .community-services-body .community-service-search,
+.hydra-easy-mode .community-rural-screen .community-services-body > .community-rural-chips { display: none; }
+.hydra-easy-mode .community-rural-screen .community-services-grid { grid-template-columns: 1fr; gap: 8px; }
+.hydra-easy-mode .community-rural-screen .community-service-card { padding: 12px; border-radius: 17px; }
+.hydra-easy-mode .community-rural-screen .community-service-card-foot { display: none; }
+
+/* Clima: no Fácil mostra o que importa agora, sem botões científicos e abas extras. */
+.hydra-easy-mode .climate-science-screen > .screen-header .screen-action,
+.hydra-easy-mode .climate-science-screen > .science-view-tabs,
+.hydra-easy-mode .climate-science-screen .science-basis-link,
+.hydra-easy-mode .climate-science-screen .science-inline-action,
+.hydra-easy-mode .climate-science-screen .science-disclaimer { display: none !important; }
+.hydra-easy-mode .climate-science-screen .easy-climate-message { border-radius: 18px; }
+.hydra-easy-mode .climate-science-screen .science-current,
+.hydra-easy-mode .climate-science-screen .science-section { border-radius: 18px; }
+.hydra-easy-mode .climate-science-screen .science-forecast { grid-template-columns: 1fr; gap: 7px; }
+.hydra-easy-mode .climate-science-screen .science-forecast article { min-height: 58px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 3px 10px; }
+.hydra-easy-mode .climate-science-screen .science-forecast article small { grid-column: 1 / -1; }
+
+/* NFC: apenas leitura e código manual. Vínculos, rastreamento demonstrativo e menus extras ficam fora do Fácil. */
+.hydra-easy-mode .nfc-screen > .segmented-control,
+.hydra-easy-mode .nfc-screen > .nfc-inline-card,
+.hydra-easy-mode .nfc-screen > details { display: none !important; }
+.hydra-easy-mode .nfc-screen .nfc-desktop-notice { border-radius: 17px; }
+.hydra-easy-mode .nfc-screen .nfc-hero { border-radius: 20px; padding: 18px 14px; }
+.hydra-easy-mode .nfc-screen .nfc-hero p { max-width: 31ch; margin-left: auto; margin-right: auto; }
+.hydra-easy-mode .nfc-screen .nfc-native-read-button { min-height: 58px; border-radius: 16px; font-size: 14px; }
+.hydra-easy-mode .nfc-screen .nfc-manual-card { padding: 14px; border-radius: 18px; }
+.hydra-easy-mode .nfc-screen .manual-heading small { display: none; }
+
+/* Modais do Fácil: menos informação paralela e ações grandes, uma etapa por vez. */
+.hydra-easy-mode .modal-sheet { border-radius: 24px 24px 0 0; }
+.hydra-easy-mode .modal-head .eyebrow { display: none; }
+.hydra-easy-mode .modal-head h2 { font-size: 1.3rem; }
+.hydra-easy-mode .modal-action-row { gap: 9px; }
+.hydra-easy-mode .modal-action-row > button { min-height: 54px; border-radius: 15px; }
 
 .easy-field { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 10px; }
 .easy-field > .easy-audio { margin-bottom: 4px; }
@@ -179,6 +358,11 @@
   .easy-shortcuts > div > button:first-child { min-height: 70px; }
   .easy-voice-dock-hint { display: none; }
   .easy-voice-dock .easy-dictation { min-width: 96px !important; }
+  .hydra-easy-mode .easy-route > .screen > .screen-header { padding: 12px; }
+  .hydra-easy-mode .easy-route > .screen > .screen-header .screen-heading h1 { font-size: 1.28rem; }
+  .hydra-easy-mode .easy-route > .screen:has(> .search-row) > .screen-header .screen-action .icon-button,
+  .hydra-easy-mode .easy-route > .screen:has(> .activity-summary) > .screen-header .screen-action .icon-button { padding: 0 11px; }
+  .hydra-easy-mode .easy-route > .screen:has(> .water-science-card) .water-consumption-metrics { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
