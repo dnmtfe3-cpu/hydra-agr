@@ -48,6 +48,7 @@ import "./auth-reference.css";
 import "./product-finish.css";
 import "./desktop-phone-frame.css";
 import "./maintenance-runtime";
+import "./interface-priority-polish.css";
 import { HydraAppShell } from "./components/hydra-app-shell";
 import { PublicTagLookup } from "./features/herd/public-tag-lookup";
 import { setupPushNotifications } from "./services/push-notifications";
