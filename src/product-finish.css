@@ -1,398 +1,752 @@
-/* Hydra Agro — acabamento final de produto.
-   Mantém celulares pequenos intactos e fecha lacunas de tablet/notebook/desktop. */
+/* Hydra Agro — camada final de acabamento.
+   Mantém os componentes existentes e resolve diferenças visuais entre telas. */
 
-/* ============================
-   Notebook/tablet landscape
-   ============================ */
-@media (min-width: 900px) and (max-width: 1023px) {
-  .hydra-root {
-    --type-display: 30px;
-    --type-section: 18px;
-    --type-card: 13px;
-    --type-body: 12px;
-    --type-control: 11px;
-    --type-caption: 9.5px;
+.hydra-root {
+  --finish-radius-sm: 14px;
+  --finish-radius: 19px;
+  --finish-radius-lg: 24px;
+  --finish-shadow: 0 16px 38px -30px rgba(9, 39, 27, .5);
+  --finish-shadow-raised: 0 18px 42px -27px rgba(9, 39, 27, .42);
+}
+
+.hydra-root .phone-app {
+  overflow-x: clip;
+}
+
+.hydra-root .app-content > .screen {
+  width: 100%;
+}
+
+.hydra-root .screen-header {
+  margin-bottom: 18px !important;
+}
+
+.hydra-root .screen-header::after {
+  width: 28px;
+  height: 3px;
+  margin-top: 12px;
+  opacity: .9;
+}
+
+.hydra-root .screen-header-row {
+  align-items: center;
+  gap: 12px;
+}
+
+.hydra-root .screen-heading {
+  min-width: 0;
+  flex: 1;
+}
+
+.hydra-root .screen-heading h1 {
+  max-width: 100%;
+  margin: 0;
+  font-family: var(--font-display), var(--font-manrope), sans-serif;
+  font-size: clamp(1.55rem, 7vw, 2rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -.045em !important;
+  overflow-wrap: anywhere;
+}
+
+.hydra-root .screen-heading p {
+  max-width: 34rem;
+  margin: 6px 0 0 !important;
+  font-size: .82rem !important;
+  line-height: 1.45 !important;
+}
+
+.hydra-root .eyebrow,
+.hydra-root .group-label,
+.hydra-root .section-kicker {
+  font-size: .68rem !important;
+  line-height: 1.25;
+  letter-spacing: .11em !important;
+}
+
+.hydra-root :is(.primary-button, .secondary-button, .wide-outline-button, .danger-button) {
+  min-height: 50px;
+  border-radius: 16px;
+}
+
+.hydra-root :is(.icon-button, .audio-help) {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 15px;
+}
+
+.hydra-root :is(
+  .animal-card, .activity-card, .monitor-card, .history-home-row,
+  .first-action-card, .task-card, .profile-menu-card, .setting-card,
+  .notification-item, .farm-management-card, .nfc-result-card,
+  .nfc-manual-card, .water-overview, .water-chart, .content-section,
+  .plus-section-card, .plus-status-card, .admin-panel-section
+) {
+  border-radius: var(--finish-radius) !important;
+  box-shadow: var(--finish-shadow) !important;
+}
+
+.hydra-root :is(
+  .animal-card, .activity-card, .history-home-row, .first-action-card,
+  .profile-menu-row, .notification-item, .farm-management-card,
+  .science-indicator, .science-basis-link, .home-science-summary button
+) {
+  transition: transform 180ms var(--ease-product), border-color 180ms ease,
+    background-color 180ms ease, box-shadow 180ms ease;
+  touch-action: manipulation;
+}
+
+.hydra-root :is(
+  .animal-card, .activity-card, .history-home-row, .first-action-card,
+  .profile-menu-row, .notification-item, .farm-management-card,
+  .science-indicator, .science-basis-link, .home-science-summary button
+):active {
+  transform: scale(.985);
+}
+
+/* Resumo principal: uma informação dominante e duas secundárias. */
+.hydra-root .home-science-summary {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 9px !important;
+}
+
+.hydra-root .home-science-summary button {
+  position: relative;
+  min-height: 76px;
+  padding: 13px !important;
+  align-items: center !important;
+  gap: 11px !important;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--line) 82%, var(--forest-700)) !important;
+  border-radius: 18px !important;
+  background: var(--paper) !important;
+  box-shadow: var(--finish-shadow) !important;
+}
+
+.hydra-root .home-science-summary button:first-child {
+  grid-column: 1 / -1;
+  min-height: 86px;
+  color: #fff !important;
+  border-color: transparent !important;
+  background: linear-gradient(135deg, #164b35 0%, #0d3827 100%) !important;
+  box-shadow: 0 18px 38px -26px rgba(8, 54, 35, .88) !important;
+}
+
+.hydra-root .home-science-summary button > svg {
+  width: 38px;
+  height: 38px;
+  padding: 9px;
+  flex: none;
+  border-radius: 13px;
+  color: var(--forest-700);
+  background: var(--sage-soft);
+}
+
+.hydra-root .home-science-summary button:first-child > svg {
+  color: #dff5e5;
+  background: rgba(255, 255, 255, .11);
+}
+
+.hydra-root .home-science-summary small {
+  font-size: .64rem !important;
+  line-height: 1.2;
+  letter-spacing: .1em !important;
+}
+
+.hydra-root .home-science-summary strong {
+  margin: 4px 0 2px !important;
+  font-size: 1rem !important;
+  line-height: 1.2;
+}
+
+.hydra-root .home-science-summary em {
+  font-size: .72rem !important;
+  line-height: 1.3;
+}
+
+.hydra-root .home-science-summary button:first-child :is(small, em) {
+  color: rgba(255, 255, 255, .72) !important;
+}
+
+.hydra-root .home-science-summary button:first-child strong {
+  color: #fff !important;
+  font-size: 1.2rem !important;
+}
+
+/* Clima & Ciência */
+.hydra-root .climate-science-screen {
+  gap: 13px !important;
+}
+
+.hydra-root .climate-science-screen > .screen-header {
+  margin-bottom: 2px !important;
+}
+
+.hydra-root .science-empty,
+.hydra-root .science-current,
+.hydra-root .science-section,
+.hydra-root .science-indicator,
+.hydra-root .science-basis-link,
+.hydra-root .easy-climate-message {
+  border-radius: var(--finish-radius-lg) !important;
+  box-shadow: var(--finish-shadow) !important;
+}
+
+.hydra-root .science-current {
+  position: relative;
+  isolation: isolate;
+  min-height: 156px;
+  padding: 21px !important;
+  align-items: flex-start !important;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  background: linear-gradient(145deg, #1d6547 0%, #0b3827 72%) !important;
+  box-shadow: 0 24px 48px -31px rgba(6, 44, 29, .95) !important;
+}
+
+.hydra-root .science-current::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 190px;
+  height: 190px;
+  right: -78px;
+  bottom: -105px;
+  border-radius: 50%;
+  background: rgba(131, 186, 91, .24);
+}
+
+.hydra-root .science-current > div {
+  min-width: 0;
+}
+
+.hydra-root .science-current > small {
+  max-width: 115px;
+  margin-left: auto;
+  text-align: right;
+  line-height: 1.35;
+}
+
+.hydra-root .science-current strong {
+  margin: 13px 0 3px !important;
+  font-family: var(--font-display), var(--font-manrope), sans-serif;
+  font-size: clamp(2.6rem, 13vw, 3.6rem) !important;
+  line-height: .98;
+  letter-spacing: -.065em;
+}
+
+.hydra-root .science-current p {
+  margin: 0;
+  font-size: .84rem;
+  line-height: 1.4;
+}
+
+.hydra-root .science-source-tag {
+  padding: 6px 9px !important;
+  font-size: .62rem !important;
+  line-height: 1.1;
+  letter-spacing: .09em !important;
+}
+
+.hydra-root .science-metrics {
+  gap: 9px !important;
+}
+
+.hydra-root .science-metrics article {
+  min-height: 76px;
+  padding: 13px !important;
+  border-radius: 17px !important;
+  box-shadow: var(--finish-shadow) !important;
+}
+
+.hydra-root .science-metrics article > svg {
+  width: 35px;
+  height: 35px;
+  padding: 8px;
+  border-radius: 12px;
+  color: var(--forest-700);
+  background: var(--sage-soft);
+}
+
+.hydra-root .science-metrics span {
+  font-size: .72rem !important;
+}
+
+.hydra-root .science-metrics strong {
+  font-size: .88rem !important;
+  line-height: 1.3;
+}
+
+.hydra-root .science-summary-grid {
+  gap: 9px !important;
+}
+
+.hydra-root .science-indicator {
+  position: relative;
+  min-height: 128px;
+  padding: 17px 17px 16px 20px !important;
+  overflow: hidden;
+}
+
+.hydra-root .science-indicator::before {
+  content: "";
+  position: absolute;
+  inset: 18px auto 18px 0;
+  width: 4px;
+  border-radius: 0 99px 99px 0;
+  background: var(--sage);
+}
+
+.hydra-root .science-indicator:has(.attention)::before { background: var(--orange); }
+.hydra-root .science-indicator:has(.risk)::before { background: var(--danger); }
+.hydra-root .science-indicator:has(.neutral)::before { background: var(--muted); }
+
+.hydra-root .science-indicator > span {
+  font-size: .66rem !important;
+}
+
+.hydra-root .science-indicator > strong {
+  font-size: 1.35rem !important;
+  line-height: 1.1;
+}
+
+.hydra-root .science-indicator > small {
+  font-size: .78rem !important;
+  line-height: 1.4;
+}
+
+.hydra-root .science-indicator > em {
+  margin-top: 2px;
+  font-size: .76rem;
+}
+
+.hydra-root .science-section {
+  padding: 17px !important;
+}
+
+.hydra-root .science-alerts article {
+  position: relative;
+  padding: 14px !important;
+  border: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+  border-radius: 16px !important;
+}
+
+.hydra-root .science-alerts p {
+  margin: 0;
+  font-size: .78rem !important;
+  line-height: 1.42;
+}
+
+.hydra-root .science-forecast {
+  gap: 8px !important;
+  margin-inline: -2px;
+  padding: 2px 2px 8px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.hydra-root .science-forecast::-webkit-scrollbar { display: none; }
+
+.hydra-root .science-forecast article {
+  min-width: 126px !important;
+  padding: 13px !important;
+  scroll-snap-align: start;
+  border: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+  border-radius: 16px !important;
+}
+
+.hydra-root .science-basis-link {
+  min-height: 72px;
+  padding: 15px 16px !important;
+}
+
+.hydra-root .science-disclaimer {
+  margin: 2px 0 4px;
+  padding: 2px 7px !important;
+  font-size: .73rem !important;
+}
+
+.hydra-root .water-science-card {
+  position: relative;
+  min-height: 96px;
+  overflow: hidden;
+  border-radius: var(--finish-radius-lg) !important;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--blue-soft) 76%, var(--paper)), var(--paper)) !important;
+  box-shadow: var(--finish-shadow) !important;
+}
+
+.hydra-root .water-science-card > span {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--blue-soft) 70%, var(--paper));
+}
+
+/* Modo Fácil: continua adulto e profissional, com alvos amplos e leitura clara. */
+.hydra-root .easy-home {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background:
+    radial-gradient(circle at 105% 2%, rgba(131, 186, 91, .15), transparent 31%),
+    var(--cream);
+}
+
+.hydra-root .easy-home-header {
+  padding: 8px 2px 2px;
+}
+
+.hydra-root .easy-home-header > span {
+  display: inline-flex;
+  margin-bottom: 8px;
+  color: var(--forest-700);
+  font-size: .7rem;
+  font-weight: 850;
+  letter-spacing: .12em;
+}
+
+.hydra-root .easy-home-header h1 {
+  margin: 0;
+  max-width: 18rem;
+  font-family: var(--font-display), var(--font-manrope), sans-serif;
+  font-size: clamp(1.8rem, 8vw, 2.3rem);
+  line-height: 1.08;
+  letter-spacing: -.045em;
+}
+
+.hydra-root .easy-home-header p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: .92rem;
+  line-height: 1.45;
+}
+
+.hydra-root .easy-shortcuts {
+  gap: 11px !important;
+}
+
+.hydra-root .easy-shortcuts > div {
+  gap: 9px !important;
+}
+
+.hydra-root .easy-shortcuts > div > button:first-child {
+  min-width: 0;
+  min-height: 78px !important;
+  padding: 11px 13px !important;
+  gap: 13px !important;
+  justify-content: flex-start !important;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 20px !important;
+  color: var(--ink);
+  background: var(--paper) !important;
+  box-shadow: var(--finish-shadow) !important;
+}
+
+.hydra-root .easy-shortcut-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 16px;
+  color: var(--forest-700);
+  background: var(--sage-soft);
+}
+
+.hydra-root .easy-shortcuts strong {
+  min-width: 0;
+  flex: 1;
+  font-size: 1.08rem;
+  text-align: left;
+}
+
+.hydra-root .easy-shortcut-arrow {
+  flex: none;
+  color: var(--muted);
+}
+
+.hydra-root .easy-audio {
+  width: 52px;
+  height: 52px;
+  min-width: 52px !important;
+  min-height: 52px !important;
+  padding: 0 !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 17px !important;
+  box-shadow: none !important;
+}
+
+.hydra-root .easy-setting {
+  border-radius: 19px;
+}
+
+.hydra-root .easy-step-heading {
+  margin-bottom: 16px;
+  padding: 12px 13px;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: var(--sage-soft);
+}
+
+/* Navegação com acabamento nativo e estado ativo mais legível. */
+@media (max-width: 899px) {
+  .hydra-root .app-content {
+    padding-bottom: calc(88px + env(safe-area-inset-bottom)) !important;
   }
 
-  .hydra-root .app-shell,
-  .hydra-root .phone-app,
-  .hydra-root .app-content {
-    width: 100% !important;
-    max-width: none !important;
-    min-height: 100dvh !important;
-    margin: 0 !important;
-    border: 0 !important;
-    border-radius: 0 !important;
+  .hydra-root .screen:not(.profile-screen) {
+    padding-inline: max(15px, env(safe-area-inset-left)) !important;
+  }
+
+  .hydra-root .bottom-nav {
+    width: calc(100% - 16px) !important;
+    max-width: 524px;
+    height: calc(74px + env(safe-area-inset-bottom)) !important;
+    bottom: 8px !important;
+    padding: 7px 6px env(safe-area-inset-bottom) !important;
+    overflow: visible !important;
+    border: 1px solid rgba(210, 218, 208, .9) !important;
+    border-radius: 25px !important;
+    background: rgba(255, 254, 251, .94) !important;
+    box-shadow: 0 18px 44px -18px rgba(7, 38, 25, .35) !important;
+    -webkit-backdrop-filter: blur(26px) saturate(145%);
+    backdrop-filter: blur(26px) saturate(145%);
+  }
+
+  .hydra-root .bottom-nav-indicator {
+    top: 6px !important;
+    height: 43px !important;
+  }
+
+  .hydra-root .bottom-nav-indicator::after {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 15px !important;
+    background: var(--sage-soft) !important;
     box-shadow: none !important;
   }
 
-  .hydra-root .app-content {
-    padding-bottom: 118px !important;
+  .hydra-root .bottom-nav > button {
+    min-height: 58px;
+    gap: 2px !important;
   }
 
-  .hydra-root .app-content > .screen,
-  .hydra-root .app-content .screen {
-    width: min(calc(100% - 48px), 880px) !important;
-    max-width: 880px !important;
-    margin: 0 auto !important;
-    padding: 28px 0 38px !important;
+  .hydra-root .bottom-nav > button > span:first-of-type {
+    width: 42px !important;
+    height: 40px !important;
+    border-radius: 15px !important;
+    background: transparent !important;
+    transform: none !important;
   }
 
-  .hydra-root .phone-app .bottom-nav {
-    position: fixed !important;
-    left: 50% !important;
-    right: auto !important;
-    bottom: 16px !important;
-    width: min(720px, calc(100vw - 48px)) !important;
-    height: 88px !important;
-    min-height: 88px !important;
-    padding: 8px 12px !important;
-    border-radius: 26px !important;
-    transform: translateX(-50%) !important;
-    background: rgba(255, 254, 250, .94) !important;
-    border: 1px solid rgba(23, 77, 53, .1) !important;
-    box-shadow: 0 18px 48px -28px rgba(8, 48, 32, .5) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    backdrop-filter: blur(20px) !important;
+  .hydra-root .bottom-nav > button.active > span:first-of-type {
+    transform: translateY(-1px) !important;
   }
 
-  .hydra-root .phone-app .bottom-nav > button {
-    min-height: 68px !important;
+  .hydra-root .bottom-nav > button small {
+    font-size: .58rem !important;
+    line-height: 1;
   }
 
-  .hydra-root .phone-app .bottom-nav > button:nth-of-type(3) {
-    transform: translateY(-10px) !important;
+  .hydra-root .bottom-nav > button.nav-nfc > span:first-of-type {
+    width: 52px !important;
+    height: 52px !important;
+    margin-top: -18px;
+    border: 5px solid var(--cream) !important;
+    border-radius: 19px !important;
+    color: #fff !important;
+    background: var(--orange) !important;
+    box-shadow: 0 14px 28px -16px rgba(255, 126, 12, .9) !important;
   }
 
-  .hydra-root .phone-app .bottom-nav > button:nth-of-type(3) > span:not(.touch-ripple) {
-    width: 58px !important;
-    height: 58px !important;
-    min-width: 58px !important;
-    min-height: 58px !important;
-    border-radius: 20px !important;
-  }
-
-  .hydra-root .phone-app .bottom-nav .touch-ripple {
-    display: none !important;
-  }
-
-  .hydra-root .home-screen > .shortcut-row {
-    display: grid !important;
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-  }
-
-  .hydra-root .home-screen > .shortcut-row > button {
-    min-height: 92px !important;
-  }
-
-  .hydra-root .community-screen > .post-list,
-  .hydra-root .screen:has(> .nfc-inline-card) > .animal-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .hydra-root.theme-dark .phone-app .bottom-nav {
-    background: rgba(12, 28, 20, .94) !important;
-    border-color: rgba(255,255,255,.07) !important;
+  .hydra-root .bottom-nav > button.nav-nfc small {
+    margin-top: -4px;
   }
 }
 
-/* ============================
-   Desktop polish
-   ============================ */
-@media (min-width: 1024px) {
-  /* Conteúdo sempre respira acima da dock. */
-  .hydra-root .app-content {
-    padding-bottom: 148px !important;
+/* Tema escuro: superfícies verdes profundas sem blocos brancos. */
+.hydra-root.theme-dark {
+  --finish-shadow: 0 18px 40px -28px rgba(0, 0, 0, .72);
+  --finish-shadow-raised: 0 22px 46px -28px rgba(0, 0, 0, .82);
+}
+
+.hydra-root.theme-dark .home-science-summary button:not(:first-child),
+.hydra-root.theme-dark :is(
+  .science-empty, .science-section, .science-indicator,
+  .science-basis-link, .easy-climate-message, .science-metrics article
+) {
+  color: var(--dark-text) !important;
+  border-color: var(--dark-border) !important;
+  background: var(--dark-surface) !important;
+}
+
+.hydra-root.theme-dark .home-science-summary button:first-child,
+.hydra-root.theme-dark .science-current {
+  background: linear-gradient(145deg, #205e43 0%, #0a2d1f 76%) !important;
+}
+
+.hydra-root.theme-dark :is(.home-science-summary button, .science-metrics article) > svg {
+  color: #9bd0a9;
+  background: var(--dark-surface-soft);
+}
+
+.hydra-root.theme-dark .science-alerts article,
+.hydra-root.theme-dark .science-forecast article {
+  color: var(--dark-text);
+  border-color: var(--dark-border);
+  background: var(--dark-surface-raised);
+}
+
+.hydra-root.theme-dark .water-science-card {
+  color: var(--dark-text) !important;
+  border-color: var(--dark-border) !important;
+  background: linear-gradient(145deg, #17392f 0%, var(--dark-surface) 100%) !important;
+}
+
+.hydra-root.theme-dark .water-science-card > span {
+  background: var(--dark-surface-soft);
+}
+
+.hydra-root.theme-dark .easy-home {
+  background:
+    radial-gradient(circle at 105% 2%, rgba(120, 184, 139, .12), transparent 31%),
+    var(--dark-bg) !important;
+}
+
+.hydra-root.theme-dark .easy-home-header > span {
+  color: #9bd0a9;
+}
+
+.hydra-root.theme-dark .easy-shortcuts > div > button:first-child,
+.hydra-root.theme-dark .easy-audio {
+  color: var(--dark-text) !important;
+  border-color: var(--dark-border) !important;
+  background: var(--dark-surface) !important;
+}
+
+.hydra-root.theme-dark .easy-shortcut-icon,
+.hydra-root.theme-dark .easy-step-heading {
+  color: #9bd0a9;
+  border-color: var(--dark-border);
+  background: var(--dark-surface-soft);
+}
+
+@media (max-width: 899px) {
+  .hydra-root.theme-dark .bottom-nav {
+    border-color: var(--dark-border) !important;
+    background: rgba(8, 25, 18, .94) !important;
+    box-shadow: 0 20px 48px -20px rgba(0, 0, 0, .85) !important;
   }
 
-  .hydra-root .screen {
-    scroll-margin-top: 24px;
+  .hydra-root.theme-dark .bottom-nav-indicator::after {
+    background: var(--dark-surface-soft) !important;
   }
 
-  /* Cabeçalhos mais consistentes. */
-  .hydra-root .screen-header {
-    min-height: 66px !important;
-    display: flex !important;
-    align-items: center !important;
-  }
-
-  .hydra-root .screen-header-row {
-    width: 100% !important;
-  }
-
-  .hydra-root .screen-heading p {
-    margin-top: 5px !important;
-    color: var(--muted) !important;
-    line-height: 1.5 !important;
-  }
-
-  /* Cards comuns ganham a mesma linguagem visual. */
-  .hydra-root .phone-app :is(
-    .content-section,
-    .empty-state,
-    .task-card,
-    .activity-card,
-    .monitor-card,
-    .water-card,
-    .history-home-row,
-    .first-action-card,
-    .assistant-home-card,
-    .today-home-card,
-    .nfc-manual-card,
-    .nfc-result-card
-  ) {
-    border-radius: 20px !important;
-  }
-
-  .hydra-root .content-section {
-    padding: 20px !important;
-    border: 1px solid rgba(18, 72, 48, .075) !important;
-    background: rgba(255, 255, 252, .74) !important;
-    box-shadow: 0 18px 42px -38px rgba(8, 48, 32, .46) !important;
-  }
-
-  .hydra-root .section-heading {
-    margin-bottom: 15px !important;
-  }
-
-  /* Empty states não ficam perdidos em painéis largos. */
-  .hydra-root .empty-state {
-    min-height: 220px !important;
-    padding: 34px 28px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-  }
-
-  .hydra-root .empty-state > span,
-  .hydra-root .empty-state > .empty-icon {
-    margin-bottom: 12px !important;
-  }
-
-  .hydra-root .empty-state p {
-    max-width: 520px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  /* Formulários desktop: campos não ocupam 1200px sem necessidade. */
-  .hydra-root .screen > form:not(.comment-form),
-  .hydra-root .screen .form-card,
-  .hydra-root .screen .form-section {
-    max-width: 900px !important;
-  }
-
-  .hydra-root .field {
-    min-width: 0 !important;
-  }
-
-  .hydra-root .field input,
-  .hydra-root .field select,
-  .hydra-root .field textarea,
-  .hydra-root .search-box input,
-  .hydra-root .comment-form input {
-    min-height: 48px !important;
-    border-radius: 14px !important;
-  }
-
-  .hydra-root .field textarea {
-    min-height: 118px !important;
-    resize: vertical !important;
-  }
-
-  .hydra-root .field input:focus,
-  .hydra-root .field select:focus,
-  .hydra-root .field textarea:focus,
-  .hydra-root .search-box input:focus,
-  .hydra-root .comment-form input:focus {
-    border-color: rgba(31, 104, 73, .36) !important;
-    box-shadow: 0 0 0 4px rgba(31, 104, 73, .07) !important;
-    outline: none !important;
-  }
-
-  /* Botões ficam com área de clique uniforme. */
-  .hydra-root .phone-app :is(.primary-button, .secondary-button, .danger-button, .wide-outline-button) {
-    min-height: 46px !important;
-    border-radius: 14px !important;
-  }
-
-  .hydra-root .icon-button {
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
-    border-radius: 14px !important;
-  }
-
-  /* Estados hover discretos, sem mover o grid. */
-  .hydra-root .phone-app :is(
-    .content-section,
-    .post-card,
-    .animal-card,
-    .activity-card,
-    .monitor-card,
-    .water-card,
-    .history-home-row,
-    .first-action-card
-  ) {
-    transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease !important;
-  }
-
-  .hydra-root .phone-app :is(.post-card, .animal-card, .activity-card, .monitor-card):hover {
-    border-color: rgba(31, 104, 73, .14) !important;
-    box-shadow: 0 20px 44px -36px rgba(7, 48, 31, .42) !important;
-  }
-
-  /* Listas em desktop ficam mais legíveis. */
-  .hydra-root :is(.animal-list, .post-list, .activity-list, .monitor-list, .history-list) {
-    align-items: start !important;
-  }
-
-  .hydra-root .animal-card,
-  .hydra-root .post-card {
-    height: 100% !important;
-  }
-
-  /* Modais centrais, com largura controlada e scroll interno. */
-  .hydra-root .modal-layer {
-    padding: 32px !important;
-  }
-
-  .hydra-root .modal-sheet:not(.modal-tall) {
-    width: min(620px, calc(100vw - 64px)) !important;
-    max-width: 620px !important;
-    max-height: min(780px, calc(100dvh - 64px)) !important;
-    border-radius: 26px !important;
-  }
-
-  .hydra-root .modal-sheet.modal-wide:not(.modal-tall) {
-    width: min(820px, calc(100vw - 64px)) !important;
-    max-width: 820px !important;
-  }
-
-  .hydra-root .modal-sheet .modal-head {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
-  }
-
-  .hydra-root .modal-sheet .modal-body {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
-  }
-
-  .hydra-root .modal-action-row {
-    gap: 10px !important;
-  }
-
-  /* Quick actions ficam com aparência de painel desktop. */
-  .hydra-root .quick-layer {
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 32px !important;
-  }
-
-  .hydra-root .quick-sheet {
-    width: min(760px, calc(100vw - 64px)) !important;
-    max-height: calc(100dvh - 64px) !important;
-    border-radius: 28px !important;
-  }
-
-  .hydra-root .quick-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-  }
-
-  .hydra-root .quick-grid > button {
-    min-height: 82px !important;
-    border-radius: 17px !important;
-  }
-
-  /* NFC desktop: aviso não fica perdido e entrada manual vira a ação principal. */
-  .hydra-root .nfc-screen .nfc-desktop-note {
-    margin-bottom: 18px !important;
-  }
-
-  .hydra-root .nfc-screen .nfc-manual-card {
-    max-width: 760px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  /* Foco de teclado: produto utilizável em notebook sem mouse. */
-  .hydra-root button:focus-visible,
-  .hydra-root a:focus-visible,
-  .hydra-root [role="button"]:focus-visible {
-    outline: 3px solid rgba(255, 135, 18, .34) !important;
-    outline-offset: 3px !important;
-  }
-
-  .hydra-root .bottom-nav button:focus-visible {
-    outline-color: rgba(31, 104, 73, .34) !important;
-  }
-
-  /* Scrollbar discreta só no desktop. */
-  .hydra-root,
-  .hydra-root .modal-body,
-  .hydra-root .quick-sheet {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(46, 92, 67, .25) transparent;
-  }
-
-  .hydra-root ::-webkit-scrollbar {
-    width: 9px;
-    height: 9px;
-  }
-
-  .hydra-root ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .hydra-root ::-webkit-scrollbar-thumb {
-    background: rgba(46, 92, 67, .22);
-    border: 2px solid transparent;
-    border-radius: 999px;
-    background-clip: padding-box;
-  }
-
-  .hydra-root ::-webkit-scrollbar-thumb:hover {
-    background: rgba(46, 92, 67, .34);
-    border: 2px solid transparent;
-    background-clip: padding-box;
-  }
-
-  /* Dark mode final. */
-  .hydra-root.theme-dark .content-section {
-    border-color: rgba(255,255,255,.065) !important;
-    background: rgba(15, 33, 24, .78) !important;
-    box-shadow: 0 18px 42px -38px rgba(0,0,0,.7) !important;
-  }
-
-  .hydra-root.theme-dark .field input:focus,
-  .hydra-root.theme-dark .field select:focus,
-  .hydra-root.theme-dark .field textarea:focus,
-  .hydra-root.theme-dark .search-box input:focus,
-  .hydra-root.theme-dark .comment-form input:focus {
-    border-color: rgba(136, 185, 145, .32) !important;
-    box-shadow: 0 0 0 4px rgba(136, 185, 145, .07) !important;
-  }
-
-  .hydra-root.theme-dark ::-webkit-scrollbar-thumb {
-    background: rgba(151, 183, 159, .18);
-    border: 2px solid transparent;
-    background-clip: padding-box;
+  .hydra-root.theme-dark .bottom-nav > button.nav-nfc > span:first-of-type {
+    border-color: var(--dark-bg) !important;
   }
 }
 
-@media (min-width: 900px) and (prefers-reduced-motion: reduce) {
+@media (min-width: 620px) {
+  .hydra-root .science-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 370px) {
+  .hydra-root .home-science-summary {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hydra-root .home-science-summary button:first-child {
+    grid-column: auto;
+  }
+
+  .hydra-root .science-current {
+    min-height: 172px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
   .hydra-root *,
   .hydra-root *::before,
   .hydra-root *::after {
+    scroll-behavior: auto !important;
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
+}
+
+/* Resolve feature tokens against the existing theme, including portal content. */
+:is(.climate-science-screen, .home-science-summary, .water-science-card, .science-method, .science-sources) {
+  --surface: var(--paper);
+  --surface-soft: var(--sage-soft);
+  --text: var(--ink);
+  --border: var(--line);
+  --primary: var(--forest-700);
+}
+
+.hydra-root :is(.science-current p, .science-indicator > small, .science-alerts p, .water-science-card p, .easy-home-header p) {
+  font-size: 1rem !important;
+  line-height: 1.5;
+}
+
+.hydra-root :is(.science-metrics span, .science-metrics strong, .science-forecast span, .science-forecast small, .science-indicator > em, .science-basis-link small, .home-science-summary em) {
+  font-size: .875rem !important;
+  line-height: 1.4;
+}
+
+.hydra-root :is(.science-source-tag, .science-current > small, .science-indicator > span, .home-science-summary small) {
+  font-size: .75rem !important;
+  white-space: normal;
+  max-width: 100%;
+}
+
+.hydra-root .home-science-summary em {
+  white-space: normal;
+  overflow: visible;
+}
+
+.hydra-root .science-current {
+  flex-wrap: wrap;
+}
+
+.hydra-root .science-current > small {
+  max-width: none;
+  flex-basis: 100%;
+  margin: 0;
+  text-align: left;
+}
+
+.hydra-root .science-current strong { color: #fff !important; }
+.hydra-root .science-current :is(p, small) { color: #d3e8dc !important; }
+.hydra-root .science-indicator > strong.good { color: #247143 !important; }
+.hydra-root .science-indicator > strong.attention { color: #995209 !important; }
+.hydra-root .science-indicator > strong.risk { color: #b3342e !important; }
+.hydra-root.theme-dark .science-indicator > strong.good { color: #9bd0a9 !important; }
+.hydra-root.theme-dark .science-indicator > strong.attention { color: #ffc081 !important; }
+.hydra-root.theme-dark .science-indicator > strong.risk { color: #ffaaa1 !important; }
+
+.hydra-root .profile-menu-row > div,
+.hydra-root .profile-menu-copy,
+.hydra-root .water-science-card > div { min-width: 0; }
+
+.hydra-root .profile-menu-row strong { line-height: 1.35; }
+.hydra-root .profile-menu-row small { line-height: 1.5; }
+.hydra-root .screen-action { flex-shrink: 0; }
+
+.hydra-easy-mode .hydra-root .screen-heading h1 { font-size: 1.6rem !important; }
+.hydra-easy-mode .hydra-root .screen-header-row { flex-wrap: wrap; }
+.hydra-easy-mode .hydra-root .screen-heading { flex-basis: 60%; }
+.hydra-easy-mode .hydra-root .easy-shortcuts strong { overflow-wrap: anywhere; }
+
+@media (max-width: 360px) {
+  .hydra-root .science-metrics { grid-template-columns: 1fr; }
+  .hydra-root .easy-shortcut-arrow { display: none; }
+  .hydra-root .easy-shortcuts > div > button:first-child { gap: 8px !important; }
 }

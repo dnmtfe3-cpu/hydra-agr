@@ -44,6 +44,7 @@ import "./native-screen-cleanup.css";
 import "./auth-green-identity.css";
 import "./auth-reference.css";
 import "./desktop-phone-frame.css";
+import "./product-finish.css";
 import "./maintenance-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
 import { setupPushNotifications } from "./services/push-notifications";

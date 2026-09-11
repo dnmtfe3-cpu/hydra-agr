@@ -1,5 +1,5 @@
 import { Children, createContext, isValidElement, useContext, useEffect, useRef, useState, type FormHTMLAttributes, type ReactNode } from "react";
-import { Beef, ClipboardCheck, CloudSun, Droplets, ScanLine, Settings, Volume2 } from "lucide-react";
+import { Beef, ChevronRight, ClipboardCheck, CloudSun, Droplets, ScanLine, Settings, Volume2 } from "lucide-react";
 import type { AppRoute } from "../../lib/hydra-types";
 import "./easy-mode.css";
 
@@ -38,7 +38,7 @@ const shortcuts = [
 ] satisfies { route: AppRoute; title: string; text: string; icon: typeof Beef }[];
 
 export function EasyHome({ navigate }: { navigate: (route: AppRoute) => void }) {
-  return <section className="screen easy-home"><h1>O que você quer fazer?</h1><div className="easy-shortcuts">{shortcuts.map(({ route, title, text, icon: Icon }) => <div key={route}><button className="secondary-button" onClick={() => navigate(route)}><Icon size={32} /><strong>{title}</strong></button><AudioHelp text={text} /></div>)}</div></section>;
+  return <section className="screen easy-home"><header className="easy-home-header"><span>MODO FÁCIL</span><h1>O que você quer fazer?</h1><p>Escolha uma função ou toque no áudio para ouvir.</p></header><div className="easy-shortcuts">{shortcuts.map(({ route, title, text, icon: Icon }) => <div key={route}><button className="secondary-button" onClick={() => navigate(route)}><span className="easy-shortcut-icon"><Icon size={29} /></span><strong>{title}</strong><ChevronRight className="easy-shortcut-arrow" size={22} /></button><AudioHelp text={text} /></div>)}</div></section>;
 }
 
 // Keep the original controlled fields and submit handler; only change presentation.
