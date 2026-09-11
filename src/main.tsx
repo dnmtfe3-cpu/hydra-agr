@@ -45,8 +45,8 @@ import "./ui-premium-polish.css";
 import "./native-screen-cleanup.css";
 import "./auth-green-identity.css";
 import "./auth-reference.css";
-import "./desktop-phone-frame.css";
 import "./product-finish.css";
+import "./desktop-layout.css";
 import "./maintenance-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
 import { PublicTagLookup } from "./features/herd/public-tag-lookup";
@@ -67,64 +67,9 @@ const publicAnimalQuery =
   typeof window !== "undefined" && new URLSearchParams(window.location.search).get("pa") === "1";
 const standalonePublicMode = publicTagMode || publicAnimalQuery;
 const preview = path === "/preview/ios/splash" ? null : renderIosPreviewRoute(path);
-const desktopPhoneMode =
-  typeof window !== "undefined" &&
-  !Capacitor.isNativePlatform() &&
-  window.innerWidth >= 1024 &&
-  !path.startsWith("/preview/") &&
-  !standalonePublicMode;
-
-function DesktopPhonePresentation() {
-  const mobileUrl = typeof window !== "undefined" ? window.location.href : "/";
-
-  return (
-    <main className="desktop-phone-stage" aria-label="Hydra Agro em visualização móvel">
-      <aside className="desktop-phone-side-copy desktop-phone-side-copy-left" aria-label="Informações da demonstração">
-        <span className="desktop-phone-kicker">Demonstração exclusiva</span>
-        <h1><span>Feira de</span> Ciências</h1>
-        <p>
-          Esta versão foi preparada especialmente para demonstrar o Hydra Agro em computador durante a Feira de Ciências.
-        </p>
-      </aside>
-
-      <div className="desktop-phone-device">
-        <span className="desktop-phone-side-button desktop-phone-side-button-left" aria-hidden="true" />
-        <span className="desktop-phone-side-button desktop-phone-side-button-right" aria-hidden="true" />
-        <div className="desktop-phone-screen">
-          <span className="desktop-phone-island" aria-hidden="true" />
-          <iframe
-            className="desktop-phone-iframe"
-            src={mobileUrl}
-            title="Hydra Agro — versão mobile"
-            allow="clipboard-read; clipboard-write; camera; microphone"
-          />
-        </div>
-      </div>
-
-      <aside className="desktop-phone-side-copy desktop-phone-side-copy-right" aria-label="Disponibilidade do Hydra Agro">
-        <div className="desktop-phone-side-item">
-          <strong>Teste ao vivo</strong>
-          <span>Use o mouse do Chromebook para navegar e testar o Hydra Agro.</span>
-        </div>
-        <div className="desktop-phone-side-item">
-          <strong>Aplicativo mobile</strong>
-          <span>O aplicativo completo foi desenvolvido para celulares.</span>
-        </div>
-        <div className="desktop-phone-side-item">
-          <strong>Versão web</strong>
-          <span>Acesse pelo navegador em hydraagro.sbs.</span>
-        </div>
-        <div className="desktop-phone-side-item">
-          <strong>APK e IPA</strong>
-          <span>Solicite gratuitamente os arquivos de instalação ao responsável pelo Hydra Agro.</span>
-        </div>
-      </aside>
-    </main>
-  );
-}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    {preview ?? (standalonePublicMode ? <PublicTagLookup /> : desktopPhoneMode ? <DesktopPhonePresentation /> : <HydraAppShell />)}
+    {preview ?? (standalonePublicMode ? <PublicTagLookup /> : <HydraAppShell />)}
   </React.StrictMode>,
 );
