@@ -47,6 +47,7 @@ import "./auth-green-identity.css";
 import "./auth-reference.css";
 import "./product-finish.css";
 import "./desktop-layout.css";
+import "./desktop-bottom-bar.css";
 import "./maintenance-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
 import { PublicTagLookup } from "./features/herd/public-tag-lookup";
