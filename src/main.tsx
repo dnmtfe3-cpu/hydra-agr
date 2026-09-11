@@ -27,6 +27,8 @@ import "./features/profile/profile-ranking-spacing-fix.css";
 import "./features/profile/level10-vip-runtime";
 import "./features/community/community-comment-runtime";
 import "./features/admin/admin-screen-polish.css";
+import "./features/nfc/remote-tag-scanner-runtime";
+import "./features/tutorial/app-tutorial-runtime";
 import "./mobile-typography-compact.css";
 import "./bottom-nav-final-runtime";
 import "./admin-panel-runtime";
@@ -47,6 +49,7 @@ import "./desktop-phone-frame.css";
 import "./product-finish.css";
 import "./maintenance-runtime";
 import { HydraAppShell } from "./components/hydra-app-shell";
+import { PublicTagLookup } from "./features/herd/public-tag-lookup";
 import { setupPushNotifications } from "./services/push-notifications";
 import { renderIosPreviewRoute } from "./ios-preview";
 
@@ -59,12 +62,17 @@ if (typeof document !== "undefined") {
 }
 
 const path = typeof window !== "undefined" ? window.location.pathname : "";
+const publicTagMode = path === "/tag" || path.startsWith("/tag/");
+const publicAnimalQuery =
+  typeof window !== "undefined" && new URLSearchParams(window.location.search).get("pa") === "1";
+const standalonePublicMode = publicTagMode || publicAnimalQuery;
 const preview = path === "/preview/ios/splash" ? null : renderIosPreviewRoute(path);
 const desktopPhoneMode =
   typeof window !== "undefined" &&
   !Capacitor.isNativePlatform() &&
   window.innerWidth >= 1024 &&
-  !path.startsWith("/preview/");
+  !path.startsWith("/preview/") &&
+  !standalonePublicMode;
 
 function DesktopPhonePresentation() {
   const mobileUrl = typeof window !== "undefined" ? window.location.href : "/";
@@ -117,6 +125,6 @@ function DesktopPhonePresentation() {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    {preview ?? (desktopPhoneMode ? <DesktopPhonePresentation /> : <HydraAppShell />)}
+    {preview ?? (standalonePublicMode ? <PublicTagLookup /> : desktopPhoneMode ? <DesktopPhonePresentation /> : <HydraAppShell />)}
   </React.StrictMode>,
 );
