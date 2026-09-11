@@ -1,13 +1,10 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { NfcScreen } from "../src/features/nfc/nfc-screen";
 import { createEmptyAccount, type UpdateAccount } from "../src/lib/hydra-types";
 
-afterEach(() => vi.useRealTimers());
-
-describe("demonstração NFC na web", () => {
-  it("simula a aproximação e mostra um animal sem registrar leitura real", async () => {
-    vi.useFakeTimers();
+describe("NFC na web", () => {
+  it("não oferece leitura NFC simulada e mantém os fallbacks reais visíveis", () => {
     const account = createEmptyAccount({ id: "owner-web", email: "owner@hydra.test" });
     account.animals = [{
       id: "animal-1",
@@ -19,25 +16,24 @@ describe("demonstração NFC na web", () => {
       electronicId: "TAG-027",
     }];
     const onRealRead = vi.fn(async () => true);
+    const onFound = vi.fn();
 
     render(<NfcScreen
       account={account}
       updateAccount={vi.fn<UpdateAccount>(async () => undefined)}
       onBack={vi.fn()}
-      onFound={vi.fn()}
+      onFound={onFound}
       onRealRead={onRealRead}
     />);
 
     expect(screen.getByText("Rastreamento não conectado")).toBeInTheDocument();
     expect(screen.getByText("Modo demonstração", { selector: "summary" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Simular leitura" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Simular localização" })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Simular leitura" }));
-    expect(screen.getByRole("status", { name: "Lendo etiqueta NFC" })).toBeInTheDocument();
-
-    await act(async () => { await vi.advanceTimersByTimeAsync(1800); });
-
-    expect(screen.getByText("Estrela")).toBeInTheDocument();
-    expect(screen.getByText("Tag lida. Animal localizado na demonstração.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Como usar NFC" })).toBeInTheDocument();
+    expect(screen.getByText(/Use QR Code ou código manual aqui/i)).toBeInTheDocument();
+    expect(screen.getByLabelText("Código da identificação")).toBeInTheDocument();
     expect(onRealRead).not.toHaveBeenCalled();
+    expect(onFound).not.toHaveBeenCalled();
   });
 });
