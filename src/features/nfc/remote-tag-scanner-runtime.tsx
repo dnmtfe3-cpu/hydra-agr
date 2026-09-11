@@ -1,6 +1,7 @@
 import { createRoot, type Root } from "react-dom/client";
 import { RemoteTagScanner } from "./remote-tag-scanner";
 import "./remote-tag-scanner.css";
+import "./remote-tag-scanner-fix.css";
 
 let mountedHost: HTMLElement | null = null;
 let mountedRoot: Root | null = null;
