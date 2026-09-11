@@ -1,0 +1,195 @@
+/* Hydra Agro — navegação de PC em bottom bar.
+   Somente desktop/notebook; o mobile permanece inalterado. */
+
+@media (min-width: 1024px) {
+  .hydra-root {
+    --desktop-sidebar: 0px;
+  }
+
+  .hydra-root .app-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding-bottom: 128px !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav,
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav {
+    position: fixed !important;
+    z-index: 180 !important;
+    left: 50% !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: 22px !important;
+    width: min(760px, calc(100vw - 64px)) !important;
+    height: 78px !important;
+    min-height: 78px !important;
+    max-height: 78px !important;
+    margin: 0 !important;
+    padding: 8px 10px !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: center !important;
+    justify-content: stretch !important;
+    gap: 6px !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(28, 73, 53, .1) !important;
+    border-radius: 24px !important;
+    background: rgba(255, 255, 255, .96) !important;
+    box-shadow: 0 18px 46px rgba(25, 55, 42, .16), 0 4px 12px rgba(25, 55, 42, .07) !important;
+    backdrop-filter: blur(18px) saturate(1.08) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(1.08) !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav::before,
+  .hydra-root .phone-app .bottom-nav::after,
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav::before,
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav-indicator {
+    display: none !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button,
+  .hydra-root .phone-app .bottom-nav > button:nth-of-type(3),
+  .hydra-root .phone-app .bottom-nav > button:nth-of-type(3).active,
+  html body #root .hydra-root .phone-app nav.bottom-nav.bottom-nav > button {
+    position: relative !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    margin: 0 !important;
+    padding: 8px 10px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    border: 1px solid transparent !important;
+    border-radius: 17px !important;
+    background: transparent !important;
+    color: #6e7d75 !important;
+    box-shadow: none !important;
+    text-align: center !important;
+    transform: none !important;
+    overflow: hidden !important;
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button:hover {
+    color: #285d45 !important;
+    background: #f3f7f4 !important;
+    transform: translateY(-1px) !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button.active,
+  .hydra-root .phone-app .bottom-nav > button:nth-of-type(3).active {
+    color: #1f6f4d !important;
+    border-color: rgba(35, 150, 104, .1) !important;
+    background: #edf6f0 !important;
+    transform: none !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button > span:first-of-type:not(.touch-ripple),
+  .hydra-root .phone-app .bottom-nav > button:nth-of-type(3) > span:first-of-type:not(.touch-ripple),
+  .hydra-root .phone-app .bottom-nav > button:nth-of-type(3).active > span:first-of-type:not(.touch-ripple) {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    background: rgba(44, 104, 76, .07) !important;
+    color: currentColor !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button.active > span:first-of-type:not(.touch-ripple) {
+    background: #239668 !important;
+    color: #fff !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button.nav-nfc.active > span:first-of-type:not(.touch-ripple) {
+    background: #f28a25 !important;
+    color: #fff !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav > button > small,
+  .hydra-root .phone-app .bottom-nav > button:nth-of-type(3) > small,
+  .hydra-root .phone-app .bottom-nav > button.active > small {
+    width: auto !important;
+    margin: 0 !important;
+    display: block !important;
+    color: inherit !important;
+    font-size: 11px !important;
+    font-weight: 750 !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    text-align: left !important;
+    transform: none !important;
+  }
+
+  .hydra-root .phone-app .bottom-nav.is-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* Os dialogs deixam de reservar espaço para uma sidebar inexistente. */
+  .hydra-root .modal-sheet,
+  .hydra-root .modal-sheet.modal-wide,
+  .hydra-root .modal-sheet.modal-tall {
+    width: min(720px, calc(100vw - 96px)) !important;
+    margin: 0 !important;
+  }
+
+  .hydra-root .modal-sheet.modal-wide {
+    width: min(860px, calc(100vw - 96px)) !important;
+  }
+
+  .hydra-root .modal-sheet.modal-wide.modal-tall:has(.herd-care-guide) {
+    width: min(900px, calc(100vw - 96px)) !important;
+    margin: 0 !important;
+  }
+
+  .hydra-root .modal-sheet.modal-centered:has(.confirm-action) {
+    width: min(440px, calc(100vw - 120px)) !important;
+    margin: 0 !important;
+  }
+
+  .hydra-root .quick-sheet {
+    width: min(760px, calc(100vw - 100px)) !important;
+    margin-left: 0 !important;
+  }
+
+  .hydra-root.theme-dark .phone-app .bottom-nav,
+  html body #root .hydra-root.theme-dark .phone-app nav.bottom-nav.bottom-nav {
+    border-color: rgba(255,255,255,.08) !important;
+    background: rgba(10, 43, 31, .96) !important;
+    box-shadow: 0 18px 46px rgba(0, 0, 0, .3) !important;
+  }
+
+  .hydra-root.theme-dark .phone-app .bottom-nav > button {
+    color: rgba(235, 245, 239, .68) !important;
+  }
+
+  .hydra-root.theme-dark .phone-app .bottom-nav > button:hover {
+    color: #fff !important;
+    background: rgba(255,255,255,.06) !important;
+  }
+
+  .hydra-root.theme-dark .phone-app .bottom-nav > button.active {
+    color: #fff !important;
+    border-color: rgba(255,255,255,.07) !important;
+    background: rgba(255,255,255,.1) !important;
+  }
+}
