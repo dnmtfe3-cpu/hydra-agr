@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import * as L from "leaflet";
+import "leaflet/dist/leaflet.css";
 import {
   Beef as Cow,
   Crosshair,
@@ -15,8 +17,8 @@ import {
   Warehouse,
   X,
 } from "lucide-react";
-import { ScreenHeader } from "../../components/ui";
 import { showAppToast } from "../../components/modal-system";
+import { ScreenHeader } from "../../components/ui";
 import type { HydraAccount } from "../../lib/hydra-types";
 import {
   deletePropertyMapFeature,
@@ -29,68 +31,6 @@ import {
 } from "../../services/property-map-service";
 import "./property-map.css";
 
-type LatLng = [number, number];
-type LeafletEvent = { latlng: { lat: number; lng: number } };
-type LeafletLayer = { addTo: (target: LeafletMap | LeafletLayerGroup) => LeafletLayer; bindTooltip?: (text: string, options?: Record<string, unknown>) => LeafletLayer; getBounds?: () => unknown };
-type LeafletLayerGroup = LeafletLayer & { clearLayers: () => void; addLayer: (layer: LeafletLayer) => void };
-type LeafletMap = {
-  setView: (center: LatLng, zoom: number) => LeafletMap;
-  flyTo: (center: LatLng, zoom?: number) => LeafletMap;
-  fitBounds: (bounds: unknown, options?: Record<string, unknown>) => LeafletMap;
-  on: (event: "click", handler: (event: LeafletEvent) => void) => void;
-  off: (event: "click", handler: (event: LeafletEvent) => void) => void;
-  invalidateSize: () => void;
-  remove: () => void;
-};
-type LeafletApi = {
-  map: (element: HTMLElement, options?: Record<string, unknown>) => LeafletMap;
-  tileLayer: (url: string, options?: Record<string, unknown>) => LeafletLayer;
-  layerGroup: () => LeafletLayerGroup;
-  polygon: (points: LatLng[], options?: Record<string, unknown>) => LeafletLayer;
-  polyline: (points: LatLng[], options?: Record<string, unknown>) => LeafletLayer;
-  circleMarker: (point: LatLng, options?: Record<string, unknown>) => LeafletLayer;
-  latLngBounds: (points: LatLng[]) => unknown;
-};
-
-declare global {
-  interface Window { L?: LeafletApi }
-}
-
-let leafletPromise: Promise<LeafletApi> | null = null;
-
-function loadLeaflet() {
-  if (window.L) return Promise.resolve(window.L);
-  if (leafletPromise) return leafletPromise;
-
-  leafletPromise = new Promise<LeafletApi>((resolve, reject) => {
-    const existingCss = document.querySelector<HTMLLinkElement>('link[data-hydra-leaflet="1"]');
-    if (!existingCss) {
-      const css = document.createElement("link");
-      css.rel = "stylesheet";
-      css.href = "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css";
-      css.dataset.hydraLeaflet = "1";
-      document.head.appendChild(css);
-    }
-
-    const existingScript = document.querySelector<HTMLScriptElement>('script[data-hydra-leaflet="1"]');
-    if (existingScript) {
-      existingScript.addEventListener("load", () => window.L ? resolve(window.L) : reject(new Error("Mapa indisponível.")), { once: true });
-      existingScript.addEventListener("error", () => reject(new Error("Não foi possível carregar o mapa.")), { once: true });
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js";
-    script.async = true;
-    script.dataset.hydraLeaflet = "1";
-    script.onload = () => window.L ? resolve(window.L) : reject(new Error("Mapa indisponível."));
-    script.onerror = () => reject(new Error("Não foi possível carregar o mapa."));
-    document.head.appendChild(script);
-  });
-
-  return leafletPromise;
-}
-
 const pointTypes = new Set<PropertyMapFeatureType>(["water", "corral", "gate", "other"]);
 const featureLabels: Record<PropertyMapFeatureType, string> = {
   boundary: "Limite da propriedade",
@@ -102,11 +42,13 @@ const featureLabels: Record<PropertyMapFeatureType, string> = {
 };
 
 function featureId(prefix: string) {
-  const random = typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const random = typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
   return `${prefix}-${random}`;
 }
 
-function pointToLatLng(point: MapPoint): LatLng {
+function pointToLatLng(point: MapPoint): L.LatLngTuple {
   return [point[1], point[0]];
 }
 
@@ -128,9 +70,10 @@ function relativeTime(value: string) {
 
 export function PropertyMapScreen({ account, onBack }: { account: HydraAccount; onBack: () => void }) {
   const mapNode = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<LeafletMap | null>(null);
-  const featureLayerRef = useRef<LeafletLayerGroup | null>(null);
-  const draftLayerRef = useRef<LeafletLayerGroup | null>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const featureLayerRef = useRef<L.LayerGroup | null>(null);
+  const draftLayerRef = useRef<L.LayerGroup | null>(null);
+  const locationLayerRef = useRef<L.LayerGroup | null>(null);
   const initialFitDone = useRef(false);
 
   const [mapReady, setMapReady] = useState(false);
@@ -165,7 +108,7 @@ export function PropertyMapScreen({ account, onBack }: { account: HydraAccount; 
       setFeatures(data.features);
       setSightings(data.sightings);
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Não foi possível carregar o mapa da propriedade.");
+      setError(caught instanceof Error ? caught.message : "Não foi possível carregar os dados do mapa.");
     } finally {
       setLoading(false);
     }
@@ -174,49 +117,87 @@ export function PropertyMapScreen({ account, onBack }: { account: HydraAccount; 
   useEffect(() => { void refresh(); }, [ownerUserId, propertyId]);
 
   useEffect(() => {
+    const node = mapNode.current;
+    if (!node || mapRef.current) return;
+
     let active = true;
-    void loadLeaflet().then((L) => {
-      if (!active || !mapNode.current || mapRef.current) return;
-      const map = L.map(mapNode.current, { zoomControl: true, attributionControl: true }).setView([-14.235, -51.925], 4);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    const timers: number[] = [];
+    let resizeObserver: ResizeObserver | undefined;
+
+    try {
+      const map = L.map(node, {
+        zoomControl: true,
+        attributionControl: true,
+        preferCanvas: true,
+        tap: true,
+      }).setView([-14.235, -51.925], 4);
+
+      const featuresLayer = L.layerGroup().addTo(map);
+      const draftLayer = L.layerGroup().addTo(map);
+      const locationLayer = L.layerGroup().addTo(map);
+      const tiles = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
         attribution: "© OpenStreetMap",
-      }).addTo(map);
-      featureLayerRef.current = L.layerGroup();
-      draftLayerRef.current = L.layerGroup();
-      featureLayerRef.current.addTo(map);
-      draftLayerRef.current.addTo(map);
+        crossOrigin: true,
+      });
+
+      tiles.on("tileerror", () => {
+        if (active) setError("O mapa-base não carregou direito. Verifique a internet e tente novamente.");
+      });
+      tiles.addTo(map);
+
       mapRef.current = map;
+      featureLayerRef.current = featuresLayer;
+      draftLayerRef.current = draftLayer;
+      locationLayerRef.current = locationLayer;
       setMapReady(true);
-      window.setTimeout(() => map.invalidateSize(), 80);
-    }).catch((caught) => {
-      if (active) setError(caught instanceof Error ? caught.message : "Não foi possível abrir o mapa.");
-    });
+
+      const invalidate = () => {
+        if (!active) return;
+        map.invalidateSize({ pan: false });
+      };
+      timers.push(window.setTimeout(invalidate, 80));
+      timers.push(window.setTimeout(invalidate, 350));
+      timers.push(window.setTimeout(invalidate, 900));
+
+      if (typeof ResizeObserver !== "undefined") {
+        resizeObserver = new ResizeObserver(invalidate);
+        resizeObserver.observe(node);
+      }
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Não foi possível abrir o mapa.");
+    }
+
     return () => {
       active = false;
+      timers.forEach((timer) => window.clearTimeout(timer));
+      resizeObserver?.disconnect();
       mapRef.current?.remove();
       mapRef.current = null;
       featureLayerRef.current = null;
       draftLayerRef.current = null;
+      locationLayerRef.current = null;
+      setMapReady(false);
     };
   }, []);
 
   useEffect(() => {
     const map = mapRef.current;
     if (!mapReady || !map || !drawMode) return;
-    const handleClick = (event: LeafletEvent) => {
+    const handleClick = (event: L.LeafletMouseEvent) => {
       const next: MapPoint = [event.latlng.lng, event.latlng.lat];
       setDraftPoints((current) => pointTypes.has(drawMode) ? [next] : [...current, next]);
     };
     map.on("click", handleClick);
-    return () => map.off("click", handleClick);
+    return () => { map.off("click", handleClick); };
   }, [drawMode, mapReady]);
 
   useEffect(() => {
-    if (!mapReady || !window.L || !featureLayerRef.current || !draftLayerRef.current || !mapRef.current) return;
-    const L = window.L;
+    const map = mapRef.current;
     const layers = featureLayerRef.current;
     const draft = draftLayerRef.current;
+    if (!mapReady || !map || !layers || !draft) return;
+
     layers.clearLayers();
     draft.clearLayers();
 
@@ -225,49 +206,43 @@ export function PropertyMapScreen({ account, onBack }: { account: HydraAccount; 
         const points = polygonPoints(feature);
         if (points.length < 3) continue;
         const isBoundary = feature.featureType === "boundary";
-        const layer = L.polygon(points, {
+        L.polygon(points, {
           color: isBoundary ? "#174c36" : "#e7792b",
           weight: isBoundary ? 4 : 2,
           fillColor: isBoundary ? "#174c36" : "#e7792b",
           fillOpacity: isBoundary ? 0.08 : 0.16,
           dashArray: isBoundary ? undefined : "7 5",
-        });
-        layer.bindTooltip?.(feature.name || featureLabels[feature.featureType], { sticky: true });
-        layers.addLayer(layer);
+        }).bindTooltip(feature.name || featureLabels[feature.featureType], { sticky: true }).addTo(layers);
       } else {
         const point = pointToLatLng(feature.geometry.coordinates);
-        const layer = L.circleMarker(point, {
+        L.circleMarker(point, {
           radius: 8,
           color: "#ffffff",
           weight: 2,
           fillColor: feature.featureType === "water" ? "#1d8dd8" : "#e7792b",
           fillOpacity: 1,
-        });
-        layer.bindTooltip?.(feature.name || featureLabels[feature.featureType], { direction: "top" });
-        layers.addLayer(layer);
+        }).bindTooltip(feature.name || featureLabels[feature.featureType], { direction: "top" }).addTo(layers);
       }
     }
 
     for (const sighting of latestSightings) {
       const animal = account.animals.find((item) => item.id === sighting.animalId);
-      const layer = L.circleMarker([sighting.latitude, sighting.longitude], {
+      L.circleMarker([sighting.latitude, sighting.longitude], {
         radius: 9,
         color: "#ffffff",
         weight: 3,
         fillColor: "#f1a23b",
         fillOpacity: 1,
-      });
-      layer.bindTooltip?.(`${animal?.name || animal?.identification || "Animal"} · ${relativeTime(sighting.seenAt)}`, { direction: "top" });
-      layers.addLayer(layer);
+      }).bindTooltip(`${animal?.name || animal?.identification || "Animal"} · ${relativeTime(sighting.seenAt)}`, { direction: "top" }).addTo(layers);
     }
 
     if (draftPoints.length > 0) {
       const points = draftPoints.map(pointToLatLng);
       if (pointTypes.has(drawMode ?? "other")) {
-        draft.addLayer(L.circleMarker(points[0], { radius: 9, color: "#174c36", weight: 3, fillColor: "#e7792b", fillOpacity: 1 }));
+        L.circleMarker(points[0], { radius: 9, color: "#174c36", weight: 3, fillColor: "#e7792b", fillOpacity: 1 }).addTo(draft);
       } else {
-        draft.addLayer(L.polyline(points, { color: "#e7792b", weight: 4, dashArray: "8 6" }));
-        points.forEach((point) => draft.addLayer(L.circleMarker(point, { radius: 5, color: "#174c36", weight: 2, fillColor: "#ffffff", fillOpacity: 1 })));
+        L.polyline(points, { color: "#e7792b", weight: 4, dashArray: "8 6" }).addTo(draft);
+        points.forEach((point) => L.circleMarker(point, { radius: 5, color: "#174c36", weight: 2, fillColor: "#ffffff", fillOpacity: 1 }).addTo(draft));
       }
     }
 
@@ -275,16 +250,20 @@ export function PropertyMapScreen({ account, onBack }: { account: HydraAccount; 
       const boundary = features.find((item) => item.featureType === "boundary" && item.geometry.type === "Polygon");
       if (boundary) {
         const points = polygonPoints(boundary);
-        if (points.length > 2) mapRef.current.fitBounds(L.latLngBounds(points), { padding: [24, 24], maxZoom: 17 });
+        if (points.length > 2) map.fitBounds(L.latLngBounds(points), { padding: [24, 24], maxZoom: 17 });
         initialFitDone.current = true;
       } else if (latestSightings[0]) {
-        mapRef.current.setView([latestSightings[0].latitude, latestSightings[0].longitude], 15);
+        map.setView([latestSightings[0].latitude, latestSightings[0].longitude], 15);
         initialFitDone.current = true;
       }
     }
   }, [account.animals, draftPoints, drawMode, features, latestSightings, mapReady]);
 
   function beginDrawing(type: PropertyMapFeatureType) {
+    if (!mapReady) {
+      setError("O mapa ainda está abrindo. Tente novamente em um instante.");
+      return;
+    }
     if (type === "sector" && account.sectors.length === 0) {
       setError("Cadastre pelo menos um setor antes de desenhá-lo no mapa.");
       return;
@@ -333,6 +312,7 @@ export function PropertyMapScreen({ account, onBack }: { account: HydraAccount; 
           : { type: "Polygon", coordinates: [closedPolygon] },
       });
       cancelDrawing();
+      initialFitDone.current = false;
       await refresh();
       showAppToast("Mapa da propriedade atualizado");
     } catch (caught) {
@@ -354,20 +334,34 @@ export function PropertyMapScreen({ account, onBack }: { account: HydraAccount; 
   }
 
   function useMyLocation() {
+    if (!mapReady) { setError("O mapa ainda está abrindo."); return; }
     if (!navigator.geolocation) { setError("Este aparelho não oferece localização pelo navegador."); return; }
     setLocating(true);
     setError("");
     navigator.geolocation.getCurrentPosition((position) => {
       setLocating(false);
-      mapRef.current?.flyTo([position.coords.latitude, position.coords.longitude], 17);
-    }, () => {
+      const point: L.LatLngTuple = [position.coords.latitude, position.coords.longitude];
+      const locationLayer = locationLayerRef.current;
+      if (locationLayer) {
+        locationLayer.clearLayers();
+        L.circleMarker(point, { radius: 9, color: "#ffffff", weight: 3, fillColor: "#174c36", fillOpacity: 1 })
+          .bindTooltip("Sua localização", { direction: "top" })
+          .addTo(locationLayer);
+        if (Number.isFinite(position.coords.accuracy) && position.coords.accuracy > 0) {
+          L.circle(point, { radius: Math.min(position.coords.accuracy, 500), color: "#174c36", weight: 1, fillColor: "#174c36", fillOpacity: 0.08 }).addTo(locationLayer);
+        }
+      }
+      mapRef.current?.flyTo(point, 17, { duration: 0.7 });
+    }, (geoError) => {
       setLocating(false);
-      setError("Não foi possível acessar sua localização. Libere a permissão do GPS para o Hydra Agro.");
-    }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 30000 });
+      if (geoError.code === geoError.PERMISSION_DENIED) setError("A localização está bloqueada. Libere a permissão de localização para o Hydra Agro e tente novamente.");
+      else if (geoError.code === geoError.TIMEOUT) setError("O GPS demorou para responder. Tente novamente em um local com melhor sinal.");
+      else setError("Não foi possível acessar sua localização agora.");
+    }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 15000 });
   }
 
   function centerOnSighting(sighting: AnimalSighting) {
-    mapRef.current?.flyTo([sighting.latitude, sighting.longitude], 17);
+    mapRef.current?.flyTo([sighting.latitude, sighting.longitude], 17, { duration: 0.7 });
   }
 
   return <div className="screen page-enter extra-screen property-map-screen">
@@ -375,7 +369,7 @@ export function PropertyMapScreen({ account, onBack }: { account: HydraAccount; 
 
     <section className="property-map-hero">
       <div><span><MapPinned size={21} /></span><div><strong>{account.property.name || "Sua propriedade"}</strong><small>Mapa rural com OpenStreetMap</small></div></div>
-      <button className="property-map-location" onClick={useMyLocation} disabled={locating}><LocateFixed size={18} /> {locating ? "Localizando…" : "Minha localização"}</button>
+      <button className="property-map-location" onClick={useMyLocation} disabled={locating || !mapReady}><LocateFixed size={18} /> {locating ? "Localizando…" : "Minha localização"}</button>
     </section>
 
     <section className="property-map-card property-map-main-card">
@@ -402,9 +396,9 @@ export function PropertyMapScreen({ account, onBack }: { account: HydraAccount; 
 
       <div className={`property-map-canvas-shell ${drawMode ? "is-drawing" : ""}`}>
         <div ref={mapNode} className="property-map-canvas" aria-label="Mapa interativo da propriedade" />
-        {loading && <div className="property-map-loading">Carregando mapa da propriedade…</div>}
+        {(loading || !mapReady) && <div className="property-map-loading">{!mapReady ? "Abrindo mapa…" : "Carregando dados da propriedade…"}</div>}
       </div>
-      <p className="property-map-map-note">Para desenhar com precisão, aproxime o mapa e marque os limites caminhando ou usando a imagem do terreno como referência.</p>
+      <p className="property-map-map-note">Aproxime o mapa para marcar os pontos com mais precisão. Use “Minha localização” para ir direto à sua posição atual.</p>
       {error && <p className="form-error property-map-error" role="alert">{error}</p>}
     </section>
 
