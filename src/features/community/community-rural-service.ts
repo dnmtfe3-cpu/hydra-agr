@@ -217,6 +217,11 @@ async function tryUploadOccurrence(occurrence: CachedOccurrence) {
   return true;
 }
 
+function toPublicOccurrence(occurrence: CachedOccurrence, syncState = occurrence.syncState): RuralOccurrence {
+  const { photoBlob: _photoBlob, photoName: _photoName, photoType: _photoType, ...publicOccurrence } = occurrence;
+  return { ...publicOccurrence, syncState };
+}
+
 export async function createRuralOccurrence(account: HydraAccount, input: CreateRuralOccurrenceInput, photo?: File): Promise<RuralOccurrence> {
   const now = new Date().toISOString();
   const online = typeof navigator === "undefined" || navigator.onLine;
@@ -250,13 +255,11 @@ export async function createRuralOccurrence(account: HydraAccount, input: Create
   };
   await cachePut(occurrence);
   try {
-    if (await tryUploadOccurrence(occurrence)) {
-      return { ...occurrence, photoBlob: undefined, photoName: undefined, photoType: undefined, syncState: "Sincronizado" };
-    }
+    if (await tryUploadOccurrence(occurrence)) return toPublicOccurrence(occurrence, "Sincronizado");
   } catch {
     // O registro local permanece disponível e será sincronizado depois.
   }
-  return occurrence;
+  return toPublicOccurrence(occurrence);
 }
 
 export async function syncPendingRuralOccurrences(account: HydraAccount) {
@@ -275,7 +278,7 @@ export async function syncPendingRuralOccurrences(account: HydraAccount) {
 
 export async function listRuralOccurrences(account: HydraAccount): Promise<RuralOccurrence[]> {
   const cached = await cacheAll(account.id);
-  const local = cached.map(({ photoBlob: _photoBlob, photoName: _photoName, photoType: _photoType, ...item }) => item);
+  const local = cached.map((item) => toPublicOccurrence(item));
   if (!supabase || (typeof navigator !== "undefined" && !navigator.onLine)) {
     return local.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   }
