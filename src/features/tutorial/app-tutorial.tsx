@@ -14,6 +14,9 @@ type TutorialStep = {
 
 type FocusRect = { top: number; left: number; width: number; height: number };
 
+// Cada versão nova é exibida uma vez para todas as contas, inclusive as já cadastradas.
+const TUTORIAL_VERSION = "v2";
+
 function findNav(label: string) {
   return Array.from(document.querySelectorAll<HTMLButtonElement>(".bottom-nav button")).find((button) =>
     button.textContent?.trim().toLocaleLowerCase("pt-BR").includes(label.toLocaleLowerCase("pt-BR")),
@@ -122,9 +125,9 @@ function buildSteps(mode: TutorialMode): TutorialStep[] {
     },
     {
       title: "Perfil e configurações",
-      body: "No Perfil ficam sua conta e as configurações. O botão “Tutorial do aplicativo” fica aqui para você rever este guia.",
+      body: "No Perfil fica o atalho Tutorial. Você pode tocar nele a qualquer momento para rever este guia.",
       navLabel: "Perfil",
-      target: () => document.querySelector<HTMLElement>(".profile-screen .profile-menu-card") ?? findNav("Perfil"),
+      target: () => document.querySelector<HTMLElement>(".tutorial-profile-row") ?? document.querySelector<HTMLElement>(".profile-screen .profile-menu-card") ?? findNav("Perfil"),
     },
     {
       title: "Pronto",
@@ -134,7 +137,7 @@ function buildSteps(mode: TutorialMode): TutorialStep[] {
 }
 
 function storageKey(userId: string) {
-  return `hydra-agro.tutorial.v1:${userId}`;
+  return `hydra-agro.tutorial.${TUTORIAL_VERSION}:${userId}`;
 }
 
 export function AppTutorial() {
@@ -312,7 +315,7 @@ export function AppTutorial() {
   const profileRow = profileTarget ? createPortal(
     <button className="profile-menu-row tutorial-profile-row" onClick={startTutorial}>
       <span className="profile-menu-icon"><CircleHelp size={21} /></span>
-      <div><strong>Tutorial do aplicativo</strong><small>Rever como usar o Hydra Agro</small></div>
+      <div><strong>Tutorial</strong><small>Aprenda ou reveja como usar o Hydra Agro</small></div>
       <ChevronRight size={19} />
     </button>,
     profileTarget,
