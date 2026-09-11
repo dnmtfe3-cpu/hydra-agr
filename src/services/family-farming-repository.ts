@@ -25,7 +25,7 @@ type QueueMutation = {
 };
 type RecordIndex = { ownerUserId: string; propertyId: string; kind: RecordKind };
 
-const knownContexts = new Map<string, { ownerUserId: string; propertyId: string }>();
+const knownOwners = new Set<string>();
 let reconnectListenerInstalled = false;
 
 function throwIfError(error: unknown) {
@@ -228,7 +228,7 @@ async function executeMutation(mutation: QueueMutation) {
   throwIfError(error);
 }
 
-export async function flushProductionQueue(ownerUserId: string, propertyId?: string) {
+export async function flushProductionQueue(ownerUserId: string) {
   if (!(await connected())) return 0;
   const key = queueKey(ownerUserId);
   const queue = await readJson<QueueMutation[]>(key) ?? [];
@@ -238,7 +238,6 @@ export async function flushProductionQueue(ownerUserId: string, propertyId?: str
   const remaining = [...queue];
   while (remaining.length) {
     const mutation = remaining[0];
-    if (propertyId && mutation.propertyId !== propertyId) break;
     try {
       await executeMutation(mutation);
       remaining.shift();
@@ -251,16 +250,16 @@ export async function flushProductionQueue(ownerUserId: string, propertyId?: str
   return completed;
 }
 
-function registerContext(ownerUserId: string, propertyId: string) {
-  knownContexts.set(`${ownerUserId}:${propertyId}`, { ownerUserId, propertyId });
+function registerOwner(ownerUserId: string) {
+  knownOwners.add(ownerUserId);
   if (reconnectListenerInstalled || typeof window === "undefined") return;
   reconnectListenerInstalled = true;
   window.addEventListener("online", () => {
-    for (const context of knownContexts.values()) void flushProductionQueue(context.ownerUserId, context.propertyId);
+    for (const owner of knownOwners) void flushProductionQueue(owner);
   });
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState !== "visible") return;
-    for (const context of knownContexts.values()) void flushProductionQueue(context.ownerUserId, context.propertyId);
+    for (const owner of knownOwners) void flushProductionQueue(owner);
   });
 }
 
@@ -312,12 +311,12 @@ function mapRemoteNotebook(production: Row[], sales: Row[], expenses: Row[], fam
 export async function loadProductionNotebook(account: HydraAccount): Promise<ProductionNotebook> {
   const ownerUserId = ownerOf(account);
   const propertyId = propertyIdOf(account);
-  registerContext(ownerUserId, propertyId);
+  registerOwner(ownerUserId);
   const cached = await readNotebook(ownerUserId);
 
   if (!(await connected())) return cached ?? emptyNotebook();
 
-  await flushProductionQueue(ownerUserId, propertyId);
+  await flushProductionQueue(ownerUserId);
   try {
     const client = requireSupabase();
     const [production, sales, expenses, familyWork] = await Promise.all([
@@ -351,7 +350,7 @@ function upsertById<T extends { id: string }>(items: T[], item: T) {
 async function saveLocal(account: HydraAccount, kind: RecordKind, item: NotebookItem) {
   const ownerUserId = ownerOf(account);
   const propertyId = propertyIdOf(account);
-  registerContext(ownerUserId, propertyId);
+  registerOwner(ownerUserId);
   const notebook = await readNotebook(ownerUserId) ?? emptyNotebook();
 
   if (kind === "production") notebook.production = upsertById(notebook.production, item as ProductionRecord);
@@ -371,7 +370,7 @@ async function saveLocal(account: HydraAccount, kind: RecordKind, item: Notebook
     item,
     createdAt: new Date().toISOString(),
   });
-  if (await connected()) await flushProductionQueue(ownerUserId, propertyId);
+  if (await connected()) await flushProductionQueue(ownerUserId);
 }
 
 export async function saveProductionRecord(account: HydraAccount, item: ProductionRecord) {
@@ -412,7 +411,7 @@ async function deleteLocal(kind: RecordKind, recordId: string) {
     return;
   }
 
-  registerContext(index.ownerUserId, index.propertyId);
+  registerOwner(index.ownerUserId);
   const notebook = await readNotebook(index.ownerUserId) ?? emptyNotebook();
   if (kind === "production") {
     notebook.production = notebook.production.filter((item) => item.id !== recordId);
@@ -435,7 +434,7 @@ async function deleteLocal(kind: RecordKind, recordId: string) {
     recordId,
     createdAt: new Date().toISOString(),
   });
-  if (await connected()) await flushProductionQueue(index.ownerUserId, index.propertyId);
+  if (await connected()) await flushProductionQueue(index.ownerUserId);
 }
 
 export async function deleteProductionRecord(id: string) {
