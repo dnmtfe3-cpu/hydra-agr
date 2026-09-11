@@ -1,6 +1,7 @@
-import { Camera, Minus, Plus, ShieldAlert, X } from "lucide-react";
+import { Camera, Fingerprint, Minus, Plus, Search, ShieldAlert, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { showAppToast } from "../../components/modal-system";
+import { requireSupabase } from "../../services/supabase";
 
 type BarcodeDetectorLike = {
   detect(source: ImageBitmapSource): Promise<Array<{ rawValue?: string }>>;
@@ -10,6 +11,17 @@ type BarcodeDetectorConstructor = new (options?: { formats?: string[] }) => Barc
 
 type ZoomCapabilities = MediaTrackCapabilities & { zoom?: { min: number; max: number; step?: number } };
 type ZoomConstraintSet = MediaTrackConstraintSet & { zoom?: number };
+type PublicLookup = {
+  identification?: string;
+  name?: string;
+  species?: string;
+  breed?: string;
+  sex?: string;
+  status?: string;
+  propertyName?: string;
+  municipality?: string;
+  state?: string;
+};
 
 function parseHydraTag(value: string) {
   const trimmed = value.trim();
@@ -23,6 +35,12 @@ function parseHydraTag(value: string) {
   return null;
 }
 
+function setSafeParam(url: URL, key: string, value: unknown, max: number) {
+  if (typeof value !== "string") return;
+  const clean = value.trim();
+  if (clean) url.searchParams.set(key, clean.slice(0, max));
+}
+
 export function RemoteTagScanner() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -33,6 +51,9 @@ export function RemoteTagScanner() {
   const [error, setError] = useState("");
   const [zoom, setZoom] = useState(1);
   const [zoomRange, setZoomRange] = useState<{ min: number; max: number; step: number } | null>(null);
+  const [manualCode, setManualCode] = useState("");
+  const [lookupBusy, setLookupBusy] = useState(false);
+  const [lookupError, setLookupError] = useState("");
 
   function stopCamera() {
     scanningRef.current = false;
@@ -69,7 +90,7 @@ export function RemoteTagScanner() {
     setError("");
     const Detector = (window as typeof window & { BarcodeDetector?: BarcodeDetectorConstructor }).BarcodeDetector;
     if (!Detector) {
-      setError("Este navegador não oferece leitura de QR pela câmera. Use a câmera normal do celular para apontar para a Hydra Tag.");
+      setError("Este navegador não oferece leitura automática de QR. Use a câmera normal do celular ou leia o Hydra ID grande no brinco com o zoom e digite o código abaixo.");
       return;
     }
     try {
@@ -112,10 +133,51 @@ export function RemoteTagScanner() {
     }
   }
 
+  async function lookupManualCode() {
+    const code = manualCode.trim().slice(0, 40);
+    if (!code) {
+      setLookupError("Digite o Hydra ID visível no brinco.");
+      return;
+    }
+
+    setLookupBusy(true);
+    setLookupError("");
+    try {
+      const { data, error: rpcError } = await requireSupabase().rpc("public_animal_by_hydra_code", { p_code: code });
+      if (rpcError || !data || typeof data !== "object") {
+        setLookupError("Hydra ID não encontrado. Confira o código sem precisar se aproximar do animal.");
+        return;
+      }
+
+      const animal = data as PublicLookup;
+      const identification = animal.identification?.trim() || code;
+      const url = new URL(window.location.origin);
+      url.searchParams.set("pa", "1");
+      url.searchParams.set("i", identification.slice(0, 40));
+      url.searchParams.set("s", (animal.species?.trim() || "animal").slice(0, 24));
+      setSafeParam(url, "n", animal.name, 32);
+      setSafeParam(url, "b", animal.breed, 28);
+      setSafeParam(url, "sx", animal.sex, 16);
+      setSafeParam(url, "st", animal.status, 20);
+      setSafeParam(url, "pn", animal.propertyName, 40);
+      setSafeParam(url, "pm", animal.municipality, 28);
+      setSafeParam(url, "uf", animal.state?.toUpperCase(), 2);
+
+      stopCamera();
+      setOpen(false);
+      window.location.assign(url.toString());
+    } catch {
+      setLookupError("Não foi possível consultar esse Hydra ID agora. Tente novamente sem se aproximar do animal.");
+    } finally {
+      setLookupBusy(false);
+    }
+  }
+
   function close() {
     stopCamera();
     setOpen(false);
     setError("");
+    setLookupError("");
   }
 
   return <>
@@ -124,23 +186,33 @@ export function RemoteTagScanner() {
       <div className="distance-id-copy">
         <small>HYDRA TAG À DISTÂNCIA</small>
         <strong>Identifique sem chegar perto do animal</strong>
-        <p>Use o zoom da câmera para ler o QR grande da Hydra Tag. A ficha mostra a propriedade de origem sem expor telefone, endereço ou outros dados privados.</p>
+        <p>Primeiro tente o QR. Se ele estiver coberto de lama, dejetos ou danificado, use o zoom para ler o Hydra ID grande impresso no brinco e consulte pelo código.</p>
       </div>
-      <button className="secondary-button distance-id-button" onClick={() => { setOpen(true); window.setTimeout(() => void startCamera(), 80); }}><Camera size={17} /> Abrir câmera</button>
-      <div className="distance-id-safety"><ShieldAlert size={17} /><span>Se o animal estiver agressivo ou solto em via pública, mantenha distância. Não tente segurar, cercar ou se aproximar só para ler a tag.</span></div>
+      <button className="secondary-button distance-id-button" onClick={() => { setOpen(true); window.setTimeout(() => void startCamera(), 80); }}><Camera size={17} /> Identificar à distância</button>
+      <div className="distance-id-safety"><ShieldAlert size={17} /><span>Se o animal estiver agressivo ou solto em via pública, mantenha distância. Não tente limpar o brinco, segurar ou cercar o animal só para identificar a tag.</span></div>
     </section>
 
     {open && <div className="distance-scanner-layer" role="dialog" aria-modal="true" aria-label="Scanner de Hydra Tag à distância">
       <div className="distance-scanner-panel">
-        <header><div><small>IDENTIFICAÇÃO À DISTÂNCIA</small><strong>Aponte para o QR da Hydra Tag</strong></div><button onClick={close} aria-label="Fechar câmera"><X size={22} /></button></header>
+        <header><div><small>IDENTIFICAÇÃO REDUNDANTE</small><strong>QR ou Hydra ID visível</strong></div><button onClick={close} aria-label="Fechar câmera"><X size={22} /></button></header>
         <div className="distance-camera-wrap">
           <video ref={videoRef} className="distance-camera-video" playsInline muted />
           <div className="distance-camera-frame"><span /><span /><span /><span /></div>
-          <div className="distance-camera-hint">Mantenha o animal inteiro fora da sua área de aproximação. Enquadre apenas a tag usando o zoom.</div>
+          <div className="distance-camera-hint">Fique em local seguro. Use o zoom para enquadrar o brinco sem chegar perto do animal.</div>
         </div>
         {zoomRange && <div className="distance-zoom-control"><button onClick={() => void applyZoom(zoom - zoomRange.step)} aria-label="Diminuir zoom"><Minus size={18} /></button><input type="range" min={zoomRange.min} max={zoomRange.max} step={zoomRange.step} value={zoom} onChange={(event) => void applyZoom(Number(event.target.value))} /><button onClick={() => void applyZoom(zoom + zoomRange.step)} aria-label="Aumentar zoom"><Plus size={18} /></button><span>{zoom.toFixed(1)}×</span></div>}
         {error && <div className="distance-scanner-error" role="alert">{error}</div>}
-        <p className="distance-scanner-note">Ao reconhecer a tag, o Hydra Agro abre automaticamente a ficha pública do animal e informa a propriedade de origem. Se ele estiver marcado como perdido, o sistema permite avisar o proprietário.</p>
+
+        <div className="distance-manual-id">
+          <div className="distance-manual-heading"><Fingerprint size={18} /><div><strong>QR sujo ou danificado?</strong><span>Leia apenas o código grande do brinco pelo zoom.</span></div></div>
+          <div className="distance-manual-form">
+            <input value={manualCode} onChange={(event) => setManualCode(event.target.value.toUpperCase())} onKeyDown={(event) => { if (event.key === "Enter") void lookupManualCode(); }} maxLength={40} autoCapitalize="characters" autoCorrect="off" spellCheck={false} inputMode="text" placeholder="Ex.: HYDRA-8F2K" aria-label="Hydra ID do animal" />
+            <button onClick={() => void lookupManualCode()} disabled={lookupBusy}><Search size={17} /> {lookupBusy ? "Buscando" : "Consultar"}</button>
+          </div>
+          {lookupError && <div className="distance-manual-error" role="alert">{lookupError}</div>}
+        </div>
+
+        <p className="distance-scanner-note">A Hydra Tag passa a ter duas formas visuais de identificação: QR e Hydra ID grande. NFC/RFID continua disponível para manejo seguro e próximo. A ficha pública mantém os dados pessoais do responsável protegidos.</p>
       </div>
     </div>}
   </>;
