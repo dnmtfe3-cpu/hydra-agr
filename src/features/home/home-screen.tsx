@@ -30,6 +30,7 @@ import { syncMissionProgress, type MissionProgress } from "../../services/missio
 import { requireSupabase } from "../../services/supabase";
 import { NutriCicloPanel } from "../family-farming/nutriciclo-panel";
 import { HomeScienceSummary } from "../climate/home-science-summary";
+import { HomePropertyMapPreview } from "./home-property-map-preview";
 
 type Props = { account: HydraAccount; navigate: (route: AppRoute) => void; onQuickAction: () => void; announcements: Announcement[] };
 
@@ -75,6 +76,11 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
 
   const pendingSetup = [account.animals.length === 0 && { label: "Cadastrar o primeiro animal", icon: <Cow size={21} />, route: "herd" as AppRoute }, account.sectors.length === 0 && { label: "Criar o primeiro setor", icon: <Map size={21} />, route: "monitor" as AppRoute }].filter(Boolean) as { label: string; icon: ReactNode; route: AppRoute }[];
 
+  function openPropertyMap() {
+    try { window.sessionStorage.setItem("hydra-open-property-map", "1"); } catch { /* navegação continua mesmo sem storage */ }
+    navigate("property");
+  }
+
   if (easy) return <EasyHome navigate={navigate} />;
   return <div className="screen home-screen page-enter">
     <div className="home-brandbar profile-brandbar">
@@ -86,6 +92,8 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
     <section className="greeting-block"><div><h1><span className="greeting-time">{welcome},</span> <strong className="greeting-name">{firstName}</strong></h1><p className="capitalize">{today}</p></div></section>
     <HomeScienceSummary account={account} onOpen={() => navigate("climate")} />
     {announcements.length > 0 && <section className="home-announcements" aria-label="Avisos do Hydra Agro">{announcements.slice(0, 3).map((announcement) => <article key={announcement.id} className={announcement.level}><span>{announcement.level === "critical" ? "IMPORTANTE" : announcement.level === "attention" ? "ATENÇÃO" : "AVISO"}</span><strong>{announcement.title}</strong><p>{announcement.body}</p></article>)}</section>}
+
+    <HomePropertyMapPreview account={account} onOpen={openPropertyMap} />
 
     <div className="shortcut-row home-shortcuts-five" aria-label="Atalhos">
       <button onClick={() => setNutriCicloOpen(true)} aria-label="Hydra NutriCiclo" title="Hydra NutriCiclo"><span><Recycle size={23} /></span></button>
