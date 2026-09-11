@@ -1,3 +1,4 @@
+import jsQR from "jsqr";
 import { Camera, Fingerprint, Minus, Plus, Search, ShieldAlert, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { showAppToast } from "../../components/modal-system";
@@ -8,57 +9,12 @@ type BarcodeDetectorLike = {
 };
 
 type BarcodeDetectorConstructor = new (options?: { formats?: string[] }) => BarcodeDetectorLike;
-type JsQrResult = { data?: string };
-type JsQrDecoder = (
-  data: Uint8ClampedArray,
-  width: number,
-  height: number,
-  options?: { inversionAttempts?: "dontInvert" | "onlyInvert" | "attemptBoth" | "invertFirst" },
-) => JsQrResult | null;
-
 type ZoomCapabilities = MediaTrackCapabilities & { zoom?: { min: number; max: number; step?: number } };
 type ZoomConstraintSet = MediaTrackConstraintSet & { zoom?: number };
-type PublicLookup = {
-  identification?: string;
-};
+type FocusConstraintSet = MediaTrackConstraintSet & { focusMode?: string };
+type PublicLookup = { identification?: string };
 
 const HYDRA_PUBLIC_ORIGIN = "https://www.hydraagro.sbs";
-const JSQR_SCRIPT_ID = "hydra-jsqr-runtime";
-const JSQR_SRC = "https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js";
-let jsQrLoader: Promise<JsQrDecoder | null> | null = null;
-
-function currentJsQr() {
-  return (window as typeof window & { jsQR?: JsQrDecoder }).jsQR ?? null;
-}
-
-function loadJsQrDecoder() {
-  const ready = currentJsQr();
-  if (ready) return Promise.resolve(ready);
-  if (jsQrLoader) return jsQrLoader;
-
-  jsQrLoader = new Promise<JsQrDecoder | null>((resolve) => {
-    const finish = () => resolve(currentJsQr());
-    const existing = document.getElementById(JSQR_SCRIPT_ID) as HTMLScriptElement | null;
-    if (existing) {
-      existing.addEventListener("load", finish, { once: true });
-      existing.addEventListener("error", () => resolve(null), { once: true });
-      window.setTimeout(finish, 5000);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.id = JSQR_SCRIPT_ID;
-    script.src = JSQR_SRC;
-    script.async = true;
-    script.crossOrigin = "anonymous";
-    script.addEventListener("load", finish, { once: true });
-    script.addEventListener("error", () => resolve(null), { once: true });
-    document.head.appendChild(script);
-    window.setTimeout(finish, 5000);
-  });
-
-  return jsQrLoader;
-}
 
 function parseHydraTag(value: string) {
   const trimmed = value.trim();
@@ -77,7 +33,7 @@ function parseHydraTag(value: string) {
     if (pathParts[0] === "tag" && pathParts[1]) return url.toString();
     if (url.searchParams.get("pa") === "1" && url.searchParams.get("i")) return url.toString();
   } catch {
-    // Conteúdo inválido para Hydra Tag.
+    // Conteúdo que não pertence à Hydra Tag.
   }
 
   return null;
@@ -87,7 +43,6 @@ export function RemoteTagScanner() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const detectorRef = useRef<BarcodeDetectorLike | null>(null);
-  const jsQrRef = useRef<JsQrDecoder | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const scanningRef = useRef(false);
   const timerRef = useRef<number | null>(null);
@@ -107,7 +62,6 @@ export function RemoteTagScanner() {
     streamRef.current?.getTracks().forEach((track) => track.stop());
     streamRef.current = null;
     detectorRef.current = null;
-    jsQrRef.current = null;
     if (videoRef.current) videoRef.current.srcObject = null;
   }
 
@@ -118,14 +72,16 @@ export function RemoteTagScanner() {
     return () => document.body.classList.remove("hydra-distance-scanner-open");
   }, [open]);
 
-  function readWithJsQr(video: HTMLVideoElement) {
-    const decoder = jsQrRef.current;
-    if (!decoder || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return "";
+  function decodeQrFromVideo(video: HTMLVideoElement) {
+    if (video.readyState < 2 || !video.videoWidth || !video.videoHeight) return "";
 
-    const maxWidth = 1280;
-    const scale = Math.min(1, maxWidth / video.videoWidth);
-    const width = Math.max(1, Math.round(video.videoWidth * scale));
-    const height = Math.max(1, Math.round(video.videoHeight * scale));
+    const sourceWidth = video.videoWidth;
+    const sourceHeight = video.videoHeight;
+    const maxWidth = 1100;
+    const scale = Math.min(1, maxWidth / sourceWidth);
+    const width = Math.max(1, Math.round(sourceWidth * scale));
+    const height = Math.max(1, Math.round(sourceHeight * scale));
+
     const canvas = canvasRef.current ?? document.createElement("canvas");
     canvasRef.current = canvas;
     if (canvas.width !== width) canvas.width = width;
@@ -133,9 +89,21 @@ export function RemoteTagScanner() {
 
     const context = canvas.getContext("2d", { willReadFrequently: true });
     if (!context) return "";
+
     context.drawImage(video, 0, 0, width, height);
-    const image = context.getImageData(0, 0, width, height);
-    return decoder(image.data, width, height, { inversionAttempts: "attemptBoth" })?.data?.trim() ?? "";
+    let image = context.getImageData(0, 0, width, height);
+    let result = jsQR(image.data, width, height, { inversionAttempts: "attemptBoth" });
+    if (result?.data) return result.data.trim();
+
+    // Segunda tentativa: região central ampliada. Ajuda quando o QR ocupa
+    // uma parte pequena da imagem, situação comum ao ler de longe.
+    const cropX = Math.round(width * 0.1);
+    const cropY = Math.round(height * 0.08);
+    const cropWidth = Math.max(1, Math.round(width * 0.8));
+    const cropHeight = Math.max(1, Math.round(height * 0.72));
+    image = context.getImageData(cropX, cropY, cropWidth, cropHeight);
+    result = jsQR(image.data, cropWidth, cropHeight, { inversionAttempts: "attemptBoth" });
+    return result?.data?.trim() ?? "";
   }
 
   async function scanFrame() {
@@ -143,22 +111,20 @@ export function RemoteTagScanner() {
 
     let raw = "";
 
-    // Alguns iPhones expõem BarcodeDetector, mas a implementação não reconhece
-    // QR de forma confiável. Por isso ele é apenas a primeira tentativa.
     if (detectorRef.current) {
       try {
         const results = await detectorRef.current.detect(videoRef.current);
         raw = results.map((item) => item.rawValue?.trim()).find(Boolean) ?? "";
       } catch {
-        // Continua imediatamente para o leitor por canvas/jsQR.
+        // O leitor embarcado abaixo continua funcionando.
       }
     }
 
-    if (!raw && jsQrRef.current) {
+    if (!raw) {
       try {
-        raw = readWithJsQr(videoRef.current);
+        raw = decodeQrFromVideo(videoRef.current);
       } catch {
-        // Um frame isolado pode falhar por foco/exposição.
+        // Frames desfocados podem falhar sem interromper o scanner.
       }
     }
 
@@ -172,20 +138,20 @@ export function RemoteTagScanner() {
       }
     }
 
-    timerRef.current = window.setTimeout(() => void scanFrame(), 140);
+    timerRef.current = window.setTimeout(() => void scanFrame(), 160);
   }
 
   async function startCamera() {
     setError("");
+
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setError("A câmera não está disponível neste navegador. Use o Hydra ID abaixo.");
+      return;
+    }
+
     const Detector = (window as typeof window & { BarcodeDetector?: BarcodeDetectorConstructor }).BarcodeDetector;
 
     try {
-      // Carrega o leitor alternativo sempre. Isso evita o bug em aparelhos que
-      // dizem suportar BarcodeDetector mas não conseguem decodificar o QR.
-      void loadJsQrDecoder().then((decoder) => {
-        jsQrRef.current = decoder;
-      });
-
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: { ideal: "environment" },
@@ -195,9 +161,10 @@ export function RemoteTagScanner() {
         audio: false,
       });
       streamRef.current = stream;
+
       const track = stream.getVideoTracks()[0];
-      const capabilities = track.getCapabilities() as ZoomCapabilities;
-      if (capabilities.zoom) {
+      const capabilities = track.getCapabilities?.() as ZoomCapabilities | undefined;
+      if (capabilities?.zoom) {
         const step = capabilities.zoom.step || 0.1;
         const initial = Math.min(Math.max(1, capabilities.zoom.min), capabilities.zoom.max);
         setZoom(initial);
@@ -206,19 +173,20 @@ export function RemoteTagScanner() {
         setZoomRange(null);
       }
 
-      // Tenta manter foco contínuo em aparelhos que oferecem essa capacidade.
       try {
-        await track.applyConstraints({ advanced: [{ focusMode: "continuous" } as MediaTrackConstraintSet] });
+        await track.applyConstraints({ advanced: [{ focusMode: "continuous" } as FocusConstraintSet] });
       } catch {
-        // Nem todo navegador expõe controle de foco.
+        // Controle manual de foco não é obrigatório.
       }
 
-      if (!videoRef.current) {
+      const video = videoRef.current;
+      if (!video) {
         stopCamera();
         return;
       }
-      videoRef.current.srcObject = stream;
-      await videoRef.current.play();
+
+      video.srcObject = stream;
+      await video.play();
 
       if (Detector) {
         try {
@@ -230,15 +198,14 @@ export function RemoteTagScanner() {
 
       scanningRef.current = true;
       void scanFrame();
-
-      window.setTimeout(() => {
-        if (scanningRef.current && !detectorRef.current && !jsQrRef.current) {
-          setError("O leitor automático não iniciou neste aparelho. Use o Hydra ID abaixo.");
-        }
-      }, 5500);
-    } catch {
+    } catch (caught) {
       stopCamera();
-      setError("Não foi possível abrir a câmera. Verifique a permissão do Hydra Agro para usar a câmera.");
+      const message = caught instanceof Error ? caught.message : "";
+      if (/permission|denied|notallowed/i.test(message)) {
+        setError("A câmera está sem permissão. Libere o acesso à câmera para o Hydra Agro e tente novamente.");
+      } else {
+        setError("Não foi possível abrir a câmera. Feche outros apps usando a câmera e tente novamente.");
+      }
     }
   }
 
@@ -285,6 +252,7 @@ export function RemoteTagScanner() {
   function openCamera() {
     setManualOpen(false);
     setLookupError("");
+    setError("");
     setOpen(true);
     window.setTimeout(() => void startCamera(), 80);
   }
@@ -370,7 +338,7 @@ export function RemoteTagScanner() {
         <div className="distance-camera-wrap">
           <video ref={videoRef} className="distance-camera-video" playsInline muted />
           <div className="distance-camera-frame"><span /><span /><span /><span /></div>
-          <div className="distance-camera-hint">Centralize o QR dentro do quadro. A leitura é automática.</div>
+          <div className="distance-camera-hint">Centralize o QR dentro do quadro e mantenha o celular parado por um instante.</div>
         </div>
 
         {zoomRange && <div className="distance-zoom-control">
