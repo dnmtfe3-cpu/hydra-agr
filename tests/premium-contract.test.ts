@@ -39,8 +39,9 @@ describe("contratos do Hydra Agro+ e confirmações", () => {
     expect(plusScreen).toContain("account.waterRecords");
     expect(plusScreen).toContain("account.animals");
     expect(plusScreen).toContain("Histórico completo");
-    expect(communityScreen).toContain("Confirmar publicação");
-    expect(communityScreen).toContain("Confirmar exclusão");
+    expect(communityScreen).toContain('title="Confirmar aviso"');
+    expect(communityScreen).toContain('confirmLabel="Publicar aviso"');
+    expect(communityScreen).toContain('title="Confirmar exclusão"');
     expect(waterScreen).toContain("Confirmar leitura");
     expect(waterScreen).toContain("Confirmar exclusão");
   });
