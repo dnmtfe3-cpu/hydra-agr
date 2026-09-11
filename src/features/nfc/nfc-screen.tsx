@@ -271,7 +271,7 @@ export function NfcScreen({ account, updateAccount, onBack, onFound, initialAnim
             <Field label="Animal">
               <select value={animalId} onChange={(event) => { setAnimalId(event.target.value); setMessage(""); }}>
                 <option value="">Selecione</option>
-                {account.animals.map((animal) => <option key={animal.id} value={animal.name || animal.identification}>{animal.name || animal.identification} · {animal.identification}</option>)}
+                {account.animals.map((animal) => <option key={animal.id} value={animal.id}>{animal.name || animal.identification} · {animal.identification}</option>)}
               </select>
             </Field>
           )}
