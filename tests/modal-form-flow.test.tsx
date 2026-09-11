@@ -11,7 +11,7 @@ describe("fluxo assíncrono dos formulários em modal", () => {
 
     render(<WaterScreen account={account} updateAccount={updateAccount} />);
     fireEvent.click(screen.getByRole("button", { name: /registrar leitura/i }));
-    const quantity = await screen.findByLabelText("Quantidade (L)");
+    const quantity = await screen.findByLabelText("Quantidade usada (L)");
     fireEvent.change(quantity, { target: { value: "850" } });
     fireEvent.click(screen.getByRole("button", { name: "Confirmar leitura" }));
 
