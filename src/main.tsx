@@ -27,6 +27,7 @@ import "./features/profile/profile-ranking-spacing-fix.css";
 import "./features/profile/level10-vip-runtime";
 import "./features/community/community-comment-runtime";
 import "./features/admin/admin-screen-polish.css";
+import "./features/nfc/remote-tag-scanner-runtime";
 import "./mobile-typography-compact.css";
 import "./bottom-nav-final-runtime";
 import "./admin-panel-runtime";
