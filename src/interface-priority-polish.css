@@ -1,5 +1,5 @@
-/* Final visual hierarchy for the normal Hydra Agro experience.
-   Keep Easy Mode isolated: it has its own simplified presentation. */
+/* Visual hierarchy for the normal Hydra Agro experience.
+   Easy Mode keeps its own simplified presentation. */
 
 /* Home: one visual system for climate, animal comfort and water. */
 body:not(.hydra-easy-mode) .home-science-summary {
@@ -101,165 +101,7 @@ body:not(.hydra-easy-mode) .home-science-summary > button:active {
   transform: scale(.985) !important;
 }
 
-/* NFC: camera/QR is now the primary experience; NFC becomes the compact secondary option. */
-body:not(.hydra-easy-mode) .nfc-screen .distance-id-runtime-host {
-  margin: 10px 0 12px !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .distance-id-card {
-  position: relative;
-  overflow: hidden;
-  padding: 17px !important;
-  border: 1px solid rgba(23, 76, 54, .16) !important;
-  border-radius: 23px !important;
-  background:
-    radial-gradient(circle at 93% 5%, rgba(217, 119, 42, .12), transparent 35%),
-    linear-gradient(145deg, #eff8f2 0%, #ffffff 64%) !important;
-  box-shadow: 0 13px 30px rgba(31, 66, 51, .085) !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .distance-id-icon {
-  width: 46px !important;
-  height: 46px !important;
-  flex-basis: 46px !important;
-  border-radius: 15px !important;
-  background: linear-gradient(145deg, #1f6247, #174c36) !important;
-  box-shadow: 0 8px 18px rgba(23, 76, 54, .16);
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .distance-id-copy small {
-  color: #b85e24 !important;
-  font-size: 9px !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .distance-id-copy strong {
-  color: #173f2f !important;
-  font-size: 18px !important;
-  letter-spacing: -.02em;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .distance-id-copy p {
-  max-width: 31ch;
-  color: #65766d !important;
-  font-size: 11.5px !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .distance-id-actions {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 8px !important;
-  margin-top: 14px !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .distance-action-primary {
-  grid-column: 1 / -1;
-  min-height: 72px !important;
-  padding: 12px 14px !important;
-  border: 0 !important;
-  border-radius: 17px !important;
-  background: linear-gradient(145deg, #1d5d43, #174c36) !important;
-  color: #fff !important;
-  box-shadow: 0 9px 20px rgba(23, 76, 54, .17) !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .distance-action-primary > svg {
-  width: 24px;
-  height: 24px;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .distance-action-primary strong {
-  font-size: 13px !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .distance-action-primary small {
-  color: rgba(255,255,255,.72) !important;
-  font-size: 9.5px !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .distance-action:not(.distance-action-primary) {
-  grid-column: 1 / -1;
-  min-height: 48px !important;
-  border-radius: 14px !important;
-  background: rgba(255,255,255,.72) !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .distance-id-safety {
-  margin-top: 11px !important;
-  padding: 9px 10px 0 !important;
-  font-size: 9.5px !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .nfc-hero {
-  display: grid !important;
-  grid-template-columns: auto minmax(0, 1fr) auto !important;
-  grid-template-rows: auto auto !important;
-  gap: 3px 10px !important;
-  align-items: center !important;
-  min-height: 0 !important;
-  margin: 0 0 12px !important;
-  padding: 12px 13px !important;
-  border: 1px solid rgba(23, 76, 54, .10) !important;
-  border-radius: 17px !important;
-  background: #fff !important;
-  box-shadow: 0 6px 17px rgba(31, 66, 51, .045) !important;
-  text-align: left !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .nfc-hero .nfc-waves {
-  grid-column: 1;
-  grid-row: 1 / 3;
-  width: 42px !important;
-  height: 42px !important;
-  min-width: 42px !important;
-  margin: 0 !important;
-  border-radius: 13px !important;
-  background: #edf5f0 !important;
-  color: #174c36 !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .nfc-hero .nfc-waves > span {
-  display: none !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .nfc-hero .nfc-waves > svg {
-  width: 22px !important;
-  height: 22px !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .nfc-hero h2 {
-  grid-column: 2;
-  grid-row: 1;
-  align-self: end;
-  margin: 0 !important;
-  color: #294b3a !important;
-  font-size: 12.5px !important;
-  line-height: 1.2 !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .nfc-hero p {
-  grid-column: 2;
-  grid-row: 2;
-  margin: 0 !important;
-  color: #75847c !important;
-  font-size: 9.5px !important;
-  line-height: 1.3 !important;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .nfc-hero .nfc-native-read-button {
-  grid-column: 3;
-  grid-row: 1 / 3;
-  min-height: 39px !important;
-  margin: 0 !important;
-  padding: 0 11px !important;
-  border-radius: 12px !important;
-  font-size: 9.5px !important;
-  white-space: nowrap;
-}
-
-body:not(.hydra-easy-mode) .nfc-screen .nfc-hero > small {
-  display: none !important;
-}
-
-/* Herd: animals come before scanner/tools and get the strongest visual priority. */
+/* Herd: animals come before secondary tools and get the strongest visual priority. */
 body:not(.hydra-easy-mode) .screen.page-enter:has(> .herd-tools-toggle) {
   display: flex !important;
   flex-direction: column !important;
@@ -356,8 +198,7 @@ body:not(.hydra-easy-mode) .screen.page-enter:has(> .herd-tools-toggle) > .nfc-i
   box-shadow: none !important;
 }
 
-.theme-dark body:not(.hydra-easy-mode) .home-science-summary,
-.theme-dark body:not(.hydra-easy-mode) .nfc-screen .nfc-hero {
+.theme-dark body:not(.hydra-easy-mode) .home-science-summary {
   border-color: rgba(255,255,255,.075) !important;
   background: #123126 !important;
 }
@@ -379,13 +220,4 @@ body:not(.hydra-easy-mode) .screen.page-enter:has(> .herd-tools-toggle) > .nfc-i
   }
   body:not(.hydra-easy-mode) .home-science-summary > button strong { font-size: 11.5px !important; }
   body:not(.hydra-easy-mode) .home-science-summary > button em { font-size: 8.5px !important; }
-  body:not(.hydra-easy-mode) .nfc-screen .nfc-hero {
-    grid-template-columns: auto minmax(0, 1fr) !important;
-  }
-  body:not(.hydra-easy-mode) .nfc-screen .nfc-hero .nfc-native-read-button {
-    grid-column: 1 / -1;
-    grid-row: 3;
-    width: 100%;
-    margin-top: 6px !important;
-  }
 }
