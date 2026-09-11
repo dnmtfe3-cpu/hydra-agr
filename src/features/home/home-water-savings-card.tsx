@@ -31,14 +31,14 @@ export function HomeWaterSavingsCard({ account, onOpen }: Props) {
         : "Comece a medir";
 
   const detail = insight.status === "saving"
-    ? `≈ ${formatLiters(insight.litersPerReading)} economizados por leitura recente`
+    ? `${formatLiters(insight.savingsLiters)} economizados nos últimos ${insight.comparisonDays} dias medidos`
     : insight.status === "higher"
-      ? `≈ ${formatLiters(insight.litersPerReading)} acima da média anterior`
+      ? `${formatLiters(Math.abs(insight.litersDifference))} acima dos ${insight.comparisonDays} dias medidos anteriores`
       : insight.status === "stable"
-        ? `Média recente de ${formatLiters(insight.currentAverage)} por leitura`
+        ? `Média de ${formatLiters(insight.currentAverage)} por dia medido`
         : insight.readingsNeeded > 0
-          ? `Faltam ${insight.readingsNeeded} leitura${insight.readingsNeeded === 1 ? "" : "s"} para comparar o consumo`
-          : "Registre leituras para comparar o consumo";
+          ? `Registre em mais ${insight.readingsNeeded} dia${insight.readingsNeeded === 1 ? "" : "s"} para comparar o consumo`
+          : "Registre leituras para acompanhar consumo e economia";
 
   return (
     <button type="button" className={`home-water-savings-card ${insight.status}`} onClick={onOpen}>
