@@ -8,6 +8,7 @@ import { showAppToast } from "../../components/modal-system";
 import { isValidCep } from "../../lib/brazil-location";
 import type { HydraAccount, Property, UpdateAccount } from "../../lib/hydra-types";
 import { PropertyMapScreen } from "./property-map-screen";
+import "./property-map-entry.css";
 
 type Props = { account: HydraAccount; updateAccount: UpdateAccount; onBack: () => void };
 
