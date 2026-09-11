@@ -19,7 +19,16 @@ function countLabel(count: number, singular: string, plural: string) { return co
 
 export function PropertyScreen({ account, updateAccount, onBack }: Props) {
   const [editOpen, setEditOpen] = useState(false);
-  const [mapOpen, setMapOpen] = useState(false);
+  const [mapOpen, setMapOpen] = useState(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      const shouldOpen = window.sessionStorage.getItem("hydra-open-property-map") === "1";
+      if (shouldOpen) window.sessionStorage.removeItem("hydra-open-property-map");
+      return shouldOpen;
+    } catch {
+      return false;
+    }
+  });
   const [draft, setDraft] = useState<Property>({ ...account.property });
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
