@@ -12,15 +12,14 @@ import {
   Plus,
   Pencil,
   Trash2,
-  TrendingDown,
-  TrendingUp,
-  Minus,
   Waves,
 } from "lucide-react";
 import { ConfirmDialog, EmptyState, Field, LoadingButton, Modal, ScreenHeader, SectionHeader, Toggle } from "../../components/ui";
 import { showAppToast } from "../../components/modal-system";
 import { makeId, type HydraAccount, type UpdateAccount, type WaterRecord, type WaterSource } from "../../lib/hydra-types";
+import { calculateWaterConsumption } from "../../lib/water-savings";
 import { WaterScienceCard } from "../climate/water-science-card";
+import { WaterConsumptionPanel } from "./water-consumption-panel";
 
 type Props = {
   account: HydraAccount;
@@ -51,18 +50,11 @@ export function WaterScreen({ account, updateAccount, createRecordRequest, onReq
     () => account.waterRecords.reduce((sum, item) => sum + item.amount, 0),
     [account.waterRecords],
   );
+  const consumption = useMemo(
+    () => calculateWaterConsumption(account.waterRecords),
+    [account.waterRecords],
+  );
   const maxRecord = Math.max(...account.waterRecords.map((item) => item.amount), 1);
-  const trend = useMemo(() => {
-    if (account.waterRecords.length < 3) return null;
-    const ordered = [...account.waterRecords].sort((left, right) => left.date.localeCompare(right.date));
-    const latest = ordered.at(-1)!.amount;
-    const comparison = ordered.slice(-3, -1);
-    const baseline = comparison.reduce((sum, item) => sum + item.amount, 0) / comparison.length;
-    if (baseline <= 0) return null;
-    const change = ((latest - baseline) / baseline) * 100;
-    const direction: "stable" | "up" | "down" = Math.abs(change) < 5 ? "stable" : change > 0 ? "up" : "down";
-    return { change, direction };
-  }, [account.waterRecords]);
 
   async function addSource(event: FormEvent) {
     event.preventDefault();
@@ -194,10 +186,11 @@ export function WaterScreen({ account, updateAccount, createRecordRequest, onReq
       <ScreenHeader
         eyebrow="GESTÃO HÍDRICA"
         title="Água"
-        subtitle="Registre apenas leituras reais da propriedade."
+        subtitle="Registre o volume usado e acompanhe consumo e economia da fazenda."
         action={<button className="icon-button accent" onClick={openSourceForm} aria-label="Adicionar fonte"><Plus size={21} /></button>}
       />
       <WaterScienceCard account={account} />
+      <WaterConsumptionPanel account={account} onRegister={openRecord} />
 
       <section className="water-overview">
         <div className="water-total">
@@ -218,7 +211,7 @@ export function WaterScreen({ account, updateAccount, createRecordRequest, onReq
       </div>
 
       <section className="content-section">
-        <SectionHeader title="Evolução" action={<span className="subtle-label">Registros recentes</span>} />
+        <SectionHeader title="Evolução" action={<span className="subtle-label">Leituras recentes</span>} />
         {account.waterRecords.length === 0 ? (
           <EmptyState
             icon={<BarChart3 size={25} />}
@@ -237,7 +230,6 @@ export function WaterScreen({ account, updateAccount, createRecordRequest, onReq
             ))}
           </div>
         )}
-        {trend && <div className={`water-trend ${trend.direction}`}><span>{trend.direction === "up" ? <TrendingUp size={21} /> : trend.direction === "down" ? <TrendingDown size={21} /> : <Minus size={21} />}</span><div><small>TENDÊNCIA PELAS 3 ÚLTIMAS LEITURAS</small><strong>{trend.direction === "up" ? "Última leitura acima da média" : trend.direction === "down" ? "Última leitura abaixo da média" : "Consumo recente estável"}</strong><p>{Math.abs(trend.change).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}% {trend.direction === "stable" ? "de variação" : trend.direction === "up" ? "acima" : "abaixo"} da média das duas leituras anteriores.</p></div></div>}
       </section>
 
       <section className="content-section">
@@ -261,17 +253,17 @@ export function WaterScreen({ account, updateAccount, createRecordRequest, onReq
       <section className="content-section">
         <div className="setting-card">
           <span className="row-icon soft-orange"><BellRing size={20} /></span>
-          <div><strong>Alertas de consumo</strong><small>Avisos dependem de leituras suficientes.</small></div>
+          <div><strong>Alertas de consumo</strong><small>Avisos baseados nos dias medidos.</small></div>
           <Toggle
             checked={account.settings.waterAlerts}
             label="Alertas de consumo de água"
             onChange={(waterAlerts) => updateAccount((current) => ({ ...current, settings: { ...current.settings, waterAlerts } }))}
           />
         </div>
-        {account.settings.waterAlerts && account.waterRecords.length < 3 && (
-          <div className="info-strip"><AlertTriangle size={17} /> Registre pelo menos 3 leituras para começar a observar tendências.</div>
+        {account.settings.waterAlerts && consumption.status === "insufficient" && (
+          <div className="info-strip"><AlertTriangle size={17} /> Registre água em pelo menos 4 dias diferentes para comparar períodos de consumo.</div>
         )}
-        {account.settings.waterAlerts && trend?.direction === "up" && trend.change >= 15 && <div className="info-strip attention"><AlertTriangle size={17} /> Atenção: a última leitura ficou {trend.change.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}% acima da média das duas anteriores.</div>}
+        {account.settings.waterAlerts && consumption.status === "higher" && Math.abs(consumption.changePercent) >= 15 && <div className="info-strip attention"><AlertTriangle size={17} /> Atenção: nos últimos {consumption.comparisonDays} dias medidos, o consumo ficou {Math.abs(consumption.changePercent).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}% acima dos {consumption.comparisonDays} dias medidos anteriores.</div>}
         {account.settings.waterAlerts && account.waterSources.some((source) => source.status === "atenção") && <div className="info-strip attention"><AlertTriangle size={17} /> Há fonte de água marcada como “atenção”. Abra a fonte para revisar sua situação.</div>}
       </section>
 
@@ -329,7 +321,7 @@ export function WaterScreen({ account, updateAccount, createRecordRequest, onReq
           <GuidedForm className="modal-form" onSubmit={addRecord}>
             <div className="field-combo">
               <Field label="Data"><input type="date" value={record.date} onChange={(e) => setRecord({ ...record, date: e.target.value })} /></Field>
-              <Field label="Quantidade (L)"><input inputMode="decimal" value={record.amount} onChange={(e) => { setRecord({ ...record, amount: e.target.value }); setError(""); }} placeholder="0" /></Field>
+              <Field label="Quantidade usada (L)"><input inputMode="decimal" value={record.amount} onChange={(e) => { setRecord({ ...record, amount: e.target.value }); setError(""); }} placeholder="0" /></Field>
             </div>
             <Field label="Origem">
               <select value={record.sourceId} onChange={(e) => setRecord({ ...record, sourceId: e.target.value })}>
