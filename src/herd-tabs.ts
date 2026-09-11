@@ -1,7 +1,7 @@
 import "./herd-tools-view.css";
 
-// O toggle de ferramentas existe assim que o Rebanho renderiza, inclusive no plano gratuito.
-// Isso garante que a lista de animais seja escondida antes de qualquer interação.
+// O rebanho abre direto na lista de animais. As ferramentas continuam acessíveis,
+// mas não escondem o conteúdo principal antes de qualquer interação.
 const HERD_SELECTOR = ".herd-tools-toggle";
 const TOOL_CLASS = "herd-tools-panel";
 
@@ -84,24 +84,24 @@ function createTools(screen: HTMLElement) {
   if (!panel) {
     panel = document.createElement("section");
     panel.className = TOOL_CLASS;
-    panel.setAttribute("aria-label", "Ferramentas do rebanho");
+    panel.setAttribute("aria-label", "Acesso rápido do rebanho");
     panel.innerHTML = `
-      <small>Ferramentas do rebanho</small>
+      <small>Acesso rápido</small>
       <div class="herd-tools-grid">
-        <button type="button" data-view="overview" aria-pressed="true">
-          <span>Visão geral</span>
-          <small>NFC, manejo e ferramentas</small>
+        <button type="button" data-view="animals" aria-pressed="true">
+          <span>Meus animais</span>
+          <small><b data-animal-count>${animalCount(screen)}</b> cadastrados</small>
         </button>
-        <button type="button" data-view="animals" aria-pressed="false">
-          <span>Animais cadastrados</span>
-          <small><b data-animal-count>${animalCount(screen)}</b> no rebanho</small>
+        <button type="button" data-view="overview" aria-pressed="false">
+          <span>Ferramentas</span>
+          <small>NFC, manejo e recursos</small>
         </button>
       </div>`;
 
     panel.addEventListener("click", (event) => {
       const button = event.target instanceof Element ? event.target.closest<HTMLButtonElement>("button[data-view]") : null;
       if (!button) return;
-      setView(screen, button.dataset.view === "animals" ? "animals" : "overview", true);
+      setView(screen, button.dataset.view === "overview" ? "overview" : "animals", true);
     });
 
     const header = screen.querySelector(":scope > .screen-header");
@@ -123,7 +123,7 @@ function enhance() {
   markViewItems(screen);
   createTools(screen);
 
-  const current = screen.dataset.herdView === "animals" ? "animals" : "overview";
+  const current = screen.dataset.herdView === "overview" ? "overview" : "animals";
   setView(screen, current);
 }
 
