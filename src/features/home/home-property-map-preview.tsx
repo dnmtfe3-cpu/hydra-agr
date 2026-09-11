@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { Beef as Cow, ChevronRight, MapPinned } from "lucide-react";
+import { Beef as Cow, ChevronRight, Droplets, MapPinned } from "lucide-react";
 import type { HydraAccount } from "../../lib/hydra-types";
 import { loadPropertyMapData, type AnimalSighting, type PropertyMapFeature } from "../../services/property-map-service";
 import "./home-property-map-preview.css";
@@ -17,6 +17,25 @@ function pointToLatLng(point: [number, number]): L.LatLngTuple {
   return [point[1], point[0]];
 }
 
+function relativeTime(value: string) {
+  const diff = Date.now() - new Date(value).getTime();
+  if (!Number.isFinite(diff) || diff < 0) return "agora";
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return "agora";
+  if (minutes < 60) return `há ${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `há ${hours} h`;
+  const days = Math.floor(hours / 24);
+  return `há ${days} dia${days === 1 ? "" : "s"}`;
+}
+
+function pointColor(type: PropertyMapFeature["featureType"]) {
+  if (type === "water") return "#2f8ecf";
+  if (type === "corral") return "#8b6847";
+  if (type === "gate") return "#e7792b";
+  return "#5f786c";
+}
+
 export function HomePropertyMapPreview({ account, onOpen }: Props) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
@@ -24,6 +43,7 @@ export function HomePropertyMapPreview({ account, onOpen }: Props) {
   const [features, setFeatures] = useState<PropertyMapFeature[]>([]);
   const [sightings, setSightings] = useState<AnimalSighting[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mapBaseFailed, setMapBaseFailed] = useState(false);
 
   const ownerUserId = account.access.ownerUserId;
   const propertyId = account.property.id ?? `property-${ownerUserId}`;
@@ -39,6 +59,8 @@ export function HomePropertyMapPreview({ account, onOpen }: Props) {
 
   const sectorCount = features.filter((feature) => feature.featureType === "sector").length;
   const waterCount = features.filter((feature) => feature.featureType === "water").length;
+  const boundaryReady = features.some((feature) => feature.featureType === "boundary");
+  const latestSighting = latestSightings[0];
 
   useEffect(() => {
     let active = true;
@@ -76,10 +98,12 @@ export function HomePropertyMapPreview({ account, onOpen }: Props) {
       preferCanvas: true,
     }).setView([-14.235, -51.925], 4);
 
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    const tiles = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       crossOrigin: true,
-    }).addTo(map);
+    });
+    tiles.on("tileerror", () => setMapBaseFailed(true));
+    tiles.addTo(map);
 
     layerRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
@@ -116,41 +140,49 @@ export function HomePropertyMapPreview({ account, onOpen }: Props) {
         const boundary = feature.featureType === "boundary";
         L.polygon(points, {
           color: boundary ? "#174c36" : "#e7792b",
-          weight: boundary ? 3 : 2,
+          weight: boundary ? 3.5 : 2,
           fillColor: boundary ? "#174c36" : "#e7792b",
-          fillOpacity: boundary ? 0.08 : 0.15,
-          dashArray: boundary ? undefined : "6 5",
+          fillOpacity: boundary ? 0.09 : 0.18,
+          dashArray: boundary ? undefined : "7 5",
           interactive: false,
         }).addTo(layers);
       } else {
         const point = pointToLatLng(feature.geometry.coordinates);
         bounds.push(point);
         L.circleMarker(point, {
-          radius: 6,
+          radius: 6.5,
           color: "#ffffff",
           weight: 2,
-          fillColor: feature.featureType === "water" ? "#2f8ecf" : "#e7792b",
+          fillColor: pointColor(feature.featureType),
           fillOpacity: 1,
           interactive: false,
         }).addTo(layers);
       }
     }
 
-    for (const sighting of latestSightings) {
+    latestSightings.forEach((sighting, index) => {
       const point: L.LatLngTuple = [sighting.latitude, sighting.longitude];
       bounds.push(point);
       L.circleMarker(point, {
-        radius: 5,
+        radius: index === 0 ? 10 : 8,
         color: "#174c36",
+        weight: 1,
+        fillColor: "#dff0e7",
+        fillOpacity: 0.5,
+        interactive: false,
+      }).addTo(layers);
+      L.circleMarker(point, {
+        radius: index === 0 ? 5.5 : 4.5,
+        color: "#ffffff",
         weight: 2,
-        fillColor: "#ffffff",
+        fillColor: "#174c36",
         fillOpacity: 1,
         interactive: false,
       }).addTo(layers);
-    }
+    });
 
     if (bounds.length > 0) {
-      map.fitBounds(L.latLngBounds(bounds), { padding: [18, 18], maxZoom: 16, animate: false });
+      map.fitBounds(L.latLngBounds(bounds), { padding: [20, 20], maxZoom: 16, animate: false });
     } else {
       map.setView([-14.235, -51.925], 4, { animate: false });
     }
@@ -159,23 +191,39 @@ export function HomePropertyMapPreview({ account, onOpen }: Props) {
   }, [features, latestSightings]);
 
   const empty = !loading && features.length === 0 && latestSightings.length === 0;
+  const displayedSectorCount = sectorCount || account.sectors.length;
 
   return <section className="home-property-map-card" aria-label="Mapa da propriedade">
     <button type="button" className="home-property-map-hitarea" onClick={onOpen} aria-label="Abrir mapa da propriedade">
       <div className="home-property-map-stage">
         <div ref={mapNode} className="home-property-map-canvas" aria-hidden="true" />
         <div className="home-property-map-shade" />
-        <div className="home-property-map-title"><span><MapPinned size={18} /></span><div><small>MAPA DA PROPRIEDADE</small><strong>{account.property.name || "Minha propriedade"}</strong></div></div>
-        {empty && <div className="home-property-map-empty">Desenhe os limites da propriedade</div>}
-        {loading && <div className="home-property-map-loading">Carregando mapa…</div>}
-      </div>
-      <div className="home-property-map-footer">
-        <div className="home-property-map-stats">
-          <span><strong>{sectorCount || account.sectors.length}</strong><small>setores</small></span>
-          <span><strong>{waterCount}</strong><small>água</small></span>
-          <span><Cow size={15} /><strong>{latestSightings.length}</strong><small>vistos</small></span>
+
+        <div className="home-property-map-title">
+          <span className="home-property-map-title-icon"><MapPinned size={18} /></span>
+          <div className="home-property-map-title-copy">
+            <small>MAPA DA PROPRIEDADE</small>
+            <strong>{account.property.name || "Minha propriedade"}</strong>
+          </div>
         </div>
-        <span className="home-property-map-open">Abrir mapa <ChevronRight size={18} /></span>
+
+        {!loading && !empty && <div className="home-property-map-badges" aria-hidden="true">
+          <span><i className="sector" /><strong>{displayedSectorCount}</strong> setores</span>
+          <span><Droplets size={13} /><strong>{waterCount}</strong> água</span>
+          <span><Cow size={13} /><strong>{latestSightings.length}</strong> vistos</span>
+        </div>}
+
+        {empty && <div className="home-property-map-empty"><MapPinned size={15} /> Toque para desenhar sua propriedade</div>}
+        {loading && <div className="home-property-map-loading"><span /> Carregando mapa</div>}
+        {mapBaseFailed && !loading && <div className="home-property-map-offline">Mapa-base indisponível</div>}
+      </div>
+
+      <div className="home-property-map-footer">
+        <div className="home-property-map-footer-copy">
+          <strong>{empty ? "Configure o mapa da fazenda" : boundaryReady ? "Sua propriedade em um toque" : "Complete os limites da propriedade"}</strong>
+          <small>{latestSighting ? `Último animal visto ${relativeTime(latestSighting.seenAt)}` : empty ? "Limites, setores, água e pontos importantes" : "Setores, água e pontos importantes reunidos"}</small>
+        </div>
+        <span className="home-property-map-open" aria-hidden="true"><ChevronRight size={20} /></span>
       </div>
     </button>
   </section>;
