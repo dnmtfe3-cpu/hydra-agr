@@ -91,11 +91,6 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
     </div>
 
     <section className="greeting-block"><div><h1><span className="greeting-time">{welcome},</span> <strong className="greeting-name">{firstName}</strong></h1><p className="capitalize">{today}</p></div></section>
-    <HomeScienceSummary account={account} onOpen={() => navigate("climate")} />
-    {announcements.length > 0 && <section className="home-announcements" aria-label="Avisos do Hydra Agro">{announcements.slice(0, 3).map((announcement) => <article key={announcement.id} className={announcement.level}><span>{announcement.level === "critical" ? "IMPORTANTE" : announcement.level === "attention" ? "ATENÇÃO" : "AVISO"}</span><strong>{announcement.title}</strong><p>{announcement.body}</p></article>)}</section>}
-
-    <HomePropertyMapPreview account={account} onOpen={openPropertyMap} />
-    <HomeWaterSavingsCard account={account} onOpen={() => navigate("water")} />
 
     <div className="shortcut-row home-shortcuts-five" aria-label="Atalhos">
       <button onClick={() => setNutriCicloOpen(true)} aria-label="Hydra NutriCiclo" title="Hydra NutriCiclo"><span><Recycle size={23} /></span></button>
@@ -104,6 +99,12 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
       <button onClick={() => navigate("assistant")} aria-label="Assistente" title="Assistente"><span><MessageSquareText size={23} /></span></button>
       <button className="production-shortcut" onClick={() => navigate("production")} aria-label="Caderno da Produção" title="Agricultura familiar"><span><NotebookTabs size={23} /></span></button>
     </div>
+
+    <HomeScienceSummary account={account} onOpen={() => navigate("climate")} />
+    {announcements.length > 0 && <section className="home-announcements" aria-label="Avisos do Hydra Agro">{announcements.slice(0, 3).map((announcement) => <article key={announcement.id} className={announcement.level}><span>{announcement.level === "critical" ? "IMPORTANTE" : announcement.level === "attention" ? "ATENÇÃO" : "AVISO"}</span><strong>{announcement.title}</strong><p>{announcement.body}</p></article>)}</section>}
+
+    <HomePropertyMapPreview account={account} onOpen={openPropertyMap} />
+    <HomeWaterSavingsCard account={account} onOpen={() => navigate("water")} />
 
     <button className="nfc-banner" onClick={() => navigate("nfc")}><span className="nfc-banner-icon"><ScanLine size={27} /></span><span className="nfc-banner-copy"><small>NFC / RFID</small><strong>Ler identificação do animal</strong><em>{countLabel(identifiedAnimals, "identificado", "identificados")} · {countLabel(account.nfcReadCount, "leitura", "leituras")}</em></span><ChevronRight size={22} /></button>
 
