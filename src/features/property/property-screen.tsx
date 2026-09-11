@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
-import { Beef as Cow, MapPin, Nfc, Pencil, RadioTower, Ruler, Sprout, Tractor } from "lucide-react";
+import { Beef as Cow, ChevronRight, MapPin, MapPinned, Nfc, Pencil, RadioTower, Ruler, Sprout, Tractor } from "lucide-react";
 import { PropertyLocationFields } from "../../components/property-location-fields";
 import { Field, LoadingButton, Modal, ScreenHeader, SectionHeader } from "../../components/ui";
 import { showAppToast } from "../../components/modal-system";
 import { isValidCep } from "../../lib/brazil-location";
 import type { HydraAccount, Property, UpdateAccount } from "../../lib/hydra-types";
+import { PropertyMapScreen } from "./property-map-screen";
 
 type Props = { account: HydraAccount; updateAccount: UpdateAccount; onBack: () => void };
 
@@ -17,11 +18,14 @@ function countLabel(count: number, singular: string, plural: string) { return co
 
 export function PropertyScreen({ account, updateAccount, onBack }: Props) {
   const [editOpen, setEditOpen] = useState(false);
+  const [mapOpen, setMapOpen] = useState(false);
   const [draft, setDraft] = useState<Property>({ ...account.property });
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const coverStyle = account.property.coverUrl ? { backgroundImage: `linear-gradient(145deg, rgba(13,78,54,.84), rgba(7,52,36,.94)), url("${account.property.coverUrl}")` } as CSSProperties : undefined;
   const identifiedAnimals = account.animals.filter((animal) => animal.electronicId).length;
+
+  if (mapOpen) return <PropertyMapScreen account={account} onBack={() => setMapOpen(false)} />;
 
   async function save(event: FormEvent) {
     event.preventDefault();
@@ -62,6 +66,12 @@ export function PropertyScreen({ account, updateAccount, onBack }: Props) {
         <InfoItem label="Referência" value={account.property.locationDetails} icon={<MapPin size={20} />} />
       </div>
     </section>
+
+    <button className="property-map-entry" type="button" onClick={() => setMapOpen(true)}>
+      <span className="property-map-entry-icon"><MapPinned size={23} /></span>
+      <span className="property-map-entry-copy"><small>MAPA DA PROPRIEDADE</small><strong>Limites, setores e localizações</strong><em>Desenhe a fazenda e veja a última localização compartilhada dos animais.</em></span>
+      <ChevronRight size={20} />
+    </button>
 
     <section className="property-section-card">
       <SectionHeader title="Produção" />
