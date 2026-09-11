@@ -31,6 +31,7 @@ import { requireSupabase } from "../../services/supabase";
 import { NutriCicloPanel } from "../family-farming/nutriciclo-panel";
 import { HomeScienceSummary } from "../climate/home-science-summary";
 import { HomePropertyMapPreview } from "./home-property-map-preview";
+import { HomeWaterSavingsCard } from "./home-water-savings-card";
 
 type Props = { account: HydraAccount; navigate: (route: AppRoute) => void; onQuickAction: () => void; announcements: Announcement[] };
 
@@ -94,6 +95,7 @@ export function HomeScreen({ account, navigate, announcements }: Props) {
     {announcements.length > 0 && <section className="home-announcements" aria-label="Avisos do Hydra Agro">{announcements.slice(0, 3).map((announcement) => <article key={announcement.id} className={announcement.level}><span>{announcement.level === "critical" ? "IMPORTANTE" : announcement.level === "attention" ? "ATENÇÃO" : "AVISO"}</span><strong>{announcement.title}</strong><p>{announcement.body}</p></article>)}</section>}
 
     <HomePropertyMapPreview account={account} onOpen={openPropertyMap} />
+    <HomeWaterSavingsCard account={account} onOpen={() => navigate("water")} />
 
     <div className="shortcut-row home-shortcuts-five" aria-label="Atalhos">
       <button onClick={() => setNutriCicloOpen(true)} aria-label="Hydra NutriCiclo" title="Hydra NutriCiclo"><span><Recycle size={23} /></span></button>
