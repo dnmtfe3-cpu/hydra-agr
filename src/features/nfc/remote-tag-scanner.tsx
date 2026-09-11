@@ -8,43 +8,87 @@ type BarcodeDetectorLike = {
 };
 
 type BarcodeDetectorConstructor = new (options?: { formats?: string[] }) => BarcodeDetectorLike;
+type JsQrResult = { data?: string };
+type JsQrDecoder = (
+  data: Uint8ClampedArray,
+  width: number,
+  height: number,
+  options?: { inversionAttempts?: "dontInvert" | "onlyInvert" | "attemptBoth" | "invertFirst" },
+) => JsQrResult | null;
 
 type ZoomCapabilities = MediaTrackCapabilities & { zoom?: { min: number; max: number; step?: number } };
 type ZoomConstraintSet = MediaTrackConstraintSet & { zoom?: number };
 type PublicLookup = {
   identification?: string;
-  name?: string;
-  species?: string;
-  breed?: string;
-  sex?: string;
-  status?: string;
-  propertyName?: string;
-  municipality?: string;
-  state?: string;
 };
+
+const HYDRA_PUBLIC_ORIGIN = "https://www.hydraagro.sbs";
+const JSQR_SCRIPT_ID = "hydra-jsqr-runtime";
+const JSQR_SRC = "https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js";
+let jsQrLoader: Promise<JsQrDecoder | null> | null = null;
+
+function currentJsQr() {
+  return (window as typeof window & { jsQR?: JsQrDecoder }).jsQR ?? null;
+}
+
+function loadJsQrDecoder() {
+  const ready = currentJsQr();
+  if (ready) return Promise.resolve(ready);
+  if (jsQrLoader) return jsQrLoader;
+
+  jsQrLoader = new Promise<JsQrDecoder | null>((resolve) => {
+    const finish = () => resolve(currentJsQr());
+    const existing = document.getElementById(JSQR_SCRIPT_ID) as HTMLScriptElement | null;
+    if (existing) {
+      existing.addEventListener("load", finish, { once: true });
+      existing.addEventListener("error", () => resolve(null), { once: true });
+      window.setTimeout(finish, 5000);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.id = JSQR_SCRIPT_ID;
+    script.src = JSQR_SRC;
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    script.addEventListener("load", finish, { once: true });
+    script.addEventListener("error", () => resolve(null), { once: true });
+    document.head.appendChild(script);
+    window.setTimeout(finish, 5000);
+  });
+
+  return jsQrLoader;
+}
 
 function parseHydraTag(value: string) {
   const trimmed = value.trim();
   if (!trimmed) return null;
+
+  if (/^[a-z0-9][a-z0-9_-]{2,79}$/i.test(trimmed)) {
+    return `${HYDRA_PUBLIC_ORIGIN}/tag/${encodeURIComponent(trimmed)}`;
+  }
+
   try {
-    const url = new URL(trimmed);
+    const url = new URL(trimmed, window.location.origin);
+    const validHosts = new Set([window.location.host, "hydraagro.sbs", "www.hydraagro.sbs"]);
+    if (!validHosts.has(url.host)) return null;
+
+    const pathParts = url.pathname.split("/").filter(Boolean);
+    if (pathParts[0] === "tag" && pathParts[1]) return url.toString();
     if (url.searchParams.get("pa") === "1" && url.searchParams.get("i")) return url.toString();
   } catch {
-    // Pode ser um código visual digitado/impresso em vez de URL.
+    // Conteúdo inválido para Hydra Tag.
   }
-  return null;
-}
 
-function setSafeParam(url: URL, key: string, value: unknown, max: number) {
-  if (typeof value !== "string") return;
-  const clean = value.trim();
-  if (clean) url.searchParams.set(key, clean.slice(0, max));
+  return null;
 }
 
 export function RemoteTagScanner() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const detectorRef = useRef<BarcodeDetectorLike | null>(null);
+  const jsQrRef = useRef<JsQrDecoder | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const scanningRef = useRef(false);
   const timerRef = useRef<number | null>(null);
   const [open, setOpen] = useState(false);
@@ -62,16 +106,50 @@ export function RemoteTagScanner() {
     timerRef.current = null;
     streamRef.current?.getTracks().forEach((track) => track.stop());
     streamRef.current = null;
+    detectorRef.current = null;
+    jsQrRef.current = null;
     if (videoRef.current) videoRef.current.srcObject = null;
   }
 
   useEffect(() => () => stopCamera(), []);
 
+  useEffect(() => {
+    document.body.classList.toggle("hydra-distance-scanner-open", open);
+    return () => document.body.classList.remove("hydra-distance-scanner-open");
+  }, [open]);
+
+  function readWithJsQr(video: HTMLVideoElement) {
+    const decoder = jsQrRef.current;
+    if (!decoder || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return "";
+
+    const maxWidth = 900;
+    const scale = Math.min(1, maxWidth / video.videoWidth);
+    const width = Math.max(1, Math.round(video.videoWidth * scale));
+    const height = Math.max(1, Math.round(video.videoHeight * scale));
+    const canvas = canvasRef.current ?? document.createElement("canvas");
+    canvasRef.current = canvas;
+    if (canvas.width !== width) canvas.width = width;
+    if (canvas.height !== height) canvas.height = height;
+
+    const context = canvas.getContext("2d", { willReadFrequently: true });
+    if (!context) return "";
+    context.drawImage(video, 0, 0, width, height);
+    const image = context.getImageData(0, 0, width, height);
+    return decoder(image.data, width, height, { inversionAttempts: "attemptBoth" })?.data?.trim() ?? "";
+  }
+
   async function scanFrame() {
-    if (!scanningRef.current || !videoRef.current || !detectorRef.current) return;
+    if (!scanningRef.current || !videoRef.current) return;
+
     try {
-      const results = await detectorRef.current.detect(videoRef.current);
-      const raw = results.map((item) => item.rawValue?.trim()).find(Boolean);
+      let raw = "";
+      if (detectorRef.current) {
+        const results = await detectorRef.current.detect(videoRef.current);
+        raw = results.map((item) => item.rawValue?.trim()).find(Boolean) ?? "";
+      } else if (jsQrRef.current) {
+        raw = readWithJsQr(videoRef.current);
+      }
+
       if (raw) {
         const hydraUrl = parseHydraTag(raw);
         if (hydraUrl) {
@@ -82,9 +160,10 @@ export function RemoteTagScanner() {
         }
       }
     } catch {
-      // Alguns aparelhos falham enquanto o vídeo ainda estabiliza.
+      // A câmera pode falhar em frames isolados enquanto ajusta foco/exposição.
     }
-    timerRef.current = window.setTimeout(() => void scanFrame(), 450);
+
+    timerRef.current = window.setTimeout(() => void scanFrame(), detectorRef.current ? 360 : 240);
   }
 
   async function startCamera() {
@@ -117,12 +196,16 @@ export function RemoteTagScanner() {
 
       if (Detector) {
         detectorRef.current = new Detector({ formats: ["qr_code"] });
-        scanningRef.current = true;
-        void scanFrame();
       } else {
-        detectorRef.current = null;
-        setError("A leitura automática de QR não está disponível neste aparelho. Você ainda pode usar o zoom para enxergar o Hydra ID e digitá-lo.");
+        jsQrRef.current = await loadJsQrDecoder();
+        if (!jsQrRef.current) {
+          setError("Não consegui ativar o leitor automático neste aparelho. Use o Hydra ID abaixo.");
+          return;
+        }
       }
+
+      scanningRef.current = true;
+      void scanFrame();
     } catch {
       stopCamera();
       setError("Não foi possível abrir a câmera. Verifique a permissão do Hydra Agro para usar a câmera.");
@@ -142,7 +225,7 @@ export function RemoteTagScanner() {
   }
 
   async function lookupManualCode() {
-    const code = manualCode.trim().slice(0, 40);
+    const code = manualCode.trim().slice(0, 80);
     if (!code) {
       setLookupError("Digite o Hydra ID visível no brinco.");
       return;
@@ -159,21 +242,9 @@ export function RemoteTagScanner() {
 
       const animal = data as PublicLookup;
       const identification = animal.identification?.trim() || code;
-      const url = new URL(window.location.origin);
-      url.searchParams.set("pa", "1");
-      url.searchParams.set("i", identification.slice(0, 40));
-      url.searchParams.set("s", (animal.species?.trim() || "animal").slice(0, 24));
-      setSafeParam(url, "n", animal.name, 32);
-      setSafeParam(url, "b", animal.breed, 28);
-      setSafeParam(url, "sx", animal.sex, 16);
-      setSafeParam(url, "st", animal.status, 20);
-      setSafeParam(url, "pn", animal.propertyName, 40);
-      setSafeParam(url, "pm", animal.municipality, 28);
-      setSafeParam(url, "uf", animal.state?.toUpperCase(), 2);
-
       stopCamera();
       setOpen(false);
-      window.location.assign(url.toString());
+      window.location.assign(`/tag/${encodeURIComponent(identification)}`);
     } catch {
       setLookupError("Não foi possível consultar esse Hydra ID agora. Tente novamente sem se aproximar do animal.");
     } finally {
@@ -209,7 +280,7 @@ export function RemoteTagScanner() {
         <div className="distance-id-copy">
           <small>ANIMAL FORA DA PROPRIEDADE</small>
           <strong>Identificar à distância</strong>
-          <p>Use a opção que você consegue enxergar sem chegar perto do animal.</p>
+          <p>Use a câmera ou o Hydra ID sem precisar chegar perto do animal.</p>
         </div>
       </div>
 
@@ -238,12 +309,12 @@ export function RemoteTagScanner() {
             value={manualCode}
             onChange={(event) => setManualCode(event.target.value.toUpperCase())}
             onKeyDown={(event) => { if (event.key === "Enter") void lookupManualCode(); }}
-            maxLength={40}
+            maxLength={80}
             autoCapitalize="characters"
             autoCorrect="off"
             spellCheck={false}
             inputMode="text"
-            placeholder="Ex.: HYDRA-8F2K"
+            placeholder="Ex.: HA-000024"
             aria-label="Hydra ID do animal"
           />
           <button onClick={() => void lookupManualCode()} disabled={lookupBusy}>
@@ -269,7 +340,7 @@ export function RemoteTagScanner() {
         <div className="distance-camera-wrap">
           <video ref={videoRef} className="distance-camera-video" playsInline muted />
           <div className="distance-camera-frame"><span /><span /><span /><span /></div>
-          <div className="distance-camera-hint">Fique em local seguro e use o zoom. Não se aproxime só para enquadrar a tag.</div>
+          <div className="distance-camera-hint">Aponte para o QR e mantenha alguns segundos no quadro. O Hydra Agro abre a ficha automaticamente.</div>
         </div>
 
         {zoomRange && <div className="distance-zoom-control">
