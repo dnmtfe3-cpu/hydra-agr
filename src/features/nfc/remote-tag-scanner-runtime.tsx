@@ -23,15 +23,15 @@ function mountScanner() {
   const host = document.createElement("div");
   host.className = "distance-id-runtime-host";
 
-  // Mantém o fluxo principal do NFC no topo. A identificação à distância entra
-  // logo depois do hero e antes dos controles de localizar/vincular.
-  const segment = screen.querySelector<HTMLElement>(".nfc-segment");
-  if (segment) {
-    screen.insertBefore(host, segment);
+  // A identificação por câmera é uma ação principal quando o animal está longe.
+  // Por isso fica logo abaixo do cabeçalho, antes do bloco de NFC por aproximação.
+  const header = screen.querySelector<HTMLElement>(".screen-header, .screen-header-row");
+  if (header?.nextSibling) {
+    screen.insertBefore(host, header.nextSibling);
+  } else if (screen.firstChild) {
+    screen.insertBefore(host, screen.firstChild);
   } else {
-    const hero = screen.querySelector<HTMLElement>(".nfc-hero");
-    if (hero?.nextSibling) screen.insertBefore(host, hero.nextSibling);
-    else screen.appendChild(host);
+    screen.appendChild(host);
   }
 
   mountedHost = host;
