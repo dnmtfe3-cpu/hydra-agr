@@ -4,7 +4,7 @@ import { NfcScreen } from "../src/features/nfc/nfc-screen";
 import { createEmptyAccount, type UpdateAccount } from "../src/lib/hydra-types";
 
 describe("NFC na web", () => {
-  it("não oferece leitura NFC simulada e mantém os fallbacks reais visíveis", () => {
+  it("não oferece leitura NFC simulada e mantém apenas fallbacks reais", () => {
     const account = createEmptyAccount({ id: "owner-web", email: "owner@hydra.test" });
     account.animals = [{
       id: "animal-1",
@@ -26,12 +26,12 @@ describe("NFC na web", () => {
       onRealRead={onRealRead}
     />);
 
-    expect(screen.getByText("Rastreamento não conectado")).toBeInTheDocument();
-    expect(screen.getByText("Modo demonstração", { selector: "summary" })).toBeInTheDocument();
+    expect(screen.getByText("NFC identifica, mas não rastreia")).toBeInTheDocument();
+    expect(screen.queryByText("Modo demonstração")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Simular leitura" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Simular localização" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Como usar NFC" })).toBeInTheDocument();
-    expect(screen.getByText(/Use QR Code ou código manual aqui/i)).toBeInTheDocument();
+    expect(screen.getByText(/Neste dispositivo, use o QR Code ou o código da identificação/i)).toBeInTheDocument();
     expect(screen.getByLabelText("Código da identificação")).toBeInTheDocument();
     expect(onRealRead).not.toHaveBeenCalled();
     expect(onFound).not.toHaveBeenCalled();
