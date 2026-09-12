@@ -7,15 +7,30 @@ import { loadWeather, type WeatherSnapshot } from "../../services/weather-servic
 export type ScienceSummaryView = "climate" | "animals" | "water";
 export const SCIENCE_VIEW_KEY = "hydra-agro.science-view";
 
-function SummaryCard({ icon, label, value, detail, onClick }: { icon: ReactNode; label: string; value: string; detail: string; onClick: () => void }) {
-  return <button className="home-science-card" type="button" onClick={onClick}>
-    <span className="home-science-card-icon" aria-hidden="true">{icon}</span>
-    <span className="home-science-card-copy">
-      <small>{label}</small>
-      <strong>{value}</strong>
-      <em>{detail}</em>
-    </span>
-  </button>;
+type ShortcutProps = {
+  icon: ReactNode;
+  label: string;
+  value: string;
+  detail: string;
+  onClick: () => void;
+};
+
+function ScienceShortcut({ icon, label, value, detail, onClick }: ShortcutProps) {
+  return (
+    <button
+      className="home-science-shortcut"
+      type="button"
+      onClick={onClick}
+      aria-label={`${label}: ${value}. ${detail}`}
+    >
+      <span className="home-science-shortcut-top">
+        <span className="home-science-shortcut-icon" aria-hidden="true">{icon}</span>
+        <span className="home-science-shortcut-label">{label}</span>
+      </span>
+      <strong className="home-science-shortcut-value">{value}</strong>
+      <span className="home-science-shortcut-detail">{detail}</span>
+    </button>
+  );
 }
 
 export function HomeScienceSummary({ account, onOpen }: { account: HydraAccount; onOpen: () => void }) {
@@ -23,10 +38,15 @@ export function HomeScienceSummary({ account, onOpen }: { account: HydraAccount;
 
   useEffect(() => {
     let active = true;
-    if (!account.property.municipality || !account.property.state) return;
+    if (!account.property.municipality || !account.property.state) {
+      setWeather(null);
+      return () => { active = false; };
+    }
+
     void loadWeather(account.property.municipality, account.property.state)
       .then((result) => { if (active) setWeather(result); })
-      .catch(() => undefined);
+      .catch(() => { if (active) setWeather(null); });
+
     return () => { active = false; };
   }, [account.property.municipality, account.property.state]);
 
@@ -35,18 +55,32 @@ export function HomeScienceSummary({ account, onOpen }: { account: HydraAccount;
     onOpen();
   }
 
-  if (!weather) {
-    return <section className="home-science-summary home-science-summary-loading" aria-label="Clima">
-      <SummaryCard icon={<CloudSun size={19} />} label="CLIMA" value="Consultar" detail="Ver previsão" onClick={() => open("climate")} />
-    </section>;
-  }
+  const comfort = weather ? animalComfort(account, weather) : null;
+  const water = weather ? waterSituation(account, weather) : null;
 
-  const comfort = animalComfort(account, weather);
-  const water = waterSituation(account, weather);
-
-  return <section className="home-science-summary" aria-label="Resumo de clima e ciência">
-    <SummaryCard icon={<CloudSun size={19} />} label="CLIMA" value={`${Math.round(weather.temperature)} °C`} detail={weather.rainChance >= 60 ? "Pode chover" : "Ver previsão"} onClick={() => open("climate")} />
-    <SummaryCard icon={<ThermometerSun size={19} />} label="ANIMAIS" value={comfort.status} detail="Conforto térmico" onClick={() => open("animals")} />
-    <SummaryCard icon={<Droplets size={19} />} label="ÁGUA" value={water.status} detail="Situação estimada" onClick={() => open("water")} />
-  </section>;
+  return (
+    <section className="home-science-summary" aria-label="Atalhos de clima, animais e água">
+      <ScienceShortcut
+        icon={<CloudSun size={18} />}
+        label="CLIMA"
+        value={weather ? `${Math.round(weather.temperature)} °C` : "Consultar"}
+        detail={weather ? (weather.rainChance >= 60 ? "Pode chover" : "Ver previsão") : "Ver previsão"}
+        onClick={() => open("climate")}
+      />
+      <ScienceShortcut
+        icon={<ThermometerSun size={18} />}
+        label="ANIMAIS"
+        value={comfort?.status ?? "Rebanho"}
+        detail="Conforto térmico"
+        onClick={() => open("animals")}
+      />
+      <ScienceShortcut
+        icon={<Droplets size={18} />}
+        label="ÁGUA"
+        value={water?.status ?? "Situação"}
+        detail="Acompanhar água"
+        onClick={() => open("water")}
+      />
+    </section>
+  );
 }
