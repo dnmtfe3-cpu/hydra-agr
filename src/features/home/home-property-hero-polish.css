@@ -1,0 +1,217 @@
+/* Home property overview: compact, useful and consistent with Hydra Agro. */
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+  padding: 17px;
+  border: 1px solid rgba(255, 255, 255, .13) !important;
+  border-radius: 20px !important;
+  background: #173f2f !important;
+  color: #f7fbf8;
+  box-shadow: 0 10px 26px rgba(18, 54, 39, .12) !important;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  right: -34px;
+  top: -42px;
+  width: 122px;
+  height: 122px;
+  border: 20px solid rgba(255, 255, 255, .035);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  left: 17px;
+  right: 17px;
+  top: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, .14);
+  pointer-events: none;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding-bottom: 0 !important;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top > div {
+  min-width: 0;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-kicker {
+  display: block;
+  margin-bottom: 5px;
+  color: rgba(232, 245, 237, .72) !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: .075em !important;
+  text-transform: uppercase !important;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero h2 {
+  overflow: hidden;
+  margin: 0;
+  color: #ffffff !important;
+  font-family: "Sora", "Manrope", sans-serif;
+  font-size: 17px !important;
+  font-weight: 750 !important;
+  line-height: 1.18;
+  letter-spacing: -.025em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top p {
+  overflow: hidden;
+  margin: 5px 0 0;
+  color: rgba(237, 247, 241, .72) !important;
+  font-size: 10px !important;
+  font-weight: 560;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top > button {
+  display: grid;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  min-width: 39px;
+  min-height: 39px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, .08) !important;
+  color: #f5fbf7 !important;
+  box-shadow: none !important;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top > button:active {
+  background: rgba(255, 255, 255, .14) !important;
+  transform: scale(.97);
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics {
+  position: relative;
+  z-index: 1;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  padding: 9px 0;
+  border: 1px solid rgba(255, 255, 255, .10);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .055);
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics > div {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 7px;
+  align-items: center;
+  padding: 2px 9px;
+  border-right: 1px solid rgba(255, 255, 255, .09);
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics > div:last-child {
+  border-right: 0;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics svg {
+  width: 16px;
+  height: 16px;
+  color: #b8d8c3;
+  stroke-width: 2;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics span {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics strong {
+  overflow: hidden;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics small {
+  overflow: hidden;
+  margin-top: 2px;
+  color: rgba(232, 245, 237, .62);
+  font-size: 7.5px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-link {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin: 0;
+  padding: 0 13px;
+  border: 1px solid rgba(255, 255, 255, .12) !important;
+  border-radius: 13px !important;
+  background: rgba(255, 255, 255, .09) !important;
+  color: #fff !important;
+  font-size: 10px;
+  font-weight: 800;
+  box-shadow: none !important;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-link:active {
+  background: rgba(255, 255, 255, .15) !important;
+  transform: scale(.99);
+}
+
+.hydra-root.theme-dark body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero,
+body.theme-dark:not(.hydra-easy-mode) .phone-app .home-screen .property-hero {
+  border-color: rgba(255, 255, 255, .09) !important;
+  background: #102d22 !important;
+}
+
+@media (max-width: 390px) {
+  body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero {
+    padding: 15px;
+    gap: 12px;
+  }
+
+  body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics > div {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 4px;
+    padding-inline: 5px;
+    text-align: center;
+  }
+
+  body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics span {
+    align-items: center;
+  }
+}
