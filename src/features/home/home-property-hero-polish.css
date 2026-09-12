@@ -1,43 +1,37 @@
-/* Home property overview: same white-card language used across the home screen. */
+/* Home property overview: refined white card, aligned with the other Home surfaces. */
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero {
   position: relative;
   overflow: hidden;
   display: grid;
-  gap: 14px;
+  gap: 12px;
   margin-top: 14px;
-  padding: 17px;
-  border: 1px solid rgba(23, 76, 54, .10) !important;
-  border-radius: 20px !important;
-  background: #ffffff !important;
+  padding: 15px 15px 11px;
+  border: 1px solid rgba(28, 96, 70, .11) !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at 96% 0%, rgba(38, 130, 91, .075), transparent 27%),
+    linear-gradient(145deg, #fbfdfb 0%, #ffffff 58%, #f8fbf9 100%) !important;
   color: #244535 !important;
-  box-shadow: 0 8px 22px rgba(31, 66, 51, .055) !important;
+  box-shadow: 0 8px 22px rgba(23, 76, 54, .055) !important;
 }
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero::before {
   content: "" !important;
-  display: block !important;
   position: absolute;
-  right: -32px;
-  top: -38px;
-  width: 112px;
-  height: 112px;
-  border: 18px solid rgba(23, 76, 54, .025);
-  border-radius: 50%;
+  z-index: 2;
+  top: -1px;
+  left: -1px;
+  display: block !important;
+  width: 44px;
+  height: 36px;
+  border-top: 2px solid #2c8a63;
+  border-left: 2px solid #2c8a63;
+  border-top-left-radius: 18px;
   pointer-events: none;
 }
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero::after {
-  content: "" !important;
-  display: block !important;
-  position: absolute;
-  left: 17px;
-  right: 17px;
-  top: 0;
-  height: 2px;
-  border-radius: 999px;
-  background: #2d6a4f;
-  opacity: .72;
-  pointer-events: none;
+  content: none !important;
 }
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top {
@@ -45,9 +39,9 @@ body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top {
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 12px;
-  align-items: start;
-  padding-bottom: 0 !important;
+  gap: 11px;
+  align-items: center;
+  padding: 0 !important;
 }
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top > div {
@@ -56,32 +50,32 @@ body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top > div {
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-kicker {
   display: block;
-  margin-bottom: 5px;
-  color: #628071 !important;
-  font-size: 9px !important;
+  margin-bottom: 4px;
+  color: #738c80 !important;
+  font-size: 8px !important;
   font-weight: 800 !important;
-  letter-spacing: .055em !important;
+  letter-spacing: .065em !important;
   text-transform: uppercase !important;
 }
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero h2 {
   overflow: hidden;
   margin: 0;
-  color: #1f4634 !important;
+  color: #1d4937 !important;
   font-family: "Sora", "Manrope", sans-serif;
-  font-size: 17px !important;
+  font-size: 16px !important;
   font-weight: 750 !important;
   line-height: 1.18;
-  letter-spacing: -.025em;
+  letter-spacing: -.022em;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top p {
   overflow: hidden;
-  margin: 5px 0 0;
-  color: #78867f !important;
-  font-size: 10px !important;
+  margin: 4px 0 0;
+  color: #819188 !important;
+  font-size: 9.5px !important;
   font-weight: 560;
   line-height: 1.35;
   text-overflow: ellipsis;
@@ -91,21 +85,26 @@ body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top p {
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top > button {
   display: grid;
   place-items: center;
-  width: 39px;
-  height: 39px;
-  min-width: 39px;
-  min-height: 39px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
   padding: 0;
-  border: 1px solid rgba(23, 76, 54, .10) !important;
-  border-radius: 12px !important;
-  background: #f2f7f4 !important;
-  color: #245a41 !important;
-  box-shadow: none !important;
+  border: 1px solid rgba(38, 130, 91, .10) !important;
+  border-radius: 11px !important;
+  background: linear-gradient(145deg, rgba(38, 130, 91, .12), rgba(38, 130, 91, .055)) !important;
+  color: #246b4b !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .55) !important;
+  transition: transform 150ms ease, background 150ms ease, border-color 150ms ease;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top > button:hover {
+  border-color: rgba(38, 130, 91, .18) !important;
+  background: linear-gradient(145deg, rgba(38, 130, 91, .16), rgba(38, 130, 91, .075)) !important;
 }
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top > button:active {
-  background: #e6f0ea !important;
-  transform: scale(.97);
+  transform: scale(.96);
 }
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics {
@@ -113,11 +112,10 @@ body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics {
   z-index: 1;
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0;
-  padding: 9px 0;
-  border: 1px solid rgba(23, 76, 54, .08);
-  border-radius: 14px;
-  background: #f7faf8;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics > div {
@@ -126,18 +124,21 @@ body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics > div {
   grid-template-columns: auto minmax(0, 1fr);
   gap: 7px;
   align-items: center;
-  padding: 2px 9px;
-  border-right: 1px solid rgba(23, 76, 54, .07);
+  min-height: 48px;
+  padding: 7px 8px;
+  border: 1px solid rgba(28, 96, 70, .075);
+  border-radius: 12px;
+  background: rgba(247, 250, 248, .82);
 }
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics > div:last-child {
-  border-right: 0;
+  border-right: 1px solid rgba(28, 96, 70, .075);
 }
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics svg {
-  width: 16px;
-  height: 16px;
-  color: #4d775f;
+  width: 15px;
+  height: 15px;
+  color: #4b765e;
   stroke-width: 2;
 }
 
@@ -150,7 +151,7 @@ body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics span {
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics strong {
   overflow: hidden;
   color: #315242;
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 800;
   line-height: 1.15;
   text-overflow: ellipsis;
@@ -160,9 +161,9 @@ body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics strong {
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics small {
   overflow: hidden;
   margin-top: 2px;
-  color: #859188;
-  font-size: 7.5px;
-  font-weight: 600;
+  color: #88968f;
+  font-size: 7.2px;
+  font-weight: 650;
   line-height: 1.2;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -172,31 +173,49 @@ body:not(.hydra-easy-mode) .phone-app .home-screen .property-link {
   position: relative;
   z-index: 1;
   width: 100%;
-  min-height: 42px;
+  min-height: 34px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 7px;
   margin: 0;
-  padding: 0 13px;
-  border: 1px solid rgba(23, 76, 54, .10) !important;
-  border-radius: 13px !important;
-  background: #eef5f1 !important;
-  color: #245a41 !important;
-  font-size: 10px;
+  padding: 8px 2px 0;
+  border: 0 !important;
+  border-top: 1px solid rgba(33, 91, 67, .075) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #416c57 !important;
+  font-size: 9px;
   font-weight: 800;
   box-shadow: none !important;
+  text-align: left;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-link svg {
+  width: 15px;
+  height: 15px;
+  color: #789084;
+  transition: transform 150ms ease;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-link:hover {
+  color: #245f43 !important;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-link:hover svg {
+  transform: translateX(2px);
 }
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-link:active {
-  background: #e3eee8 !important;
-  transform: scale(.99);
+  transform: none;
 }
 
 .hydra-root.theme-dark body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero,
 body.theme-dark:not(.hydra-easy-mode) .phone-app .home-screen .property-hero {
   border-color: #294235 !important;
-  background: #0e1d15 !important;
+  background:
+    radial-gradient(circle at 96% 0%, rgba(65, 125, 91, .12), transparent 28%),
+    linear-gradient(145deg, #102119 0%, #0e1d15 62%, #102119 100%) !important;
   color: #eef3ef !important;
 }
 
@@ -214,10 +233,8 @@ body.theme-dark:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics 
   color: #91a098 !important;
 }
 
-.hydra-root.theme-dark body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics,
-body.theme-dark:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics,
-.hydra-root.theme-dark body:not(.hydra-easy-mode) .phone-app .home-screen .property-link,
-body.theme-dark:not(.hydra-easy-mode) .phone-app .home-screen .property-link,
+.hydra-root.theme-dark body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics > div,
+body.theme-dark:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics > div,
 .hydra-root.theme-dark body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top > button,
 body.theme-dark:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top > button {
   border-color: #294235 !important;
@@ -225,17 +242,35 @@ body.theme-dark:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top
   color: #b3c7b8 !important;
 }
 
+.hydra-root.theme-dark body:not(.hydra-easy-mode) .phone-app .home-screen .property-link,
+body.theme-dark:not(.hydra-easy-mode) .phone-app .home-screen .property-link {
+  border-top-color: #294235 !important;
+  color: #b3c7b8 !important;
+}
+
 @media (max-width: 390px) {
   body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero {
-    padding: 15px;
-    gap: 12px;
+    padding: 14px 14px 10px;
+    gap: 11px;
+    border-radius: 17px !important;
+  }
+
+  body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero::before {
+    width: 41px;
+    height: 34px;
+    border-top-left-radius: 17px;
+  }
+
+  body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics {
+    gap: 5px;
   }
 
   body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics > div {
     grid-template-columns: 1fr;
     justify-items: center;
-    gap: 4px;
-    padding-inline: 5px;
+    min-height: 51px;
+    gap: 3px;
+    padding: 6px 4px;
     text-align: center;
   }
 
