@@ -154,3 +154,31 @@ body:not(.hydra-easy-mode) .screen.page-enter:has(> .herd-tools-toggle) > .nfc-i
   background: #f6f9f7 !important;
   box-shadow: none !important;
 }
+
+/* Final override: all three Home summary shortcuts use the same white surface.
+   This intentionally beats older global button/primary-card styles. */
+body:not(.hydra-easy-mode) .phone-app .home-screen .home-science-summary > button,
+body:not(.hydra-easy-mode) .phone-app .home-screen .home-science-summary > button:hover,
+body:not(.hydra-easy-mode) .phone-app .home-screen .home-science-summary > button:focus,
+body:not(.hydra-easy-mode) .phone-app .home-screen .home-science-summary > button:focus-visible,
+body:not(.hydra-easy-mode) .phone-app .home-screen .home-science-summary > button:active {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: rgba(23, 76, 54, .11) !important;
+  color: var(--text) !important;
+  box-shadow: 0 6px 18px rgba(31, 66, 51, .05) !important;
+}
+
+body:not(.hydra-easy-mode) .phone-app .home-screen .home-science-summary > button::before,
+body:not(.hydra-easy-mode) .phone-app .home-screen .home-science-summary > button::after {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+.hydra-root.theme-dark body:not(.hydra-easy-mode) .phone-app .home-screen .home-science-summary > button,
+body.theme-dark:not(.hydra-easy-mode) .phone-app .home-screen .home-science-summary > button {
+  background: var(--surface) !important;
+  background-color: var(--surface) !important;
+  background-image: none !important;
+}
