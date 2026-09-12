@@ -11,6 +11,7 @@ export type AppRoute =
   | "today"
   | "history"
   | "nfc"
+  | "found-animal"
   | "notifications"
   | "climate"
   | "plus"
