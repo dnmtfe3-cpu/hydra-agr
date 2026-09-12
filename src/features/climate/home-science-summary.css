@@ -1,1 +1,191 @@
-.home-science-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.home-science-summary button{min-width:0;border:1px solid var(--border);background:#fff!important;color:var(--text);border-radius:17px;padding:12px 9px;text-align:left;display:flex;gap:8px;align-items:flex-start;box-shadow:0 5px 14px rgba(23,76,54,.035)}.home-science-summary button:hover{background:#fff!important}.home-science-summary svg{color:var(--primary);flex:none}.home-science-summary span{min-width:0}.home-science-summary small,.home-science-summary strong,.home-science-summary em{display:block}.home-science-summary small{font-size:.62rem;letter-spacing:.06em;color:var(--muted);font-weight:800}.home-science-summary strong{font-size:.92rem;margin:3px 0}.home-science-summary em{font-size:.68rem;color:var(--muted);font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hydra-root.theme-dark .home-science-summary button,body.theme-dark .home-science-summary button{background:var(--surface)!important}.hydra-root.theme-dark .home-science-summary button:hover,body.theme-dark .home-science-summary button:hover{background:var(--surface)!important}@media(max-width:370px){.home-science-summary{grid-template-columns:1fr}.home-science-summary button{min-height:68px}}
+.home-science-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  margin: 2px 0 14px;
+}
+
+/* The three summary shortcuts share exactly the same visual shell. */
+.home-screen .home-science-summary > button,
+.phone-app .home-screen .home-science-summary > button {
+  appearance: none;
+  position: relative;
+  min-width: 0;
+  min-height: 88px;
+  display: grid;
+  grid-template-columns: 31px minmax(0, 1fr);
+  align-items: start;
+  gap: 9px;
+  padding: 11px 10px;
+  overflow: hidden;
+  border: 1px solid rgba(28, 96, 70, .10) !important;
+  border-radius: 17px !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  color: var(--text);
+  text-align: left;
+  box-shadow: 0 6px 17px rgba(23, 76, 54, .045) !important;
+  transform: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+.home-screen .home-science-summary > button::before,
+.home-screen .home-science-summary > button::after,
+.phone-app .home-screen .home-science-summary > button::before,
+.phone-app .home-screen .home-science-summary > button::after {
+  content: none !important;
+  display: none !important;
+}
+
+.home-screen .home-science-summary > button:hover,
+.home-screen .home-science-summary > button:focus-visible,
+.phone-app .home-screen .home-science-summary > button:hover,
+.phone-app .home-screen .home-science-summary > button:focus-visible {
+  border-color: rgba(28, 96, 70, .18) !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  box-shadow: 0 8px 20px rgba(23, 76, 54, .065) !important;
+}
+
+.home-screen .home-science-summary > button:active,
+.phone-app .home-screen .home-science-summary > button:active {
+  background: #ffffff !important;
+  background-image: none !important;
+  transform: scale(.985);
+}
+
+.home-science-summary > button > svg {
+  box-sizing: border-box;
+  width: 31px;
+  height: 31px;
+  padding: 7px;
+  flex: none;
+  border: 1px solid rgba(38, 130, 91, .08);
+  border-radius: 10px;
+  background: #f1f7f3;
+  color: #2b7655;
+  stroke-width: 2;
+}
+
+.home-science-summary > button > span {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  padding-top: 1px;
+}
+
+.home-science-summary small,
+.home-science-summary strong,
+.home-science-summary em {
+  display: block;
+  min-width: 0;
+}
+
+.home-science-summary small {
+  overflow: hidden;
+  color: #778a80;
+  font-size: .54rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: .055em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-science-summary strong {
+  overflow: hidden;
+  margin: 2px 0 1px;
+  color: #244b39;
+  font-size: .84rem;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -.018em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-science-summary em {
+  overflow: hidden;
+  color: #89968f;
+  font-size: .58rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hydra-root.theme-dark .home-science-summary > button,
+body.theme-dark .home-science-summary > button,
+.hydra-root.theme-dark .home-science-summary > button:hover,
+body.theme-dark .home-science-summary > button:hover,
+.hydra-root.theme-dark .home-science-summary > button:active,
+body.theme-dark .home-science-summary > button:active {
+  border-color: #294235 !important;
+  background: var(--surface) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.hydra-root.theme-dark .home-science-summary > button > svg,
+body.theme-dark .home-science-summary > button > svg {
+  border-color: rgba(115, 166, 136, .12);
+  background: #173326;
+  color: #9fc2ac;
+}
+
+.hydra-root.theme-dark .home-science-summary strong,
+body.theme-dark .home-science-summary strong {
+  color: #edf4ef;
+}
+
+.hydra-root.theme-dark .home-science-summary small,
+.hydra-root.theme-dark .home-science-summary em,
+body.theme-dark .home-science-summary small,
+body.theme-dark .home-science-summary em {
+  color: #91a098;
+}
+
+@media (max-width: 390px) {
+  .home-science-summary {
+    gap: 6px;
+  }
+
+  .home-screen .home-science-summary > button,
+  .phone-app .home-screen .home-science-summary > button {
+    min-height: 84px;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 7px;
+    padding: 10px 8px;
+    border-radius: 15px !important;
+  }
+
+  .home-science-summary > button > svg {
+    width: 28px;
+    height: 28px;
+    padding: 6px;
+    border-radius: 9px;
+  }
+
+  .home-science-summary strong {
+    font-size: .76rem;
+  }
+
+  .home-science-summary em {
+    font-size: .53rem;
+  }
+}
+
+@media (max-width: 330px) {
+  .home-science-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .home-screen .home-science-summary > button,
+  .phone-app .home-screen .home-science-summary > button {
+    min-height: 66px;
+    grid-template-columns: 31px minmax(0, 1fr);
+  }
+}
