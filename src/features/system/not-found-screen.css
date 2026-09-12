@@ -1,0 +1,257 @@
+.hydra-not-found {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 16% 12%, rgba(196, 230, 206, .7), transparent 30%),
+    radial-gradient(circle at 90% 88%, rgba(239, 173, 96, .18), transparent 28%),
+    linear-gradient(160deg, #f5f8f3 0%, #fbfaf5 52%, #f1f5ef 100%);
+  color: #173f2e;
+}
+
+.hydra-not-found-glow {
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(1px);
+}
+
+.hydra-not-found-glow-one {
+  width: 260px;
+  height: 260px;
+  top: -115px;
+  right: -92px;
+  border: 1px solid rgba(23, 76, 54, .07);
+}
+
+.hydra-not-found-glow-two {
+  width: 180px;
+  height: 180px;
+  left: -90px;
+  bottom: -65px;
+  border: 1px solid rgba(186, 100, 40, .08);
+}
+
+.hydra-not-found-card {
+  width: min(100%, 470px);
+  position: relative;
+  z-index: 1;
+  padding: 28px 24px 24px;
+  border: 1px solid rgba(23, 76, 54, .11);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, .88);
+  box-shadow: 0 24px 70px rgba(30, 67, 49, .11);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.hydra-not-found-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #174c36;
+}
+
+.hydra-not-found-brand > span {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: #e7f1e9;
+  box-shadow: inset 0 0 0 1px rgba(23, 76, 54, .05);
+}
+
+.hydra-not-found-brand strong {
+  font-family: "Sora", sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .13em;
+}
+
+.hydra-not-found-visual {
+  min-height: 162px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin: 18px 0 10px;
+}
+
+.hydra-not-found-code {
+  position: relative;
+  z-index: 2;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(78px, 24vw, 112px);
+  font-weight: 800;
+  line-height: .9;
+  letter-spacing: -.08em;
+  color: #174c36;
+  text-shadow: 0 10px 30px rgba(23, 76, 54, .08);
+}
+
+.hydra-not-found-pin {
+  width: 54px;
+  height: 54px;
+  position: absolute;
+  z-index: 3;
+  right: 13%;
+  bottom: 13px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: #fff2e7;
+  color: #ba6428;
+  box-shadow: 0 10px 26px rgba(186, 100, 40, .15);
+  transform: rotate(7deg);
+}
+
+.hydra-not-found-route {
+  position: absolute;
+  display: block;
+  border: 2px dashed rgba(23, 76, 54, .12);
+  border-radius: 999px;
+}
+
+.hydra-not-found-route-one {
+  width: 132px;
+  height: 52px;
+  left: 5%;
+  top: 25px;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  transform: rotate(-8deg);
+}
+
+.hydra-not-found-route-two {
+  width: 108px;
+  height: 42px;
+  right: 5%;
+  top: 42px;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  transform: rotate(12deg);
+}
+
+.hydra-not-found-copy {
+  text-align: center;
+}
+
+.hydra-not-found-kicker {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: #6d7e73;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .12em;
+}
+
+.hydra-not-found-copy h1 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(23px, 7vw, 31px);
+  line-height: 1.08;
+  letter-spacing: -.035em;
+  color: #173f2e;
+}
+
+.hydra-not-found-copy p {
+  max-width: 360px;
+  margin: 12px auto 0;
+  color: #6a7b71;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.hydra-not-found-actions {
+  display: grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.hydra-not-found-actions button {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 15px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.hydra-not-found-actions button:active {
+  transform: scale(.98);
+}
+
+.hydra-not-found-primary {
+  border: 1px solid #174c36;
+  background: #174c36;
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(23, 76, 54, .17);
+}
+
+.hydra-not-found-primary:hover {
+  background: #123f2d;
+}
+
+.hydra-not-found-secondary {
+  border: 1px solid rgba(23, 76, 54, .13);
+  background: #f7faf8;
+  color: #315242;
+}
+
+.hydra-not-found-secondary:hover {
+  background: #eef5f0;
+}
+
+.hydra-not-found-footnote {
+  display: block;
+  max-width: 330px;
+  margin: 17px auto 0;
+  color: #8b9890;
+  font-size: 10px;
+  line-height: 1.45;
+  text-align: center;
+}
+
+@media (max-width: 430px) {
+  .hydra-not-found {
+    padding: 16px;
+  }
+
+  .hydra-not-found-card {
+    padding: 23px 18px 20px;
+    border-radius: 24px;
+  }
+
+  .hydra-not-found-visual {
+    min-height: 145px;
+    margin-top: 14px;
+  }
+
+  .hydra-not-found-pin {
+    right: 8%;
+  }
+
+  .hydra-not-found-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hydra-not-found-pin {
+    animation: hydra-404-float 3.2s ease-in-out infinite;
+  }
+}
+
+@keyframes hydra-404-float {
+  0%, 100% { transform: translateY(0) rotate(7deg); }
+  50% { transform: translateY(-6px) rotate(4deg); }
+}
