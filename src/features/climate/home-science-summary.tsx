@@ -13,12 +13,13 @@ type ShortcutProps = {
   value: string;
   detail: string;
   onClick: () => void;
+  variant?: "climate";
 };
 
-function ScienceShortcut({ icon, label, value, detail, onClick }: ShortcutProps) {
+function ScienceShortcut({ icon, label, value, detail, onClick, variant }: ShortcutProps) {
   return (
     <button
-      className="home-science-shortcut"
+      className={`home-science-shortcut${variant === "climate" ? " home-science-shortcut--climate" : ""}`}
       type="button"
       onClick={onClick}
       aria-label={`${label}: ${value}. ${detail}`}
@@ -61,6 +62,7 @@ export function HomeScienceSummary({ account, onOpen }: { account: HydraAccount;
   return (
     <section className="home-science-summary" aria-label="Atalhos de clima, animais e água">
       <ScienceShortcut
+        variant="climate"
         icon={<CloudSun size={18} />}
         label="CLIMA"
         value={weather ? `${Math.round(weather.temperature)} °C` : "Consultar"}
