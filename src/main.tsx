@@ -51,6 +51,7 @@ import "./maintenance-runtime";
 import "./interface-priority-polish.css";
 import { HydraAppShell } from "./components/hydra-app-shell";
 import { PublicTagLookup } from "./features/herd/public-tag-lookup";
+import { NotFoundScreen } from "./features/system/not-found-screen";
 import { setupPushNotifications } from "./services/push-notifications";
 import { renderIosPreviewRoute } from "./ios-preview";
 
@@ -68,12 +69,20 @@ const publicAnimalQuery =
   typeof window !== "undefined" && new URLSearchParams(window.location.search).get("pa") === "1";
 const standalonePublicMode = publicTagMode || publicAnimalQuery;
 const preview = path === "/preview/ios/splash" ? null : renderIosPreviewRoute(path);
+const rootWebPath = path === "/" || path === "/index.html" || path === "/preview/ios/splash";
+const notFoundMode =
+  typeof window !== "undefined" &&
+  !Capacitor.isNativePlatform() &&
+  !rootWebPath &&
+  !standalonePublicMode &&
+  !preview;
 const desktopPhoneMode =
   typeof window !== "undefined" &&
   !Capacitor.isNativePlatform() &&
   window.innerWidth >= 1024 &&
   !path.startsWith("/preview/") &&
-  !standalonePublicMode;
+  !standalonePublicMode &&
+  !notFoundMode;
 
 function DesktopPhonePresentation() {
   const mobileUrl = typeof window !== "undefined" ? window.location.href : "/";
@@ -101,6 +110,16 @@ function DesktopPhonePresentation() {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    {preview ?? (standalonePublicMode ? <PublicTagLookup /> : desktopPhoneMode ? <DesktopPhonePresentation /> : <HydraAppShell />)}
+    {preview ?? (
+      notFoundMode ? (
+        <NotFoundScreen />
+      ) : standalonePublicMode ? (
+        <PublicTagLookup />
+      ) : desktopPhoneMode ? (
+        <DesktopPhonePresentation />
+      ) : (
+        <HydraAppShell />
+      )
+    )}
   </React.StrictMode>,
 );
