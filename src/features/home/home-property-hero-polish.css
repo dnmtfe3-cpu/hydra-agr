@@ -15,24 +15,11 @@ body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero {
   box-shadow: 0 8px 22px rgba(23, 76, 54, .055) !important;
 }
 
-/* Accent kept simple and straight to avoid the previous curved-corner rendering bug. */
-body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero::before {
-  content: "" !important;
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 16px;
-  display: block !important;
-  width: 36px;
-  height: 2px;
-  border: 0;
-  border-radius: 0 0 2px 2px;
-  background: #2c8a63;
-  pointer-events: none;
-}
-
+/* Keep decorative pseudo-elements disabled. They previously produced a moving/clipped line on some mobile WebViews. */
+body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero::before,
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero::after {
   content: none !important;
+  display: none !important;
 }
 
 body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero-top {
@@ -254,11 +241,6 @@ body.theme-dark:not(.hydra-easy-mode) .phone-app .home-screen .property-link {
     padding: 14px 14px 10px;
     gap: 11px;
     border-radius: 17px !important;
-  }
-
-  body:not(.hydra-easy-mode) .phone-app .home-screen .property-hero::before {
-    left: 15px;
-    width: 34px;
   }
 
   body:not(.hydra-easy-mode) .phone-app .home-screen .property-metrics {
